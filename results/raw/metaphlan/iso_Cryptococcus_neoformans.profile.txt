@@ -1,0 +1,14 @@
+#mpa_vJan26_CHOCOPhlAnSGB_202605
+#/scratch/shenoy.am/mockcheck/env_mpa/bin/metaphlan /scratch/shenoy.am/mockcheck/reads/iso_Cryptococcus_neoformans_1.fastq.gz,/scratch/shenoy.am/mockcheck/reads/iso_Cryptococcus_neoformans_2.fastq.gz --input_type fastq --nproc 8 --db_dir /scratch/shenoy.am/mockcheck/db/metaphlan -x mpa_vJan26_CHOCOPhlAnSGB_202605 --mapout /scratch/shenoy.am/mockcheck/out/metaphlan/iso_Cryptococcus_neoformans.mapout.bz2 -o /scratch/shenoy.am/mockcheck/out/metaphlan/iso_Cryptococcus_neoformans.profile.txt
+#600000 reads processed
+#SampleID	Metaphlan_Analysis
+#clade_name	NCBI_tax_id	relative_abundance	additional_species
+UNCLASSIFIED	-1	0.0	
+k__Eukaryota	2759	100.0	
+k__Eukaryota|p__Basidiomycota	2759|5204	100.0	
+k__Eukaryota|p__Basidiomycota|c__Tremellomycetes	2759|5204|155616	100.0	
+k__Eukaryota|p__Basidiomycota|c__Tremellomycetes|o__Tremellales	2759|5204|155616|5234	100.0	
+k__Eukaryota|p__Basidiomycota|c__Tremellomycetes|o__Tremellales|f__Cryptococcaceae	2759|5204|155616|5234|1884633	100.0	
+k__Eukaryota|p__Basidiomycota|c__Tremellomycetes|o__Tremellales|f__Cryptococcaceae|g__Cryptococcus	2759|5204|155616|5234|1884633|5206	100.0	
+k__Eukaryota|p__Basidiomycota|c__Tremellomycetes|o__Tremellales|f__Cryptococcaceae|g__Cryptococcus|s__Cryptococcus_neoformans	2759|5204|155616|5234|1884633|5206|5207	100.0	
+k__Eukaryota|p__Basidiomycota|c__Tremellomycetes|o__Tremellales|f__Cryptococcaceae|g__Cryptococcus|s__Cryptococcus_neoformans|t__EUK5207	2759|5204|155616|5234|1884633|5206|5207|	100.0	

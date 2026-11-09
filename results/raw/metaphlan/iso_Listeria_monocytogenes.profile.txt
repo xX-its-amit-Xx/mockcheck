@@ -1,0 +1,14 @@
+#mpa_vJan26_CHOCOPhlAnSGB_202605
+#/scratch/shenoy.am/mockcheck/env_mpa/bin/metaphlan /scratch/shenoy.am/mockcheck/reads/iso_Listeria_monocytogenes_1.fastq.gz,/scratch/shenoy.am/mockcheck/reads/iso_Listeria_monocytogenes_2.fastq.gz --input_type fastq --nproc 8 --db_dir /scratch/shenoy.am/mockcheck/db/metaphlan -x mpa_vJan26_CHOCOPhlAnSGB_202605 --mapout /scratch/shenoy.am/mockcheck/out/metaphlan/iso_Listeria_monocytogenes.mapout.bz2 -o /scratch/shenoy.am/mockcheck/out/metaphlan/iso_Listeria_monocytogenes.profile.txt
+#600000 reads processed
+#SampleID	Metaphlan_Analysis
+#clade_name	NCBI_tax_id	relative_abundance	additional_species
+UNCLASSIFIED	-1	16.396	
+k__Bacteria	2	83.604	
+k__Bacteria|p__Firmicutes	2|1239	83.604	
+k__Bacteria|p__Firmicutes|c__Bacilli	2|1239|91061	83.604	
+k__Bacteria|p__Firmicutes|c__Bacilli|o__Bacillales	2|1239|91061|1385	83.604	
+k__Bacteria|p__Firmicutes|c__Bacilli|o__Bacillales|f__Listeriaceae	2|1239|91061|1385|186820	83.604	
+k__Bacteria|p__Firmicutes|c__Bacilli|o__Bacillales|f__Listeriaceae|g__Listeria	2|1239|91061|1385|186820|1637	83.604	
+k__Bacteria|p__Firmicutes|c__Bacilli|o__Bacillales|f__Listeriaceae|g__Listeria|s__Listeria_monocytogenes	2|1239|91061|1385|186820|1637|1639	83.604	
+k__Bacteria|p__Firmicutes|c__Bacilli|o__Bacillales|f__Listeriaceae|g__Listeria|s__Listeria_monocytogenes|t__SGB7535	2|1239|91061|1385|186820|1637|1639|	83.604	

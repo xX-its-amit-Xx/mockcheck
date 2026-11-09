@@ -1,0 +1,68 @@
+name	taxonomy_id	taxonomy_lvl	kraken_assigned_reads	added_reads	new_est_reads	fraction_total_reads
+Pseudomonas sp. CIP-10	2892442	S	2316	978	3294	0.74273
+Pseudomonas sp. ADAK13	2730847	S	3	0	3	0.00068
+Pseudomonas sp. Colony2	2861799	S	2	0	2	0.00045
+Pseudomonas sp. ABY48	3402865	S	1	0	1	0.00023
+Pseudomonas sp. CBS	2971912	S	1	0	1	0.00023
+Pseudomonas sp. MM213	2866807	S	1	0	1	0.00023
+Pseudomonas tolaasii	29442	S	1	0	1	0.00023
+Pseudomonas extremorientalis	169669	S	1	0	1	0.00023
+Pseudomonas yamanorum	515393	S	1	0	1	0.00023
+Pseudomonas viciae	2505979	S	1	0	1	0.00023
+Stenotrophomonas maltophilia	40324	S	82	22	104	0.02345
+Stenotrophomonas pigmentata	3055080	S	1	0	1	0.00023
+Xanthomonas euvesicatoria	456327	S	7	531	538	0.12131
+Pseudoxanthomonas spadix	415229	S	1	0	1	0.00023
+Klebsiella pneumoniae	573	S	3	5	8	0.00180
+Escherichia coli	562	S	1	2	3	0.00068
+Hafnia paralvei	546367	S	2	0	2	0.00045
+Proteus terrae	1574161	S	1	0	1	0.00023
+Coxiella burnetii	777	S	5	0	5	0.00113
+Microbulbifer sp. SAOS-129_SWC	3145235	S	3	0	3	0.00068
+Acinetobacter sp. A1-4-2	3156489	S	1	0	1	0.00023
+Shewanella oncorhynchi	2726434	S	1	0	1	0.00023
+Bradyrhizobium sp. CB82	3039159	S	2	0	2	0.00045
+Bradyrhizobium sp. NP1	3049772	S	1	0	1	0.00023
+Breoghania sp.	2065378	S	1	0	1	0.00023
+Kordiimonas sp. SCSIO 12603	2829596	S	1	0	1	0.00023
+Caulobacter flavus	1679497	S	1	0	1	0.00023
+Qipengyuania citrea	225971	S	1	0	1	0.00023
+Rhodoferax sp. WC2427	3234144	S	2	0	2	0.00045
+Burkholderia vietnamiensis	60552	S	1	0	1	0.00023
+Polynucleobacter sp. AP-Titi-500A-B4	2576923	S	1	0	1	0.00023
+Sulfurimicrobium lacus	2715678	S	2	0	2	0.00045
+uncultured Acetobacteroides sp.	1760811	S	93	0	93	0.02097
+Bacteroides thetaiotaomicron	818	S	1	0	1	0.00023
+Candidatus Arcticimaribacter forsetii	2820661	S	3	0	3	0.00068
+Muriicola soli	2507538	S	1	0	1	0.00023
+Chlorobaculum sp. MV4-Y	2976335	S	1	0	1	0.00023
+Frigoriglobus tundricola	2774151	S	1	3	4	0.00090
+Chlamydia psittaci	83554	S	1	0	1	0.00023
+Desulfovibrio fairfieldensis	44742	S	1	0	1	0.00023
+Mycobacterium canetti	78331	S	47	2	49	0.01105
+Mycolicibacterium goodii	134601	S	1	0	1	0.00023
+Streptomyces sp. NBC_01483	2903883	S	2	0	2	0.00045
+Streptomyces sp. NBC_01716	2975917	S	1	0	1	0.00023
+Streptomyces sp. T12	477697	S	1	0	1	0.00023
+Streptomyces anulatus	1892	S	3	0	3	0.00068
+Streptomyces cyaneofuscatus	66883	S	1	0	1	0.00023
+Streptomyces asoensis	249586	S	1	0	1	0.00023
+Arthrobacter sp. YN	2020486	S	2	0	2	0.00045
+Nocardioides sp. Arc9.136	2996826	S	1	0	1	0.00023
+Limosilactobacillus fermentum	1613	S	27	1	28	0.00631
+Lactobacillus amylovorus	1604	S	1	0	1	0.00023
+Enterococcus faecalis	1351	S	1	3	4	0.00090
+Enterococcus mundtii	53346	S	1	0	1	0.00023
+Bacillus spizizenii	96241	S	4	1	5	0.00113
+Bacillus velezensis	492670	S	1	1	2	0.00045
+Priestia megaterium	1404	S	1	0	1	0.00023
+Listeria monocytogenes	1639	S	1	1	2	0.00045
+Agathobaculum massiliense	3014267	S	1	0	1	0.00023
+Roseburia sp. 499	1261634	S	1	0	1	0.00023
+Allocoprobacillus halotolerans	2944914	S	1	0	1	0.00023
+Synechococcus sp. PROS-7-1	1442556	S	1	0	1	0.00023
+Chamaesiphon minutus	1173032	S	1	0	1	0.00023
+uncultured Ilyobacter sp.	544433	S	1	0	1	0.00023
+Homo sapiens	9606	S	211	10	221	0.04983
+Stygiolobus azoricus	41675	S	1	0	1	0.00023
+Klementvirus CP1	1188794	S	1	0	1	0.00023

@@ -1,0 +1,104 @@
+kraken2.08gb.c0.0.even	20.49	8236736
+kraken2.08gb.c0.1.even	14.22	8268728
+kraken2.16gb.c0.0.even	26.67	16062832
+bracken.16gb.even	0.63	28520
+kraken2.16gb.c0.1.even	18.02	16059952
+Command exited with non-zero status 1
+metaphlan.even	6.11	112972
+kraken2.08gb.c0.0.log	0.75	7843904
+kraken2.08gb.c0.1.log	0.70	7844196
+kraken2.16gb.c0.0.log	1.49	15656496
+Command exited with non-zero status 1
+bracken.16gb.log	0.12	15948
+kraken2.16gb.c0.1.log	1.61	15656536
+Command exited with non-zero status 1
+metaphlan.log	1.86	115576
+kraken2.08gb.c0.0.iso_Salmonella_enterica	1.95	8125200
+kraken2.08gb.c0.1.iso_Salmonella_enterica	1.99	8130900
+kraken2.16gb.c0.0.iso_Salmonella_enterica	2.71	15952440
+bracken.16gb.iso_Salmonella_enterica	0.34	27336
+kraken2.16gb.c0.1.iso_Salmonella_enterica	2.67	15955960
+Command exited with non-zero status 1
+metaphlan.iso_Salmonella_enterica	1.53	113764
+kraken2.08gb.c0.0.iso_Staphylococcus_aureus	1.85	8143300
+kraken2.08gb.c0.1.iso_Staphylococcus_aureus	1.86	8131600
+kraken2.16gb.c0.0.iso_Staphylococcus_aureus	2.68	15949680
+bracken.16gb.iso_Staphylococcus_aureus	0.30	27016
+kraken2.16gb.c0.1.iso_Staphylococcus_aureus	2.62	15948144
+Command exited with non-zero status 1
+metaphlan.iso_Staphylococcus_aureus	1.41	113496
+kraken2.08gb.c0.0.iso_Enterococcus_faecalis	1.88	8129276
+kraken2.08gb.c0.1.iso_Enterococcus_faecalis	1.82	8126248
+kraken2.16gb.c0.0.iso_Enterococcus_faecalis	2.58	15954560
+bracken.16gb.iso_Enterococcus_faecalis	0.36	26720
+kraken2.16gb.c0.1.iso_Enterococcus_faecalis	2.69	15954924
+Command exited with non-zero status 1
+metaphlan.iso_Enterococcus_faecalis	1.54	115524
+kraken2.08gb.c0.0.iso_Bacillus_subtilis	1.93	8136344
+kraken2.08gb.c0.1.iso_Bacillus_subtilis	1.89	8122012
+kraken2.16gb.c0.0.iso_Bacillus_subtilis	2.86	15966708
+bracken.16gb.iso_Bacillus_subtilis	0.30	27000
+kraken2.16gb.c0.1.iso_Bacillus_subtilis	2.72	15956912
+Command exited with non-zero status 1
+metaphlan.iso_Bacillus_subtilis	1.54	113608
+kraken2.08gb.c0.0.iso_Escherichia_coli	1.88	8152732
+kraken2.08gb.c0.1.iso_Escherichia_coli	1.89	8125104
+kraken2.16gb.c0.0.iso_Escherichia_coli	2.70	15948572
+bracken.16gb.iso_Escherichia_coli	0.30	27308
+kraken2.16gb.c0.1.iso_Escherichia_coli	2.66	15962008
+Command exited with non-zero status 1
+metaphlan.iso_Escherichia_coli	1.09	115500
+kraken2.08gb.c0.0.iso_Pseudomonas_aeruginosa	1.96	8128204
+kraken2.08gb.c0.1.iso_Pseudomonas_aeruginosa	1.91	8144748
+kraken2.16gb.c0.0.iso_Pseudomonas_aeruginosa	2.73	15953696
+bracken.16gb.iso_Pseudomonas_aeruginosa	0.30	27328
+kraken2.16gb.c0.1.iso_Pseudomonas_aeruginosa	2.74	15940888
+Command exited with non-zero status 1
+metaphlan.iso_Pseudomonas_aeruginosa	1.36	113384
+kraken2.08gb.c0.0.iso_Listeria_monocytogenes	1.96	8130052
+kraken2.08gb.c0.1.iso_Listeria_monocytogenes	1.86	8128056
+kraken2.16gb.c0.0.iso_Listeria_monocytogenes	2.76	15954440
+bracken.16gb.iso_Listeria_monocytogenes	0.28	27084
+kraken2.16gb.c0.1.iso_Listeria_monocytogenes	2.59	15952600
+Command exited with non-zero status 1
+metaphlan.iso_Listeria_monocytogenes	1.03	112844
+kraken2.08gb.c0.0.iso_Saccharomyces_cerevisiae	1.83	8119460
+kraken2.08gb.c0.1.iso_Saccharomyces_cerevisiae	1.80	8107988
+kraken2.16gb.c0.0.iso_Saccharomyces_cerevisiae	2.53	15928264
+bracken.16gb.iso_Saccharomyces_cerevisiae	0.28	26760
+kraken2.16gb.c0.1.iso_Saccharomyces_cerevisiae	2.53	15937236
+Command exited with non-zero status 1
+metaphlan.iso_Saccharomyces_cerevisiae	0.99	114860
+kraken2.08gb.c0.0.iso_Cryptococcus_neoformans	1.83	8097000
+kraken2.08gb.c0.1.iso_Cryptococcus_neoformans	1.88	8097000
+kraken2.16gb.c0.0.iso_Cryptococcus_neoformans	2.57	15912000
+bracken.16gb.iso_Cryptococcus_neoformans	0.27	26916
+kraken2.16gb.c0.1.iso_Cryptococcus_neoformans	2.54	15908184
+Command exited with non-zero status 1
+metaphlan.iso_Cryptococcus_neoformans	1.02	114260
+kraken2.08gb.c0.0.iso_Lactobacillus_fermentum	1.98	8133608
+kraken2.08gb.c0.1.iso_Lactobacillus_fermentum	1.90	8130056
+kraken2.16gb.c0.0.iso_Lactobacillus_fermentum	2.63	15946956
+bracken.16gb.iso_Lactobacillus_fermentum	0.27	26932
+kraken2.16gb.c0.1.iso_Lactobacillus_fermentum	2.61	15963268
+Command exited with non-zero status 1
+metaphlan.iso_Lactobacillus_fermentum	1.02	114424
+metaphlan.even	547.85	35622372
+kraken2.08gb.c0.0.log	18.53	7843960
+kraken2.08gb.c0.1.log	0.87	7843668
+kraken2.16gb.c0.0.log	32.03	15656252
+Command exited with non-zero status 1
+bracken.16gb.log	1.74	15680
+kraken2.16gb.c0.1.log	2.14	15656500
+Command exited with non-zero status 1
+metaphlan.log	193.55	35629100
+metaphlan.iso_Salmonella_enterica	242.80	35629320
+metaphlan.iso_Staphylococcus_aureus	241.57	35629124
+metaphlan.iso_Enterococcus_faecalis	245.09	35629060
+metaphlan.iso_Bacillus_subtilis	238.49	35627964
+metaphlan.iso_Escherichia_coli	242.00	35628976
+metaphlan.iso_Pseudomonas_aeruginosa	256.42	35629092
+metaphlan.iso_Listeria_monocytogenes	240.30	35628224
+metaphlan.iso_Saccharomyces_cerevisiae	241.39	35629188
+metaphlan.iso_Cryptococcus_neoformans	237.38	35629252
+metaphlan.iso_Lactobacillus_fermentum	241.99	35628864

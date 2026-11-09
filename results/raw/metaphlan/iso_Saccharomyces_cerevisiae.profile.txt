@@ -1,0 +1,14 @@
+#mpa_vJan26_CHOCOPhlAnSGB_202605
+#/scratch/shenoy.am/mockcheck/env_mpa/bin/metaphlan /scratch/shenoy.am/mockcheck/reads/iso_Saccharomyces_cerevisiae_1.fastq.gz,/scratch/shenoy.am/mockcheck/reads/iso_Saccharomyces_cerevisiae_2.fastq.gz --input_type fastq --nproc 8 --db_dir /scratch/shenoy.am/mockcheck/db/metaphlan -x mpa_vJan26_CHOCOPhlAnSGB_202605 --mapout /scratch/shenoy.am/mockcheck/out/metaphlan/iso_Saccharomyces_cerevisiae.mapout.bz2 -o /scratch/shenoy.am/mockcheck/out/metaphlan/iso_Saccharomyces_cerevisiae.profile.txt
+#600000 reads processed
+#SampleID	Metaphlan_Analysis
+#clade_name	NCBI_tax_id	relative_abundance	additional_species
+UNCLASSIFIED	-1	15.264833	
+k__Eukaryota	2759	84.735167	
+k__Eukaryota|p__Ascomycota	2759|4890	84.735167	
+k__Eukaryota|p__Ascomycota|c__Saccharomycetes	2759|4890|4891	84.735167	
+k__Eukaryota|p__Ascomycota|c__Saccharomycetes|o__Saccharomycetales	2759|4890|4891|4892	84.735167	
+k__Eukaryota|p__Ascomycota|c__Saccharomycetes|o__Saccharomycetales|f__Saccharomycetaceae	2759|4890|4891|4892|4893	84.735167	
+k__Eukaryota|p__Ascomycota|c__Saccharomycetes|o__Saccharomycetales|f__Saccharomycetaceae|g__Saccharomyces	2759|4890|4891|4892|4893|4930	84.735167	
+k__Eukaryota|p__Ascomycota|c__Saccharomycetes|o__Saccharomycetales|f__Saccharomycetaceae|g__Saccharomyces|s__Saccharomyces_cerevisiae	2759|4890|4891|4892|4893|4930|4932	84.735167	
+k__Eukaryota|p__Ascomycota|c__Saccharomycetes|o__Saccharomycetales|f__Saccharomycetaceae|g__Saccharomyces|s__Saccharomyces_cerevisiae|t__EUK4932	2759|4890|4891|4892|4893|4930|4932|	84.735167	

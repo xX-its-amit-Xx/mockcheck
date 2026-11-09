@@ -1,0 +1,14 @@
+#mpa_vJan26_CHOCOPhlAnSGB_202605
+#/scratch/shenoy.am/mockcheck/env_mpa/bin/metaphlan /scratch/shenoy.am/mockcheck/reads/iso_Bacillus_subtilis_1.fastq.gz,/scratch/shenoy.am/mockcheck/reads/iso_Bacillus_subtilis_2.fastq.gz --input_type fastq --nproc 8 --db_dir /scratch/shenoy.am/mockcheck/db/metaphlan -x mpa_vJan26_CHOCOPhlAnSGB_202605 --mapout /scratch/shenoy.am/mockcheck/out/metaphlan/iso_Bacillus_subtilis.mapout.bz2 -o /scratch/shenoy.am/mockcheck/out/metaphlan/iso_Bacillus_subtilis.profile.txt
+#600000 reads processed
+#SampleID	Metaphlan_Analysis
+#clade_name	NCBI_tax_id	relative_abundance	additional_species
+UNCLASSIFIED	-1	4.155833	
+k__Bacteria	2	95.844167	
+k__Bacteria|p__Firmicutes	2|1239	95.844167	
+k__Bacteria|p__Firmicutes|c__Bacilli	2|1239|91061	95.844167	
+k__Bacteria|p__Firmicutes|c__Bacilli|o__Bacillales	2|1239|91061|1385	95.844167	
+k__Bacteria|p__Firmicutes|c__Bacilli|o__Bacillales|f__Bacillaceae	2|1239|91061|1385|186817	95.844167	
+k__Bacteria|p__Firmicutes|c__Bacilli|o__Bacillales|f__Bacillaceae|g__Bacillus	2|1239|91061|1385|186817|1386	95.844167	
+k__Bacteria|p__Firmicutes|c__Bacilli|o__Bacillales|f__Bacillaceae|g__Bacillus|s__Bacillus_spizizenii	2|1239|91061|1385|186817|1386|96241	95.844167	
+k__Bacteria|p__Firmicutes|c__Bacilli|o__Bacillales|f__Bacillaceae|g__Bacillus|s__Bacillus_spizizenii|t__SGB7791_group	2|1239|91061|1385|186817|1386|96241|	95.844167	k__Bacteria|p__Bacillota|c__Bacilli|o__Bacillales|f__Bacillaceae|g__Bacillus|s__Bacillus_tequilensis,k__Bacteria|p__Bacillota|c__Bacilli|o__Bacillales|f__Bacillaceae|g__Bacillus|s__Bacillus_sp_C28GYM_DRY_1

@@ -1,0 +1,87 @@
+method	organism	expected_pct	expected_cell_pct	observed_pct
+bracken_16gb_c0.0	pseudomonas aeruginosa	12.0	6.1	15.875
+bracken_16gb_c0.0	escherichia coli	12.0	8.5	9.59
+bracken_16gb_c0.0	salmonella enterica	12.0	8.8	16.249
+bracken_16gb_c0.0	lactobacillus fermentum	12.0	21.9	10.806
+bracken_16gb_c0.0	enterococcus faecalis	12.0	14.6	12.013
+bracken_16gb_c0.0	staphylococcus aureus	12.0	15.3	9.8
+bracken_16gb_c0.0	listeria monocytogenes	12.0	13.9	11.194
+bracken_16gb_c0.0	bacillus subtilis	12.0	10.3	0.31
+bracken_16gb_c0.0	saccharomyces cerevisiae	2.0	0.29	0.0
+bracken_16gb_c0.0	cryptococcus neoformans	2.0	0.18	0.0
+bracken_16gb_c0.0	[not in mock] bacillus spizizenii	0.0	0.0	11.563
+bracken_16gb_c0.0	[not in mock] staphylococcus sp. sm9054	0.0	0.0	0.53
+bracken_16gb_c0.0	[not in mock] xanthomonas euvesicatoria	0.0	0.0	0.364
+bracken_16gb_c0.0	[not in mock] shigella flexneri	0.0	0.0	0.347
+bracken_16gb_c0.0	[not in mock] mycobacterium canetti	0.0	0.0	0.145
+kraken2_08gb_c0.0	pseudomonas aeruginosa	12.0	6.1	8.167
+kraken2_08gb_c0.0	escherichia coli	12.0	8.5	2.213
+kraken2_08gb_c0.0	salmonella enterica	12.0	8.8	6.702
+kraken2_08gb_c0.0	lactobacillus fermentum	12.0	21.9	30.901
+kraken2_08gb_c0.0	enterococcus faecalis	12.0	14.6	20.353
+kraken2_08gb_c0.0	staphylococcus aureus	12.0	15.3	4.639
+kraken2_08gb_c0.0	listeria monocytogenes	12.0	13.9	1.342
+kraken2_08gb_c0.0	bacillus subtilis	12.0	10.3	0.081
+kraken2_08gb_c0.0	saccharomyces cerevisiae	2.0	0.29	0.0
+kraken2_08gb_c0.0	cryptococcus neoformans	2.0	0.18	0.0
+kraken2_08gb_c0.0	[not in mock] bacillus spizizenii	0.0	0.0	23.567
+kraken2_08gb_c0.0	[not in mock] mycobacterium canetti	0.0	0.0	0.557
+kraken2_08gb_c0.0	[not in mock] xanthomonas euvesicatoria	0.0	0.0	0.303
+kraken2_08gb_c0.0	[not in mock] listeria innocua	0.0	0.0	0.122
+kraken2_08gb_c0.0	[not in mock] bacillus inaquosorum	0.0	0.0	0.064
+kraken2_08gb_c0.1	pseudomonas aeruginosa	12.0	6.1	3.495
+kraken2_08gb_c0.1	escherichia coli	12.0	8.5	0.913
+kraken2_08gb_c0.1	salmonella enterica	12.0	8.8	0.977
+kraken2_08gb_c0.1	lactobacillus fermentum	12.0	21.9	69.247
+kraken2_08gb_c0.1	enterococcus faecalis	12.0	14.6	13.043
+kraken2_08gb_c0.1	staphylococcus aureus	12.0	15.3	1.136
+kraken2_08gb_c0.1	listeria monocytogenes	12.0	13.9	0.227
+kraken2_08gb_c0.1	bacillus subtilis	12.0	10.3	0.0
+kraken2_08gb_c0.1	saccharomyces cerevisiae	2.0	0.29	0.0
+kraken2_08gb_c0.1	cryptococcus neoformans	2.0	0.18	0.0
+kraken2_08gb_c0.1	[not in mock] bacillus spizizenii	0.0	0.0	10.895
+kraken2_08gb_c0.1	[not in mock] actinomyces oris	0.0	0.0	0.039
+kraken2_08gb_c0.1	[not in mock] vibrio anguillarum	0.0	0.0	0.013
+kraken2_08gb_c0.1	[not in mock] bacillus mycoides	0.0	0.0	0.006
+kraken2_08gb_c0.1	[not in mock] homo sapiens	0.0	0.0	0.003
+kraken2_16gb_c0.0	pseudomonas aeruginosa	12.0	6.1	9.348
+kraken2_16gb_c0.0	escherichia coli	12.0	8.5	2.712
+kraken2_16gb_c0.0	salmonella enterica	12.0	8.8	8.099
+kraken2_16gb_c0.0	lactobacillus fermentum	12.0	21.9	26.481
+kraken2_16gb_c0.0	enterococcus faecalis	12.0	14.6	20.706
+kraken2_16gb_c0.0	staphylococcus aureus	12.0	15.3	5.413
+kraken2_16gb_c0.0	listeria monocytogenes	12.0	13.9	1.734
+kraken2_16gb_c0.0	bacillus subtilis	12.0	10.3	0.092
+kraken2_16gb_c0.0	saccharomyces cerevisiae	2.0	0.29	0.0
+kraken2_16gb_c0.0	cryptococcus neoformans	2.0	0.18	0.0
+kraken2_16gb_c0.0	[not in mock] bacillus spizizenii	0.0	0.0	23.52
+kraken2_16gb_c0.0	[not in mock] mycobacterium canetti	0.0	0.0	0.37
+kraken2_16gb_c0.0	[not in mock] listeria innocua	0.0	0.0	0.137
+kraken2_16gb_c0.0	[not in mock] xanthomonas euvesicatoria	0.0	0.0	0.122
+kraken2_16gb_c0.0	[not in mock] streptococcus agalactiae	0.0	0.0	0.085
+kraken2_16gb_c0.1	pseudomonas aeruginosa	12.0	6.1	3.797
+kraken2_16gb_c0.1	escherichia coli	12.0	8.5	0.923
+kraken2_16gb_c0.1	salmonella enterica	12.0	8.8	1.293
+kraken2_16gb_c0.1	lactobacillus fermentum	12.0	21.9	61.519
+kraken2_16gb_c0.1	enterococcus faecalis	12.0	14.6	14.623
+kraken2_16gb_c0.1	staphylococcus aureus	12.0	15.3	1.512
+kraken2_16gb_c0.1	listeria monocytogenes	12.0	13.9	0.341
+kraken2_16gb_c0.1	bacillus subtilis	12.0	10.3	0.001
+kraken2_16gb_c0.1	saccharomyces cerevisiae	2.0	0.29	0.0
+kraken2_16gb_c0.1	cryptococcus neoformans	2.0	0.18	0.0
+kraken2_16gb_c0.1	[not in mock] bacillus spizizenii	0.0	0.0	15.947
+kraken2_16gb_c0.1	[not in mock] actinomyces oris	0.0	0.0	0.017
+kraken2_16gb_c0.1	[not in mock] burkholderia multivorans	0.0	0.0	0.012
+kraken2_16gb_c0.1	[not in mock] vibrio anguillarum	0.0	0.0	0.004
+kraken2_16gb_c0.1	[not in mock] pseudomonas sp. cip-10	0.0	0.0	0.004
+metaphlan4	pseudomonas aeruginosa	12.0	6.1	9.199
+metaphlan4	escherichia coli	12.0	8.5	9.041
+metaphlan4	salmonella enterica	12.0	8.8	9.63
+metaphlan4	lactobacillus fermentum	12.0	21.9	20.254
+metaphlan4	enterococcus faecalis	12.0	14.6	15.261
+metaphlan4	staphylococcus aureus	12.0	15.3	13.353
+metaphlan4	listeria monocytogenes	12.0	13.9	11.721
+metaphlan4	bacillus subtilis	12.0	10.3	0.0
+metaphlan4	saccharomyces cerevisiae	2.0	0.29	0.34
+metaphlan4	cryptococcus neoformans	2.0	0.18	0.0
+metaphlan4	[not in mock] bacillus spizizenii	0.0	0.0	11.201

@@ -1,0 +1,5 @@
+method	listeria_pct	listeria_expected_pct	mock_species_detected_ge_0_01pct	non_mock_species_ge_0_1pct	non_mock_mass_pct
+kraken2_08gb_c0.0	0	89.1	0	0	0
+kraken2_08gb_c0.1	0	89.1	0	0	0
+kraken2_16gb_c0.0	0	89.1	0	0	0
+kraken2_16gb_c0.1	0	89.1	0	0	0

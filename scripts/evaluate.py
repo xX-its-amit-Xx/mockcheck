@@ -67,11 +67,11 @@ def read_metaphlan(path):
 
 profiles, meta = {}, {}
 for p in sorted(glob.glob(f"{RAW}/kraken2/*.report.gz")):
-    sample, db, conf = os.path.basename(p)[: -len(".report.gz")].rsplit(".", 2)
+    sample, db, conf = os.path.basename(p)[: -len(".report.gz")].split(".", 2)
     m = f"kraken2_{db}_{conf}"
     profiles[(sample, m)], meta[(sample, m)] = read_kraken(p)
 for p in sorted(glob.glob(f"{RAW}/bracken/*.bracken")):
-    sample, db, conf = os.path.basename(p)[: -len(".bracken")].rsplit(".", 2)
+    sample, db, conf = os.path.basename(p)[: -len(".bracken")].split(".", 2)
     m = f"bracken_{db}_{conf}"
     profiles[(sample, m)], meta[(sample, m)] = read_bracken(p)
 for p in sorted(glob.glob(f"{RAW}/metaphlan/*.profile.txt")):
@@ -89,6 +89,15 @@ def bray(a, b):
     num = sum(abs(a.get(k, 0) - b.get(k, 0)) for k in keys)
     den = sum(a.get(k, 0) + b.get(k, 0) for k in keys)
     return num / den if den else float("nan")
+
+
+def relax(prof):
+    """Sensitivity analysis only: merge B. spizizenii (a former B. subtilis subspecies in NCBI)
+    into B. subtilis. Reported as *_relaxed columns, never as the headline."""
+    r = dict(prof)
+    if "bacillus spizizenii" in r:
+        r["bacillus subtilis"] = r.get("bacillus subtilis", 0) + r.pop("bacillus spizizenii")
+    return r
 
 
 def prf(pred, truth):
@@ -122,11 +131,15 @@ for m in methods:
     for i, t in enumerate(THRESH):
         pred = {k for k, v in prof.items() if v >= t and v > 0}
         tp, fp, fn, pr, rc, f1 = prf(pred, truth)
+        rp = relax(prof)
+        _, fpr, fnr, prr, rcr, f1r = prf({k for k, v in rp.items() if v >= t and v > 0}, truth)
         r = dict(method=m, threshold_pct=t, tp=tp, fp=fp, fn=fn,
-                 precision=round(pr, 3), recall=round(rc, 3), f1=round(f1, 3))
+                 precision=round(pr, 3), recall=round(rc, 3), f1=round(f1, 3),
+                 fn_relaxed=fnr, recall_relaxed=round(rcr, 3), f1_relaxed=round(f1r, 3))
         if i == 0:
             r["bray_curtis_vs_expected"] = round(bray(prof, e), 3)
             r["bray_curtis_vs_cell_truth"] = round(bray(prof, ecell), 3)
+            r["bray_curtis_relaxed_native"] = round(bray(rp, ecell if m.startswith(CELL_NATIVE) else e), 3)
             r["native_basis"] = "cell" if m.startswith(CELL_NATIVE) else "dna"
             r["bray_curtis_native_basis"] = r["bray_curtis_vs_cell_truth"] if r["native_basis"] == "cell" else r["bray_curtis_vs_expected"]
             r["false_positive_mass_pct"] = round(sum(v for k, v in prof.items() if k not in truth), 2)

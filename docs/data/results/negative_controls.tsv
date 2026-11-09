@@ -1,0 +1,61 @@
+sample	method	truth	truth_pct	other_species_ge_0_1pct	other_species_ge_1pct	other_mass_pct	top_other	top_other_pct	same_genus_other_pct
+iso_Salmonella_enterica	bracken_16gb_c0.0	salmonella enterica	98.32	3	0	1.68	salmonella sp. sal-020	0.52	1.49
+iso_Salmonella_enterica	kraken2_08gb_c0.0	salmonella enterica	98.78	2	0	1.22	salmonella bongori	0.28	0.34
+iso_Salmonella_enterica	kraken2_08gb_c0.1	salmonella enterica	99.58	2	0	0.42	enterococcus faecalis	0.31	0.0
+iso_Salmonella_enterica	kraken2_16gb_c0.0	salmonella enterica	98.92	2	0	1.08	salmonella bongori	0.29	0.37
+iso_Salmonella_enterica	kraken2_16gb_c0.1	salmonella enterica	99.4	1	0	0.6	enterococcus faecalis	0.37	0.02
+iso_Salmonella_enterica	metaphlan4	salmonella enterica	100.0	0	0	0.0		0.0	0.0
+iso_Staphylococcus_aureus	bracken_16gb_c0.0	staphylococcus aureus	96.41	6	0	3.59	staphylococcus sp. mz8	0.87	2.38
+iso_Staphylococcus_aureus	kraken2_08gb_c0.0	staphylococcus aureus	96.61	7	0	3.39	staphylococcus agnetis	0.56	2.42
+iso_Staphylococcus_aureus	kraken2_08gb_c0.1	staphylococcus aureus	99.46	5	0	0.54	staphylococcus schweitzeri	0.11	0.11
+iso_Staphylococcus_aureus	kraken2_16gb_c0.0	staphylococcus aureus	95.99	8	1	4.01	streptococcus agalactiae	1.19	2.11
+iso_Staphylococcus_aureus	kraken2_16gb_c0.1	staphylococcus aureus	99.61	1	0	0.39	homo sapiens	0.16	0.02
+iso_Staphylococcus_aureus	metaphlan4	staphylococcus aureus	100.0	0	0	0.0		0.0	0.0
+iso_Enterococcus_faecalis	bracken_16gb_c0.0	enterococcus faecalis	99.84	0	0	0.16	listeria monocytogenes	0.02	0.05
+iso_Enterococcus_faecalis	kraken2_08gb_c0.0	enterococcus faecalis	99.77	0	0	0.23	listeria monocytogenes	0.02	0.08
+iso_Enterococcus_faecalis	kraken2_08gb_c0.1	enterococcus faecalis	99.98	0	0	0.02	klebsiella oxytoca	0.01	0.0
+iso_Enterococcus_faecalis	kraken2_16gb_c0.0	enterococcus faecalis	99.77	0	0	0.23	listeria monocytogenes	0.03	0.07
+iso_Enterococcus_faecalis	kraken2_16gb_c0.1	enterococcus faecalis	99.99	0	0	0.01	homo sapiens	0.0	0.0
+iso_Enterococcus_faecalis	metaphlan4	enterococcus faecalis	100.0	0	0	0.0		0.0	0.0
+iso_Bacillus_subtilis	bracken_16gb_c0.0	bacillus subtilis	3.21	6	1	96.79	bacillus spizizenii	94.17	96.44
+iso_Bacillus_subtilis	kraken2_08gb_c0.0	bacillus subtilis	0.35	2	1	99.65	bacillus spizizenii	98.66	99.48
+iso_Bacillus_subtilis	kraken2_08gb_c0.1	bacillus subtilis	0.0	1	1	100.0	bacillus spizizenii	99.98	99.99
+iso_Bacillus_subtilis	kraken2_16gb_c0.0	bacillus subtilis	0.39	3	1	99.61	bacillus spizizenii	98.5	99.45
+iso_Bacillus_subtilis	kraken2_16gb_c0.1	bacillus subtilis	0.0	1	1	100.0	bacillus spizizenii	99.97	99.98
+iso_Bacillus_subtilis	metaphlan4	bacillus subtilis	0.0	1	1	100.0	bacillus spizizenii	100.0	100.0
+iso_Escherichia_coli	bracken_16gb_c0.0	escherichia coli	93.39	5	1	6.61	shigella flexneri	4.39	0.32
+iso_Escherichia_coli	kraken2_08gb_c0.0	escherichia coli	94.17	11	0	5.83	shigella flexneri	0.67	1.64
+iso_Escherichia_coli	kraken2_08gb_c0.1	escherichia coli	99.68	2	0	0.32	citrobacter braakii	0.21	0.0
+iso_Escherichia_coli	kraken2_16gb_c0.0	escherichia coli	93.17	11	0	6.83	shigella flexneri	0.7	1.96
+iso_Escherichia_coli	kraken2_16gb_c0.1	escherichia coli	99.64	1	0	0.36	homo sapiens	0.13	0.1
+iso_Escherichia_coli	metaphlan4	escherichia coli	100.0	0	0	-0.0		0.0	0.0
+iso_Pseudomonas_aeruginosa	bracken_16gb_c0.0	pseudomonas aeruginosa	97.16	1	1	2.84	homo sapiens	2.05	0.41
+iso_Pseudomonas_aeruginosa	kraken2_08gb_c0.0	pseudomonas aeruginosa	93.04	2	1	6.96	homo sapiens	5.51	0.62
+iso_Pseudomonas_aeruginosa	kraken2_08gb_c0.1	pseudomonas aeruginosa	98.01	1	1	1.99	homo sapiens	1.83	0.0
+iso_Pseudomonas_aeruginosa	kraken2_16gb_c0.0	pseudomonas aeruginosa	89.37	1	1	10.63	homo sapiens	9.09	0.82
+iso_Pseudomonas_aeruginosa	kraken2_16gb_c0.1	pseudomonas aeruginosa	93.04	1	1	6.96	homo sapiens	6.77	0.0
+iso_Pseudomonas_aeruginosa	metaphlan4	pseudomonas aeruginosa	100.0	0	0	0.0		0.0	0.0
+iso_Listeria_monocytogenes	bracken_16gb_c0.0	listeria monocytogenes	97.99	5	0	2.01	listeria innocua	0.82	1.88
+iso_Listeria_monocytogenes	kraken2_08gb_c0.0	listeria monocytogenes	83.94	7	4	16.06	listeria innocua	7.33	14.11
+iso_Listeria_monocytogenes	kraken2_08gb_c0.1	listeria monocytogenes	100.0	0	0	0.0		0.0	0.0
+iso_Listeria_monocytogenes	kraken2_16gb_c0.0	listeria monocytogenes	85.08	8	5	14.92	listeria innocua	6.42	13.2
+iso_Listeria_monocytogenes	kraken2_16gb_c0.1	listeria monocytogenes	99.41	1	0	0.59	homo sapiens	0.39	0.1
+iso_Listeria_monocytogenes	metaphlan4	listeria monocytogenes	100.0	0	0	0.0		0.0	0.0
+iso_Saccharomyces_cerevisiae	bracken_16gb_c0.0	saccharomyces cerevisiae	0.0	16	9	100.0	xanthomonas euvesicatoria	38.17	0.0
+iso_Saccharomyces_cerevisiae	kraken2_08gb_c0.0	saccharomyces cerevisiae	0.0	16	8	100.0	actinomyces oris	28.56	0.0
+iso_Saccharomyces_cerevisiae	kraken2_08gb_c0.1	saccharomyces cerevisiae	0.0	7	6	100.0	actinomyces oris	43.46	0.0
+iso_Saccharomyces_cerevisiae	kraken2_16gb_c0.0	saccharomyces cerevisiae	0.0	20	8	100.0	homo sapiens	25.37	0.0
+iso_Saccharomyces_cerevisiae	kraken2_16gb_c0.1	saccharomyces cerevisiae	0.0	13	8	100.0	escherichia coli	35.8	0.0
+iso_Saccharomyces_cerevisiae	metaphlan4	saccharomyces cerevisiae	100.0	0	0	0.0		0.0	0.0
+iso_Cryptococcus_neoformans	bracken_16gb_c0.0	cryptococcus neoformans	0.0	10	6	100.0	pseudomonas sp. cip-10	74.39	0.0
+iso_Cryptococcus_neoformans	kraken2_08gb_c0.0	cryptococcus neoformans	0.0	13	6	100.0	pseudomonas sp. cip-10	81.82	0.0
+iso_Cryptococcus_neoformans	kraken2_08gb_c0.1	cryptococcus neoformans	0.0	3	3	100.0	pseudomonas sp. cip-10	90.32	0.0
+iso_Cryptococcus_neoformans	kraken2_16gb_c0.0	cryptococcus neoformans	0.0	14	5	100.0	pseudomonas sp. cip-10	80.78	0.0
+iso_Cryptococcus_neoformans	kraken2_16gb_c0.1	cryptococcus neoformans	0.0	4	3	100.0	pseudomonas sp. cip-10	87.0	0.0
+iso_Cryptococcus_neoformans	metaphlan4	cryptococcus neoformans	100.0	0	0	0.0		0.0	0.0
+iso_Lactobacillus_fermentum	bracken_16gb_c0.0	lactobacillus fermentum	99.86	0	0	0.14	homo sapiens	0.02	0.02
+iso_Lactobacillus_fermentum	kraken2_08gb_c0.0	lactobacillus fermentum	99.9	0	0	0.1	homo sapiens	0.02	0.02
+iso_Lactobacillus_fermentum	kraken2_08gb_c0.1	lactobacillus fermentum	100.0	0	0	0.0	streptococcus alactolyticus	0.0	0.0
+iso_Lactobacillus_fermentum	kraken2_16gb_c0.0	lactobacillus fermentum	99.86	0	0	0.14	homo sapiens	0.02	0.02
+iso_Lactobacillus_fermentum	kraken2_16gb_c0.1	lactobacillus fermentum	99.99	0	0	0.01	homo sapiens	0.0	0.0
+iso_Lactobacillus_fermentum	metaphlan4	lactobacillus fermentum	100.0	0	0	0.0		0.0	0.0
