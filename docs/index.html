@@ -56,6 +56,7 @@ input[type=text]{width:100%;padding:8px;border:1px solid var(--line);border-radi
 .yes h4{color:var(--ok)}.no h4{color:var(--bad)}.nx h4{color:var(--acc)}
 .mut{color:var(--mut)}.small{font-size:14px}
 .kmer{font:14px ui-monospace,Consolas,monospace}
+.kwrap{display:flex;flex-wrap:wrap;gap:4px 6px;margin:10px 0}
 .hit-a{background:#2a7d3f33}.hit-b{background:#b4531a33}.hit-c{background:#3b6fb533}
 footer{padding:30px 0;color:var(--mut);font:14px system-ui,sans-serif}
 button.tog{font:14px system-ui,sans-serif;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;padding:6px 10px;cursor:pointer}
@@ -260,7 +261,7 @@ function toy(){
   $("#toy-ref").textContent="Made-up references (not real organisms): A, B, C, each ~40 letters long.";
   const best=Object.entries(votes).sort((a,b)=>b[1]-a[1])[0],tot=ks.length||1,frac=best[1]/tot;
   const verdict=ks.length===0?"Read too short for this k.":frac>=conf&&best[1]>0?"Called: "+NAMES[best[0]]+" ("+best[1]+" of "+tot+" words, "+(frac*100).toFixed(0)+"%)":"Unclassified: best guess has only "+(frac*100).toFixed(0)+"% of words, below the "+(conf*100).toFixed(0)+"% bar.";
-  $("#toy-out").replaceChildren(el("p",{},cells),el("p",{},el("b",{},verdict)),el("p",{class:"small mut"},"Words in no reference: "+none+" \u00b7 words in more than one reference: "+amb+". Raise the confidence bar and watch borderline reads become \u2018unclassified\u2019: fewer wrong calls, fewer reads classified. Shorter words find more matches but also more accidental ones."));
+  $("#toy-out").replaceChildren(el("div",{class:"kwrap"},cells),el("p",{},el("b",{},verdict)),el("p",{class:"small mut"},"Words in no reference: "+none+" \u00b7 words in more than one reference: "+amb+". Raise the confidence bar and watch borderline reads become \u2018unclassified\u2019: fewer wrong calls, fewer reads classified. Shorter words find more matches but also more accidental ones."));
 }
 ["toy-read","toy-k","toy-c"].forEach(id=>$("#"+id).addEventListener("input",toy));
 
