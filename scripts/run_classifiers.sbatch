@@ -12,6 +12,8 @@ REPO="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$0")/.." && pwd)}"
 source "$REPO/scripts/common.sh"
 mc_activate
 T=${SLURM_CPUS_PER_TASK:-8}
+MPA_INDEX=$(basename "$(ls "$MC_DB"/metaphlan/*.pkl | head -1)" .pkl)
+echo "MetaPhlAn index: $MPA_INDEX"
 mkdir -p "$MC_OUT"/{kraken2,bracken,metaphlan} "$MC_OUT/timing"
 timeit() { # label, then command; appends label, wall seconds, max RSS KB to timing.tsv
   local label=$1; shift
@@ -42,8 +44,7 @@ tail -n +2 "$REPO/config/samples.tsv" | while IFS=$'\t' read -r sample acc role 
   mp="$MC_OUT/metaphlan/$sample.profile.txt"
   if [ ! -s "$mp" ]; then
     timeit "metaphlan.$sample" env PATH="$MC_ENV_MPA/bin:$PATH" metaphlan "$r1,$r2" --input_type fastq --nproc $T \
-      --bowtie2db "$MC_DB/metaphlan" --bowtie2out "$MC_OUT/metaphlan/$sample.bt2out" \
-      --no_map -o "$mp"
+      --db_dir "$MC_DB/metaphlan" -x "$MPA_INDEX" --no_map -o "$mp"
   fi
   echo "done $sample"
 done
