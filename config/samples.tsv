@@ -1,0 +1,13 @@
+sample	accession	role	n_pairs	truth
+even	ERR2984773	quantitative	2000000	D6300_even
+log	ERR2935805	presence	500000	D6310_log
+iso_Salmonella_enterica	ERR2935848	negative_control	300000	Salmonella enterica
+iso_Staphylococcus_aureus	ERR2935849	negative_control	300000	Staphylococcus aureus
+iso_Enterococcus_faecalis	ERR2935850	negative_control	300000	Enterococcus faecalis
+iso_Bacillus_subtilis	ERR2935851	negative_control	300000	Bacillus subtilis
+iso_Escherichia_coli	ERR2935852	negative_control	300000	Escherichia coli
+iso_Pseudomonas_aeruginosa	ERR2935853	negative_control	300000	Pseudomonas aeruginosa
+iso_Listeria_monocytogenes	ERR2935854	negative_control	300000	Listeria monocytogenes
+iso_Saccharomyces_cerevisiae	ERR2935855	negative_control	300000	Saccharomyces cerevisiae
+iso_Cryptococcus_neoformans	ERR2935856	negative_control	300000	Cryptococcus neoformans
+iso_Lactobacillus_fermentum	ERR2935857	negative_control	300000	Lactobacillus fermentum

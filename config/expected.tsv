@@ -1,0 +1,13 @@
+sample	organism	expected_percent	basis	source
+even	Bacillus subtilis	12	not stated in paper (cells vs DNA)	Nicholls 2019 GigaScience giz043, Table 4, product D6300 lot ZRC190633
+even	Listeria monocytogenes	12	not stated in paper (cells vs DNA)	Nicholls 2019 GigaScience giz043, Table 4, product D6300 lot ZRC190633
+even	Enterococcus faecalis	12	not stated in paper (cells vs DNA)	Nicholls 2019 GigaScience giz043, Table 4, product D6300 lot ZRC190633
+even	Staphylococcus aureus	12	not stated in paper (cells vs DNA)	Nicholls 2019 GigaScience giz043, Table 4, product D6300 lot ZRC190633
+even	Salmonella enterica	12	not stated in paper (cells vs DNA)	Nicholls 2019 GigaScience giz043, Table 4, product D6300 lot ZRC190633
+even	Escherichia coli	12	not stated in paper (cells vs DNA)	Nicholls 2019 GigaScience giz043, Table 4, product D6300 lot ZRC190633
+even	Pseudomonas aeruginosa	12	not stated in paper (cells vs DNA)	Nicholls 2019 GigaScience giz043, Table 4, product D6300 lot ZRC190633
+even	Lactobacillus fermentum	12	not stated in paper (cells vs DNA)	Nicholls 2019 GigaScience giz043, Table 4, product D6300 lot ZRC190633
+even	Saccharomyces cerevisiae	2	not stated in paper (cells vs DNA)	Nicholls 2019 GigaScience giz043, Table 4, product D6300 lot ZRC190633
+even	Cryptococcus neoformans	2	not stated in paper (cells vs DNA)	Nicholls 2019 GigaScience giz043, Table 4, product D6300 lot ZRC190633
+log	Listeria monocytogenes	89.1	cell counts	Nicholls 2019 giz043 text, product D6310 lot ZRC190842
+log	Staphylococcus aureus	0.000089	cell counts	Nicholls 2019 giz043 text, product D6310 lot ZRC190842
