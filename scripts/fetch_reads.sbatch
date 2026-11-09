@@ -4,7 +4,6 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=2G
 #SBATCH --time=04:00:00
-#SBATCH --output=%x.%j.out
-# Run from the repo root or via sbatch scripts/fetch_reads.sbatch
-cd "${SLURM_SUBMIT_DIR:-.}"
-bash "$(dirname "$(readlink -f "$0")")/fetch_reads.sh"
+#SBATCH --output=logs/%x.%j.out
+# Submit from the repo root: sbatch scripts/fetch_reads.sbatch
+bash "$SLURM_SUBMIT_DIR/scripts/fetch_reads.sh"

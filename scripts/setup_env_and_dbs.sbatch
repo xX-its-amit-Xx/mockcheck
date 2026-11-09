@@ -4,10 +4,11 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
 #SBATCH --time=06:00:00
-#SBATCH --output=%x.%j.out
+#SBATCH --output=logs/%x.%j.out
 # Builds the pinned-by-lockfile environment and downloads databases. Idempotent.
 set -euo pipefail
-source "$(dirname "$0")/common.sh"
+REPO="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$0")/.." && pwd)}"
+source "$REPO/scripts/common.sh"
 mkdir -p "$MC_DB" "$MOCKCHECK_SCRATCH"
 module load miniforge3/26.7.2-0
 eval "$(conda shell.bash hook)"
