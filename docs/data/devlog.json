@@ -1,0 +1,21 @@
+{
+  "updated": "2026-11-09",
+  "agents": {
+    "emperor": "Decided the structure: 6 queens (one per subdomain: ground truth, sequencing, algorithms, databases, evaluation, decisions), 1 king (cross-domain analogies and serendipity), 1 completeness critic. Queens do not talk to each other; only the king links them, to keep each context small.",
+    "king": "Forces cross-domain analogies (law, medicine, art, philosophy) and 'how others overcame it' stories.",
+    "queens": ["ground_truth", "sequencing", "algorithms", "databases", "evaluation", "decisions"],
+    "critic": "Re-opens cited sources and flags anything stated as fact that is not supported."
+  },
+  "entries": [
+    {"date": "2026-11-09", "status": "done", "title": "Plan written into the repo", "story": "Before any code, PLAN.md fixed the question (which classifier should I trust, and what should I check?), the data, the tools, the metrics and the report format.", "commit": "PLAN.md"},
+    {"date": "2026-11-09", "status": "done", "title": "Ground truth verified from the source paper", "story": "The expected composition (8 bacteria at 12%, 2 yeasts at 2%) was read from Nicholls et al. 2019, not from memory. The paper does not say whether those percentages are by cells or by DNA, so that is carried forward as an open uncertainty.", "commit": "config/expected.tsv"},
+    {"date": "2026-11-09", "status": "problem", "title": "No local Linux tooling", "story": "This Windows machine has no WSL distribution and Docker's engine returned an error, so the classifiers cannot run locally. Decision: run them on the Explorer cluster (public 'short' partition only) and keep only small result tables in git.", "commit": ""},
+    {"date": "2026-11-09", "status": "problem", "title": "SSH refused the config file", "story": "ssh rejected the user config because Windows gave 'Everyone' full access to it. Instead of changing the user's permissions, a private copy of the config (no secrets) was used for this session.", "commit": ""},
+    {"date": "2026-11-09", "status": "done", "title": "Reads streamed, never downloaded in full", "story": "Only the first N read pairs of each run were streamed from ENA (12 samples, 960 MB total). No FASTQ is committed.", "commit": "scripts/fetch_reads.sh"},
+    {"date": "2026-11-09", "status": "problem", "title": "Three setup bugs, found by running it", "story": "1) Slurm runs a copy of the script so relative paths broke. 2) MetaPhlAn needs Python 3.11 because Python 3.12+ removed a module it imports. 3) A check tested for a folder, not its contents, so an empty database folder looked finished. Each was fixed and committed.", "commit": "several"},
+    {"date": "2026-11-09", "status": "done", "title": "Kraken2 and Bracken finished", "story": "48 Kraken2 reports (2 databases x 2 confidence settings x 12 samples) completed. Bracken produced 11 of 12 outputs; the missing one is being checked rather than assumed harmless.", "commit": ""},
+    {"date": "2026-11-09", "status": "running", "title": "MetaPhlAn 4 on all samples", "story": "Running now on Explorer. Results will be parsed, scored against the known answer and added to this dashboard.", "commit": ""},
+    {"date": "2026-11-09", "status": "running", "title": "Research fan-out for the dashboard", "story": "Six queens are researching their subdomains and writing cited JSON; the king then adds cross-domain analogies and the critic checks the sources.", "commit": ""},
+    {"date": "2026-11-09", "status": "todo", "title": "Evaluate, write the decision report, deploy the site", "story": "Score every tool, write REPORT.md with Supports / Does not support / Check next for each run, then publish this site on Cloudflare Pages and link it from the README.", "commit": ""}
+  ]
+}

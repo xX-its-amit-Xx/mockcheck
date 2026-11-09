@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mockcheck: which classifier can you trust?</title>
+<meta name="description" content="A plain-language guide and live benchmark of taxonomic read classifiers on public mock microbial communities.">
+<style>
+:root{--bg:#fbfaf7;--fg:#1d2430;--mut:#5d6675;--card:#ffffff;--line:#e3e0d8;--acc:#0b6e69;--acc2:#b4531a;--ok:#2a7d3f;--warn:#b4531a;--bad:#a42c2c;--chip:#eef3f2}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#12161b;--fg:#e8e6e1;--mut:#9aa3b0;--card:#1a2027;--line:#2b333d;--acc:#4fc4bc;--acc2:#e89a62;--ok:#6cc47f;--warn:#e89a62;--bad:#ee7b7b;--chip:#1f2a2c}}
+:root[data-theme=dark]{--bg:#12161b;--fg:#e8e6e1;--mut:#9aa3b0;--card:#1a2027;--line:#2b333d;--acc:#4fc4bc;--acc2:#e89a62;--ok:#6cc47f;--warn:#e89a62;--bad:#ee7b7b;--chip:#1f2a2c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 Georgia,"Iowan Old Style",serif}
+a{color:var(--acc)}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+header.hero{padding:42px 0 26px;border-bottom:1px solid var(--line)}
+h1{font:700 clamp(28px,5vw,44px)/1.15 system-ui,sans-serif;margin:0 0 10px}
+h2{font:700 26px/1.25 system-ui,sans-serif;margin:0 0 6px}
+h3{font:650 18px/1.3 system-ui,sans-serif;margin:18px 0 6px}
+.lede{font-size:20px;color:var(--mut);max-width:42em}
+nav{position:sticky;top:0;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);z-index:5}
+nav .wrap{display:flex;gap:4px;overflow-x:auto;padding:8px 16px}
+nav a{font:14px system-ui,sans-serif;text-decoration:none;color:var(--mut);padding:6px 10px;border-radius:8px;white-space:nowrap}
+nav a:hover{background:var(--chip);color:var(--fg)}
+section{padding:34px 0;border-bottom:1px solid var(--line)}
+.sub{color:var(--mut);font:15px system-ui,sans-serif;margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:12px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.tldr{border-left:5px solid var(--acc);background:var(--chip);padding:14px 18px;border-radius:0 12px 12px 0;font-size:18px}
+details{border:1px solid var(--line);border-radius:10px;margin:8px 0;background:var(--card)}
+details>summary{cursor:pointer;padding:10px 14px;font:600 16px system-ui,sans-serif;list-style:none}
+details>summary::before{content:"+";display:inline-block;width:1.2em;color:var(--acc)}
+details[open]>summary::before{content:"\2212"}
+details>.in{padding:2px 16px 12px}
+details details{margin-left:6px;background:transparent}
+.term{border-bottom:1.5px dotted var(--acc);cursor:help}
+#pop{position:fixed;max-width:340px;background:var(--card);border:1px solid var(--acc);border-radius:12px;padding:12px 14px;font:15px/1.5 system-ui,sans-serif;box-shadow:0 8px 28px rgba(0,0,0,.22);z-index:20;display:none}
+#pop b{display:block;margin-bottom:4px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.tab{font:14px system-ui,sans-serif;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:7px 12px;border-radius:999px;cursor:pointer}
+.tab[aria-selected=true]{background:var(--acc);color:#fff;border-color:var(--acc)}
+.pill{display:inline-block;font:600 12px system-ui,sans-serif;padding:2px 9px;border-radius:999px;color:#fff}
+.done{background:var(--ok)}.running{background:var(--acc)}.problem{background:var(--bad)}.todo{background:var(--mut)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.bar{height:14px;background:var(--chip);border-radius:7px;position:relative;margin:3px 0}
+.bar>i{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:var(--acc)}
+.bar>u{position:absolute;top:-3px;bottom:-3px;width:3px;background:var(--fg);text-decoration:none}
+table{border-collapse:collapse;width:100%;font:14px system-ui,sans-serif}
+td,th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+.scroll{overflow-x:auto}
+select,input[type=range],input[type=text]{font:15px system-ui,sans-serif}
+input[type=text]{width:100%;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg)}
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.three>div{border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:var(--card)}
+.three h4{margin:0 0 4px;font:700 14px system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em}
+.yes h4{color:var(--ok)}.no h4{color:var(--bad)}.nx h4{color:var(--acc)}
+.mut{color:var(--mut)}.small{font-size:14px}
+.kmer{font:14px ui-monospace,Consolas,monospace}
+.hit-a{background:#2a7d3f33}.hit-b{background:#b4531a33}.hit-c{background:#3b6fb533}
+footer{padding:30px 0;color:var(--mut);font:14px system-ui,sans-serif}
+button.tog{font:14px system-ui,sans-serif;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;padding:6px 10px;cursor:pointer}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <div class="row" style="justify-content:space-between"><span class="mut small" style="font-family:system-ui">mockcheck &middot; living dashboard</span><button class="tog" id="theme">Light / dark</button></div>
+  <h1>You have DNA reads from a mixed sample. Which classifier can you trust?</h1>
+  <p class="lede">We test popular tools on communities where the right answer is known, then say in plain words what each result supports, what it does not, and what to check next.</p>
+  <div class="tldr" id="tldr">Loading the headline&hellip;</div>
+</div></header>
+<nav><div class="wrap">
+  <a href="#story">The story</a><a href="#results">Live results</a><a href="#toy">Try it</a><a href="#fail">What goes wrong</a><a href="#analogy">Other fields</a><a href="#ideas">Untried ideas</a><a href="#gloss">Glossary</a><a href="#timeline">Timeline</a><a href="#devlog">Dev log</a><a href="#sources">Sources</a>
+</div></nav>
+<main class="wrap">
+
+<section id="story"><h2>The story, in plain language</h2>
+<p class="sub">Pick a chapter. Every dotted word is clickable. Every "+" opens a deeper layer. Skim or dive.</p>
+<div class="tabs" id="tabs" role="tablist"></div><div id="chapter"></div></section>
+
+<section id="results"><h2>Live results</h2>
+<p class="sub">Computed from the committed result tables in this repo. Nothing on this page is typed in by hand.</p>
+<div id="res-body"><p class="mut">Loading results&hellip;</p></div></section>
+
+<section id="toy"><h2>Try it: a toy classifier</h2>
+<p class="sub">This is a teaching toy with three <b>made-up</b> mini genomes, not real data. It shows the core idea behind k-mer classifiers such as Kraken2: chop a read into short words, look each word up, let the words vote.</p>
+<div class="card"><div id="toy-ref" class="kmer small"></div>
+<p><label>Type or edit a read (letters A C G T):<input type="text" id="toy-read" value="ATGCGTACGTTAGCTAGGCTA"></label></p>
+<p><label>Word length k = <b id="kv">6</b> <input type="range" id="toy-k" min="4" max="9" value="6"></label>
+&nbsp; <label>Confidence needed = <b id="cv">0.30</b> <input type="range" id="toy-c" min="0" max="100" value="30"></label></p>
+<div id="toy-out"></div></div></section>
+
+<section id="fail"><h2>What goes wrong, and how to notice</h2><p class="sub">Collected from every research area.</p><div id="fails"></div></section>
+<section id="analogy"><h2>The same problem in other fields</h2><p class="sub">Analogies from law, medicine, art and more, each with the place the analogy breaks, and stories of how others solved similar problems.</p><div id="analogies"></div></section>
+<section id="ideas"><h2>Untried or under-tried ideas</h2><p class="sub">These are ideas to test, not findings.</p><div id="ideas-body"></div></section>
+<section id="gloss"><h2>Glossary</h2><p class="sub">Every term used on this page.</p><input type="text" id="gsearch" placeholder="Search terms&hellip;"><div id="glist"></div></section>
+<section id="timeline"><h2>Timeline of the field</h2><div id="tl"></div></section>
+<section id="devlog"><h2>Dev log</h2><p class="sub">How this project was actually built, including what broke.</p><div id="dev"></div></section>
+<section id="sources"><h2>Sources and unverified items</h2><p class="sub">Every source the research agents cite. Anything they could not verify is listed separately rather than stated as fact.</p><div id="srcs"></div></section>
+</main>
+<footer><div class="wrap">Open source (see LICENSE). Data: Nicholls et al. 2019, ENA PRJEB29504. Built by an emperor/king/queen agent fan-out, then reviewed by a critic agent.</div></footer>
+<div id="pop" role="tooltip"></div>
+
+<script>
+"use strict";
+const $=(s,r=document)=>r.querySelector(s);
+function el(tag,attrs={},...kids){const e=document.createElement(tag);for(const[k,v]of Object.entries(attrs)){if(k==="class")e.className=v;else if(k.startsWith("on"))e.addEventListener(k.slice(2),v);else e.setAttribute(k,v)}for(const k of kids.flat()){if(k==null)continue;e.append(k.nodeType?k:document.createTextNode(String(k)))}return e}
+async function j(p){try{const r=await fetch(p);if(!r.ok)return null;return await r.json()}catch{return null}}
+async function tsv(p){try{const r=await fetch(p);if(!r.ok)return null;const t=(await r.text()).trim().split("\n").map(l=>l.split("\t"));const h=t.shift();return t.map(r=>Object.fromEntries(h.map((k,i)=>[k,r[i]])))}catch{return null}}
+$("#theme").onclick=()=>{const d=document.documentElement;const dark=getComputedStyle(d).getPropertyValue("--bg").trim()==="#12161b";d.setAttribute("data-theme",dark?"light":"dark")};
+
+const QIDS=["ground_truth","sequencing","algorithms","databases","evaluation","decisions"];
+const NICE={ground_truth:"The answer key",sequencing:"Reading the DNA",algorithms:"How classifiers think",databases:"Their reference books",evaluation:"Keeping score",decisions:"Making the call"};
+let Q={},KING=null,CRIT=null,GLOSS=new Map();
+
+function detailsFrom(summary,body,open){const d=el("details",{},el("summary",{},summary),el("div",{class:"in"},body));if(open)d.open=true;return d}
+function paras(t){return String(t||"").split(/\n\n+/).map(p=>el("p",{},p))}
+function qa(items){return (items||[]).map(x=>detailsFrom(x.q,el("p",{},x.a)))}
+function srcList(s){return el("ul",{class:"small"},(s||[]).map(x=>el("li",{},el("a",{href:x.url,target:"_blank",rel:"noopener"},x.title||x.url))))}
+
+function renderChapter(id){
+  const q=Q[id],box=$("#chapter");box.replaceChildren();
+  if(!q){box.append(el("p",{class:"mut"},"This chapter is still being researched. Check the dev log below."));return}
+  box.append(el("p",{class:"lede"},q.one_line||""));
+  box.append(el("div",{class:"card"},paras(q.layperson_story)));
+  for(const s of q.sections||[]){
+    box.append(detailsFrom(s.title,[paras(s.plain),(s.deeper||[]).length?el("h3",{},"Go deeper"):null,qa(s.deeper),(s.sources||[]).length?el("p",{class:"small mut"},"Sources:"):null,(s.sources||[]).length?srcList(s.sources):null]));
+  }
+  box.append(el("div",{class:"three"},
+    el("div",{class:"yes"},el("h4",{},"Supports"),el("ul",{},(q.what_this_supports||[]).map(x=>el("li",{},x)))),
+    el("div",{class:"no"},el("h4",{},"Does not support"),el("ul",{},(q.what_this_does_not_support||[]).map(x=>el("li",{},x)))),
+    el("div",{class:"nx"},el("h4",{},"Check next"),el("ul",{},(q.check_next||[]).map(x=>el("li",{},x))))));
+  if((q.aha_moments||[]).length)box.append(detailsFrom("Aha moments",el("ul",{},q.aha_moments.map(x=>el("li",{},x))),true));
+  linkTerms(box);
+}
+function renderTabs(){
+  const t=$("#tabs");t.replaceChildren();
+  QIDS.forEach((id,i)=>{const b=el("button",{class:"tab",role:"tab","aria-selected":i===0?"true":"false",onclick:()=>{[...t.children].forEach(c=>c.setAttribute("aria-selected","false"));b.setAttribute("aria-selected","true");renderChapter(id)}},(i+1)+". "+NICE[id]);t.append(b)});
+  renderChapter(QIDS[0]);
+}
+
+/* glossary: hover/click popovers, auto-linked */
+function buildGloss(){
+  GLOSS=new Map();
+  for(const id of QIDS){for(const g of (Q[id]&&Q[id].glossary)||[]){if(g.term&&!GLOSS.has(g.term.toLowerCase()))GLOSS.set(g.term.toLowerCase(),g)}}
+  const list=$("#glist");const draw=f=>{list.replaceChildren();[...GLOSS.values()].filter(g=>!f||(g.term+" "+g.plain).toLowerCase().includes(f)).sort((a,b)=>a.term.localeCompare(b.term)).forEach(g=>list.append(detailsFrom(g.term,[el("p",{},g.plain),g.deeper?el("p",{class:"mut"},g.deeper):null])))};
+  draw("");$("#gsearch").oninput=e=>draw(e.target.value.toLowerCase());
+}
+function linkTerms(root){
+  if(!GLOSS.size)return;
+  const terms=[...GLOSS.keys()].sort((a,b)=>b.length-a.length).filter(t=>t.length>2);
+  if(!terms.length)return;
+  const re=new RegExp("\\b("+terms.map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")+")\\b","i");
+  const seen=new Set();
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement.closest("summary,.term,button,a")?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+  const nodes=[];while(w.nextNode())nodes.push(w.currentNode);
+  for(const n of nodes){
+    let text=n.nodeValue,m,frag=null;
+    while((m=re.exec(text))&&!seen.has(m[1].toLowerCase())){
+      seen.add(m[1].toLowerCase());frag=frag||document.createDocumentFragment();
+      frag.append(text.slice(0,m.index));frag.append(el("span",{class:"term",tabindex:"0","data-t":m[1].toLowerCase()},m[1]));text=text.slice(m.index+m[1].length);
+    }
+    if(frag){frag.append(text);n.replaceWith(frag)}
+  }
+}
+const pop=$("#pop");
+function showPop(t,e){const g=GLOSS.get(t.dataset.t);if(!g)return;pop.replaceChildren(el("b",{},g.term),el("div",{},g.plain),g.deeper?el("div",{class:"mut small",style:"margin-top:6px"},g.deeper):"");pop.style.display="block";const r=t.getBoundingClientRect();pop.style.left=Math.max(8,Math.min(innerWidth-360,r.left))+"px";pop.style.top=Math.min(innerHeight-pop.offsetHeight-8,r.bottom+6)+"px"}
+document.addEventListener("mouseover",e=>{const t=e.target.closest?.(".term");if(t)showPop(t)});
+document.addEventListener("click",e=>{const t=e.target.closest?.(".term");if(t)showPop(t);else if(!e.target.closest("#pop"))pop.style.display="none"});
+document.addEventListener("mouseout",e=>{if(e.target.closest?.(".term")&&!e.relatedTarget?.closest?.("#pop"))pop.style.display="none"});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")pop.style.display="none";if(e.key==="Enter"&&e.target.classList?.contains("term"))showPop(e.target)});
+
+/* failures, analogies, ideas, timeline, sources */
+function renderFails(){
+  const box=$("#fails");box.replaceChildren();let n=0;
+  for(const id of QIDS){const q=Q[id];if(!q||!(q.failure_modes||[]).length)continue;
+    box.append(el("h3",{},NICE[id]));
+    for(const f of q.failure_modes){n++;box.append(detailsFrom(f.what_goes_wrong,[el("p",{},el("b",{},"How to notice: "),f.how_to_notice),el("p",{},el("b",{},"What to do: "),f.what_to_do)]))}}
+  if(!n)box.append(el("p",{class:"mut"},"Research in progress."));
+}
+function renderKing(){
+  const a=$("#analogies"),i=$("#ideas-body");a.replaceChildren();i.replaceChildren();
+  if(!KING){a.append(el("p",{class:"mut"},"The king is still gathering cross-domain material."));return}
+  const byQ={};for(const x of KING.analogies||[])(byQ[x.queen]=byQ[x.queen]||[]).push(x);
+  for(const[k,v]of Object.entries(byQ)){a.append(el("h3",{},NICE[k]||k));for(const x of v)a.append(detailsFrom(x.concept+"  \u2194  "+x.other_field,[el("p",{},x.analogy),el("p",{class:"mut"},el("b",{},"Where it breaks: "),x.where_it_breaks),x.source_url?el("p",{class:"small"},el("a",{href:x.source_url,target:"_blank",rel:"noopener"},"source")):null]))}
+  if((KING.overcame_it||[]).length){a.append(el("h3",{},"How others overcame it"));for(const x of KING.overcame_it)a.append(detailsFrom(x.problem+" ("+x.other_field+")",[el("p",{},x.story),el("p",{},el("b",{},"Lesson here: "),x.lesson_for_mockcheck),srcList(x.sources)]))}
+  const sq={};for(const x of KING.serendipity||[])(sq[x.queen]=sq[x.queen]||[]).push(x);
+  for(const[k,v]of Object.entries(sq)){i.append(el("h3",{},NICE[k]||k));for(const x of v)i.append(detailsFrom(x.idea,[el("p",{},x.why_interesting),el("p",{class:"mut"},el("b",{},"Cheap test: "),x.how_to_test_cheaply)]))}
+  if((KING.cross_links||[]).length){i.append(el("h3",{},"Connections between areas"));for(const x of KING.cross_links)i.append(el("div",{class:"card small"},el("b",{},(NICE[x.from]||x.from)+" \u2192 "+(NICE[x.to]||x.to)+": "),x.insight))}
+  linkTerms(a);linkTerms(i);
+}
+function renderTimeline(){
+  const rows=[];for(const id of QIDS)for(const t of (Q[id]&&Q[id].timeline)||[])rows.push({...t,area:NICE[id]});
+  rows.sort((a,b)=>String(a.year).localeCompare(String(b.year)));
+  const box=$("#tl");box.replaceChildren();
+  if(!rows.length){box.append(el("p",{class:"mut"},"Research in progress."));return}
+  box.append(el("div",{class:"scroll"},el("table",{},el("tr",{},el("th",{},"Year"),el("th",{},"Area"),el("th",{},"What happened")),rows.map(r=>el("tr",{},el("td",{},r.year),el("td",{},r.area),el("td",{},r.event," ",r.source_url?el("a",{href:r.source_url,target:"_blank",rel:"noopener"},"[source]"):""))))));
+}
+function renderSources(){
+  const box=$("#srcs");box.replaceChildren();const seen=new Map();
+  for(const id of QIDS)for(const s of (Q[id]&&Q[id].sections)||[])for(const x of s.sources||[])if(x.url&&!seen.has(x.url))seen.set(x.url,x.title||x.url);
+  for(const x of (KING&&KING.overcame_it)||[])for(const s of x.sources||[])if(s.url&&!seen.has(s.url))seen.set(s.url,s.title||s.url);
+  box.append(detailsFrom(seen.size+" sources",el("ul",{class:"small"},[...seen].map(([u,t])=>el("li",{},el("a",{href:u,target:"_blank",rel:"noopener"},t))))));
+  const un=[];for(const id of QIDS)for(const u of (Q[id]&&Q[id].unverified)||[])un.push(NICE[id]+": "+u);for(const u of (KING&&KING.unverified)||[])un.push("King: "+u);
+  box.append(detailsFrom("Could not be verified ("+un.length+")",el("ul",{class:"small"},un.map(u=>el("li",{},u)))));
+  if(CRIT){const miss=CRIT.missing_topics||[],over=CRIT.overstated||[];box.append(detailsFrom("Critic's review",[el("h3",{},"Missing topics"),el("ul",{class:"small"},miss.map(x=>el("li",{},x))),el("h3",{},"Possibly overstated"),el("ul",{class:"small"},over.map(x=>el("li",{},(x.file||"")+": "+(x.text||"")+" \u2192 "+(x.fix||"")))),el("h3",{},"Citation spot-checks"),el("ul",{class:"small"},(CRIT.citation_checks||[]).map(x=>el("li",{},(x.supported?"\u2713 ":"\u2717 ")+x.claim+(x.note?" ("+x.note+")":""))))]))}
+}
+
+/* dev log */
+async function renderDev(){
+  const d=await j("data/devlog.json"),box=$("#dev");box.replaceChildren();if(!d){box.append(el("p",{class:"mut"},"No dev log."));return}
+  const c={};d.entries.forEach(e=>c[e.status]=(c[e.status]||0)+1);
+  box.append(el("div",{class:"row"},Object.entries(c).map(([k,v])=>el("span",{},el("span",{class:"pill "+k},k)," ",v))));
+  box.append(detailsFrom("The agent structure (emperor / king / queens / critic)",[el("p",{},d.agents.emperor),el("p",{},d.agents.king),el("p",{},"Queens: "+d.agents.queens.map(q=>NICE[q]).join(", ")+"."),el("p",{},d.agents.critic)]));
+  d.entries.slice().reverse().forEach(e=>box.append(el("div",{class:"card"},el("div",{class:"row"},el("span",{class:"pill "+e.status},e.status),el("b",{},e.title),el("span",{class:"mut small"},e.date)),el("p",{style:"margin:6px 0 0"},e.story),e.commit?el("p",{class:"small mut",style:"margin:4px 0 0"},"Where: "+e.commit):"")));
+}
+
+/* results explorer */
+async function renderResults(){
+  const box=$("#res-body");box.replaceChildren();
+  const sum=await tsv("data/results/even_summary.tsv"),per=await tsv("data/results/even_per_organism.tsv"),nc=await tsv("data/results/negative_controls.tsv"),lg=await tsv("data/results/log_summary.tsv");
+  if(!sum||!per){$("#tldr").textContent="Results are still being computed on the cluster; the dev log below shows where things stand.";box.append(el("p",{class:"mut"},"Result tables are not published yet."));return}
+  const methods=[...new Set(sum.map(r=>r.method))];
+  /* headline */
+  const base=sum.filter(r=>r.threshold_pct==="0"||r.threshold_pct==="0.0");
+  const best=base.slice().sort((a,b)=>parseFloat(a.bray_curtis_vs_expected)-parseFloat(b.bray_curtis_vs_expected))[0];
+  if(best)$("#tldr").textContent="On the even mock community, the closest match to the known answer was "+best.method+" (Bray-Curtis distance "+best.bray_curtis_vs_expected+", 0 is perfect). Distance depends heavily on the database and on whether the tool can see yeast at all; read the sections below before choosing.";
+  /* per organism chart */
+  const sel=el("select",{},methods.map(m=>el("option",{value:m},m)));
+  const chart=el("div");
+  const draw=()=>{chart.replaceChildren();const m=sel.value;const rows=per.filter(r=>r.method===m);const mx=Math.max(14,...rows.map(r=>parseFloat(r.observed_pct)));
+    rows.forEach(r=>{const o=parseFloat(r.observed_pct),e=parseFloat(r.expected_pct);const nm=r.organism.startsWith("[")?r.organism:r.organism;
+      chart.append(el("div",{},el("div",{class:"small"},nm+"  \u2014  observed "+o.toFixed(2)+"%"+(e?" vs expected "+e+"%":"")),el("div",{class:"bar"},el("i",{style:"width:"+(o/mx*100)+"%;background:"+(e?"var(--acc)":"var(--bad)")}),e?el("u",{style:"left:"+(e/mx*100)+"%"}):"")))})};
+  sel.onchange=draw;draw();
+  box.append(el("div",{class:"card"},el("h3",{style:"margin-top:0"},"Even mock: what each tool saw"),el("p",{class:"small mut"},"Teal bar = what the tool reported. Black tick = the expected share. Red = species that are not in the mock at all."),el("label",{class:"small"},"Tool: ",sel),chart));
+  /* threshold slider */
+  const ths=[...new Set(sum.map(r=>r.threshold_pct))].sort((a,b)=>a-b);
+  const sl=el("input",{type:"range",min:0,max:ths.length-1,value:0,step:1});const out=el("div",{class:"scroll"});const lab=el("b",{},"");
+  const d2=()=>{const t=ths[sl.value];lab.textContent=t+"%";out.replaceChildren(el("table",{},el("tr",{},["Tool","Real species found","False species","Missed","Precision","Recall","F1"].map(h=>el("th",{},h))),sum.filter(r=>r.threshold_pct===t).map(r=>el("tr",{},el("td",{},r.method),el("td",{},r.tp),el("td",{},r.fp),el("td",{},r.fn),el("td",{},r.precision),el("td",{},r.recall),el("td",{},r.f1)))))};
+  sl.oninput=d2;d2();
+  box.append(el("div",{class:"card"},el("h3",{style:"margin-top:0"},"Slide the cut-off: ignore anything rarer than"),el("p",{class:"small mut"},"Raising the cut-off removes false alarms but can also remove real, rare species. Watch precision and recall trade places."),el("div",{class:"row"},sl,lab),out));
+  /* negative controls */
+  if(nc){const ms=[...new Set(nc.map(r=>r.method))];const avg=ms.map(m=>{const r=nc.filter(x=>x.method===m);return{m,mass:r.reduce((s,x)=>s+parseFloat(x.other_mass_pct),0)/r.length,n:r.reduce((s,x)=>s+parseFloat(x.other_species_ge_0_1pct),0)/r.length}}).sort((a,b)=>a.mass-b.mass);
+    box.append(el("div",{class:"card"},el("h3",{style:"margin-top:0"},"Single-organism controls: how many false alarms?"),el("p",{class:"small mut"},"Each control is one known organism. Anything else reported is a false alarm. (Real strains can differ slightly from reference genomes, so some \u2018false\u2019 mass is genuine relatives.)"),avg.map(a=>el("div",{},el("div",{class:"small"},a.m+" \u2014 "+a.mass.toFixed(1)+"% of profile not the true organism; "+a.n.toFixed(1)+" extra species \u2265 0.1% on average"),el("div",{class:"bar"},el("i",{style:"width:"+Math.min(100,a.mass)+"%;background:var(--warn)"}))))))}
+  if(lg)box.append(detailsFrom("Log-distribution mock (presence only)",[el("p",{class:"small mut"},"Only two expected values are stated in the source paper's text, so this mock is used for presence checks and for one anchor: Listeria monocytogenes expected near 89.1% of cells."),el("div",{class:"scroll"},el("table",{},el("tr",{},Object.keys(lg[0]).map(k=>el("th",{},k))),lg.map(r=>el("tr",{},Object.values(r).map(v=>el("td",{},v))))))]));
+  const tm=await tsv("data/results/timing_even.tsv");
+  if(tm)box.append(detailsFrom("Speed and memory (even mock)",el("div",{class:"scroll"},el("table",{},el("tr",{},el("th",{},"Run"),el("th",{},"Seconds"),el("th",{},"Peak GB")),tm.map(r=>el("tr",{},el("td",{},r.label),el("td",{},r.wall_s),el("td",{},r.max_rss_gb)))))));
+  const rep=el("p",{},el("a",{href:"https://github.com/xX-its-amit-Xx/mockcheck/blob/main/REPORT.md"},"Read the full decision report"));box.append(rep);
+}
+
+/* toy k-mer classifier */
+const TOY={A:"ATGCGTACGTTAGCTAGGCTAACGTTAGGCTAGCTTAGC",B:"TTGACCGGATCGATCGGCTAAGCTTGACCGATCGGATCC",C:"GGCATCGATTTACGGCATGCATCGGATTACGCATCGAGC"};
+const NAMES={A:"Toy species A",B:"Toy species B",C:"Toy species C"};
+function kmers(s,k){const o=[];for(let i=0;i+k<=s.length;i++)o.push(s.slice(i,i+k));return o}
+function toy(){
+  const k=+$("#toy-k").value,conf=+$("#toy-c").value/100;$("#kv").textContent=k;$("#cv").textContent=conf.toFixed(2);
+  const read=$("#toy-read").value.toUpperCase().replace(/[^ACGT]/g,"");
+  const idx={};for(const[s,g]of Object.entries(TOY))for(const km of kmers(g,k))(idx[km]=idx[km]||new Set()).add(s);
+  const ks=kmers(read,k),votes={A:0,B:0,C:0};let amb=0,none=0;
+  const cells=ks.map(km=>{const h=idx[km];if(!h){none++;return el("span",{class:"kmer",style:"margin-right:4px;opacity:.5"},km)}if(h.size>1)amb++;h.forEach(s=>votes[s]++);return el("span",{class:"kmer hit-"+[...h][0].toLowerCase(),style:"margin-right:4px;padding:0 2px;border-radius:3px"},km)});
+  $("#toy-ref").textContent="Made-up references (not real organisms): A, B, C, each ~40 letters long.";
+  const best=Object.entries(votes).sort((a,b)=>b[1]-a[1])[0],tot=ks.length||1,frac=best[1]/tot;
+  const verdict=ks.length===0?"Read too short for this k.":frac>=conf&&best[1]>0?"Called: "+NAMES[best[0]]+" ("+best[1]+" of "+tot+" words, "+(frac*100).toFixed(0)+"%)":"Unclassified: best guess has only "+(frac*100).toFixed(0)+"% of words, below the "+(conf*100).toFixed(0)+"% bar.";
+  $("#toy-out").replaceChildren(el("p",{},cells),el("p",{},el("b",{},verdict)),el("p",{class:"small mut"},"Words in no reference: "+none+" \u00b7 words in more than one reference: "+amb+". Raise the confidence bar and watch borderline reads become \u2018unclassified\u2019: fewer wrong calls, fewer reads classified. Shorter words find more matches but also more accidental ones."));
+}
+["toy-read","toy-k","toy-c"].forEach(id=>$("#"+id).addEventListener("input",toy));
+
+(async function init(){
+  for(const id of QIDS){Q[id]=await j("data/q_"+id+".json")}
+  KING=await j("data/king.json");CRIT=await j("data/critic.json");
+  buildGloss();renderTabs();renderFails();renderKing();renderTimeline();renderSources();
+  await renderDev();await renderResults();toy();
+})();
+</script>
+</body>
+</html>

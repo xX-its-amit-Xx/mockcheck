@@ -1,6 +1,6 @@
 BRIEF.md
-data/
-work/
+/data/
+/work/
 *.fastq*
 *.fq*
 *.k2d
