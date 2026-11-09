@@ -33,7 +33,7 @@ for name in k2_standard_08gb_20250402 k2_standard_16gb_20250402; do
   fi
 done
 # MetaPhlAn database
-if [ ! -d "$MC_DB/metaphlan" ]; then
+if ! ls "$MC_DB"/metaphlan/*.bt2* >/dev/null 2>&1; then
   mkdir -p "$MC_DB/metaphlan"
   PATH="$MC_ENV_MPA/bin:$PATH" "$MC_ENV_MPA/bin/metaphlan" --install --bowtie2db "$MC_DB/metaphlan"
 fi
