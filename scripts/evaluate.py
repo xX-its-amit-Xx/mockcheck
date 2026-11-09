@@ -191,6 +191,7 @@ pd.DataFrame(lg).to_csv(f"{OUT}/log_summary.tsv", sep="\t", index=False)
 tp = f"{RAW}/timing.tsv"
 if os.path.exists(tp):
     t = pd.read_csv(tp, sep="\t", header=None, names=["label", "wall_s", "max_rss_kb"])
+    t = t.drop_duplicates("label", keep="last")  # a failed first attempt may precede the real run
     t = t[t["label"].str.endswith(".even")].copy()
     t["max_rss_gb"] = (t["max_rss_kb"] / 1048576).round(1)
     t[["label", "wall_s", "max_rss_gb"]].to_csv(f"{OUT}/timing_even.tsv", sep="\t", index=False)

@@ -102,3 +102,9 @@ metaphlan.iso_Listeria_monocytogenes	240.30	35628224
 metaphlan.iso_Saccharomyces_cerevisiae	241.39	35629188
 metaphlan.iso_Cryptococcus_neoformans	237.38	35629252
 metaphlan.iso_Lactobacillus_fermentum	241.99	35628864
+kraken2.08gb.c0.0.log	16.57	8157636
+kraken2.08gb.c0.1.log	3.17	8146476
+kraken2.16gb.c0.0.log	28.51	15984080
+bracken.16gb.log	1.65	26948
+kraken2.16gb.c0.1.log	3.98	15981624
+metaphlan.log	325.21	35628372

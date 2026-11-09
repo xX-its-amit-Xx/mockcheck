@@ -10,6 +10,7 @@ for f in "$MC_OUT"/kraken2/*.report; do
 done
 cp "$MC_OUT"/bracken/*.bracken "$R/bracken/"
 cp "$MC_OUT"/metaphlan/*.profile.txt "$R/metaphlan/"
+sed -i "s|$MOCKCHECK_SCRATCH|\$MOCKCHECK_SCRATCH|g" "$R"/metaphlan/*.profile.txt   # scrub site-specific paths
 cp "$MC_OUT/timing/timing.tsv" "$R/timing.tsv"
 cp "$MOCKCHECK_SCRATCH/environment.lock.txt" "$REPO/env/environment.lock.txt" 2>/dev/null || true
 du -sh "$R"

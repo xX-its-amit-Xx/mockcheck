@@ -60,10 +60,10 @@ run_all.sh   one-command reproduction (Explorer/Slurm), with a --local path
 ```
 
 ## Compute and storage
-- Reads, databases, scratch: `/scratch/shenoy.am/mockcheck` on Explorer
+- Reads, databases, scratch: `/scratch/$USER/mockcheck` on Explorer
   (set `MOCKCHECK_SCRATCH`). Nothing large on D: or in git.
 - Slurm: public `short` partition only, one job at a time, modest memory
-  (<= 64 GB, 8 cores), no GPUs. Submitted as `shenoy.am`.
+  (<= 64 GB, 8 cores), no GPUs. Submitted as `$USER`.
 - Small raw classifier outputs (reports only, no per-read files) are
   committed under `results/raw/`; cold large outputs go to OneDrive offload.
 

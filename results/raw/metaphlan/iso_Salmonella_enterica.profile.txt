@@ -1,5 +1,5 @@
 #mpa_vJan26_CHOCOPhlAnSGB_202605
-#/scratch/shenoy.am/mockcheck/env_mpa/bin/metaphlan /scratch/shenoy.am/mockcheck/reads/iso_Salmonella_enterica_1.fastq.gz,/scratch/shenoy.am/mockcheck/reads/iso_Salmonella_enterica_2.fastq.gz --input_type fastq --nproc 8 --db_dir /scratch/shenoy.am/mockcheck/db/metaphlan -x mpa_vJan26_CHOCOPhlAnSGB_202605 --mapout /scratch/shenoy.am/mockcheck/out/metaphlan/iso_Salmonella_enterica.mapout.bz2 -o /scratch/shenoy.am/mockcheck/out/metaphlan/iso_Salmonella_enterica.profile.txt
+#$MOCKCHECK_SCRATCH/env_mpa/bin/metaphlan $MOCKCHECK_SCRATCH/reads/iso_Salmonella_enterica_1.fastq.gz,$MOCKCHECK_SCRATCH/reads/iso_Salmonella_enterica_2.fastq.gz --input_type fastq --nproc 8 --db_dir $MOCKCHECK_SCRATCH/db/metaphlan -x mpa_vJan26_CHOCOPhlAnSGB_202605 --mapout $MOCKCHECK_SCRATCH/out/metaphlan/iso_Salmonella_enterica.mapout.bz2 -o $MOCKCHECK_SCRATCH/out/metaphlan/iso_Salmonella_enterica.profile.txt
 #600000 reads processed
 #SampleID	Metaphlan_Analysis
 #clade_name	NCBI_tax_id	relative_abundance	additional_species

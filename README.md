@@ -1,0 +1,71 @@
+# mockcheck
+
+**Reproducible benchmark of taxonomic read classifiers on public mock microbial communities, with a plain-language decision report.**
+
+> **Start here (no biology needed): [the live dashboard](https://mockcheck.pages.dev)**
+> A guided story with clickable terms, live charts, a toy classifier you can play with, and a dev log of how this was built, including what broke.
+> **Then read [REPORT.md](REPORT.md)**: the decision report.
+
+## The question
+
+You have DNA from a mixed sample (gut, soil, a probiotic, a clinical swab) and a computer program says what organisms are in it. **Can you trust it?** Mock communities are tubes mixed from known organisms in known amounts, so we can check programs against a known answer.
+
+## The answer in one table
+
+| If you need... | Use | Watch out for |
+|---|---|---|
+| Which species are present and roughly how much | **MetaPhlAn 4**: closest to truth, 1 false species on the even mock | Slowest here (548 s, 34 GB RAM); misses organisms below about 0.2% of cells |
+| Fast screening or read-level labels | **Kraken2 + Bracken** | Over 150 false low-level species; cannot see fungi at all |
+| Abundances straight from Kraken2 | **Don't** | A 12% organism read as 26% to 69% |
+| A shrunk 8 GB Kraken2 database | Only if memory forces it | 73% of reads left unclassified at confidence 0.1 |
+
+The biggest swings came from **what the database contains and what names it uses**, not from algorithm cleverness. Details, numbers and caveats: [REPORT.md](REPORT.md). Each run ends with three blocks: what the result **supports**, what it **does not**, and what to **check next**.
+
+## What is in the box
+
+| Path | What |
+|---|---|
+| `REPORT.md` | The decision report |
+| `docs/` | The dashboard (a static site, deployed on Cloudflare Pages) |
+| `results/*.tsv`, `results/fig/` | Small result tables and figures |
+| `results/raw/` | Small raw classifier reports (no reads are in the repo) |
+| `config/` | Samples and accessions, expected composition **with its source**, name aliases |
+| `env/environment.lock.txt` | Exact tool versions |
+| `scripts/` | Fetch, setup, run, collect, evaluate, build site |
+| `PLAN.md` | The plan written before any code |
+
+## Data (public and harmless)
+
+Nicholls et al. 2019, *GigaScience* 8(5):giz043, ENA project PRJEB29504. The even mock **ERR2984773** (ZymoBIOMICS D6300, MiSeq 2x151), the log mock **ERR2935805** (D6310, HiSeq 2x101), and ten single-organism runs **ERR2935848 to ERR2935857** as negative controls. Only the first N read pairs of each run are streamed (2,000,000 / 500,000 / 300,000); nothing large is stored in git.
+
+The expected composition comes from Zymo's D6300 datasheet (12% and 2% are theoretical genomic DNA; the cell-number column is also recorded). Details and caveats in `config/expected.tsv` and the report.
+
+## Tools and versions
+
+Kraken2 2.17.2 (standard 8 GB and 16 GB indexes, 2025-04-02), Bracken 3.1, MetaPhlAn 4.2.6 (index `mpa_vJan26_CHOCOPhlAnSGB_202605`), Bowtie2 2.5.5. Full list: `env/environment.lock.txt`.
+
+## Reproduce
+
+```bash
+# On a Slurm cluster (roughly 24 GB of disk for databases; the heaviest step is MetaPhlAn at about 9 minutes per 2M-pair sample):
+bash run_all.sh
+# when the classifier job finishes:
+bash scripts/collect_raw.sh && bash run_all.sh --local
+
+# No cluster? Re-score the committed raw reports on any machine (python3, pandas, matplotlib):
+bash run_all.sh --local
+```
+
+Big files (reads, databases, scratch) live under `MOCKCHECK_SCRATCH` (default `/scratch/$USER/mockcheck`) and never in git. Heavy runs use the cluster's public `short` partition with a modest footprint (one 8-core job at a time).
+
+## Honest limits
+
+Two mocks, one lab, public data; real samples will differ. The even mock's "truth" is the vendor's theoretical recipe. Some background chapters on the dashboard were drafted by AI research agents, spot-checked by a second agent, and anything unverified is listed on the page rather than stated as fact. The full list of limitations is at the end of [REPORT.md](REPORT.md).
+
+## Deploying the dashboard
+
+`docs/` is a plain static site (no build step). On Cloudflare Pages: `wrangler pages deploy docs --project-name mockcheck`.
+
+## License
+
+See [LICENSE](LICENSE).
