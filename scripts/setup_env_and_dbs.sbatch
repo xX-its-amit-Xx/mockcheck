@@ -14,10 +14,14 @@ module load miniforge3/26.7.2-0
 eval "$(conda shell.bash hook)"
 if [ ! -d "$MC_ENV" ]; then
   conda create -y -p "$MC_ENV" -c conda-forge -c bioconda \
-    kraken2 bracken metaphlan seqtk pandas matplotlib
+    kraken2 bracken seqtk pandas matplotlib
 fi
+if [ ! -d "$MC_ENV_MPA" ]; then
+  conda create -y -p "$MC_ENV_MPA" -c conda-forge -c bioconda python=3.11 metaphlan
+fi
+{ echo "# env (kraken2/bracken)"; conda list -p "$MC_ENV" --export;
+  echo "# env_mpa (metaphlan)"; conda list -p "$MC_ENV_MPA" --export; } > "$MOCKCHECK_SCRATCH/environment.lock.txt"
 conda activate "$MC_ENV"
-conda list --export > "$MOCKCHECK_SCRATCH/environment.lock.txt"
 # Kraken2 databases (Langmead indexes, 2025-04-02 build)
 for name in k2_standard_08gb_20250402 k2_standard_16gb_20250402; do
   d="$MC_DB/$name"
@@ -31,7 +35,7 @@ done
 # MetaPhlAn database
 if [ ! -d "$MC_DB/metaphlan" ]; then
   mkdir -p "$MC_DB/metaphlan"
-  metaphlan --install --bowtie2db "$MC_DB/metaphlan"
+  PATH="$MC_ENV_MPA/bin:$PATH" "$MC_ENV_MPA/bin/metaphlan" --install --bowtie2db "$MC_DB/metaphlan"
 fi
 ls -la "$MC_DB" "$MC_DB"/metaphlan | head -40
 echo SETUP_DONE
