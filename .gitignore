@@ -1,0 +1,9 @@
+BRIEF.md
+data/
+work/
+*.fastq*
+*.fq*
+*.k2d
+*.bt2
+__pycache__/
+.env
