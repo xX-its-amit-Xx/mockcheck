@@ -102,8 +102,12 @@ def prf(pred, truth):
 
 # ---- even mock: quantitative
 rows, per = [], []
-e = exp[exp["sample"] == "even"].set_index("organism")["expected_percent"].to_dict()
-bact = {k: v for k, v in e.items() if k not in YEASTS}
+e = exp[exp["sample"] == "even"].set_index("organism")["expected_percent"].astype(float).to_dict()
+# Zymo datasheet: expected_percent is theoretical genomic DNA (matches read share);
+# the cell column is the fair truth for tools that report taxon (cell-like) abundance.
+ecell = exp[exp["sample"] == "even"].set_index("organism")["expected_cell_percent"].astype(float).to_dict()
+CELL_NATIVE = ("metaphlan4",)
+bact ={k: v for k, v in e.items() if k not in YEASTS}
 sb = sum(bact.values())
 bact = {k: 100 * v / sb for k, v in bact.items()}
 for m in methods:
@@ -122,14 +126,18 @@ for m in methods:
                  precision=round(pr, 3), recall=round(rc, 3), f1=round(f1, 3))
         if i == 0:
             r["bray_curtis_vs_expected"] = round(bray(prof, e), 3)
+            r["bray_curtis_vs_cell_truth"] = round(bray(prof, ecell), 3)
+            r["native_basis"] = "cell" if m.startswith(CELL_NATIVE) else "dna"
+            r["bray_curtis_native_basis"] = r["bray_curtis_vs_cell_truth"] if r["native_basis"] == "cell" else r["bray_curtis_vs_expected"]
             r["false_positive_mass_pct"] = round(sum(v for k, v in prof.items() if k not in truth), 2)
             r["bray_curtis_8_bacteria_only"] = round(bray(pbn, bact), 3)
             r["species_assigned_frac_of_reads"] = None if af is None else round(af, 3)
         rows.append(r)
     for org, ev in e.items():
-        per.append(dict(method=m, organism=org, expected_pct=ev, observed_pct=round(prof.get(org, 0), 3)))
+        per.append(dict(method=m, organism=org, expected_pct=ev, expected_cell_pct=ecell[org],
+                        observed_pct=round(prof.get(org, 0), 3)))
     for v, k in sorted(((v, k) for k, v in prof.items() if k not in truth), reverse=True)[:5]:
-        per.append(dict(method=m, organism=f"[not in mock] {k}", expected_pct=0, observed_pct=round(v, 3)))
+        per.append(dict(method=m, organism=f"[not in mock] {k}", expected_pct=0, expected_cell_pct=0, observed_pct=round(v, 3)))
 pd.DataFrame(rows).to_csv(f"{OUT}/even_summary.tsv", sep="\t", index=False)
 pd.DataFrame(per).to_csv(f"{OUT}/even_per_organism.tsv", sep="\t", index=False)
 

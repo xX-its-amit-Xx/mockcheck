@@ -222,13 +222,13 @@ async function renderResults(){
   const methods=[...new Set(sum.map(r=>r.method))];
   /* headline */
   const base=sum.filter(r=>r.threshold_pct==="0"||r.threshold_pct==="0.0");
-  const best=base.slice().sort((a,b)=>parseFloat(a.bray_curtis_vs_expected)-parseFloat(b.bray_curtis_vs_expected))[0];
-  if(best)$("#tldr").textContent="On the even mock community, the closest match to the known answer was "+best.method+" (Bray-Curtis distance "+best.bray_curtis_vs_expected+", 0 is perfect). Distance depends heavily on the database and on whether the tool can see yeast at all; read the sections below before choosing.";
+  const best=base.slice().sort((a,b)=>parseFloat(a.bray_curtis_native_basis)-parseFloat(b.bray_curtis_native_basis))[0];
+  if(best)$("#tldr").textContent="On the even mock community, the closest match to the known answer was "+best.method+" (Bray-Curtis distance "+best.bray_curtis_native_basis+", 0 is perfect; each tool is scored against the kind of answer it reports: reads or cells). Distance depends heavily on the database and on whether the tool can see yeast at all; read the sections below before choosing.";
   /* per organism chart */
   const sel=el("select",{},methods.map(m=>el("option",{value:m},m)));
   const chart=el("div");
   const draw=()=>{chart.replaceChildren();const m=sel.value;const rows=per.filter(r=>r.method===m);const mx=Math.max(14,...rows.map(r=>parseFloat(r.observed_pct)));
-    rows.forEach(r=>{const o=parseFloat(r.observed_pct),e=parseFloat(r.expected_pct);const nm=r.organism.startsWith("[")?r.organism:r.organism;
+    rows.forEach(r=>{const o=parseFloat(r.observed_pct),e=parseFloat(m.startsWith("metaphlan")?r.expected_cell_pct:r.expected_pct);const nm=r.organism.startsWith("[")?r.organism:r.organism;
       chart.append(el("div",{},el("div",{class:"small"},nm+"  \u2014  observed "+o.toFixed(2)+"%"+(e?" vs expected "+e+"%":"")),el("div",{class:"bar"},el("i",{style:"width:"+(o/mx*100)+"%;background:"+(e?"var(--acc)":"var(--bad)")}),e?el("u",{style:"left:"+(e/mx*100)+"%"}):"")))})};
   sel.onchange=draw;draw();
   box.append(el("div",{class:"card"},el("h3",{style:"margin-top:0"},"Even mock: what each tool saw"),el("p",{class:"small mut"},"Teal bar = what the tool reported. Black tick = the expected share. Red = species that are not in the mock at all."),el("label",{class:"small"},"Tool: ",sel),chart));

@@ -1,0 +1,446 @@
+{
+  "id": "king",
+  "analogies": [
+    {
+      "queen": "ground_truth",
+      "concept": "A mock community is a reference set of known-authentic samples",
+      "other_field": "Art restoration and forgery detection",
+      "analogy": "To spot a fake Vermeer you need genuine Vermeers and known-modern materials to compare against. A mock community plays the same role for classifiers: a sample whose contents we already know, so a wrong answer can be recognised as wrong. The Han van Meegeren case shows what happens without that comparison. His forged Supper at Emmaus was hailed in 1937 as a masterpiece of Vermeer partly because genuine Vermeers were in wartime storage and nothing could be set beside it. When an international panel led by Paul Coremans examined his paintings in 1945-47, it found phenolformaldehyde resins (Bakelite, Albertol), a 20th-century material, in the paint.",
+      "where_it_breaks": "A museum can usually find out whether a painting is real. A mock's answer key is itself a recipe with error bars: the famous 12 percent is DNA weight, not cell share, and Zymo swapped five strains partway through the product's life. So the mock is a good-but-imperfect answer key, and an apparent classifier error may be an error in the key.",
+      "source_url": "https://en.wikipedia.org/wiki/Han_van_Meegeren"
+    },
+    {
+      "queen": "ground_truth",
+      "concept": "12 percent is a recipe number, not what a read counter should report",
+      "other_field": "Philosophy of measurement",
+      "analogy": "The Stanford Encyclopedia distinguishes an instrument indication (what the dial shows) from a measurement outcome (a claim about the quantity, with units and uncertainty), and says measurement involves a model linking the two. Here the quantity of interest (the measurand) must be defined first. 12 percent of DNA mass, 12 percent of cells, and 12 percent of reads are three different measurands. Asking whether a classifier got 12 percent right is like asking whether a thermometer is right without saying whether you mean air or water temperature.",
+      "where_it_breaks": "In physics the measurand can usually be fixed by convention (the kilogram, the second). In a microbial mix there is no single privileged definition: the vendor itself says to use different columns for 16S and shotgun work. So the benchmark has to publish its choice rather than hide it.",
+      "source_url": "https://plato.stanford.edu/entries/measurement-science/"
+    },
+    {
+      "queen": "ground_truth",
+      "concept": "Truth sets are built, not found, and they have regions where truth is unknown",
+      "other_field": "Human genome reference benchmarks (Genome in a Bottle)",
+      "analogy": "NIST's Genome in a Bottle consortium sequenced one person's DNA (NA12878) many times, combining 14 data sets from five sequencing platforms, to produce a trusted set of genotype calls. The answer key is a consensus of many imperfect methods, with difficult regions excluded and labelled as uncertain. A mock community answer key is similar: a recipe plus a published genome, with known weak spots (strain drift, DNA-versus-cell shares).",
+      "where_it_breaks": "Genome in a Bottle has one genome and a worldwide community building the key over years. Our mocks are two vendor products measured in a single paper, and we have not built a consensus truth ourselves.",
+      "source_url": "https://www.nist.gov/news-events/news/2014/02/how-well-did-you-sequence-genome-nist-consortium-partners-have-answer"
+    },
+    {
+      "queen": "sequencing",
+      "concept": "A FASTQ file is the tube after several lab steps have bent the numbers",
+      "other_field": "Philosophy of measurement (calibration)",
+      "analogy": "The Stanford Encyclopedia describes calibration as fitting an instrument's indications to a model or known standards, resting on theoretical and statistical assumptions whose uncertainty carries into the result. A sequencer is an instrument whose indications (reads) must be calibrated against the thing we care about (cells in the tube). Extraction, PCR and imaging each add an uncalibrated step. A mock community is the calibration standard for the whole chain, which is exactly why the vendor sells it.",
+      "where_it_breaks": "A good thermometer is calibrated once and then trusted across temperatures. Sequencing bias depends on the organism (tough cell walls, GC content), so a calibration done on eight bacteria and two yeasts does not transfer cleanly to a gut sample.",
+      "source_url": "https://plato.stanford.edu/entries/measurement-science/"
+    },
+    {
+      "queen": "sequencing",
+      "concept": "Base quality scores (Q30) are confidence, not accuracy of the whole result",
+      "other_field": "Law: eyewitness identification",
+      "analogy": "A witness's stated confidence is not the same as being right. The eyewitness literature says post-lineup feedback such as Good, you identified the suspect can inflate a witness's confidence, especially when wrong, so confidence should be recorded in the witness's own words straight after the identification. A Phred quality score is the machine's confidence per letter and describes only the reading step. It says nothing about earlier steps, such as which cells broke open during extraction.",
+      "where_it_breaks": "Phred scores are calibrated statistically and are fairly honest about the reading step; human confidence can be wildly miscalibrated. The caution is about scope (what the confidence covers), not about the machine lying.",
+      "source_url": "https://en.wikipedia.org/wiki/Eyewitness_identification"
+    },
+    {
+      "queen": "sequencing",
+      "concept": "Index hopping and cross-talk between samples; low-amount DNA stochastics",
+      "other_field": "Forensic DNA mixture interpretation",
+      "analogy": "NIST's 2024 review notes that people constantly shed small amounts of DNA, that highly sensitive methods now detect DNA from more than one person, and that it can be hard to tell whether trace DNA is relevant or contamination. It also lists stochastic effects during PCR and low-quantity minor contributors as drivers of uncertainty. A single-isolate sequencing run with a few stray reads from another sample is the same problem in miniature: sensitivity brings you someone else's DNA.",
+      "where_it_breaks": "A crime scene mixture is a unique, unrepeatable sample with a person's liberty at stake. A sequencing run is cheap to repeat and cross-talk rates are measurable by design (unique dual indexes, blanks).",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/ir/2024/NIST.IR.8351.pdf"
+    },
+    {
+      "queen": "databases",
+      "concept": "A classifier cannot name an organism that is not in its database",
+      "other_field": "Spell-checking (the Cupertino effect)",
+      "analogy": "Older spell checkers had only the hyphenated co-operation in their dictionaries, so the correct word cooperation was swapped for Cupertino, which was in the dictionary. WordPerfect 9 did this automatically for any unknown word close to exactly one known word. A classifier with no yeast references behaves the same way: yeast reads are not reported as unknown, they get pulled toward the nearest thing the database does contain, or silently dropped.",
+      "where_it_breaks": "A spell checker acts on a whole word and a human can instantly see that Cupertino is absurd. A classifier's wrong label looks like any other label in a table, and nobody reads reads one by one.",
+      "source_url": "https://en.wikipedia.org/wiki/Cupertino_effect"
+    },
+    {
+      "queen": "databases",
+      "concept": "Names change: Lactobacillus reuteri became Limosilactobacillus reuteri; NCBI versus GTDB",
+      "other_field": "Librarianship and cataloguing (authority control)",
+      "analogy": "Libraries give every person, place or topic one authorised heading, with variant forms pointing to it, so Princess Diana's records are grouped under one name despite different spellings and dates. They add birth and death years to separate two authors with the same name. A taxonomy needs the same thing: one authorised ID per organism, with old names, synonyms and renamings as cross-references. Scoring a classifier by comparing name strings is like searching the catalogue under the wrong variant and concluding the library lacks the book.",
+      "where_it_breaks": "Library headings are decided by a cataloguing authority and then fixed. Microbial taxonomy has competing authorities (NCBI, GTDB) who disagree about where the species boundaries are, not just what to call them.",
+      "source_url": "https://en.wikipedia.org/wiki/Authority_control"
+    },
+    {
+      "queen": "databases",
+      "concept": "Missing references make close relatives take the credit",
+      "other_field": "Law: police line-ups",
+      "analogy": "In a culprit-absent line-up, the witness tends to choose whoever looks most like the perpetrator, using relative judgment, so an innocent person is at heightened risk. Telling the witness the culprit may or may not be present reduces such misidentifications. A classifier whose database lacks the true species will often credit the closest relative that is present, such as an E. coli call for Shigella reads. The classifier's default instructions never say the answer may be absent.",
+      "where_it_breaks": "A witness has a fallible memory; a classifier has an exact deterministic rule. The remedy is also different: raising the confidence threshold or adding a reference, not coaching.",
+      "source_url": "https://en.wikipedia.org/wiki/Eyewitness_identification"
+    },
+    {
+      "queen": "algorithms",
+      "concept": "Kraken assigns to the lowest common ancestor when matches are ambiguous",
+      "other_field": "Spell-checking",
+      "analogy": "WordPerfect 9's default replaced an unknown word only when it was close to exactly one known word. If two known words were equally close, no automatic replacement made sense. Kraken's lowest-common-ancestor rule resolves ambiguity differently: when a read matches several species equally well, the label moves up to their shared genus or family instead of guessing, trading precision at species level for honesty.",
+      "where_it_breaks": "A spell checker compares whole words one at a time, while Kraken tallies many overlapping fixed-length words per read and votes among them. Also, a spell checker never reports the share of an ambiguous word; a classifier does.",
+      "source_url": "https://en.wikipedia.org/wiki/Cupertino_effect"
+    },
+    {
+      "queen": "algorithms",
+      "concept": "Marker-gene profilers (MetaPhlAn) look only at a small catalogue of unique genes",
+      "other_field": "Art forgery detection",
+      "analogy": "The Van Meegeren panel did not repaint a Vermeer to compare. It looked for specific tell-tale markers: Bakelite-type resins, paint too hard for alcohol or acids to touch, and later (1967) lead-210 and polonium-210 values far above what 17th-century lead would show. A few strong markers are cheap and decisive when present. MetaPhlAn works similarly, checking a catalogue of species-unique genes rather than every letter of every read.",
+      "where_it_breaks": "Finding a marker is strong evidence of presence; not finding it is weak evidence of absence. A forger who used genuinely period materials would slip through, and a microbe outside the marker catalogue is invisible to MetaPhlAn.",
+      "source_url": "https://en.wikipedia.org/wiki/Han_van_Meegeren"
+    },
+    {
+      "queen": "algorithms",
+      "concept": "Different algorithms, same data, different answers",
+      "other_field": "Forensic DNA mixture interpretation",
+      "analogy": "NIST's review says that for clean single-source DNA, different laboratories reach the same result whatever their instruments, tests or software, but that multiple interlaboratory studies over two decades show different laboratories can produce a wide range of results when interpreting the same DNA mixtures. The review counts twenty such studies over 25 years. Metagenomic classifiers show the same pattern: on easy, clean pure cultures they agree; on mixtures and borderline signals they diverge.",
+      "where_it_breaks": "Forensic labs differ in analyst judgment and software settings; our tools are deterministic and fully reproducible when versions and parameters are pinned. The divergence is built into the algorithm, not human variation.",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/ir/2024/NIST.IR.8351.pdf"
+    },
+    {
+      "queen": "evaluation",
+      "concept": "Precision and the cost of false positives depend on how common the real thing is",
+      "other_field": "Healthcare diagnostics and screening (base rate fallacy)",
+      "analogy": "Wikipedia's worked example: a test with a 5 percent false positive rate and no false negatives. In a population with 40 percent infected, a positive result means about 93 percent chance of infection. In a population with 2 percent infected, the same test gives only about 29 percent (20 true positives, 49 false positives). Same test, different base rate. A classifier that reports a long tail of low-abundance species behaves the same way: a rare species call is mostly false unless the species is plausible in that sample.",
+      "where_it_breaks": "In a medical screen the base rate is a property of the population. In a metagenomic sample, the base rate for a species depends on the sample type and is usually unknown, and we are not testing people but reads.",
+      "source_url": "https://en.wikipedia.org/wiki/Base_rate_fallacy"
+    },
+    {
+      "queen": "evaluation",
+      "concept": "Rankings change when you change the scoring method",
+      "other_field": "Wine tasting (Judgment of Paris, 1976)",
+      "analogy": "In the 1976 blind tasting, eleven judges scored wines out of 20; Chateau Montelena (California, 1973) placed first among whites with 132 points over Meursault Charmes at 126.5, and Stag's Leap won the reds. The page notes that later reanalyses found the rankings changed depending on the statistical method used. Benchmarks of classifiers rank differently depending on the metric (F1, AUPR, Bray-Curtis) and cutoff, so a ranking without its method is nearly meaningless.",
+      "where_it_breaks": "Wine quality is subjective, and judges had no stated criteria. Our mocks have a known answer, so metric differences reflect what is being asked, not taste.",
+      "source_url": "https://en.wikipedia.org/wiki/Judgment_of_Paris_(wine)"
+    },
+    {
+      "queen": "evaluation",
+      "concept": "Negative controls and single-isolate runs act as a known-innocent line-up",
+      "other_field": "Law: line-up fillers",
+      "analogy": "Research recommends that line-up fillers be known-innocent people matching the witness's description, so a pick of a filler reveals a memory error. A single-isolate run is a line-up with only one real member: any other species is, by construction, an error (or cross-talk). Without fillers there is no wrong answer to reveal the mistake, as in the 2006 Duke lacrosse case where multiple suspects were included.",
+      "where_it_breaks": "Fillers are chosen to resemble the suspect; our negative controls are chosen for purity, not similarity, so they test false positives from noise, not confusions between near relatives.",
+      "source_url": "https://en.wikipedia.org/wiki/Eyewitness_identification"
+    },
+    {
+      "queen": "decisions",
+      "concept": "A classifier report is a screen that needs confirmation",
+      "other_field": "Healthcare screening",
+      "analogy": "The base-rate example shows why a positive on a screening test among mostly-negative people is more likely false than true. A founder should treat a long list of species the way a clinician treats a positive screen: a reason to look, not a conclusion. Targeted PCR or assembly plays the role of the confirmatory test.",
+      "where_it_breaks": "Medical screens have a defined condition and calibrated sensitivity and specificity. A metagenomic species list has no single condition being tested, and the cost of a false positive varies a lot by use case.",
+      "source_url": "https://en.wikipedia.org/wiki/Base_rate_fallacy"
+    },
+    {
+      "queen": "decisions",
+      "concept": "Ask the right question of the vendor: may the answer be absent?",
+      "other_field": "Law: how line-ups are run",
+      "analogy": "Good line-up practice includes double-blind administration (someone who does not know the suspect runs it), telling the witness the culprit may or may not be present, and recording confidence immediately. The analogue for buying a classification service: ask who ran the analysis without knowing the expected answer, whether it was told the target might be absent, and whether the report records settings and database versions.",
+      "where_it_breaks": "Line-up reforms were driven by a measured record of wrongful identifications; there is no comparable record of wrongful microbial calls, so the checklist rests on reasoning rather than outcome data.",
+      "source_url": "https://en.wikipedia.org/wiki/Eyewitness_identification"
+    },
+    {
+      "queen": "decisions",
+      "concept": "Every method has limits tied to the risk you accept",
+      "other_field": "Forensic science governance",
+      "analogy": "NIST's executive summary opens: All scientific methods have limits. To use a method appropriately, one must understand those limits, which are inevitably tied to the risk one is willing to accept either as an individual or as a society. It also says challenges should be clearly communicated, or the strength and relevance of the evidence can be misunderstood. That is the stance a founder should take with a read classifier: decide what a wrong answer costs before deciding how much to trust it.",
+      "where_it_breaks": "Forensic stakes are life and liberty. A product decision may have lower stakes and benefit from a simpler rule of thumb.",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/ir/2024/NIST.IR.8351.pdf"
+    }
+  ],
+  "overcame_it": [
+    {
+      "problem": "Methods claim to work, but nobody can compare them fairly because developers see the answers in advance.",
+      "other_field": "Protein structure prediction (CASP)",
+      "story": "CASP (Critical Assessment of Structure Prediction) has run every two years since 1994 with more than 100 groups taking part. It is double-blind: predictors, organizers and assessors all lack the target structures when predictions are made. Targets are structures about to be solved experimentally or held back by the Protein Data Bank. Predictions are scored with GDT-TS, the percentage of well-modelled residues, and free-modelling predictions are also judged visually because numbers handle loose resemblances poorly. In December 2018 DeepMind's AlphaFold won CASP13, and in November 2020 AlphaFold 2 won CASP14 with John Moult saying it scored around 90 out of 100 on moderately difficult targets. Funding became an issue in 2025 when NIH support ended and DeepMind provided interim funding.",
+      "lesson_for_mockcheck": "Our mock communities are public and well known, so every tool's authors could have tuned to them. CASP's remedy is truly unseen targets. mockcheck could add a held-out check (new isolate runs deposited after the database build date of 2025-04-02) and publish scoring rules before running the tools.",
+      "sources": [
+        { "title": "CASP (Wikipedia)", "url": "https://en.wikipedia.org/wiki/CASP" }
+      ]
+    },
+    {
+      "problem": "Published accuracy of diagnostic tests was hard to trust because studies did not report enough to judge bias or generalisability.",
+      "other_field": "Clinical diagnostic test validation (STARD)",
+      "story": "STARD (Standards for Reporting of Diagnostic Accuracy) was published in 2003 and updated as STARD 2015 in October 2015. According to the EQUATOR Network page, its aim is to improve the completeness and transparency of reporting of diagnostic accuracy studies, so readers can judge the study's potential for bias (internal validity) and how generalisable the findings are (external validity). It provides a checklist and flow diagram.",
+      "lesson_for_mockcheck": "mockcheck should have its own STARD-style checklist printed on every results page: tool and database versions, read subsets, answer key choice (DNA share, cell share), cutoff, and how the cutoff was chosen. Then a reader can judge bias and generalisability without asking.",
+      "sources": [
+        { "title": "STARD reporting guideline (EQUATOR Network)", "url": "https://www.equator-network.org/reporting-guidelines/stard/" }
+      ]
+    },
+    {
+      "problem": "Different labs reach different answers from the same complex DNA mixture.",
+      "other_field": "Forensic DNA mixture interpretation (NIST scientific foundation review)",
+      "story": "NIST's 2024 final report (NISTIR 8351) reviewed mixture interpretation methods and probabilistic genotyping software. It found that for single-source samples laboratories agree, but that multiple interlaboratory studies over two decades show a wide range of results on the same mixtures. It counted twenty interlaboratory studies over 25 years, plus validation data and proficiency tests, and stated that more complex samples (more contributors, low-quantity minor contributors, degradation, overlapping alleles) have greater uncertainty. The report went through a public comment period after a June 2021 draft, with comments from groups including the Innocence Project. The key moves were: measure the limits with known mixtures, publish them, and communicate them to the people who use the result.",
+      "lesson_for_mockcheck": "Report difficulty explicitly. A classifier score on a clean 8-bacteria even mock is the easy single-source case; the log mock and any real sample are the hard mixture case. Say so on the page, and show results by difficulty instead of one number.",
+      "sources": [
+        { "title": "NISTIR 8351: DNA Mixture Interpretation, NIST Scientific Foundation Review (Dec 2024)", "url": "https://nvlpubs.nist.gov/nistpubs/ir/2024/NIST.IR.8351.pdf" }
+      ]
+    },
+    {
+      "problem": "Sequencing and analysis methods gave hundreds of thousands of differences on the same human genome, so nobody could say which was right.",
+      "other_field": "Human genome reference materials (Genome in a Bottle, NIST)",
+      "story": "NIST hosted the Genome in a Bottle consortium of industry, academic and federal partners. They sequenced and re-sequenced DNA from one person (NA12878) with multiple techniques, combining data from 14 sequencing experiments on five platforms, weighting and analysing them to remove variation and error and to minimise bias toward any specific method. The Nature Biotechnology paper appeared in February 2014 and the genotype calls were released publicly, with a website letting labs benchmark any method against them. The story reports that in December 2013 the FDA approved the first high-throughput DNA sequencer, and that approval was the first use of a reference set of standard genotypes.",
+      "lesson_for_mockcheck": "A trusted answer key comes from combining many independent measurements, not from one recipe. mockcheck could cross-check the mock's stated composition against a deep-sequenced consensus of several unrelated tools and flag disagreements as questions about the key, not the tools.",
+      "sources": [
+        { "title": "How well did you sequence that genome? NIST consortium partners have the answer (NIST, 2014)", "url": "https://www.nist.gov/news-events/news/2014/02/how-well-did-you-sequence-genome-nist-consortium-partners-have-answer" }
+      ]
+    },
+    {
+      "problem": "Benchmark scores keep rising, but do the methods really generalise, or have they overfitted to the test set?",
+      "other_field": "Machine-learning image classification (ImageNet re-test)",
+      "story": "Recht and colleagues built new test sets for CIFAR-10 and ImageNet by closely following the original creation procedures and re-evaluated many classifiers. Accuracy dropped by 3 to 15 percent on CIFAR-10 and 11 to 14 percent on ImageNet. Gains on the original test sets still carried over to the new ones at a smaller scale. The authors concluded the drop is not due to adaptive overfitting from repeatedly reusing the test sets, and instead that models struggle with images slightly harder than those in the original sets.",
+      "lesson_for_mockcheck": "Any result on two public mocks should be expected to be optimistic for real samples. Build a second test set the same way (new mock runs, other labs) and report the drop, rather than assume the mock score transfers.",
+      "sources": [
+        { "title": "Do ImageNet Classifiers Generalize to ImageNet? (arXiv 1902.10811)", "url": "https://arxiv.org/abs/1902.10811" }
+      ]
+    },
+    {
+      "problem": "Eyewitness line-ups led to confident wrong identifications.",
+      "other_field": "Law: eyewitness identification reform",
+      "story": "The Innocence Project states that eyewitness misidentification is the single greatest cause of wrongful convictions nationwide and that it played a role in more than 75 percent of convictions overturned through DNA testing. Researchers recommend known-innocent fillers matching the description, double-blind administration, instructions that the culprit may or may not be present, recording confidence right after the pick, and sequential presentation. A 2006 Minnesota (Hennepin County) pilot found sequential presentation reduced false identifications, though a 2005 Chicago pilot was criticised in 2007 because its variables were confounded and the traditional method was not double-blind.",
+      "lesson_for_mockcheck": "The same procedural fixes apply: run the scoring script blind to the tool identity, include known-wrong fillers (negative controls), record the settings in advance, and beware of confounded comparisons (different databases for different tools) like the Chicago pilot.",
+      "sources": [
+        { "title": "Eyewitness identification (Wikipedia)", "url": "https://en.wikipedia.org/wiki/Eyewitness_identification" }
+      ]
+    },
+    {
+      "problem": "Experts believed a forgery was real; how was it finally exposed?",
+      "other_field": "Art forgery detection (Han van Meegeren)",
+      "story": "Abraham Bredius praised The Supper at Emmaus in The Burlington Magazine in 1937, and standard tests of the time (X-rays, white lead analysis, micro-spectroscopy) seemed to confirm authenticity. In 1945 Van Meegeren was arrested and a court-commissioned panel led by Paul Coremans identified phenolformaldehyde resins, a 20th-century material, in his paint. In 1967 Carnegie Mellon researchers used lead-210 dating: polonium-210 values of 8.5 plus or minus 1.4 versus 0.23 plus or minus 0.27 in 1600-1660 Dutch paintings. Dutch labs reaffirmed the findings in 1977 with gas chromatography. The lesson was that independent methods looking at different properties converged.",
+      "lesson_for_mockcheck": "A single method agreeing with itself is weak. When a k-mer tool and a marker-gene tool, using different databases and different logic, agree on a species, confidence is much higher; when they disagree, flag it.",
+      "sources": [
+        { "title": "Han van Meegeren (Wikipedia)", "url": "https://en.wikipedia.org/wiki/Han_van_Meegeren" }
+      ]
+    }
+  ],
+  "serendipity": [
+    {
+      "queen": "ground_truth",
+      "idea": "IDEA, not a fact: score every tool against three answer keys at once (DNA share, cell share, and the read share observed in a deep run) and report which key each tool agrees with best.",
+      "why_interesting": "A tool that looks bad against the headline 12 percent may look excellent against the cell key, or vice versa. This turns the ground-truth ambiguity into a measurable result instead of a footnote.",
+      "how_to_test_cheaply": "Compute three expected-abundance vectors from Zymo's table and the Nicholls read shares, then recompute L1 or Bray-Curtis three times. No new compute."
+    },
+    {
+      "queen": "ground_truth",
+      "idea": "IDEA: use the log mock as a calibration ladder. Plot observed against expected abundance on log-log axes for each tool and read the slope; a slope below 1 means the tool compresses the dynamic range.",
+      "why_interesting": "It turns a pass/fail detection question into a continuous 'how linear is it' measurement that works across several orders of magnitude.",
+      "how_to_test_cheaply": "Take the existing D6310 outputs and fit a line to log(observed) versus log(expected) for species above the detection floor given N."
+    },
+    {
+      "queen": "ground_truth",
+      "idea": "IDEA: perturb the answer key within its plausible range (12 percent versus 22 percent for L. fermentum, lot-dependent strains) and check whether the tool ranking flips. A ranking that survives is robust to the key; one that flips is mostly measuring the key.",
+      "why_interesting": "It quantifies how much of a score difference is ambiguity in the truth rather than differences between tools.",
+      "how_to_test_cheaply": "Randomly draw answer-key abundances from a range, recompute scores 1,000 times, count rank flips. A spreadsheet or short script."
+    },
+    {
+      "queen": "ground_truth",
+      "idea": "IDEA: distinguish true contamination from classifier noise in the 10 single-isolate runs by coverage evenness: reads from a real contaminant should spread across its genome, while false positives may pile onto a few conserved regions.",
+      "why_interesting": "Today an extra species in an isolate run is ambiguous (contamination, cross-talk or software error). Coverage evenness might separate them without a new experiment.",
+      "how_to_test_cheaply": "For each extra species, map the reads classified to it onto that species' reference with a fast aligner and compare the fraction of the genome covered to what a real organism at that abundance would give."
+    },
+    {
+      "queen": "ground_truth",
+      "idea": "IDEA: run the benchmark against both strain sets of D6300 (before and after Zymo's lot change) to measure how much score changes purely because the reference genomes are different.",
+      "why_interesting": "It converts the known-but-unmeasured lot problem into a number for how much strain choice alone moves results.",
+      "how_to_test_cheaply": "Needs the two sets of reference accessions from Zymo's documents; then re-score with the existing outputs under each set of expected names."
+    },
+    {
+      "queen": "sequencing",
+      "idea": "IDEA: classify at N = 10 thousand, 100 thousand, 1 million, and so on, and plot the N at which each mock species first appears and stabilises. This gives an empirical 'minimum reads for a given abundance' curve per tool.",
+      "why_interesting": "It tells a founder how deep to sequence for the species they care about, and shows when a miss is a depth problem rather than a tool problem.",
+      "how_to_test_cheaply": "Subsample the existing FASTQs with seqtk at several depths and rerun the fastest tool."
+    },
+    {
+      "queen": "sequencing",
+      "idea": "IDEA: compare the first N read pairs against a later slice and a random slice of the same run to test whether the head of the file is representative.",
+      "why_interesting": "First-N is an assumption in this project; if the file head differs (for example, tile edge effects, sorted order), every score is subtly biased.",
+      "how_to_test_cheaply": "Stream a second window of N pairs from ENA, classify it, and compare per-species shares with the first window using a simple chi-square or L1 distance."
+    },
+    {
+      "queen": "sequencing",
+      "idea": "IDEA: trim the 2x151 MiSeq reads to 2x101 in silico and re-score. If results shift toward the HiSeq log mock's pattern, part of the difference between the two mocks is read length, not the mock.",
+      "why_interesting": "The two mocks differ in instrument, read length and composition at once, so conclusions drawn by comparing them are confounded. This breaks one confound apart.",
+      "how_to_test_cheaply": "cutadapt or seqtk to truncate reads; rerun the same pipeline."
+    },
+    {
+      "queen": "sequencing",
+      "idea": "IDEA: plot observed-over-expected share against genome GC content for every mock species and tool, then test whether the pattern from one mock predicts the shifts in the other.",
+      "why_interesting": "If bias follows GC predictably, it could be corrected or at least labelled as lab chemistry, not classifier error.",
+      "how_to_test_cheaply": "A scatter plot from the data already on hand, plus the genomes' published GC percentages."
+    },
+    {
+      "queen": "sequencing",
+      "idea": "IDEA: use mate disagreement as a free quality signal. Classify the two reads of each pair separately; pairs where the mates point to different species are suspicious, and the rate of such pairs per species could flag false positives.",
+      "why_interesting": "Paired reads come from the same DNA fragment and should agree. Disagreement is evidence of confusion, cross-talk or chimeric reads, and costs no extra sequencing.",
+      "how_to_test_cheaply": "Run Kraken2 on read 1 and read 2 as separate files and count disagreeing pairs by called species, including in the isolate controls."
+    },
+    {
+      "queen": "databases",
+      "idea": "IDEA: leave-one-out deletion. Remove one mock species' genomes from a small database and see where its reads go, such as the nearest relative, an ancestor label or unclassified.",
+      "why_interesting": "It measures directly what happens when the database lacks the organism, which is the generic real-world failure, and shows which relatives will take false credit.",
+      "how_to_test_cheaply": "Build a small custom Kraken2 database of the 8 bacteria with and without one species; classify its reads; tabulate where they land."
+    },
+    {
+      "queen": "databases",
+      "idea": "IDEA: a naming tax. Score every tool twice, once by name string and once after mapping names to taxonomy IDs and synonyms, and report the difference as the share of the score lost to naming alone.",
+      "why_interesting": "It makes the invisible cost of renamings (e.g., Lactobacillus splits) visible, and shows which tools output stable IDs.",
+      "how_to_test_cheaply": "Use the NCBI taxonomy dump's names table to normalise both sides; compare F1 before and after."
+    },
+    {
+      "queen": "databases",
+      "idea": "IDEA: compare which species lose the most reads going from the 16 GB to the 8 GB index and test whether the loss tracks genome size, GC or number of related genomes in the database.",
+      "why_interesting": "The cap downsamples minimizers; if the loss is not uniform, some organisms are systematically disadvantaged by the memory budget.",
+      "how_to_test_cheaply": "Both indexes are being run already; compute per-species classified-read ratio 8 GB over 16 GB and correlate with genome features."
+    },
+    {
+      "queen": "databases",
+      "idea": "IDEA: a time-travel canary. Simulate reads from a genome published after the database build date (2025-04-02) and see where each tool puts them. This is a controlled 'organism not in the database' test with a known answer.",
+      "why_interesting": "It tests unseen-organism behaviour without needing a real unseen sample, and a post-cutoff genome cannot have leaked into the references.",
+      "how_to_test_cheaply": "Pick a recent RefSeq genome, simulate reads with ART or wgsim, classify, and tally calls."
+    },
+    {
+      "queen": "databases",
+      "idea": "IDEA: a name-churn audit. For the 10 mock species and 10 isolates, record the taxonomy ID and accepted name as of the database build date versus today, and count how many labels would be scored wrong by naive string matching.",
+      "why_interesting": "It puts a number on how fast the answer key goes stale, which tells the founder how often results must be re-run.",
+      "how_to_test_cheaply": "Download two NCBI taxdump snapshots and diff the relevant IDs."
+    },
+    {
+      "queen": "algorithms",
+      "idea": "IDEA: treat agreement between unrelated algorithms (k-mer Kraken2 and marker-gene MetaPhlAn) as a confidence signal and test whether species called by both have higher precision on the single-isolate controls than species called by either.",
+      "why_interesting": "The two tools fail differently, so errors should be less correlated; the intersection may buy precision cheaply. Whether this is new in this setting I have not verified.",
+      "how_to_test_cheaply": "Intersect species lists from existing outputs and compute precision in the 10 isolates."
+    },
+    {
+      "queen": "algorithms",
+      "idea": "IDEA: choose the Kraken2 confidence threshold from data, not convention, by plotting per-read confidence for correct versus incorrect species in the isolates and picking where the distributions separate.",
+      "why_interesting": "It replaces guesses like 0.1 or 0.5 with an empirical, tool-and-database-specific choice, and shows if the 8 GB and 16 GB databases need different values.",
+      "how_to_test_cheaply": "Rerun a few thresholds on the isolate subsets and compute the false-positive mass at each."
+    },
+    {
+      "queen": "algorithms",
+      "idea": "IDEA: use evenness of evidence as a filter. For each reported species, compare reads to the number of distinct genome positions or minimizers they hit; real organisms should show many distinct hits, false positives few.",
+      "why_interesting": "It separates a species supported by broad evidence from one supported by a pile of reads on a single shared region. Kraken2 may offer a report option with distinct-minimizer data; I have not verified the flag.",
+      "how_to_test_cheaply": "Check the Kraken2 manual for a minimizer-data report option, add it to the run, and compare reads-to-distinct-minimizer ratios for true and false species."
+    },
+    {
+      "queen": "algorithms",
+      "idea": "IDEA: borrow target-decoy from proteomics. Add decoy reference genomes that cannot be present (for example, scrambled or reversed sequences of real genomes) and count decoy calls to estimate the false-positive rate in real runs.",
+      "why_interesting": "It gives a per-sample estimate of the false discovery rate without needing an answer key, which real samples lack. I have not verified whether this has been tried in metagenomic classification.",
+      "how_to_test_cheaply": "Build a small database containing real species plus shuffled decoys; classify the isolates; any decoy hits estimate the noise floor."
+    },
+    {
+      "queen": "algorithms",
+      "idea": "IDEA: robustness by perturbation. Add 1 percent random errors to reads and see which species calls disappear; fragile calls are suspect.",
+      "why_interesting": "A true organism should survive small perturbations; a false positive resting on a few marginal matches may vanish.",
+      "how_to_test_cheaply": "Use a simple read mutator on the isolate subsets and re-run; compare call lists."
+    },
+    {
+      "queen": "evaluation",
+      "idea": "IDEA: cross-mock validation. Tune cutoffs on D6300 and score only on D6310 (and the reverse), reporting the drop, so no cutoff is tuned on the data it is scored on.",
+      "why_interesting": "It directly attacks the 'cutoff tuned on the scoring set' failure mode and shows how portable each tool's best settings are.",
+      "how_to_test_cheaply": "Sweep thresholds on one mock, freeze the best, evaluate on the other. Uses existing outputs."
+    },
+    {
+      "queen": "evaluation",
+      "idea": "IDEA: report the probability that tool A beats tool B by bootstrapping reads or species, instead of a single rank order.",
+      "why_interesting": "With only 10 answer-key species and two mocks, many rank differences will be noise; a probability communicates that honestly.",
+      "how_to_test_cheaply": "Resample reads with replacement 1,000 times, rerun scoring only (not classification) where possible, and count wins."
+    },
+    {
+      "queen": "evaluation",
+      "idea": "IDEA: a 'founder cost' score. Weight false positives by the cost of a confirmatory follow-up and false negatives by the cost of a miss, with the weights stated and editable, so tools are ranked on money or time instead of F1.",
+      "why_interesting": "F1 treats a wrong species and a missed species as equally bad, which no real buyer believes.",
+      "how_to_test_cheaply": "A spreadsheet with an editable cost cell for each error type, driven by the existing confusion counts. The cost values would be assumptions and must be labelled as such."
+    },
+    {
+      "queen": "evaluation",
+      "idea": "IDEA: freeze the scoring script and thresholds under a tagged git commit before running the final tools, CASP-style, and publish the commit hash on the results page.",
+      "why_interesting": "It makes it impossible, and visibly so, to quietly adjust the grading after seeing results.",
+      "how_to_test_cheaply": "git tag the scorer before the final run and display the tag in the site footer."
+    },
+    {
+      "queen": "evaluation",
+      "idea": "IDEA: derive each tool's abundance cutoff from the 10 isolates, as the level below which false-positive mass is under a stated tolerance, then evaluate on the mocks. This is similar to how clinical labs use blank samples to set a detection floor, though I have not opened a source for that practice.",
+      "why_interesting": "It ties the cutoff to measured noise instead of convention and gives a per-tool detection floor in plain terms.",
+      "how_to_test_cheaply": "For each tool, rank false-positive abundances in the isolates and pick the 95th or 99th percentile as the cutoff."
+    },
+    {
+      "queen": "decisions",
+      "idea": "IDEA: a one-page decision card answering three questions for any tool: is my organism of interest in its database, what is its false-positive floor, and what is the smallest abundance it can see at my sequencing depth. Test the card on non-specialists.",
+      "why_interesting": "The audience is a decision-maker. If three people cannot answer the three questions from the card, the site has failed regardless of how correct it is.",
+      "how_to_test_cheaply": "Show the card to three non-biologists and time how long they take to answer; revise."
+    },
+    {
+      "queen": "decisions",
+      "idea": "IDEA: a confirmation-cost calculator that takes a tool's false-positive mass and an assumed prior chance that a species is really present, and outputs how many reported species would need a PCR follow-up to find one real one (the base-rate arithmetic made interactive).",
+      "why_interesting": "It converts abstract precision into the number of wasted follow-up assays, which a founder can price.",
+      "how_to_test_cheaply": "A small page using the base-rate formula with sliders; the example numbers from the Wikipedia article (5 percent false positive, 2 percent prevalence) can serve as a check."
+    },
+    {
+      "queen": "decisions",
+      "idea": "IDEA: show non-specialists the default Kraken2 report and a filtered report from the same pure isolate, hidden labels, and ask which sample they would worry about. This measures how easily default output misleads.",
+      "why_interesting": "The harm of false positives lies in how people read them; this tests that directly.",
+      "how_to_test_cheaply": "Make two screenshots from existing results and ask five people."
+    },
+    {
+      "queen": "decisions",
+      "idea": "IDEA: use tool disagreement as the trigger for an expensive second test. Only escalate to PCR or assembly when Kraken2 and MetaPhlAn disagree, and measure how many disagreements are real errors on the mocks.",
+      "why_interesting": "It gives a cheap triage rule: agreement means move on, disagreement means look closer.",
+      "how_to_test_cheaply": "Tabulate species where the tools disagree on the mocks and isolates and check against the answer key."
+    },
+    {
+      "queen": "decisions",
+      "idea": "IDEA: closed-set versus open-set calling. For a use case with a known short list of plausible organisms (say a food process), restrict the report to an allow-list and compare errors with open-world calling on the isolates.",
+      "why_interesting": "The base-rate fallacy suggests a prior of plausibility should sharply cut false alarms; the allow-list is a crude, transparent prior.",
+      "how_to_test_cheaply": "Filter the isolate outputs to a hypothetical allow-list containing the true species plus a handful of others, and count false positives remaining."
+    }
+  ],
+  "cross_links": [
+    {
+      "from": "ground_truth",
+      "to": "evaluation",
+      "insight": "The ground-truth file says the 12 percent is a DNA-mass share and that by cell count the two yeasts are under 0.3 percent and L. fermentum about 22 percent. That changes what an abundance distance (Bray-Curtis, L1, Aitchison) in the evaluation file means: the same tool output can score well or badly depending on which answer key (DNA, cells, reads) is subtracted. A distance is only meaningful when the key behind it is named."
+    },
+    {
+      "from": "databases",
+      "to": "evaluation",
+      "insight": "The databases file says the Standard Kraken2 database contains no fungi. So recall for the two yeasts is capped at zero by design for Kraken2 and Bracken, and a low recall is not evidence of a weak algorithm. Evaluation should report scores for in-scope organisms (the 8 bacteria) separately from out-of-scope ones, and MetaPhlAn, whose catalogue is different, should not be compared on a single combined number."
+    },
+    {
+      "from": "sequencing",
+      "to": "decisions",
+      "insight": "Sequencing says taking only the first N read pairs limits what can be seen, and ground truth says the log mock's rarest members are around 0.000089 percent, about 1 read pair per million in the ideal case. A species 'missed' in the log mock is therefore a statement about depth (N), not about the tool. For a decision-maker, the detection limit is a joint property of tool, database and sequencing depth, never of the tool alone."
+    },
+    {
+      "from": "sequencing",
+      "to": "ground_truth",
+      "insight": "Index hopping (Illumina cites about 0.1 to 2 percent on patterned flow cells; one 2017 preprint reported more on HiSeq 4000) means a stray species in a single-isolate run may be real reads from another sample. That changes the meaning of a false positive in the negative-control role: some of what we call classifier error may be cross-talk, and the controls are a test of the run as well as the software."
+    },
+    {
+      "from": "databases",
+      "to": "algorithms",
+      "insight": "The 8 GB and 16 GB indexes keep fewer k-mers. The algorithms file reports (from a search summary, not a fully opened page) that with small databases the share of classified reads approaches zero once the confidence threshold passes about 0.4. So the confidence threshold is not a universal setting: the same value bites harder on a smaller database, and comparing Kraken2 at 0.2 across 8 GB and 16 GB is not comparing like with like."
+    },
+    {
+      "from": "algorithms",
+      "to": "decisions",
+      "insight": "The algorithms file says Bracken only redistributes reads Kraken already assigned and cannot tell if a species is truly present, and that this is an inference from its description. For a buyer, a Bracken abundance table looks like a stronger result than a Kraken report, but it inherits every Kraken false positive. 'Abundance estimated' does not mean 'presence confirmed.'"
+    },
+    {
+      "from": "databases",
+      "to": "ground_truth",
+      "insight": "The ground-truth file says Zymo changed five strains of D6300 during its life and that taxonomy names change (the databases file's Lactobacillus example). Together they mean the mock's answer key has two moving parts: which genomes the lot contained, and what those organisms are called in the database release used. A mismatch in either shows up as a false positive or a false negative that no classifier caused."
+    }
+  ],
+  "unverified": [
+    "The Stanford Encyclopedia and NIST report were opened and read; the NIST 2024 PDF was read via text extraction of its executive summary and section 3.1.4, not the full 498-reference document.",
+    "STARD 2015 details beyond the EQUATOR page (for example, the number of checklist items and what the flow diagram shows) were seen only in search-result summaries, so they are not stated as fact above. The PMC full text was blocked by a browser check.",
+    "Robert Hodgson's 2008 Journal of Wine Economics study of judge reliability (replicate wines, judges rarely repeating their scores) was seen only through a search summary; the double-gold-medal anecdote appears only in press reports. It is not used as a fact above.",
+    "The Genome in a Bottle story comes from NIST's 2014 news page plus a search summary of the Zook et al. Nature Biotechnology abstract; the paper was not opened.",
+    "The Wikipedia pages for CASP, Han van Meegeren, Base rate fallacy, Judgment of Paris, Eyewitness identification, Cupertino effect and Authority control are secondary sources; Wikipedia states the Van Meegeren cobalt-blue detail nowhere I read, so it is not used. Only the first 100,000 characters of the longer pages were read.",
+    "The Judgment of Paris page says later reanalyses changed the rankings depending on the statistical method, but I did not open the reanalysis papers.",
+    "Whether target-decoy FDR estimation, mate-concordance filters, allow-list calling or cross-algorithm agreement have already been tried in metagenomic classification was not searched. Every serendipity item is an idea, not a claim of novelty.",
+    "Whether Kraken2 has a report option for distinct minimizer counts was not verified in the manual here.",
+    "The use of blank samples to set a limit of detection in clinical laboratories is background knowledge; no source was opened for it.",
+    "Facts about the mocks and tools in cross_links (12 percent DNA share, under 0.3 percent yeast cells, 0.000089 percent rarest member, 8 GB and 16 GB index sizes, index-hopping rates, the 0.4 threshold observation) are taken from the queen files, which themselves flag several of these as taken from search summaries or unopened pages.",
+    "The claim that a classifier with no yeast references pulls yeast reads toward the nearest database entry or drops them is a mechanism-level inference from how Kraken works, not something observed in our data."
+  ]
+}

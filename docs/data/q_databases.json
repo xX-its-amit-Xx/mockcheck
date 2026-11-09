@@ -1,0 +1,198 @@
+{
+"id": "databases",
+"title": "Reference databases and taxonomy: the answer key behind every classifier",
+"one_line": "A read classifier can only name what its reference database contains and only in the naming system that database uses, so the database often decides the answer before the algorithm runs.",
+"layperson_story": [
+"Imagine a bird-identification app. It does not actually know birds. It compares your photo to a library of labelled photos. If your bird is not in the library, the app will name the closest thing it has, or shrug. DNA read classifiers work the same way. The library is called a reference database.",
+"Our benchmark feeds the same mock community, a known mixture of 8 bacteria and 2 yeasts, to several tools. Because we know what is in the tube, we can grade each tool. But the grade depends heavily on the library. The standard Kraken2 library contains bacteria, archaea, viruses, plasmids and the human genome, but not fungi. So the two yeasts in the mock cannot be found by that database, no matter how clever the software is.",
+"The library also comes in sizes. Kraken2 publishes the same set of genomes squeezed into an 8 GB or a 16 GB index so it fits on a laptop. The squeezing works by throwing away part of the index, which costs some sensitivity and accuracy. It is like shrinking a photo library by keeping only some of the pictures.",
+"Then there is naming. Scientists rename organisms. In 2020 the huge genus Lactobacillus was split into 25 genera, so the probiotic Lactobacillus reuteri became Limosilactobacillus reuteri. Two tools can both be right and still print different names. E. coli and Shigella are another case: genetically they are extremely close, so tools can disagree about which label to use.",
+"The takeaway for a decision-maker: before comparing tools, check what each one was given to look up. A tool that scores badly may simply have a smaller or differently named library. Our mock communities are useful precisely because we know the truth, so we can see which errors are database errors."
+],
+"sections": [
+{
+"title": "What a reference database is and why it caps what a classifier can say",
+"plain": "A classifier cuts each DNA read into short pieces and looks them up in a library built from known genomes. It can only report organisms (or their relatives) that are in that library. Anything missing is either unclassified or wrongly assigned to the nearest relative that is present.",
+"deeper": [
+{"q": "How does Kraken2 use its database?", "a": "Per the Kraken2 manual, it uses minimizers (short representative pieces of k-mers; defaults k=35, l=31 for nucleotide databases) stored in a hash table. Reads are matched against it and assigned to taxa."},
+{"q": "Does the database or the algorithm matter more?", "a": "We did not find a source we opened that quantifies this, so we treat 'database choice often matters more than algorithm' as a hypothesis our benchmark can test, not as a fact (see unverified)."}
+],
+"sources": [{"title": "Kraken2 manual (GitHub wiki)", "url": "https://github.com/DerrickWood/kraken2/wiki/Manual"}]
+},
+{
+"title": "Why the Standard Kraken2 database has no fungi",
+"plain": "The Standard build contains only RefSeq bacteria, archaea, viruses, plasmids, the human genome and a vector-contamination set called UniVec_Core. Fungi are an optional add-on. So in our D6300 even mock, the two yeasts (2% each) cannot be assigned correctly by Standard, Standard-8 or Standard-16. This is a feature of the database, not a failure of the tool.",
+"deeper": [
+{"q": "How do you get fungi?", "a": "The Kraken2 manual lists fungi as a separate library to add with --download-library. The Langmead prebuilt index page lists PlusPF (protozoa and fungi) and PlusPFP (plus plants) collections."},
+{"q": "What should we expect in the benchmark?", "a": "The yeasts' reads should appear as unclassified or be mis-assigned to something else. Reporting the share of reads that fall in unclassified or wrong bins, and not only the bacterial fractions, shows this honestly."}
+],
+"sources": [
+{"title": "Kraken2 manual (GitHub wiki)", "url": "https://github.com/DerrickWood/kraken2/wiki/Manual"},
+{"title": "Kraken 2 / Bracken prebuilt indexes (Langmead)", "url": "https://benlangmead.github.io/aws-indexes/k2"}
+]
+},
+{
+"title": "Why the 8 GB and 16 GB indexes drop information",
+"plain": "Standard-8 and Standard-16 are the same genome list as Standard, but the index is capped in size using the --max-db-size option. When the full index would be too big, the reference library is downsampled to fit. The index maintainers say this makes it smaller at the expense of some sensitivity and accuracy. The full Standard index from 2025-04-02 is about 86.8 GB; the capped ones are 7.5 GB and 14.9 GB.",
+"deeper": [
+{"q": "What exactly is dropped?", "a": "The manual says downsampling applies a hash function to minimizers, so a subset of the minimizers is kept. It is therefore pieces of genomes, not necessarily whole genomes, that go missing. Our phrase 'drops genomes' in lay text means 'drops coverage of genomes'. Which species lose the most was not verified."},
+{"q": "Do the capped sizes change over time?", "a": "On the prebuilt page the capped indexes stay about 5.5 GB archive / 7.5 GB index and 11.2 / 14.9 GB across releases, while Standard grew from 36.0 / 46.8 GB (12/2/2020) to 84.6 / 109.4 GB (10/22/2026). So the fraction retained shrinks over time."}
+],
+"sources": [
+{"title": "Kraken 2 / Bracken prebuilt indexes (Langmead)", "url": "https://benlangmead.github.io/aws-indexes/k2"},
+{"title": "Kraken2 manual (GitHub wiki)", "url": "https://github.com/DerrickWood/kraken2/wiki/Manual"}
+]
+},
+{
+"title": "Names change: NCBI taxonomy, GTDB and the Lactobacillus split",
+"plain": "Two big naming systems exist. NCBI taxonomy is curated by hand and is what Kraken2 uses by default. GTDB (Genome Taxonomy Database) rebuilds names from genome-wide evolutionary trees and uses a stricter species rule based on genome similarity. The same organism can have different names in each. Separately, names change within a system: in 2020 Lactobacillus was split into 25 genera (the emended Lactobacillus and Paralactobacillus plus 23 new ones), e.g. L. reuteri became Limosilactobacillus reuteri. If a database and an answer key use different naming vintages, a correct call looks wrong.",
+"deeper": [
+{"q": "How do NCBI and GTDB differ?", "a": "A secondary guide (CosmosID) describes NCBI as curator-driven and not rank-normalized, GTDB as genome-based with ranks normalized by evolutionary divergence and species based on ANI (>95% for bacteria). GTDB release 207 (8 April 2022) spans 317,542 genomes in 65,703 species clusters per the GTDB site."},
+{"q": "Is NCBI taxonomy versioned?", "a": "A GTDB forum post says NCBI taxonomy is not versioned and GTDB tied each release to the NCBI taxonomy as it stood shortly after a given RefSeq release."},
+{"q": "Why does this matter to us?", "a": "Our Zymo mock includes a Limosilactobacillus (Zymo's former name was Lactobacillus fermentum). We have not verified how each tool and database names it, so the scoring must map synonyms."}
+],
+"sources": [
+{"title": "Search result summary: Zheng et al. 2020, A taxonomic note on the genus Lactobacillus (doi 10.1099/ijsem.0.004107)", "url": "https://doi.org/10.1099/ijsem.0.004107"},
+{"title": "ISAPP: New names for important probiotic Lactobacillus species", "url": "https://isappscience.org/new-names-for-important-probiotic-lactobacillus-species/"},
+{"title": "GTDB release 207 statistics", "url": "https://gtdb.ecogenomic.org/stats/r207"},
+{"title": "GTDB forum: which NCBI taxonomy version does each release use", "url": "https://forum.gtdb.ecogenomic.org/t/which-ncbi-taxonomy-version-does-each-release-use/293"},
+{"title": "CosmosID: GTDB and NCBI taxonomy comparison", "url": "https://docs.cosmosid.com/docs/technical-appendix/gtdb-and-ncbi-taxonomy-comparison"}
+]
+},
+{
+"title": "Look-alike species: E. coli vs Shigella and the Bacillus cereus group",
+"plain": "Some organisms that doctors treat as different are genetically almost the same. Shigella (dysentery) and E. coli differ little in genome terms; the GTDB-based preprint literature proposes that Shigella species are really E. coli. The Bacillus cereus group (B. cereus, B. anthracis the anthrax agent, B. thuringiensis the biopesticide) is similar: close genomes, different medical or industrial roles. A read classifier cannot reliably split these on short reads, so some wrong species calls within these groups are expected, not alarming.",
+"deeper": [
+{"q": "What is the evidence for E. coli/Shigella?", "a": "A preprint proposes that Shigella species are later heterotypic synonyms of E. coli under the GTDB genomic species definition; another report cites ANI above 96% for type strains. This is a proposal and not settled; ANI tools often cannot separate them."},
+{"q": "And the B. cereus group?", "a": "Carroll et al. argue the 95% ANI cutoff is problematic for the group and propose about 92.5% to define genomospecies, with labels such as Anthracis or Thuringiensis as biovars (phenotype labels). We read only abstracts and snippets."},
+{"q": "Which mock organisms are affected?", "a": "The Zymo mock has E. coli and Bacillus subtilis, among others. Our single-isolate controls let us see whether an E. coli run gets a Shigella call. Not yet checked."}
+],
+"sources": [
+{"title": "Reclassification of Shigella species as later heterotypic synonyms of E. coli in GTDB (preprint)", "url": "https://www.biorxiv.org/content/10.1101/2021.09.22.461432.full.pdf"},
+{"title": "GTDB forum: Shigella as synonyms of E. coli", "url": "https://forum.gtdb.ecogenomic.org/t/reclassification-of-shigella-species-as-synonyms-of-e-coli/182"},
+{"title": "Carroll et al.: taxonomic nomenclature for the Bacillus cereus group (preprint)", "url": "https://www.biorxiv.org/content/10.1101/779199.full.pdf"},
+{"title": "Carroll et al. 2020, Frontiers in Microbiology", "url": "https://www.frontiersin.org/articles/10.3389/fmicb.2020.580691/full"}
+]
+},
+{
+"title": "Contaminated reference genomes",
+"plain": "Reference libraries are not perfectly clean. Some genome entries accidentally contain pieces of other organisms, including human DNA. If a bacterial genome in the library carries human DNA, human reads can be called bacterial; if a eukaryote's entry carries bacterial DNA, the reverse can happen.",
+"deeper": [
+{"q": "How widespread?", "a": "Steinegger and Salzberg (2020, Genome Biology) report 2,161,746 contaminated entries in GenBank (their abstract title says more than 2,000,000) and fewer in RefSeq and NR; the paper's text and our search summary disagree on which figure belongs to which database, so check before quoting counts. In RefSeq 52% of contamination was in eukaryotic genomes, versus over 95% in GenBank."},
+{"q": "Human DNA in bacterial genomes?", "a": "A 2019 Genome Research paper reports 2250 bacterial genomes contaminated by human sequence, mainly from high-copy human repeats."}
+],
+"sources": [
+{"title": "Terminating contamination (Genome Biology 2020) PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/32398145/"},
+{"title": "Human contamination in bacterial genomes (Genome Research 2019)", "url": "https://genome.cshlp.org/content/early/2019/05/07/gr.245373.118"}
+]
+},
+{
+"title": "What is a species? SGBs and why MetaPhlAn is different",
+"plain": "There is no single natural definition of a species for bacteria. Tools use working definitions, typically genome similarity cutoffs. MetaPhlAn 4 does not use named species alone; it uses species-level genome bins (SGBs), groups of genomes that are about 5% apart, many of which have no official name. That means a MetaPhlAn answer can say 'unnamed SGB' where Kraken2 says a named species, and the two cannot be compared by name alone.",
+"deeper": [
+{"q": "What are SGBs?", "a": "Pasolli et al. 2019 (Cell) built 4,930 SGBs from 154,723 genomes reconstructed from 9,428 metagenomes; 77% had no genome in public repositories. Clustering used a roughly 5% genetic diversity span; we did not verify the precise distance definition."},
+{"q": "Does the benchmark's MetaPhlAn index match?", "a": "Our index mpa_vJan26_CHOCOPhlAnSGB_202605 is a later release than the 2019 paper; we did not open its documentation."}
+],
+"sources": [
+{"title": "Pasolli et al. 2019 data page (Segata lab)", "url": "https://segatalab.cibio.unitn.it/data/Pasolli_et_al.html"},
+{"title": "Pasolli et al. 2019, Cell (PMC)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6349461"}
+]
+},
+{
+"title": "The mock communities and why they test the database",
+"plain": "The ZymoBIOMICS mocks have known compositions, so any deviation is an error. Nicholls et al. 2019 (GigaScience) sequenced two Zymo mocks with nanopore and the 10 individual isolates with Illumina. The single isolates are negative controls: a run of one organism should yield only that organism.",
+"deeper": [
+{"q": "What did the paper provide?", "a": "Two mock communities of 10 species (even and log-distributed) on nanopore, plus the 10 isolates on Illumina; data in the GigaScience database (doi 10.5524/100580)."},
+{"q": "Caveat", "a": "Zymo's stated composition is by DNA or cell proportion and the real sequence yield differs by organism; we have not quantified this here."}
+],
+"sources": [
+{"title": "Nicholls et al. 2019, GigaScience giz043 (PMC6520541)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6520541"},
+{"title": "Nicholls et al. preprint", "url": "https://www.biorxiv.org/content/10.1101/487033v1.full.pdf+html"}
+]
+}
+],
+"glossary": [
+{"term": "Reference database", "plain": "The library of known genomes a classifier compares reads against.", "deeper": "Classifiers can only report taxa represented, directly or via relatives, in it."},
+{"term": "Read", "plain": "A short stretch of DNA letters produced by the sequencer.", "deeper": "Here Illumina 2x151 (D6300) and 2x101 (D6310) paired reads."},
+{"term": "Taxonomy", "plain": "The family tree naming system for organisms.", "deeper": "Ranks: domain, phylum, class, order, family, genus, species."},
+{"term": "NCBI taxonomy", "plain": "The hand-curated naming system used by NCBI and by Kraken2 by default.", "deeper": "Not strictly rank-normalized and not versioned per a GTDB forum post."},
+{"term": "GTDB", "plain": "Genome Taxonomy Database, a genome-based re-naming of bacteria and archaea.", "deeper": "Species by ANI clustering; release 207 had 65,703 species clusters."},
+{"term": "ANI (average nucleotide identity)", "plain": "How similar two genomes are as a percentage.", "deeper": "About 95% is the common species cutoff for bacteria; contested for groups like B. cereus."},
+{"term": "Kraken2", "plain": "A fast classifier that matches read k-mers to a database.", "deeper": "Assigns reads to the lowest common ancestor of matching taxa."},
+{"term": "Bracken", "plain": "A tool that re-estimates species abundances from Kraken2 output.", "deeper": "Needs a database-specific file built for read length; not verified here from a source."},
+{"term": "k-mer", "plain": "A short fixed-length DNA word (35 letters by default in Kraken2).", "deeper": "Defaults k=35, l=31."},
+{"term": "Minimizer", "plain": "A representative small piece chosen from each k-mer to save space.", "deeper": "--max-db-size downsamples by hashing minimizers."},
+{"term": "Standard database", "plain": "Kraken2's default library: RefSeq archaea, bacteria, viruses, plasmids, human, UniVec_Core.", "deeper": "No fungi or plants."},
+{"term": "Standard-8 / Standard-16", "plain": "Standard shrunk to 8 or 16 GB.", "deeper": "Cost: some sensitivity and accuracy."},
+{"term": "RefSeq", "plain": "NCBI's curated, non-redundant reference genome collection.", "deeper": "Has stricter filters than GenBank per Steinegger and Salzberg."},
+{"term": "GenBank", "plain": "The large open archive of all submitted sequences.", "deeper": "More contamination than RefSeq in the 2020 study."},
+{"term": "Contamination (of a genome)", "plain": "Foreign DNA accidentally included in a genome entry.", "deeper": "Detected by tools like Conterminator."},
+{"term": "Synonym / renaming", "plain": "Different names for the same organism over time.", "deeper": "Example: Lactobacillus reuteri to Limosilactobacillus reuteri."},
+{"term": "Genus", "plain": "The group of related species, the first word in a name.", "deeper": "Lactobacillus was split into 25 genera in 2020."},
+{"term": "SGB (species-level genome bin)", "plain": "A group of genomes about 5% apart treated as one species-like unit, often unnamed.", "deeper": "Basis of MetaPhlAn 4 markers."},
+{"term": "MetaPhlAn", "plain": "A classifier using clade-specific marker genes rather than all reads.", "deeper": "Reports relative abundance of SGBs."},
+{"term": "Genomospecies", "plain": "A species defined by genome similarity, regardless of historic name.", "deeper": "Used by Carroll et al. for the B. cereus group."},
+{"term": "Biovar", "plain": "A label for a shared lifestyle or trait within a species.", "deeper": "Anthracis, Thuringiensis, Emeticus."},
+{"term": "Mock community", "plain": "A lab-made mixture of known organisms used as an answer key.", "deeper": "Zymo D6300 even, D6310 log."},
+{"term": "Unclassified reads", "plain": "Reads the tool could not assign.", "deeper": "Expected for yeast reads against a no-fungi database."}
+],
+"failure_modes": [
+{"what_goes_wrong": "Yeasts in the mock appear missing or are misassigned.", "how_to_notice": "Yeast reads land in unclassified or in odd bacterial bins; yeasts absent from a Standard-based result.", "what_to_do": "Do not count it as an algorithm miss; state that Standard has no fungi, or add a fungal library as a separate arm."},
+{"what_goes_wrong": "Capped 8 GB index loses sensitivity.", "how_to_notice": "Standard-8 has more unclassified reads or lower recall than Standard-16 on the same sample.", "what_to_do": "Report the cap size next to every result and compare against the full Standard index where feasible."},
+{"what_goes_wrong": "Name mismatch between answer key and tool output.", "how_to_notice": "A correct organism scored as a false positive plus a false negative, e.g. Limosilactobacillus vs Lactobacillus.", "what_to_do": "Build a synonym map before scoring and record the taxonomy version used."},
+{"what_goes_wrong": "GTDB vs NCBI mixing.", "how_to_notice": "Names like 'Escherichia flexneri' or SGB IDs that do not match NCBI names.", "what_to_do": "Map all tools into one taxonomy or compare at a rank where they agree, such as genus."},
+{"what_goes_wrong": "E. coli and Shigella confusion.", "how_to_notice": "An E. coli isolate run shows Shigella reads or the reverse.", "what_to_do": "Merge them for scoring, or report the pair as one group."},
+{"what_goes_wrong": "B. cereus group cross-calls.", "how_to_notice": "Reads split between B. cereus, B. thuringiensis and B. anthracis.", "what_to_do": "Score at the group level; do not read anything clinical into the anthracis label."},
+{"what_goes_wrong": "Contaminated reference genome produces false hits.", "how_to_notice": "Unexpected organisms at low abundance in single-isolate controls, especially human-like or odd taxa.", "what_to_do": "Check the reads' best matches; treat low-level hits in negative controls as a database artifact signal."},
+{"what_goes_wrong": "Comparing MetaPhlAn SGBs to Kraken2 species directly.", "how_to_notice": "Unnamed SGBs or very different species counts.", "what_to_do": "Compare at genus level or via a mapping, and disclose the index version."}
+],
+"aha_moments": [
+"The Standard Kraken2 database has no fungi, so the two yeasts in the even mock are invisible to it by design.",
+"The same genomes in a 8 GB index are not the same results: the cap downsamples minimizers and the maintainers say it costs sensitivity and accuracy.",
+"The full Standard index grew from about 47 GB (Dec 2020) to about 109 GB (Oct 2026) on disk, while the capped ones stayed at 7.5 and 14.9 GB.",
+"A famous probiotic name changed in 2020: Lactobacillus reuteri is now Limosilactobacillus reuteri, with no change to the organism.",
+"E. coli and Shigella are so close genetically that a GTDB-based proposal treats Shigella as E. coli."
+],
+"timeline": [
+{"year": "2018", "event": "GTDB bacterial taxonomy proposed based on a concatenated protein phylogeny (preprint).", "source_url": "https://www.biorxiv.org/content/10.1101/256800v2.full"},
+{"year": "2019", "event": "Pasolli et al. define 4,930 SGBs; Nicholls et al. publish the Zymo mock nanopore data.", "source_url": "https://segatalab.cibio.unitn.it/data/Pasolli_et_al.html"},
+{"year": "2019", "event": "Genome Research reports human DNA in 2250 bacterial genomes.", "source_url": "https://genome.cshlp.org/content/early/2019/05/07/gr.245373.118"},
+{"year": "2020", "event": "Lactobacillus split into 25 genera (Zheng et al.).", "source_url": "https://doi.org/10.1099/ijsem.0.004107"},
+{"year": "2020", "event": "Steinegger and Salzberg publish Conterminator and a survey of contamination in sequence databases.", "source_url": "https://pubmed.ncbi.nlm.nih.gov/32398145/"},
+{"year": "2020", "event": "Carroll et al. propose a genomospecies nomenclature for the Bacillus cereus group (published in Frontiers in Microbiology).", "source_url": "https://www.frontiersin.org/articles/10.3389/fmicb.2020.580691/full"},
+{"year": "2022", "event": "GTDB release 207 (8 April): 317,542 genomes, 65,703 species clusters.", "source_url": "https://gtdb.ecogenomic.org/stats/r207"},
+{"year": "2025", "event": "Kraken2 Standard prebuilt index of 2025-04-02: 86.8 GB; Standard-8 7.5 GB; Standard-16 14.9 GB.", "source_url": "https://benlangmead.github.io/aws-indexes/k2"}
+],
+"what_this_supports": [
+"The Standard Kraken2 database as documented does not include fungi, so yeast calls are not expected from it.",
+"The 8 GB and 16 GB indexes are size-capped versions of Standard that trade sensitivity and accuracy for size.",
+"Names and taxonomies differ between NCBI and GTDB, and genera were renamed in 2020, so scoring needs a name mapping.",
+"Reference databases contain documented contamination."
+],
+"what_this_does_not_support": [
+"That any specific tool is better or worse than another.",
+"That database choice matters more than algorithm in our results; that is a hypothesis to test.",
+"Which specific genomes the capped indexes drop.",
+"That Shigella is formally E. coli; this is a proposal.",
+"Any clinical interpretation of B. anthracis-labelled reads."
+],
+"check_next": [
+"Open the Kraken2 build log or inspect the 2025-04-02 Standard-8 and Standard-16 contents to see which taxa lose k-mer coverage.",
+"Run the same samples against a Standard plus fungi (PlusPF) index to isolate the yeast effect.",
+"Open the MetaPhlAn 4 documentation for the mpa_vJan26 index to confirm how SGB names map to NCBI names.",
+"Build and test a synonym table for Zymo organisms (Limosilactobacillus fermentum, E. coli/Shigella, Bacillus).",
+"Find a peer-reviewed source that compares database choice vs algorithm effect.",
+"Quantify RefSeq growth over time from NCBI release notes."
+],
+"unverified": [
+"Database choice often matters more than algorithm: no source opened that quantifies this.",
+"RefSeq growth over time: numbers not verified; only Kraken2 index sizes from the prebuilt page were seen.",
+"Exact numbers for contamination counts per database: sources conflict on which figure belongs to RefSeq or GenBank.",
+"The exact species list of the Zymo D6300 and D6310 mocks and their stated percentages were not re-checked from the Zymo sheet; the task statement was relied on.",
+"Whether Zymo's older Lactobacillus fermentum label maps to Limosilactobacillus fermentum in each database used.",
+"Which genomes or taxa the 8 GB and 16 GB indexes lose.",
+"Details of the MetaPhlAn mpa_vJan26 index.",
+"Several sources (Zheng et al., Carroll et al., GTDB comparisons, Shigella preprint, Pasolli et al.) were read as search-result summaries or abstracts, not full text; the GTDB Parks 2022 paper was not retrieved.",
+"The 5% SGB distance definition."
+]
+}

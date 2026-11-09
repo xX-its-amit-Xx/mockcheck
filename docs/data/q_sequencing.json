@@ -1,0 +1,179 @@
+{
+"id": "sequencing",
+"title": "Sequencing as a measurement: what happens between a tube of cells and a FASTQ file",
+"one_line": "A FASTQ file is not the community in the tube; it is the community after extraction, library prep, amplification, imaging and base calling have each bent the numbers a little.",
+"layperson_story": [
+"Imagine you blend a smoothie from eight fruits in known amounts and then ask a machine to tell you the recipe by tasting tiny random spoonfuls. The machine is good, but some fruits are tougher to pulp, some stick to the blender, and some spoonfuls get mislabeled on the way. The recipe you get back is close to the truth but never exactly the truth. That is shotgun sequencing as a measurement.",
+"In our benchmark the 'smoothie' is a ZymoBIOMICS mock community: ten known microbes (8 bacteria, 2 yeasts) mixed in known proportions. In the even mock, each bacterium is meant to be about 12 percent and each yeast about 2 percent. Nicholls et al. (2019) sequenced it, and the raw results are public in the European Nucleotide Archive.",
+"Physically, the DNA is first pulled out of the cells, chopped into short pieces, tagged with adapters (short handles of synthetic DNA), copied to make enough signal, and then read by an Illumina machine. The machine makes clusters of identical copies on a glass slide and, one letter at a time, flashes a color for each base and photographs it. Each letter comes with a confidence score.",
+"Every step can nudge the numbers. Tough-walled cells may give up their DNA less easily. The copying step prefers fragments with a middling share of G and C letters. A small fraction of reads can be assigned to the wrong sample in a pooled run. Our benchmark also uses only the first N read pairs of each file, so it is a sample of a sample.",
+"The practical lesson for a decision-maker: when a classifier reports, say, 14 percent for one species in a mock where the truth is 12 percent, part of that gap may come from the lab and the sequencer, not the software. A fair benchmark must separate 'the software got it wrong' from 'the measurement already skewed it'."
+],
+"sections": [
+{
+"title": "How an Illumina machine physically reads DNA",
+"plain": "DNA is chopped into fragments and given adapters at both ends. Fragments stick to a glass flow cell and are copied in place (bridge amplification) until each fragment forms a tiny cluster of roughly 1,000 identical copies. The machine then adds fluorescently tagged letters one round at a time; a reversible blocker lets only one letter attach per round. A camera photographs the flow cell after each round, and software converts the color seen at each cluster into a base (A, C, G or T). Repeat for 100 to 300 rounds and each cluster yields one read.",
+"deeper": [
+{"q": "Why are clusters needed?", "a": "A single DNA molecule gives too faint a flash to read reliably. About a thousand identical copies in one spot give a bright, consistent signal (Wikipedia, Illumina dye sequencing)."},
+{"q": "What does 'reversible terminator' mean?", "a": "Each added nucleotide carries a blocker so only one base is added per round. After imaging, the blocker and dye are removed so the next round can proceed. The chemistry was patented by Canard and Sarfati at the Pasteur Institute (patent published 13 October 1994); Balasubramanian and Klenerman of Cambridge developed the method further and founded Solexa, later acquired by Illumina (Wikipedia)."},
+{"q": "Do all Illumina machines use the same chemistry?", "a": "The core idea is shared, but details differ. Older four-color instruments give each base its own color; NextSeq and MiniSeq use a two-color scheme (Wikipedia). Some newer systems use patterned flow cells with a different cluster-making method (exclusion amplification), which matters for index hopping (see that section)."}
+],
+"sources": [
+{"title": "Illumina dye sequencing (Wikipedia)", "url": "https://en.wikipedia.org/wiki/Illumina_dye_sequencing"}
+]
+},
+{
+"title": "Read length, paired ends and what a 'read pair' is",
+"plain": "A read is the stretch of letters the machine reports for one cluster. In paired-end sequencing the machine reads both ends of the same fragment, giving two reads (forward and reverse) that come from the same piece of DNA. Our data: D6300 even mock was sequenced on a MiSeq with 2x151 (two reads of 151 letters per pair) and D6310 log mock on a HiSeq with 2x101. Pairs help because two reads known to be a fixed distance apart on the same genome give a classifier more evidence than one read.",
+"deeper": [
+{"q": "What does paired-end give you?", "a": "Illumina states paired-end reads yield twice the reads for the same library prep effort and align more accurately, including across repetitive regions, and need the same DNA input as single-read runs (Illumina paired-end vs single-read page)."},
+{"q": "Does read length matter for taxonomic classification?", "a": "Plausibly, since longer reads contain more distinguishing k-mers, but this page did not verify a quantified effect; see unverified."},
+{"q": "Why do the two mocks differ in read length?", "a": "They were different sequencing runs on different instruments; the platform per sample is described in the project brief. The Nicholls paper confirms the isolates were sequenced on a HiSeq 1500 and the even community on a MiSeq (GigaScience page)."}
+],
+"sources": [
+{"title": "Paired-end vs. single-read sequencing (Illumina)", "url": "https://www.illumina.com/science/technology/next-generation-sequencing/plan-experiments/paired-end-vs-single-read.html"},
+{"title": "Nicholls et al. 2019, GigaScience giz043 (PMC)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6511074/"}
+]
+},
+{
+"title": "Base quality scores (Q20, Q30) and what they do not tell you",
+"plain": "Every letter comes with a Phred quality score Q, defined as Q = -10 log10(e), where e is the machine's estimated chance that the letter is wrong. Q20 means about 1 error in 100 (99 percent accuracy). Q30 means about 1 error in 1,000 (99.9 percent). Higher is better. These scores estimate only the machine's reading error. Illumina itself says they do not offer a complete measure of system or assay accuracy.",
+"deeper": [
+{"q": "What is not captured by Q scores?", "a": "Errors from sample extraction, library prep or analysis. A perfectly read fragment can still be over- or under-represented because of upstream bias (Illumina quality scores page)."},
+{"q": "Can I compare Q scores across vendors?", "a": "Illumina says they cannot be used to directly compare platforms from different manufacturers, because scoring models may be proprietary."},
+{"q": "Why would a classifier care?", "a": "A wrong letter can break a k-mer match, so low-quality tails may push a read to 'unclassified' or to a wrong taxon. This specific effect was not measured in sources I opened; treat as a hypothesis."}
+],
+"sources": [
+{"title": "Sequencing quality scores (Illumina)", "url": "https://www.illumina.com/science/technology/next-generation-sequencing/plan-experiments/quality-scores.html"}
+]
+},
+{
+"title": "Copying bias: PCR and GC content",
+"plain": "Library prep usually copies the DNA by PCR so there is enough to load. Copying is not perfectly even. Fragments with middling GC (the share of G and C letters) tend to be over-copied, while very GC-rich and very AT-rich fragments are under-represented. So organisms with extreme GC genomes can look rarer than they truly are, even before any software touches the data.",
+"deeper": [
+{"q": "How big is the effect?", "a": "Benjamini and Speed (2012) report coverage typically peaks around 0.4 to 0.55 GC and that more than 2-fold coverage differences are common even in 100 kb bins in human data. Both GC-rich and AT-rich fragments are underrepresented."},
+{"q": "Is PCR the cause?", "a": "The authors say their evidence strengthens the hypothesis that PCR is the most important cause; it is supporting evidence, not proof. PCR-free and optimized-PCR protocols showed reduced bias, though optimized PCR can still show significant bias."},
+{"q": "Does it apply to our mocks?", "a": "The mock bacteria span a range of genome GC contents, so GC bias could shift abundances. Neither the Nicholls paper (as read) nor my sources quantified this for these libraries; see unverified. Also note Benjamini and Speed studied human data, so magnitude for microbes is not established here."}
+],
+"sources": [
+{"title": "Benjamini and Speed 2012, GC content bias (PMC)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3378858/"}
+]
+},
+{
+"title": "Extraction bias: Gram-positive, Gram-negative and yeast",
+"plain": "Before sequencing, DNA must be released from the cells. Gram-positive bacteria and yeasts have thick, tough walls and need hard mechanical or chemical lysis (bead-beating), while Gram-negative cells break open more easily. If the protocol is gentle, tough cells give up less DNA and look under-represented; if harsh, DNA from fragile cells may be sheared. In the even mock, yeasts are meant to be only 2 percent of the mix, so small shifts are easy to mistake for classifier errors.",
+"deeper": [
+{"q": "What did Nicholls et al. do?", "a": "Used the ZymoBIOMICS DNA Miniprep kit with changes to preserve fragment length and the expected representation of Gram-negative species, with bead-beating of cells and recombination of the stored supernatant with the pellet extract. Note that the page I read described the nanopore workflow; the Illumina reference runs are described as isolates on HiSeq 1500 and the even community on MiSeq."},
+{"q": "Is extraction the biggest source of variation?", "a": "In human fecal metagenomes, Costea et al. (2017) report that DNA extraction had the largest effect among the steps they compared (21 extraction protocols vs library prep and storage), and they used a ten-species mock to evaluate Gram-positive vs Gram-negative bias. That is stool, not our mocks, so use it as a general warning, not a number for our data."},
+{"q": "Did the observed even-mock proportions match 12 percent?", "a": "A summary of the paper's Table 4 suggested some Gram-positive species appeared above 12 percent (roughly 12 to 19 percent) and Gram-negatives near 10 percent, but the summary tool flagged the table layout as hard to confirm and this is for the nanopore data. Do not rely on it; see unverified."}
+],
+"sources": [
+{"title": "Nicholls et al. 2019, GigaScience giz043", "url": "https://academic.oup.com/gigascience/article/8/5/giz043/5486468"},
+{"title": "Costea et al. 2017, Towards standards for human fecal sample processing in metagenomic studies", "url": "https://edoc.mdc-berlin.de/id/eprint/16793/"}
+]
+},
+{
+"title": "Index hopping and sample cross-talk",
+"plain": "To save money, labs pool many samples in one run and tag each with a short barcode (index). Occasionally a read ends up with the wrong barcode and is credited to the wrong sample. That is index hopping or index switching. For a single-isolate negative control, this means a few reads from another organism in the pool could appear in it. A small number of unexpected species in a control is not automatically a classifier error.",
+"deeper": [
+{"q": "How common is it?", "a": "Illumina says typical rates are about 0.1 to 2 percent on patterned flow cell systems, higher (1 to 2 percent) for PCR-free TruSeq libraries. Sinha et al. (2017 preprint) reported up to 5 to 10 percent of reads misassigned on HiSeq 4000 and not seen on NextSeq 500."},
+{"q": "How is it prevented?", "a": "Unique dual indexes: hopped reads yield index pairs never assigned and are discarded as undetermined. Also remove free adapters, store libraries individually at -20 C and pool just before sequencing (Illumina)."},
+{"q": "Which of our runs are at risk?", "a": "I could not verify which instrument (HiSeq model), index design or pooling scheme produced the ENA runs; see unverified. The D6310 run was on a HiSeq, so exposure is plausible but unconfirmed."}
+],
+"sources": [
+{"title": "Index hopping (Illumina)", "url": "https://www.illumina.com/techniques/sequencing/ngs-library-prep/multiplexing/index-hopping.html"},
+{"title": "Sinha et al. 2017 bioRxiv", "url": "https://www.biorxiv.org/content/10.1101/125724.full.pdf"}
+]
+},
+{
+"title": "Taking only the first N read pairs",
+"plain": "Our benchmark streams the first N pairs from each ENA file rather than the whole thing. If reads in the file are in effectively random order, the first N are a fair random sample and the only cost is statistical noise: rare organisms (the yeasts at 2 percent, or low-abundance members) get few reads and their estimated share wobbles. If the file were ordered (for example by instrument tile or position), the head could be unrepresentative.",
+"deeper": [
+{"q": "How much noise comes from a sample of N reads?", "a": "Standard sampling statistics (not from a fetched source): for a species at true share p, the standard error of its estimated share is about sqrt(p(1-p)/N). This is general math, flagged in unverified as not drawn from a cited page."},
+{"q": "Are the first reads representative?", "a": "FASTQ files from Illumina are typically written in order of clusters as they pass filters, but I did not open a source confirming that this gives no bias at the file head; see unverified. A cheap check is to compare composition of the first N against a later slice."},
+{"q": "Why also note the log mock?", "a": "Nicholls et al. report the log community spans abundances from 89.1 percent down to 0.000089 percent, so most species will have zero reads in a small N even if the classifier is perfect."}
+],
+"sources": [
+{"title": "Nicholls et al. 2019, GigaScience giz043", "url": "https://academic.oup.com/gigascience/article/8/5/giz043/5486468"}
+]
+}
+],
+"glossary": [
+{"term": "Read", "plain": "The string of letters the machine reports for one cluster.", "deeper": "Our D6300 reads are 151 letters long, D6310 reads are 101."},
+{"term": "Read pair", "plain": "Two reads from opposite ends of the same DNA fragment.", "deeper": "Paired-end data, produced by a small change to library prep (Illumina)."},
+{"term": "FASTQ", "plain": "The text file format holding each read's letters plus a confidence score per letter.", "deeper": "Four lines per read: name, sequence, separator, quality string."},
+{"term": "Flow cell", "plain": "The glass slide inside the sequencer where DNA is copied and imaged.", "deeper": "Patterned flow cells have fixed wells for clusters."},
+{"term": "Cluster", "plain": "A spot of about 1,000 identical DNA copies that gives one bright, readable signal.", "deeper": "Made by bridge amplification (or exclusion amplification on newer systems)."},
+{"term": "Bridge amplification", "plain": "Copying DNA in place on the slide by arching strands onto neighboring anchors.", "deeper": "Used on older Illumina systems such as NextSeq 500 per Sinha et al."},
+{"term": "Sequencing by synthesis", "plain": "Reading DNA by watching it being built one lettered, color-tagged piece at a time.", "deeper": "Uses reversible terminators."},
+{"term": "Adapter", "plain": "Short synthetic DNA handles attached to every fragment so it sticks to the slide and can be read.", "deeper": "If a fragment is shorter than the read length, the read can run into the adapter; trimming removes this. Not verified from a source here."},
+{"term": "Index (barcode)", "plain": "A short tag that marks which sample a fragment belongs to when many samples share a run.", "deeper": "Unique dual indexes let hopped reads be filtered."},
+{"term": "Index hopping", "plain": "A read gets the wrong sample tag and is credited to the wrong sample.", "deeper": "0.1 to 2 percent typical on patterned flow cells per Illumina."},
+{"term": "Demultiplexing", "plain": "Sorting a pooled run back into per-sample files using the index tags.", "deeper": "Reads with unassigned index pairs go to 'undetermined'."},
+{"term": "Phred quality score (Q)", "plain": "A number stating how likely a letter is wrong.", "deeper": "Q = -10 log10(error probability)."},
+{"term": "Q30", "plain": "One expected error in 1,000 letters (99.9 percent accuracy).", "deeper": "Common benchmark; Q20 is 99 percent."},
+{"term": "GC content", "plain": "The share of a DNA stretch made of the letters G and C.", "deeper": "Extreme GC or AT fragments are under-copied by PCR."},
+{"term": "GC bias", "plain": "Uneven coverage because fragments with certain GC levels are copied or read less.", "deeper": "Unimodal curve, peak about 0.4 to 0.55 GC in human data (Benjamini and Speed)."},
+{"term": "PCR", "plain": "A copying reaction that doubles DNA repeatedly.", "deeper": "Believed to be the main cause of GC bias; PCR-free protocols reduce it."},
+{"term": "PCR duplicate", "plain": "Extra reads that are copies of one original fragment.", "deeper": "Can inflate counts of whichever fragments were over-copied. Not quantified in sources I opened."},
+{"term": "Gram-positive / Gram-negative", "plain": "Two broad types of bacterial cell wall; Gram-positive walls are thicker and harder to break open.", "deeper": "Relevant to extraction efficiency (Costea et al.)."},
+{"term": "Lysis / bead-beating", "plain": "Breaking cells open, here by shaking with tiny beads.", "deeper": "Needed for tough cells like yeast and Gram-positives."},
+{"term": "Mock community", "plain": "A mix of known microbes in known amounts used as an answer key.", "deeper": "ZymoBIOMICS D6300 (even) and D6310 (log)."},
+{"term": "Host reads", "plain": "Reads from the human or animal the sample came from instead of microbes.", "deeper": "Mock communities contain no host by design; not an issue in these runs, though stool studies must handle it."},
+{"term": "Negative control (single isolate)", "plain": "A sample with one known organism; anything else reported is suspicious.", "deeper": "Extra species can reflect classifier error, cross-talk, contamination or reference-database issues."}
+],
+"failure_modes": [
+{"what_goes_wrong": "Tough-walled organisms (Gram-positive bacteria, yeast) are under-recovered at extraction, so measured shares miss the stated recipe.", "how_to_notice": "Yeasts or Gram-positives are consistently below expected share across all classifiers, not just one.", "what_to_do": "Report deviation from the nominal mix as a ceiling on achievable accuracy and compare classifiers to each other, not only to the nominal values."},
+{"what_goes_wrong": "GC bias in PCR makes extreme-GC genomes look rarer.", "how_to_notice": "Over/under-representation correlates with each organism's genome GC, across tools.", "what_to_do": "Plot error against genome GC before blaming a tool."},
+{"what_goes_wrong": "Index hopping puts a few reads of other samples into single-isolate controls.", "how_to_notice": "Controls show low-level species that exist elsewhere in the same study or run.", "what_to_do": "Set a read-count or abundance threshold before calling a control contaminated; look up the run's pooling metadata."},
+{"what_goes_wrong": "Too small N: rare species get zero or a handful of reads, so their estimates are noise.", "how_to_notice": "Rerun with different N or different slices and see rare-species shares jump around.", "what_to_do": "Report results at more than one N and mark species below a minimum read count as unreliable."},
+{"what_goes_wrong": "The head of a FASTQ is not a representative sample.", "how_to_notice": "Composition of the first N differs from a later slice of the same file.", "what_to_do": "Compare first-N against a middle or tail slice for at least one run."},
+{"what_goes_wrong": "Adapter read-through or low-quality tails create junk k-mers that mislead classifiers.", "how_to_notice": "FastQC-style reports show adapter content or quality dropping at read ends; more unclassified reads.", "what_to_do": "State whether reads were trimmed; if not, test a trimmed subset to see if results change."},
+{"what_goes_wrong": "Treating Q scores as overall data accuracy.", "how_to_notice": "Someone says 'Q30 so the data is 99.9 percent right'.", "what_to_do": "Say Q measures only base-calling error, not extraction or library bias (Illumina)."},
+{"what_goes_wrong": "Reference or label problems in the mock mistaken for classifier errors.", "how_to_notice": "One species disagrees with every tool.", "what_to_do": "Nicholls et al. suggest the S. enterica reference strain may be mis-annotated; check genome identity before scoring."}
+],
+"aha_moments": [
+"The sequencer reports a confidence for every letter, yet the confidence covers only the reading step, not the lab steps before it.",
+"A 'perfect' classifier would still not return exactly 12 percent per bacterium, because extraction and PCR have already skewed the reads.",
+"With the log mock spanning 89.1 percent down to 0.000089 percent, a small N can only ever see the top few species.",
+"Index hopping means a clean single-isolate control is a test of both the software and the run.",
+"Reading both ends of a fragment doubles the reads for the same prep effort."
+],
+"timeline": [
+{"year": "1994", "event": "Canard and Sarfati (Pasteur Institute) patent reversible terminator chemistry, published 13 October 1994, an early basis for Illumina-style sequencing by synthesis.", "source_url": "https://en.wikipedia.org/wiki/Illumina_dye_sequencing"},
+{"year": "2012", "event": "Benjamini and Speed publish a model of GC content bias in high-throughput sequencing (Nucleic Acids Research 40(10), e72).", "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3378858/"},
+{"year": "2017", "event": "Sinha et al. preprint reports index switching on HiSeq 4000 patterned flow cells, up to 5 to 10 percent of reads misassigned.", "source_url": "https://www.biorxiv.org/content/10.1101/125724.full.pdf"},
+{"year": "2017", "event": "Costea et al. publish Towards standards for human fecal sample processing in metagenomic studies (Nature Biotechnology 35(11), 1069-1076), finding DNA extraction has the largest effect.", "source_url": "https://edoc.mdc-berlin.de/id/eprint/16793/"},
+{"year": "2019", "event": "Nicholls et al. publish the ZymoBIOMICS even and log mock community sequencing study in GigaScience (giz043).", "source_url": "https://academic.oup.com/gigascience/article/8/5/giz043/5486468"}
+],
+"what_this_supports": [
+"Saying benchmark results measure software plus the whole upstream pipeline, and that nominal mock proportions are an imperfect answer key.",
+"Explaining that Q30 means about 1 error in 1,000 letters and covers only base calling.",
+"Treating low-level unexpected species in single-isolate controls with caution because index hopping is documented at roughly 0.1 to 2 percent on patterned flow cells.",
+"Stating that GC content bias exists and that PCR is the leading suspected cause."
+],
+"what_this_does_not_support": [
+"Any specific claim about how much extraction or GC bias distorts the ERR2984773 or ERR2935805 reads; I found no quantification for those libraries.",
+"Claims that the first N pairs are or are not representative of the full files.",
+"Claims about which runs experienced index hopping.",
+"The Table 4 percentages I saw summarized, which pertain to nanopore data and could not be confirmed."
+],
+"check_next": [
+"Compute composition of first N vs a later slice for at least D6300 and D6310.",
+"Fetch ENA run metadata for the 12 runs (instrument model, library prep, pooling) from the ENA browser.",
+"Plot observed minus expected share against genome GC for the mock species.",
+"Run FastQC-style adapter and quality checks on the head of each file.",
+"Read Nicholls et al. Illumina methods and supplementary tables directly."
+],
+"unverified": [
+"Whether the first N read pairs in ENA FASTQs are an unbiased sample of the full run.",
+"Whether adapters were trimmed upstream and how much adapter read-through exists in these runs.",
+"How read length affects classifier accuracy in these data.",
+"PCR duplicate rates and library prep (kit, PCR cycles) for ERR2984773 and ERR2935805.",
+"Exact instrument models, indexing scheme and pooling for the ENA runs, and any index hopping in them.",
+"Observed vs nominal proportions in the Illumina data of the even mock; the Table 4 figures seen were via a summary tool and relate to nanopore data.",
+"The standard-error formula sqrt(p(1-p)/N) is general statistics, not drawn from a cited page.",
+"Host/human read contamination in the mock runs (not expected, not checked).",
+"Exact figures from Costea et al. on Gram-positive bias; only the abstract-level summary was seen."
+]
+}

@@ -1,0 +1,271 @@
+{
+  "id": "evaluation",
+  "title": "How to judge a classifier: what the scores mean and what they hide",
+  "one_line": "A classifier is graded by comparing its list of species (and how much of each) to a known answer key, but the grade depends heavily on which score you pick, where you cut off tiny hits, and how realistic the test sample is.",
+  "layperson_story": [
+    "Imagine you hand a stranger a fruit salad blended into smoothie and ask, 'What fruits are in here, and how much of each?' A DNA classifier does something similar. It reads millions of tiny DNA snippets from a microbial sample and guesses which organisms they came from. To know whether it is any good, you need a smoothie where you already know the recipe. That is a mock community: a commercial mix of known microbes at known proportions.",
+    "Grading has two separate questions. First, did it name the right ingredients and avoid naming ones that are not there? That is presence/absence, scored with precision (of the things it named, how many were real), recall (of the real ingredients, how many did it find) and F1 (one number blending the two). Second, did it get the amounts right? That is abundance, scored with distances such as Bray-Curtis, L1 or Aitchison, which are different ways of measuring how far the guessed recipe is from the true one.",
+    "The catch is that the scores are easy to move. Real classifiers report a long tail of very rare species that are mostly wrong. In the Ye et al. 2019 benchmark, the number of distinct false-positive species ranged from tens for some tools to thousands for others. If you simply ignore anything below a small abundance cutoff, precision can jump, without the tool changing at all. So a score is only meaningful together with its cutoff, its reference database and its settings.",
+    "Negative controls help here. If you sequence one single bacterium (a single-isolate run), the right answer is exactly one species. Anything else the classifier reports is a false positive, and you can add up how much of the output it takes up (false-positive mass). It is a very clean, if blunt, test.",
+    "Finally, a mock community is an easy exam. It has about ten known organisms, all with well-sequenced genomes. Real samples (gut, soil, a patient) contain thousands of organisms, many with no reference genome. Big community benchmarks like CAMI found that tools were strong at high taxonomic ranks and got noticeably worse at finer ones. Good mock results are necessary evidence, not sufficient evidence, that a tool will work on your real samples."
+  ],
+  "sections": [
+    {
+      "title": "Presence/absence: precision, recall and F1",
+      "plain": "First question: which species are in the sample? The classifier produces a list. We compare it to the answer key. A true positive is a listed species that really is in the mix. A false positive is a listed species that is not. A false negative is a real species the tool missed. Precision = true positives divided by everything listed (how trustworthy the list is). Recall = true positives divided by everything real (how complete the list is). F1 combines them into one number (their harmonic mean), which is low if either one is low. For the Zymo D6300 mock, the answer key is 10 species (8 bacteria, 2 yeasts), so even 10 false positives would drop precision to about 50 percent while recall stays at 100 percent.",
+      "deeper": [
+        {
+          "q": "Why does one wrong species hurt so much on a mock?",
+          "a": "Because the answer key is tiny (10 species). With so few true items, each false positive moves precision a lot. On a real gut sample with hundreds of true species, the same number of false positives would barely change precision. So mock precision numbers are harsher than they would be in a complex sample, and cannot be directly compared across communities of different size."
+        },
+        {
+          "q": "What is the difference between F1 and AUPR?",
+          "a": "F1 is computed at one specific cutoff. AUPR (area under the precision-recall curve) sweeps the cutoff across all values and summarises the whole trade-off. Ye et al. 2019 used AUPR as their headline presence/absence metric and defined F1 but did not report it as the main result, per the text we read. For a single deployed pipeline with a fixed cutoff, F1 at that cutoff is what you actually experience."
+        },
+        {
+          "q": "Why do scores differ between species and genus level?",
+          "a": "Telling two close species apart is harder than telling two genera apart. Ye et al. report genus-level results were slightly better than species-level, and on CAMI datasets species-level AUPR was very low while genus-level improved significantly. Sczyrba et al. 2017 similarly report a notable performance decrease below family level."
+        }
+      ],
+      "sources": [
+        {"title": "Ye et al. 2019, Benchmarking Metagenomics Tools for Taxonomic Classification (Cell), PMC copy", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6716367"}
+      ]
+    },
+    {
+      "title": "Abundance thresholds: why the cutoff changes the grade",
+      "plain": "Classifiers tend to report many species at very low abundance, and many of those are wrong. A common fix is a floor, for example: ignore anything under 0.01 percent of reads. Raise the floor and precision improves (fewer false positives) but recall can fall (you may drop a real rare organism). In the Zymo log mock the rarest real species is tiny, so a floor that cleans up the list could also erase a true organism. A fair benchmark reports results across a sweep of cutoffs, or states the cutoff clearly.",
+      "deeper": [
+        {
+          "q": "What did Ye et al. find about low-abundance false positives?",
+          "a": "On simulated ATCC Even DNA, some methods began calling false positives below 0.5 percent abundance; most did so below 0.01 percent. Distinct false-positive species ranged from tens (Bracken, MetaPhlAn2) to thousands (Centrifuge, CLARK, Kaiju, MMseqs2, PathSeq). Marker-based methods plateaued at a threshold while others kept adding false positives at lower abundances. They also report that sequenced DNA showed similar false-positive patterns to simulated DNA, suggesting the false positives are mostly computational rather than lab contamination."
+        },
+        {
+          "q": "Are there recommended cutoffs?",
+          "a": "No universal one. A search-result summary of other studies mentions cutoffs on the order of 0.001 to 0.005 percent in one soil mock study and Kraken2 confidence values around 0.05 to 0.5 in others, but the best value depends on database and sample type. We did not open those papers, so we do not state them as findings here. See unverified."
+        },
+        {
+          "q": "Is a threshold sweep cheating?",
+          "a": "Only if you tune the cutoff on the same data you then report as the result. Choosing the cutoff on a mock and then reporting the mock's score is optimistic. Cleaner: fix the cutoff in advance, or choose it on one dataset and report on another (for example choose on D6300, report on D6310)."
+        }
+      ],
+      "sources": [
+        {"title": "Ye et al. 2019, Cell (PMC copy)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6716367"}
+      ]
+    },
+    {
+      "title": "Abundance accuracy: Bray-Curtis, L1, Aitchison and compositionality",
+      "plain": "Second question: how much of each organism? Sequencing only tells you proportions (the share of reads), never absolute counts, because the machine's output size is arbitrary. This is called compositional data: the parts must add to 100 percent, so if one organism goes up, all others appear to go down. To measure how far an estimated recipe is from the true one you use a distance. L1 distance adds up the absolute differences per species (for proportions, it ranges from 0 for identical to 2 for no overlap; half of it is the share of mass in the wrong place). Bray-Curtis dissimilarity is closely related: it is 0 for identical, 1 for no overlap. Aitchison distance works on ratios between species (log-ratios), so it respects the compositional nature of the data, but it needs special handling of zeros.",
+      "deeper": [
+        {
+          "q": "What does 'compositional' really break?",
+          "a": "Gloor et al. 2017 argue that sequencing counts carry only relative information and that the total read count is arbitrary ('the count can not be related to the absolute number of molecules in the input sample'). Consequences they describe: correlations between taxa are biased (a negative correlation bias), and distances such as Bray-Curtis tend to be driven by the most abundant features. They recommend the centered log-ratio (clr) transform, which takes the log of each feature divided by the geometric mean of all features, and the Aitchison distance, which is the Euclidean distance between clr-transformed samples."
+        },
+        {
+          "q": "What is the problem with zeros?",
+          "a": "The log-ratio needs every feature to be non-zero. Sparse data has zeros (taxa not detected), so zeros must be replaced or modelled first, and the choice of replacement changes the distance. This matters a lot for classifier benchmarks, where the true answer is zero for most species in the database. Gloor et al. mention the zCompositions and ALDEx2 R packages for this."
+        },
+        {
+          "q": "Which distance should a benchmark use?",
+          "a": "There is no single right answer. Bray-Curtis and L1 are intuitive and bounded, and are dominated by the abundant species. Aitchison is sensitive to rare species and to how zeros are handled. Reporting more than one, plus a plain language measure such as 'percent of reads assigned to species that are not in the mix' (false-positive mass), protects against one metric hiding a problem."
+        },
+        {
+          "q": "How well do classifiers estimate abundance in practice?",
+          "a": "Ye et al. use L2 distance (not L1) for abundance error. DNA classifiers using long k-mers (over 30 nt), such as Kraken and taxMaps, had typical L2 distances below 0.1, marker-based and protein tools higher, and Bracken improved species-level abundance estimates when applied to Kraken output."
+        }
+      ],
+      "sources": [
+        {"title": "Gloor et al. 2017, Microbiome Datasets Are Compositional: And This Is Not Optional (PMC)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5695134"},
+        {"title": "Ye et al. 2019, Cell (PMC copy)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6716367"}
+      ]
+    },
+    {
+      "title": "False-positive mass, negative controls and single-isolate runs",
+      "plain": "Counting false positives by species hides how much they matter. Ten false species each at 0.001 percent is harmless; one false species at 20 percent is a serious error. False-positive mass is the total share of reads (or estimated abundance) assigned to species that should not be there. Single-isolate runs are ideal for this: sequence one pure organism, and every read assigned to a different species is, by construction, an error (with caveats such as contamination in the lab sample and mislabelled reference genomes). In this benchmark the 10 single-isolate runs serve as negative controls for each classifier.",
+      "deeper": [
+        {
+          "q": "Can a single-isolate run have a 'true' extra species?",
+          "a": "Yes, in principle. Real isolates can carry contamination, and reference databases contain mislabelled or very similar genomes. The giz043 paper itself flags that its Salmonella isolate is listed as Typhimurium LT2 but genomic analysis suggests Choleraesuis, indicating possible mis-annotation of the reference. So a 'false positive' near the true species name can be a labelling issue rather than a tool error."
+        },
+        {
+          "q": "What is a non-template control?",
+          "a": "A sample with no input DNA, processed through the whole lab workflow, used to reveal contamination from reagents. Ye et al. included one; they report it had 75 percent duplicate reads, and note many tools do not remove PCR duplicates."
+        },
+        {
+          "q": "Why do closely related species get confused?",
+          "a": "Reads from a conserved stretch of DNA look identical across relatives, so the tool may assign them to the wrong relative, or to a higher rank. Ye et al. report that on simulated human reads most DNA classifiers misclassified 1 to 5 percent of reads and protein classifiers 5 to 15 percent, and that including host genomes in the database reduced misclassification."
+        }
+      ],
+      "sources": [
+        {"title": "Nicholls et al. 2019, GigaScience giz043 (ZymoBIOMICS mocks)", "url": "https://academic.oup.com/gigascience/article/8/5/giz043/5486468"},
+        {"title": "Ye et al. 2019, Cell (PMC copy)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6716367"}
+      ]
+    },
+    {
+      "title": "The mock communities used here",
+      "plain": "The two Zymo mocks have the same 10 organisms (8 bacteria and 2 yeasts) but different recipes. The Even mock has each bacterium at about 12 percent and each yeast at about 2 percent, so a classifier that works well should see 8 big equal bars and 2 small ones. The Log mock spans from about 89 percent Listeria monocytogenes down to about 0.000089 percent Staphylococcus aureus, a million-fold range, which tests whether a tool can see rare things without inventing many fake ones. Caveat: these percentages are by cell or DNA mixing as described by the supplier and the authors; actual sequencing proportions also depend on DNA extraction and library prep.",
+      "deeper": [
+        {
+          "q": "What did Nicholls et al. actually do?",
+          "a": "They sequenced the two Zymo mocks on Oxford Nanopore (GridION and PromethION) to produce 335.1 Gb of long-read data, and sequenced each isolate on Illumina to build reference genomes. The paper is a long-read dataset paper; it does not benchmark multiple taxonomic classifiers (it uses kraken2 only to label assembled contigs) and does not quantify false positives, per the text we read. The Illumina short-read runs used in this project's benchmark (ERR2984773 and ERR2935805) are from the same study's ENA project, but we did not verify those accession-to-instrument mappings on the page we opened."
+        },
+        {
+          "q": "How rare can the rarest species be and still be detected?",
+          "a": "Nicholls et al. report a detection limit below 50 cells on GridION for the rarest species; S. aureus got 4 reads on GridION from a 50-cell input and 19 on PromethION from a 400-cell input. That is a long-read nanopore result; with short reads and only the first N read pairs streamed, the rarest species may receive zero reads, which makes recall on the log mock capped by sampling depth rather than by the classifier."
+        },
+        {
+          "q": "Is there any conflict of interest to know about?",
+          "a": "The paper discloses that one co-author is a Zymo employee and some authors have received ONT reagents."
+        }
+      ],
+      "sources": [
+        {"title": "Nicholls et al. 2019, GigaScience giz043", "url": "https://academic.oup.com/gigascience/article/8/5/giz043/5486468"}
+      ]
+    },
+    {
+      "title": "Major benchmarks and why their rankings disagree",
+      "plain": "Several large studies have ranked classifiers, and they do not agree on a single winner. Reasons: they use different test data (simulated reads versus real sequencing), different reference databases (a tool with a bigger database finds more), different metrics (F1 versus abundance error), different abundance cutoffs, and different versions of the software. A ranking is therefore an answer to a specific question under specific settings, not a universal ordering.",
+      "deeper": [
+        {
+          "q": "CAMI I (Sczyrba et al. 2017)",
+          "a": "The first Critical Assessment of Metagenome Interpretation. According to the abstract and listings we saw: datasets built from about 700 newly sequenced microbial isolate genomes and about 600 novel viruses and plasmids; 215 submissions representing 25 programs and 36 biobox implementations from 16 teams. Findings: assembly and binning did well for species with individual genomes but were affected by related strains; taxonomic profilers and binners were proficient at high ranks with a notable drop below family level; parameter settings markedly affected performance, which matters for reproducibility. We saw these through abstract and repository listings, not the full text."
+        },
+        {
+          "q": "CAMI II (Meyer et al. 2022)",
+          "a": "The second round. Per the bibliographic summaries we saw: simulated, realistic datasets from about 1,700 new and known genomes plus 600 plasmids and viruses, with both long and short reads, and 5,002 results from 76 program versions. Assembly improved noticeably, partly thanks to long reads; related strains remained hard; taxon profilers and binners did best at higher bacterial ranks and worse on viruses and archaea. We could not open the Nature Methods full text (paywall redirect)."
+        },
+        {
+          "q": "Ye et al. 2019",
+          "a": "Benchmarked 20 classifiers (DNA-to-DNA, DNA-to-protein, marker-based). Most methods scored above 0.8 AUPR at species level with default databases. Using a uniform RefSeq complete-genome database made results slightly worse, most noticeably for protein tools, showing that the database, not just the algorithm, drives scores. Their practical recommendations: with over 100 GB of memory, Kraken and its derivatives (Bracken, KrakenUniq, Kraken2) performed well; with under 2 GB, MetaPhlAn2; Centrifuge if a custom database is needed with tens of GB of memory. These are 2019 recommendations for older tool versions."
+        },
+        {
+          "q": "LEMMI (Seppey, Manni and Zdobnov 2020)",
+          "a": "A continuously updated benchmark platform (Genome Research 30(8):1208-1216) where methods are wrapped in standardised containers and results are shown with rankings for several analytic objectives and computational costs such as memory. The authors argue that snapshot evaluations become obsolete quickly. Note: LEMMI is by Seppey et al. 2020; Meyer et al. 2022 is CAMI II, not LEMMI. We saw these details via search summaries, not the full text."
+        },
+        {
+          "q": "Long-read benchmark (Portik et al. 2022)",
+          "a": "A benchmark of 11 methods (5 designed for long reads) on mocks sequenced with PacBio HiFi or Nanopore. Per the abstract summary: BugSeq, MEGAN-LR with DIAMOND and sourmash reached high precision and recall without filtering, MetaMaps and MMseqs2 needed moderate filtering, and datasets with many reads under 2 kb gave lower precision and poorer abundance estimates. This shows that whether a tool 'needs filtering' is part of what a benchmark measures."
+        },
+        {
+          "q": "So why do rankings disagree?",
+          "a": "Our synthesis (not a quote from one paper): (1) different truth sets and difficulty; (2) database differences (Ye et al. show swapping to a uniform database changes scores); (3) metric choice (presence/absence versus abundance); (4) filters and thresholds; (5) software versions; (6) reads that come from organisms absent from any reference (Ye et al. note only about 30 to 40 percent of reads in the CAMI data came from known taxa, limiting performance)."
+        }
+      ],
+      "sources": [
+        {"title": "Sczyrba et al. 2017, CAMI benchmark (UEA repository record)", "url": "https://ueaeprints.uea.ac.uk/id/eprint/87984"},
+        {"title": "Meyer et al. 2022, CAMI II (UiT repository record)", "url": "https://munin.uit.no/handle/10037/26204"},
+        {"title": "Ye et al. 2019, Cell (PMC copy)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6716367"},
+        {"title": "Seppey et al. 2020, LEMMI (Genome Research abstract page)", "url": "https://genome.cshlp.org/content/30/8/1208"},
+        {"title": "Portik et al. 2022, long-read classification benchmark (eScholarship PDF)", "url": "https://escholarship.org/content/qt41m7h15x/qt41m7h15x.pdf?t=rxh64k"}
+      ]
+    },
+    {
+      "title": "Limits of mocks: what they cannot tell you",
+      "plain": "A mock is a practice exam with the answers published. Its organisms have good reference genomes, there are few of them, they are not close relatives of each other, and they are sequenced at known depth. Real samples have thousands of species, many without any reference genome, strains that differ from references, host DNA, and uneven DNA extraction. A tool that does well on a mock has shown it can do the easy case. A tool that does badly on a mock is likely to do badly in the real world too. So mocks are good at ruling tools out, weaker at ruling them in.",
+      "deeper": [
+        {
+          "q": "What makes real samples harder?",
+          "a": "Ye et al. note that in the CAMI data only about 30 to 40 percent of reads came from known taxa, which limited performance. CAMI I found related strains degraded assembly and binning. These are both properties of real or realistic communities that a ten-organism mock does not have."
+        },
+        {
+          "q": "Do abundance numbers on mocks reflect the true cell ratios?",
+          "a": "Not exactly. Extraction and library preparation introduce bias, so even a perfect classifier will not reproduce the stated percentages. Nicholls et al. modified their DNA extraction to preserve Gram-negative representation, a reminder that wet-lab choices shape the measured composition. We did not find a source that quantified this bias, so we do not state a magnitude."
+        },
+        {
+          "q": "Does reading only the first N read pairs matter?",
+          "a": "Likely yes: fewer reads means rare species may get few or no reads, and early reads in a file can be non-random (for example, ordered by tile position), though we did not verify the latter for these ENA files. This is a design limitation to disclose rather than a verified bias."
+        }
+      ],
+      "sources": [
+        {"title": "Ye et al. 2019, Cell (PMC copy)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6716367"},
+        {"title": "Sczyrba et al. 2017 (UEA repository record)", "url": "https://ueaeprints.uea.ac.uk/id/eprint/87984"},
+        {"title": "Nicholls et al. 2019, GigaScience giz043", "url": "https://academic.oup.com/gigascience/article/8/5/giz043/5486468"}
+      ]
+    }
+  ],
+  "glossary": [
+    {"term": "Mock community", "plain": "A lab-made mix of known microbes in known amounts, used as a test sample with a known answer.", "deeper": "Zymo D6300 (even) and D6310 (log) are commercial examples; each has 8 bacteria and 2 yeasts per Nicholls et al. 2019."},
+    {"term": "Taxonomic classifier", "plain": "Software that guesses which organism each DNA read came from.", "deeper": "Ye et al. 2019 group them as DNA-to-DNA, DNA-to-protein and marker-based."},
+    {"term": "Ground truth / answer key", "plain": "The known correct list and proportions you grade against.", "deeper": "For mocks it comes from how the mix was made plus isolate sequencing; it can itself contain errors such as mislabelled references."},
+    {"term": "True positive", "plain": "A species the tool listed that really is in the sample.", "deeper": "Counted at a chosen taxonomic rank (species or genus) and above a chosen abundance cutoff."},
+    {"term": "False positive", "plain": "A species the tool listed that is not really in the sample.", "deeper": "Often at very low abundance; Ye et al. report tens to thousands of distinct false-positive species depending on the tool."},
+    {"term": "False negative", "plain": "A real species the tool failed to report.", "deeper": "In a shallow read subsample, a rare real species may have zero reads, so this can reflect depth, not the tool."},
+    {"term": "Precision", "plain": "Of everything the tool reported, the fraction that was real.", "deeper": "TP / (TP + FP). Sensitive to the number of low-abundance false positives."},
+    {"term": "Recall (sensitivity)", "plain": "Of everything that was really there, the fraction the tool found.", "deeper": "TP / (TP + FN)."},
+    {"term": "F1 score", "plain": "A single number combining precision and recall; high only when both are high.", "deeper": "Harmonic mean of precision and recall, computed at one cutoff."},
+    {"term": "AUPR", "plain": "A summary of the precision-versus-recall trade-off across all cutoffs.", "deeper": "Area under the precision-recall curve; Ye et al. 2019 used it as their main presence/absence metric."},
+    {"term": "Abundance threshold (cutoff)", "plain": "A floor below which tiny hits are ignored.", "deeper": "Raises precision, can lower recall; benchmark results must state it."},
+    {"term": "Relative abundance", "plain": "Each organism's share of the total, adding up to 100 percent.", "deeper": "Not the same as absolute cell counts; sequencing output size is arbitrary (Gloor et al. 2017)."},
+    {"term": "Compositional data", "plain": "Data where only the proportions matter and the parts must sum to a fixed total, so one going up forces others down.", "deeper": "Gloor et al. 2017 argue microbiome sequencing data are compositional and should be analysed with log-ratio methods."},
+    {"term": "Bray-Curtis dissimilarity", "plain": "A 0-to-1 score of how different two recipes are; 0 means identical.", "deeper": "Dominated by the most abundant taxa and sensitive to read depth, per Gloor et al.'s discussion of distance matrices."},
+    {"term": "L1 distance", "plain": "Add up the absolute differences in each species' share between estimate and truth.", "deeper": "For proportions that sum to 1 it ranges 0 to 2; half the L1 equals the share of mass in the wrong place."},
+    {"term": "L2 distance", "plain": "Like L1 but squares the differences, so one big error counts more.", "deeper": "Ye et al. 2019 used L2 for abundance error; Kraken and taxMaps typically had L2 under 0.1."},
+    {"term": "Aitchison distance", "plain": "A distance that compares ratios between species rather than raw shares, so it respects that the data are proportions.", "deeper": "Euclidean distance between centered log-ratio (clr) transformed samples; requires handling zeros first."},
+    {"term": "Centered log-ratio (clr)", "plain": "A transform that divides each species by the typical (geometric mean) species and takes the log.", "deeper": "Scale-invariant, so the same ratios give the same values whether a sample has few or many reads."},
+    {"term": "False-positive mass", "plain": "The total share of the output that belongs to species that should not be there.", "deeper": "More informative than counting false species, since a single large false hit matters more than many tiny ones. Our definition for this project, not a term taken from a specific paper."},
+    {"term": "Negative control", "plain": "A sample where the right answer is known to be 'nothing' or 'only one thing', used to catch false alarms.", "deeper": "Includes single-isolate runs and non-template controls (reagent-only samples)."},
+    {"term": "Single-isolate run", "plain": "Sequencing one pure organism, so the correct answer is exactly one species.", "deeper": "Catches misassignment to close relatives; reference mislabelling can cause apparent errors."},
+    {"term": "Reference database", "plain": "The library of known genomes a classifier compares reads against.", "deeper": "Ye et al. show database choice changes scores; a uniform RefSeq complete-genome database gave slightly worse results than default databases."},
+    {"term": "CAMI", "plain": "A community challenge (Critical Assessment of Metagenome Interpretation) where tool makers are tested on the same hidden-answer datasets.", "deeper": "CAMI I (Sczyrba et al. 2017) and CAMI II (Meyer et al. 2022)."},
+    {"term": "LEMMI", "plain": "A continuously updated benchmark website for classifiers where tools are run in standard containers.", "deeper": "Seppey, Manni and Zdobnov 2020, Genome Research."},
+    {"term": "Taxonomic rank", "plain": "The level of the family tree: species is fine-grained, genus is broader, family broader still.", "deeper": "Performance drops at finer ranks (Sczyrba et al. 2017 report a notable decrease below family level)."}
+  ],
+  "failure_modes": [
+    {"what_goes_wrong": "Cutoff tuned on the same mock it is scored on, making results look better than they will be in practice.", "how_to_notice": "The cutoff was picked after looking at the answer key, and the same dataset is then reported.", "what_to_do": "Fix the cutoff in advance or choose on one mock and report on another; show the full threshold sweep."},
+    {"what_goes_wrong": "Comparing tools with different databases and calling the difference an algorithm difference.", "how_to_notice": "Tools use their default databases of different size or age.", "what_to_do": "State each database; where possible add a run on a common reference set (Ye et al. did this with RefSeq complete genomes)."},
+    {"what_goes_wrong": "Precision on a tiny answer key (10 species) looks terrible or great depending on a handful of false positives.", "how_to_notice": "Precision swings a lot when the cutoff moves a little.", "what_to_do": "Report false-positive mass alongside precision and give counts, not just percentages."},
+    {"what_goes_wrong": "Compositionality ignored: treating read shares as absolute amounts, or computing correlations/distances that are biased on proportions.", "how_to_notice": "Claims like 'species X increased' based on shares in one sample where others changed.", "what_to_do": "Say 'share of reads', use log-ratio methods or Aitchison distance where relevant, and handle zeros explicitly (Gloor et al. 2017)."},
+    {"what_goes_wrong": "Mislabelled or near-identical reference genomes make a correct call look like an error (or vice versa).", "how_to_notice": "The 'false positive' in a single-isolate run is a very close relative or a renamed species.", "what_to_do": "Inspect top false hits manually, compare at genus level as well as species level, and note reference annotation problems (as flagged for Salmonella in Nicholls et al.)."},
+    {"what_goes_wrong": "Shallow subsampling (first N read pairs) leaves rare species with zero reads, so recall falls for reasons unrelated to the classifier.", "how_to_notice": "Missed species are the ones at the bottom of the log mock; recall rises as N grows.", "what_to_do": "Report recall against read depth and mark species that are expected to have fewer than a few reads."},
+    {"what_goes_wrong": "Over-generalising from mock results to real samples.", "how_to_notice": "Statements such as 'tool X is the most accurate' with no qualification about community complexity.", "what_to_do": "Phrase as 'on these mocks, with these settings'; point to CAMI-style complex benchmarks for the harder case."},
+    {"what_goes_wrong": "Software and database versions drift, so a published ranking is outdated.", "how_to_notice": "Results cite old tool versions; benchmark authors themselves note snapshots get obsolete (LEMMI's motivation).", "what_to_do": "Record exact versions and database build dates, and rerun when they change."}
+  ],
+  "aha_moments": [
+    "The same classifier can score very differently depending only on the abundance cutoff you apply, so a score without its cutoff is nearly meaningless.",
+    "Sequencing gives you shares, not counts: if one organism doubles, every other organism's share drops even though nothing happened to them.",
+    "A single pure bacterium is a perfect lie detector: any other species in the output is a mistake (modulo reference errors).",
+    "Benchmarks disagree mostly because they ask different questions (different data, database, metric, cutoff), not because some of them are wrong.",
+    "Ye et al. found that false positives in real sequenced mock DNA looked similar to those in simulated reads, so they come mostly from the software and database, not dirty lab work."
+  ],
+  "timeline": [
+    {"year": "1897", "event": "Gloor et al. 2017 credit Karl Pearson (1897) with first describing the spurious-correlation problem that affects compositional (proportion) data.", "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5695134"},
+    {"year": "2017", "event": "Sczyrba et al. publish the first CAMI benchmark in Nature Methods (215 submissions, 25 programs, 16 teams); profilers strong at high ranks, drop below family level.", "source_url": "https://ueaeprints.uea.ac.uk/id/eprint/87984"},
+    {"year": "2017", "event": "Gloor et al. argue microbiome sequencing data are compositional 'and this is not optional' (Frontiers in Microbiology, 15 Nov 2017).", "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5695134"},
+    {"year": "2019", "event": "Ye et al. benchmark 20 classifiers in Cell (Aug 2019), finding most exceed 0.8 AUPR at species level and many report large numbers of low-abundance false positives.", "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6716367"},
+    {"year": "2019", "event": "Nicholls et al. release ultra-deep nanopore data of the Zymo even and log mock communities in GigaScience (giz043).", "source_url": "https://academic.oup.com/gigascience/article/8/5/giz043/5486468"},
+    {"year": "2020", "event": "Seppey, Manni and Zdobnov introduce LEMMI, a continuous benchmarking platform for metagenomic classifiers (Genome Research 30(8):1208-1216).", "source_url": "https://genome.cshlp.org/content/30/8/1208"},
+    {"year": "2022", "event": "Meyer et al. publish CAMI II in Nature Methods (5,002 results from 76 program versions; long and short reads).", "source_url": "https://munin.uit.no/handle/10037/26204"},
+    {"year": "2022", "event": "Portik, Brown and Pierce-Ward benchmark 11 long-read classification and profiling methods on PacBio HiFi and Nanopore mocks (BMC Bioinformatics 23:541).", "source_url": "https://escholarship.org/content/qt41m7h15x/qt41m7h15x.pdf?t=rxh64k"}
+  ],
+  "what_this_supports": [
+    "Reporting precision, recall and F1 together with the exact abundance cutoff and database used for each classifier.",
+    "Reporting false-positive mass from the 10 single-isolate negative controls alongside species-level precision.",
+    "Using more than one abundance-accuracy measure (for example Bray-Curtis or L1 plus Aitchison) and explaining that read shares are proportions.",
+    "Stating that published benchmark rankings differ because of data, database, metric and threshold choices.",
+    "Presenting results as 'on these public mocks, with these settings', with a clear note that mocks are an easy test."
+  ],
+  "what_this_does_not_support": [
+    "Claiming any classifier is 'the most accurate' for real, complex samples such as gut, soil or clinical specimens.",
+    "Treating the Zymo stated percentages as exact truth for short-read data without allowing for extraction and library-prep bias.",
+    "Generalising a threshold that works on these mocks to other sample types (the best cutoffs in other studies depend on database and sample type).",
+    "Inferring absolute cell counts from read shares.",
+    "Assuming 2019 benchmark recommendations (Ye et al.) apply to current Kraken2, Bracken and MetaPhlAn 4 versions."
+  ],
+  "check_next": [
+    "Open the full text of CAMI I (Sczyrba 2017) and CAMI II (Meyer 2022) to confirm the quoted numbers and see which metrics they used (including any Bray-Curtis, L1 or weighted UniFrac measures).",
+    "Read the Kraken2 confidence-threshold study and the soil mock study cited in search results to see whether their cutoffs apply to Kraken2 and Bracken on these mocks.",
+    "Confirm ENA accession metadata for ERR2984773 and ERR2935805 (instrument, read length, layout).",
+    "Find a source that quantifies extraction and library-prep bias on Zymo mocks.",
+    "Check whether the first N read pairs in each ENA file are a representative random subsample.",
+    "Pick and justify one false-positive mass definition (for example share of assigned reads on non-target species) and one zero-handling rule for Aitchison distance before computing results."
+  ],
+  "unverified": [
+    "Full text of Sczyrba et al. 2017 and Meyer et al. 2022 was not opened (access blocked); their figures here come from abstract and repository listing text returned by search.",
+    "The LEMMI details come from search-result summaries, not the opened paper; the PMC page was blocked by a browser check.",
+    "Portik et al. 2022 findings come from a search summary of the abstract, not the opened full text.",
+    "Cutoff values from other studies (0.001 to 0.005 percent abundance, Kraken2 confidence 0.05 to 0.5) came from search summaries of papers we did not open and are not asserted as findings.",
+    "That ERR2984773 is the D6300 MiSeq 2x151 run and ERR2935805 the D6310 HiSeq 2x101 run was not verified; the giz043 page we read describes nanopore data and Illumina isolate sequencing.",
+    "The mathematical properties given for L1 and Bray-Curtis (ranges, relationship) are standard definitions stated from general knowledge, not from an opened source.",
+    "Whether early reads in ENA FASTQ files are non-random was not checked.",
+    "The Pearson 1897 date and the Gloor details come from the Gloor et al. PMC page as summarised by the fetch tool, not from reading the full page directly."
+  ]
+}

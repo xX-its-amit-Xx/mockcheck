@@ -1,0 +1,197 @@
+{
+  "id": "decisions",
+  "title": "Is read classification the right tool? A decision guide for non-specialists",
+  "one_line": "Taxonomic read classification answers 'which organisms might be in this sample?' quickly and cheaply, but it is a screening tool whose output needs controls, filtering and often a second test before anyone acts on it.",
+  "layperson_story": [
+    "Imagine you have a bag of mixed-up jigsaw pieces from many different puzzles and you want to know which puzzles are in the bag. A taxonomic read classifier does this for DNA. A sequencing machine reads millions of short DNA fragments (called reads), and software matches each fragment against a library of known genomes to guess which organism it came from. The output is a list: 'this much looks like organism A, this much like organism B'.",
+    "That list is useful, but it is a set of guesses, not a lab-certified result. The guesses depend on the settings you chose, the size and quality of the reference library, how much of the sample was the thing you cared about versus something else (in human samples, over 99% of reads can be human), and whether contamination crept in. A good decision-maker's job is not to learn the software; it is to know when this tool is the right one and what questions to ask before trusting its list.",
+    "There are three main alternatives. 16S sequencing reads just one barcode gene in bacteria: cheaper, and fine for 'who is roughly there', but usually stops at genus level and ignores viruses, fungi and most functional information. Assembly (building genomes, called MAGs) stitches fragments back together: it gives much richer information but needs more data, more computing and expert curation. Targeted PCR looks only for a specific named organism: fast and sensitive for that target, blind to everything else. Classification sits in the middle: broad, no need to know what you are looking for in advance, but weaker on certainty.",
+    "This project, mockcheck, tests classifiers on public 'mock communities': samples made by mixing known microbes in known proportions, so we know the right answer. Using the Zymo D6300 (even) and D6310 (log) mocks plus ten single-microbe runs as negative controls from Nicholls et al. 2019, we can see what each tool gets right, what it invents, and what it misses. That is the kind of evidence a non-specialist should ask any vendor or analyst to show for their own pipeline.",
+    "The practical advice: use classification for screening, exploration and monitoring where a follow-up is possible; use targeted tests when you know the one thing you must detect; use deeper methods when you need genomes or strain-level detail; and in every case demand controls, a stated detection threshold, and the settings used. Treat tiny percentages and rare species in a report as hypotheses, not findings."
+  ],
+  "sections": [
+    {
+      "title": "What classification is, in one page",
+      "plain": "A classifier takes short DNA reads and assigns each to a species, genus or higher group by comparing it to a reference database. Kraken 2 does this by matching short DNA 'words' (k-mers, compressed to 'minimizers') against a compact database that maps them to taxa. Bracken is a second step that re-estimates how many reads truly belong at species level, because many reads can only be pinned to a broader group. MetaPhlAn takes a different route: it looks only for marker genes that are unique to each group. The answer is always 'best match in the database', so anything not in the database cannot be named correctly.",
+      "deeper": [
+        {"q": "What does Kraken 2 trade away to be fast and small?", "a": "Wood, Lu and Langmead (Genome Biology 2019) report Kraken 2 uses a probabilistic compact hash table and cut memory use by about 85% versus Kraken 1 (a 9.1 Gbp reference needed 10.6 GB versus 72.4 GB). Using a smaller hash table lowers memory and raises speed but reduces accuracy; the authors report error rates below 1% at the default load factor."},
+        {"q": "Why is Bracken usually run after Kraken 2?", "a": "Wright, Comeau and Langille (Microbial Genomics 2023) note Bracken re-estimates abundances after Kraken 2 classification, that the Kraken developers recommend it, but that the original Kraken publications do not include the step and many comparison studies skip it. The Kraken 2 paper reports Bracken estimates were more accurate with Kraken 2 than Kraken 1."},
+        {"q": "Are defaults safe?", "a": "Not necessarily. Wright et al. 2023 found Kraken 2's default confidence threshold of 0 gives very low precision and probably overestimates the number of species in many samples, and they say default databases and parameters should not simply be used. The best threshold depends on the database."}
+      ],
+      "sources": [
+        {"title": "Improved metagenomic analysis with Kraken 2 (Wood, Lu, Langmead 2019)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6883579/"},
+        {"title": "From defaults to databases (Wright, Comeau, Langille 2023, Microbial Genomics)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10132073"}
+      ]
+    },
+    {
+      "title": "Classification vs 16S vs assembly (MAGs) vs targeted PCR",
+      "plain": "Choose by the question. 'Is organism X present at all?' points to targeted PCR. 'Roughly what bacteria are in this, cheaply, across hundreds of samples?' points to 16S. 'What is in this, including viruses and fungi, and I do not know what to expect?' points to shotgun sequencing plus classification. 'I need the genome, genes (for example resistance or toxin genes) or strain-level identity' points to assembly and deeper analysis.",
+      "deeper": [
+        {"q": "How does PCR compare with metagenomic sequencing?", "a": "Batool and Galloway-Peña (Frontiers in Microbiology 2023) say PCR is fast and sensitive but usually tests one gene at a time and can miss low-copy targets; multiplex PCR still needs prior knowledge of the suspected pathogen. Metagenomic sequencing needs no prior knowledge and can detect rare or novel organisms. The same review says routine rapid molecular panels report in about 15 minutes to 2 hours."},
+        {"q": "How does 16S compare with shotgun?", "a": "A 2021 Frontiers infant-gut study snippet and vendor blogs state shotgun profiling often reaches species level where 16S is restricted to genus; vendor material claims shotgun costs 2-3 times more, and shallow shotgun (2-5 million reads) approaches 16S cost. These specific cost figures come from vendors and search snippets I did not open, so treat as rough (see unverified)."},
+        {"q": "What are MAGs and what limits them?", "a": "Metagenome-assembled genomes are draft genomes rebuilt from mixed reads. Search-result summaries say uncurated MAGs can contain gaps, chimeras and contamination, and that binning relies on read coverage; assembly needs substantial compute. I could not open the underlying papers (paywalled), so this is listed as unverified."}
+      ],
+      "sources": [
+        {"title": "Clinical metagenomics: challenges and future prospects (Batool, Galloway-Pena 2023)", "url": "https://frontiersin.org/articles/10.3389/fmicb.2023.1186424/full"},
+        {"title": "Clinical Metagenomic NGS for Pathogen Detection (Gu, Miller, Chiu; Annu Rev Pathol 2018, PMC manuscript 2019)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6345613"}
+      ]
+    },
+    {
+      "title": "Use cases and what accuracy each needs",
+      "plain": "The cost of a wrong answer sets the accuracy you need. In research exploration, a false lead costs a few days. In food or probiotic quality control, a false positive can halt a batch and a false negative can ship a contaminated one. In clinical use, a wrong answer can change treatment. In biosurveillance, missing a rare threat matters more than a false alarm, as long as follow-up testing exists. The higher the stakes, the more you should use classification as a screen and confirm with a targeted or validated test.",
+      "deeper": [
+        {"q": "Clinical metagenomics", "a": "Gu et al. (2019) describe over 99% of reads in clinical samples often coming from the human host, no standard interpretation method, incomplete databases, and contamination from reagents, lab environment or normal flora. Labs validate wet-lab and software together, run positive and negative controls every run, and set thresholds using background signal from negative controls. They say no commercial proficiency-testing materials existed for this at the time of writing."},
+        {"q": "Food, probiotic and environmental monitoring", "a": "No source I opened covers these use cases directly. The general logic applies: you need a stated detection limit, a database that actually contains the organisms of concern, and a confirmatory test for anything that triggers action. Specific regulatory or accuracy requirements are not stated here."},
+        {"q": "Biosurveillance", "a": "No source I opened covers biosurveillance performance. I do not state requirements; check with the relevant agency or standards body."},
+        {"q": "What does a mock-community benchmark tell you?", "a": "It tells you how a pipeline behaves when the truth is known: which species it invents (false positives), which it misses, and how far abundances drift. The Nicholls et al. 2019 data supply two ZymoBIOMICS mock communities and Illumina data for the ten individual species, which makes this possible. It does not tell you how the pipeline behaves on your sample type."}
+      ],
+      "sources": [
+        {"title": "Clinical Metagenomic NGS for Pathogen Detection (Gu et al.)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6345613"},
+        {"title": "Ultra-deep, long-read nanopore sequencing of mock microbial community standards (Nicholls et al. 2019, PDF)", "url": "https://rcastoragev2.blob.core.windows.net/8549eafcd36bb3ddd4ed1a13363ce8d3/PMC6520541.pdf"}
+      ]
+    },
+    {
+      "title": "Cost, compute and time",
+      "plain": "Three costs matter: lab and sequencing cost, computing cost for analysis, and the cost of a wrong decision. The big knob for compute is database size. Bigger databases usually find more but need much more memory and disk. Time matters too: culture can take days to weeks, rapid PCR panels minutes to hours, and clinical metagenomic services can take a week or two, according to one review.",
+      "deeper": [
+        {"q": "How much does database size matter?", "a": "Wright et al. 2023 found the full NCBI RefSeq Complete database (about 1.2 TB) performed best overall but needs substantial memory and storage; they suggest a 500 GB size-limited version or a smaller curated database as next-best options and advise against MiniKraken2 V2, which performed substantially worse. This project uses 8 GB and 16 GB standard Kraken 2 databases, so expect them to miss organisms that bigger databases would find."},
+        {"q": "What is the cost picture in clinical use?", "a": "Gu et al. say sequencing costs have fallen by orders of magnitude since 2004 but metagenomic sequencing is still expensive, and that depleting host DNA before sequencing is more economical than removing human reads afterwards. Batool and Galloway-Pena say the cost may be small compared with invasive procedures and intensive care, though that is the authors' argument, not a measured result here."},
+        {"q": "Turnaround examples", "a": "Batool and Galloway-Pena: culture days to weeks; rapid molecular panels about 15 minutes to 2 hours; nanopore detection within minutes with genotyping in under 6 hours; the UCSF clinical lab reports 1 to 2 weeks after shipment."}
+      ],
+      "sources": [
+        {"title": "From defaults to databases (Wright et al. 2023)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10132073"},
+        {"title": "Clinical metagenomics: challenges and future prospects", "url": "https://frontiersin.org/articles/10.3389/fmicb.2023.1186424/full"},
+        {"title": "Clinical Metagenomic NGS for Pathogen Detection", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6345613"}
+      ]
+    },
+    {
+      "title": "A plain decision checklist",
+      "plain": "Before commissioning or buying a classifier-based analysis, answer these in order. 1) What decision will the result drive, and what does a wrong answer cost? 2) Do I know the specific organism I care about? If yes, a targeted test is probably better. 3) Do I need only broad bacterial composition? Consider 16S. 4) Do I need genomes, genes or strain-level identity? You need more than classification. 5) Is the organism of interest actually in the reference database? 6) Is there a confirmatory test for anything that triggers action? 7) Are negative controls and a mock community run alongside real samples? 8) Are the software versions, database version and settings written down?",
+      "deeper": [
+        {"q": "Why controls come before everything else", "a": "Gu et al. describe running positive and negative controls on every sequencing run to track contamination, and using negative-control background to set detection thresholds."},
+        {"q": "Why version and date matter", "a": "Results change with database content and settings (Wright et al. 2023). A report without the database name, date and settings cannot be reproduced or compared."}
+      ],
+      "sources": [
+        {"title": "Clinical Metagenomic NGS for Pathogen Detection", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6345613"},
+        {"title": "From defaults to databases", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10132073"}
+      ]
+    },
+    {
+      "title": "Red flags to ask a vendor or analyst about",
+      "plain": "Ask: Which database, which version, and what date? Which confidence threshold and why? What happened on a mock community with known answers, and what were the false positives? Were negative controls run, and what showed up in them? What is the lowest abundance you will report, and how was that set? How do you tell contamination or normal flora from real infection or real presence? What happens to organisms not in the database? What confirmatory test do you recommend for a positive? Vague or confident answers with no numbers are a red flag.",
+      "deeper": [
+        {"q": "Claims to be sceptical of", "a": "A single accuracy number without saying what sample, database and threshold it applies to; 'detects everything'; no mention of false positives; results at species level with no explanation of how species were distinguished. Wright et al. 2023 report that low thresholds give very low precision, so any pipeline using defaults without filtering deserves a question."},
+        {"q": "Vendor-supplied comparisons", "a": "Promotional material may cite favourable sensitivity figures. Prefer independent or peer-reviewed comparisons and ask for the validation data itself."}
+      ],
+      "sources": [
+        {"title": "From defaults to databases", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10132073"},
+        {"title": "Clinical metagenomics: challenges and future prospects", "url": "https://frontiersin.org/articles/10.3389/fmicb.2023.1186424/full"}
+      ]
+    },
+    {
+      "title": "How to read a classifier report without being fooled",
+      "plain": "Look at the top few lines first: they are usually reliable. Be wary of the long tail of tiny percentages: that is where false positives live. Check the percentage of reads that were not classified at all. Check whether names you did not expect are close relatives of ones you did (a database often confuses neighbouring species). Remember percentages are of reads, not of cells, and not all organisms contribute equal DNA per cell. If a mock or control sample run through the same pipeline shows the same odd names, they are artefacts.",
+      "deeper": [
+        {"q": "Reads vs cells", "a": "Read share is not the same as cell share or biomass share because genome size and DNA extraction efficiency differ between organisms. This is a general principle I am stating from domain knowledge and did not verify from a source in this task (see unverified)."},
+        {"q": "Why raising the confidence threshold is not free", "a": "A Springer snippet in my search reported classified reads approach zero above a confidence of about 0.4 on Minikraken and Standard-16 databases; Wright et al. 2023 found higher thresholds improve precision but reduce the number of classified reads. You trade fewer false alarms for more unclassified reads."},
+        {"q": "Presence is not infection or contamination-free", "a": "Batool and Galloway-Pena note DNA can persist after a pathogen is dead and that commensals are hard to separate from infection, so a detected name is not proof of disease."}
+      ],
+      "sources": [
+        {"title": "From defaults to databases", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10132073"},
+        {"title": "Clinical metagenomics: challenges and future prospects", "url": "https://frontiersin.org/articles/10.3389/fmicb.2023.1186424/full"}
+      ]
+    },
+    {
+      "title": "Why this project uses mock communities and negative controls",
+      "plain": "A mock community is a sample whose true contents are known. Running a classifier on it is like marking your own homework against an answer key. Single-isolate runs, where only one organism is present, are even simpler: anything other than that one organism in the output is an error or contamination. This project uses the Zymo D6300 even mock, the D6310 log mock and ten single-isolate runs from the Nicholls et al. 2019 data (ENA PRJEB29504), using only the first N read pairs of each run.",
+      "deeper": [
+        {"q": "What are the limits of the benchmark?", "a": "These are lab-made, clean mixtures of a few organisms with high-quality reference genomes. Real samples (stool, soil, blood) have many more organisms, many absent from databases, and host DNA. Good mock performance is necessary, not sufficient. Using only the first N read pairs may also not represent the whole run; the effect is not quantified here."},
+        {"q": "Where did the data come from?", "a": "Nicholls, Quick, Tang and Loman, GigaScience 2019, DOI 10.1093/gigascience/giz043, sequenced two ZymoBIOMICS mock communities on nanopore devices and the individual species on Illumina. The article PDF I opened gave only metadata; the details of composition and accession come from the task brief."}
+      ],
+      "sources": [
+        {"title": "Nicholls et al. 2019, GigaScience (PDF)", "url": "https://rcastoragev2.blob.core.windows.net/8549eafcd36bb3ddd4ed1a13363ce8d3/PMC6520541.pdf"}
+      ]
+    }
+  ],
+  "glossary": [
+    {"term": "Read", "plain": "A short stretch of DNA letters produced by the sequencing machine.", "deeper": "Illumina reads here are 101-151 letters long; paired reads come from both ends of one fragment."},
+    {"term": "Taxonomic classification", "plain": "Assigning each read to the organism group it most likely came from.", "deeper": "Done by comparison with a reference database; the answer cannot be better than the database."},
+    {"term": "Reference database", "plain": "The library of known genomes the software compares reads against.", "deeper": "Size and content strongly affect results; Wright et al. 2023 found database choice dramatically changes performance."},
+    {"term": "Kraken 2", "plain": "Fast software that classifies reads by matching short DNA words to a compact database.", "deeper": "Uses minimizers and a probabilistic hash table to lower memory about 85% versus Kraken 1 (Wood et al. 2019)."},
+    {"term": "Bracken", "plain": "A follow-up step that re-estimates how many reads belong to each species after Kraken.", "deeper": "Recommended by the Kraken developers; compatible with Kraken 2 per Wood et al. 2019."},
+    {"term": "MetaPhlAn", "plain": "A classifier that uses only marker genes unique to each group rather than every read.", "deeper": "Index version in this project: mpa_vJan26_CHOCOPhlAnSGB_202605. Mechanism described here from general knowledge, not verified in this task."},
+    {"term": "Confidence threshold", "plain": "A Kraken 2 setting: how strongly a read must match before it gets a name.", "deeper": "Default 0 gives many false positives; higher values improve precision but leave more reads unclassified (Wright et al. 2023)."},
+    {"term": "False positive", "plain": "A report of an organism that is not actually in the sample.", "deeper": "Comes from low thresholds, contamination, database errors or look-alike relatives."},
+    {"term": "False negative", "plain": "Failing to report an organism that is really there.", "deeper": "Comes from database gaps, low abundance, or too strict filtering."},
+    {"term": "Precision and recall", "plain": "Precision: of what was reported, how much is real. Recall: of what is real, how much was reported.", "deeper": "F1 combines both; the best threshold depends on which you value more."},
+    {"term": "Mock community", "plain": "A lab-made mixture of known microbes in known amounts, used as an answer key.", "deeper": "ZymoBIOMICS D6300 (even) and D6310 (log) are used here."},
+    {"term": "Negative control", "plain": "A sample that should contain none of the target, or only one known organism, used to reveal contamination or invented calls.", "deeper": "Gu et al. 2019 describe using negative-control background to set detection thresholds."},
+    {"term": "16S rRNA sequencing", "plain": "Reading one barcode gene in bacteria and archaea to see who is roughly there.", "deeper": "Usually genus-level resolution per vendor and study summaries; does not see viruses or most fungi."},
+    {"term": "Shotgun metagenomics", "plain": "Sequencing all DNA in a sample rather than one gene.", "deeper": "Needed for species-level calls, viruses, fungi and gene content; costs more than 16S."},
+    {"term": "Assembly", "plain": "Stitching short reads back into longer sequences.", "deeper": "Needs more data and computing than classification."},
+    {"term": "MAG (metagenome-assembled genome)", "plain": "A draft genome of one organism rebuilt from a mixed sample.", "deeper": "Quality varies; completeness and contamination must be checked before use."},
+    {"term": "Targeted PCR", "plain": "A test that copies and detects one specific DNA target, such as one named organism.", "deeper": "Fast and sensitive for the target but blind to everything else (Batool and Galloway-Pena 2023)."},
+    {"term": "Host DNA", "plain": "DNA from the person or animal the sample came from, which swamps microbial DNA.", "deeper": "Often over 99% of reads in clinical samples (Gu et al. 2019)."},
+    {"term": "Commensal / normal flora", "plain": "Microbes that normally live on or in a body without causing disease.", "deeper": "Make it hard to judge whether a detection means infection."},
+    {"term": "Detection limit", "plain": "The lowest amount of an organism a method can reliably detect.", "deeper": "Should be measured by diluting known material; ask for it."},
+    {"term": "Unclassified reads", "plain": "Reads the software could not confidently name.", "deeper": "Often large; a high fraction means the database or threshold is limiting."}
+  ],
+  "failure_modes": [
+    {"what_goes_wrong": "Long tail of false-positive species from default settings.", "how_to_notice": "Dozens of species at tiny percentages, many not plausible for the sample; the same names appear in the mock or negative control.", "what_to_do": "Apply a confidence threshold and minimum-abundance filter tuned on a mock community; confirm any important rare hit with a targeted test."},
+    {"what_goes_wrong": "Organism is missing from a small database.", "how_to_notice": "Large unclassified fraction or reads assigned to a distant relative.", "what_to_do": "Ask which database was used and its size; compare with a larger database before concluding absence."},
+    {"what_goes_wrong": "Contamination from reagents, the lab, or other samples.", "how_to_notice": "The same organism shows up in negative controls or across unrelated samples.", "what_to_do": "Run negative controls every batch and subtract or flag background."},
+    {"what_goes_wrong": "Host DNA swamps the signal.", "how_to_notice": "Over 99% of reads are host; very few microbial reads.", "what_to_do": "Use host depletion or targeted approaches; report how many microbial reads the call is based on."},
+    {"what_goes_wrong": "Close relatives confused with each other.", "how_to_notice": "Species flip between runs; related names appear at similar low levels.", "what_to_do": "Report at genus level or use a method with finer resolution (assembly, targeted assay)."},
+    {"what_goes_wrong": "Percentages mistaken for exact cell counts.", "how_to_notice": "Output abundances differ from the known mixture even on a mock.", "what_to_do": "Compare against a mock with known proportions; treat abundances as approximate."},
+    {"what_goes_wrong": "Detected DNA mistaken for a living or disease-causing organism.", "how_to_notice": "Positive call with no symptoms or no confirming test.", "what_to_do": "Read results with clinical or process context and a confirmatory test (Batool and Galloway-Pena 2023 note DNA can persist after death)."},
+    {"what_goes_wrong": "Result cannot be reproduced because versions and settings were not recorded.", "how_to_notice": "Report lacks database name, date, software version, threshold.", "what_to_do": "Require these in every report."}
+  ],
+  "aha_moments": [
+    "The classifier cannot name what its database does not contain, so a clean-looking report can still be wrong by omission.",
+    "Default settings can produce lots of false positives: the same data gives very different answers at different confidence thresholds.",
+    "Mock communities are a free answer key; if a vendor has not run one, you are trusting rather than checking.",
+    "Classification is a screen, PCR is a confirmation, assembly is a deep look; they answer different questions.",
+    "In human samples, over 99% of reads can be human, so microbial calls may rest on very few reads."
+  ],
+  "timeline": [
+    {"year": "2017", "event": "Bracken published (Lu, Breitwieser, Thielen, Salzberg, PeerJ Computer Science) to estimate species-level abundance from Kraken output.", "source_url": "https://peerj.com/articles/cs-104"},
+    {"year": "2018", "event": "Gu, Miller and Chiu review clinical metagenomic sequencing for pathogen detection in Annual Review of Pathology (author manuscript 2019).", "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6345613"},
+    {"year": "2019", "event": "Kraken 2 published in Genome Biology (Wood, Lu, Langmead), cutting memory use about 85% versus Kraken 1.", "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6883579/"},
+    {"year": "2019", "event": "Nicholls et al. publish nanopore data on ZymoBIOMICS mock communities in GigaScience (DOI 10.1093/gigascience/giz043).", "source_url": "https://rcastoragev2.blob.core.windows.net/8549eafcd36bb3ddd4ed1a13363ce8d3/PMC6520541.pdf"},
+    {"year": "2023", "event": "Wright, Comeau and Langille show database and parameter choices dramatically change classifier performance (Microbial Genomics).", "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10132073"},
+    {"year": "2023", "event": "Batool and Galloway-Pena review challenges of clinical metagenomics, including standardization gaps (Frontiers in Microbiology).", "source_url": "https://frontiersin.org/articles/10.3389/fmicb.2023.1186424/full"}
+  ],
+  "what_this_supports": [
+    "Classification is a broad, no-prior-knowledge screen, whereas PCR needs you to know the target (Batool and Galloway-Pena 2023).",
+    "Default Kraken 2 settings and small databases can mislead; thresholds and database size materially change results (Wright et al. 2023).",
+    "Controls and validation are standard practice in clinical metagenomics (Gu et al. 2019).",
+    "Kraken 2 trades some accuracy for much lower memory use (Wood et al. 2019).",
+    "Mock communities and single-isolate runs are a sensible way to check a pipeline."
+  ],
+  "what_this_does_not_support": [
+    "Any claim about a specific company or product.",
+    "That any classifier is 'accurate' in general; accuracy depends on sample, database, and settings.",
+    "Specific accuracy requirements for food, environmental or biosurveillance use; no source opened covers these.",
+    "That metagenomics beats targeted PCR for a known pathogen; the sources do not give a direct head-to-head.",
+    "Exact cost figures for sequencing or analysis."
+  ],
+  "check_next": [
+    "Read the Wright et al. 2023 full text for the precise precision/recall curves and compare with this project's 8 GB and 16 GB results.",
+    "Find peer-reviewed guidance for food, probiotic and environmental metagenomic QC (not found in this pass).",
+    "Find biosurveillance guidance from a public health agency on sequencing-based detection requirements.",
+    "Open the Bracken paper and a peer-reviewed MAG review to verify details currently listed as unverified.",
+    "Verify 16S versus shotgun cost and resolution claims with a peer-reviewed comparison."
+  ],
+  "unverified": [
+    "16S typically resolves only to genus while shotgun reaches species, and shotgun costs 2-3 times more than 16S: from vendor blogs and search snippets, not opened.",
+    "Shallow shotgun (2-5 million reads) approaches 16S cost: from search snippets and a 2018 mSystems paper that returned 403 when opened.",
+    "MAG limitations (gaps, chimeras, contamination, reliance on coverage): from search snippets; the Genome Research paper required login.",
+    "Bracken details beyond the title and authors (peerj.com returned 403); only search result summaries were seen.",
+    "Classified reads approach zero above confidence 0.4 on Minikraken and Standard-16: from a search snippet of a Springer article not opened.",
+    "ICU-cohort sensitivity and specificity of mNGS (96.6% and 83.1%) and vendor-cited sensitivity figures: from search snippets, not opened, and not used in the main text.",
+    "That read share differs from cell or biomass share because of genome size and extraction bias: domain knowledge, not sourced here.",
+    "MetaPhlAn marker-gene mechanism: domain knowledge, not opened in this task.",
+    "Mock community compositions and accessions (D6300 8 bacteria at 12% and 2 yeasts at 2%, ERR2984773, ERR2935805): from the task brief; the Nicholls PDF fetch returned only metadata.",
+    "Whether using only the first N read pairs changes benchmark results: not assessed."
+  ]
+}

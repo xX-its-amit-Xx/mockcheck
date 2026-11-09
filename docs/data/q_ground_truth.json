@@ -1,0 +1,328 @@
+{
+  "id": "ground_truth",
+  "title": "Mock communities and ground truth",
+  "one_line": "A mock community is a microbe mixture made on purpose so we know the right answer; it is a useful answer key, but its '12%' is a recipe number (DNA mass), not what a read counter should report, and it cannot by itself prove a tool works on real samples.",
+  "layperson_story": [
+    "Imagine testing a metal detector. You bury ten coins in a sandbox, write down exactly where they are, and then see whether the detector finds them. A mock community is the same idea for microbes: a company grows ten known microbes, mixes them in set amounts, and sells the tube. Because the recipe is known, any software that claims to say 'what is in this tube' can be graded against the answer key. That answer key is what this project calls ground truth.",
+    "The best-known tube is the ZymoBIOMICS D6300, the 'even' mock. It holds eight bacteria and two yeasts. The headline says 'bacteria 12% each, yeasts 2% each'. The catch, printed in Zymo's own manual: those percentages are the share of DNA by weight, not the share of cells. Convert to cells and the numbers shift: Lactobacillus fermentum is about 21.9% of cells, Bacillus subtilis about 10.3%, and the yeast Saccharomyces cerevisiae only 0.29%. So 'what is the right answer' depends on what you count: DNA mass, genome copies, cells, or 16S gene copies.",
+    "Then there is the sequencing machine. It does not return a tidy percentage; it returns millions of short DNA reads, and the lab chemistry favors some organisms over others. In the 2019 Nicholls et al. study, even the nanopore sequencing of the even mock showed Bacillus subtilis at about 19% of reads against an expected 12%, and Pseudomonas aeruginosa at about 10% (the paper's Table 4). So even before any classifier software touches the data, the reads are not a perfect copy of the recipe.",
+    "A second tube, D6310, is the 'log' mock: abundances fall by factors of ten, from Listeria monocytogenes at about 89% down to Staphylococcus aureus at about 0.000089% (Nicholls et al.). It is designed to show how rare a microbe a pipeline can still spot. Ten pure single-organism runs act as negative controls: if a classifier reports many other species in a read set that comes from one organism, those extra species are false positives.",
+    "What a mock can prove: that a tool can name these particular microbes, in a clean sample, when the reference database contains close matches. What it cannot prove: that the tool will behave the same on stool, soil or a hospital swab, where there are thousands of species, unknown organisms, host DNA, and contamination. Treat a mock score as a minimum bar, not a guarantee."
+  ],
+  "sections": [
+    {
+      "title": "What a mock community is and why anyone uses one",
+      "plain": "A mock community is a tube of microbes (or their DNA) mixed in known amounts, so that the 'right answer' of any analysis is known in advance. It lets you grade the whole chain: lab extraction, sequencing, and software. Zymo describes its D6300 as a standard 'with defined composition' intended to assess performance of microbiome workflows and as quality control for inter-lab studies. Other sources of mocks include ATCC (genomic DNA mixes of 20 strains), BEI Resources (DNA mixes from the Human Microbiome Project era), and purely computer-made datasets such as CAMI. Mocks differ in what is mixed (whole cells versus extracted DNA versus simulated reads), and that choice decides which errors the mock can reveal.",
+      "deeper": [
+        {
+          "q": "What is the difference between a whole-cell mock and a DNA mock?",
+          "a": "A whole-cell mock (such as Zymo D6300) contains intact microbes, so it also tests the DNA extraction step: tough cells (Gram-positive bacteria, yeasts) are harder to break open than easy ones. Zymo's manual calls three of the bacteria easy to lyse and five bacteria plus two yeasts tough to lyse, and shows that several common extraction methods gave biased profiles. A DNA mock (such as Zymo D6311, ATCC MSA-1002) skips extraction, so it only tests sequencing and software."
+        },
+        {
+          "q": "What is CAMI?",
+          "a": "CAMI (Critical Assessment of Metagenome Interpretation) is a community benchmarking effort. Sczyrba et al. 2017 (Nature Methods) built benchmark datasets from roughly 700 newly sequenced microbial isolate genomes plus about 600 viruses and plasmids and evaluated assembly, taxonomic profiling and binning tools. Per the search summaries, taxonomic profilers were strong at high ranks with a notable drop below family level, and closely related strains hurt performance. (Details taken from library/publisher records, not the full text.)"
+        },
+        {
+          "q": "What is mockrobiota?",
+          "a": "mockrobiota (Bokulich et al. 2016, mSystems) is a public resource of mock-community datasets for marker-gene (amplicon) benchmarking. It stores metadata, expected composition and links to raw data; at publication it had 11 datasets. It does not distribute physical samples. It targets 16S-style amplicon work, not shotgun classifiers like ours."
+        },
+        {
+          "q": "What are ATCC and BEI mocks?",
+          "a": "ATCC sells frozen nucleic-acid standards such as MSA-1002 (20 strain even mix genomic material) and MSA-1003 (staggered), stored in Tris-HCl at -20 C or colder. BEI lists HM-782D as an 'Even B' mock of about 20 bacterial species with DNA pooled based on 16S qPCR, according to one journal table; older forum posts say availability was limited. I did not open a primary BEI or ATCC species table, so I do not list their compositions."
+        }
+      ],
+      "sources": [
+        {"title": "ZymoBIOMICS D6300 instruction manual (as hosted by a reseller)", "url": "https://www.bioscience.co.uk/resources/zymobiomics-microbial-community-standard-protocol.pdf"},
+        {"title": "ATCC MSA-1002 product page", "url": "https://www.atcc.org/products/msa-1002"},
+        {"title": "mockrobiota, PubMed record", "url": "https://pubmed.ncbi.nlm.nih.gov/27822553/"},
+        {"title": "CAMI benchmark (Sczyrba 2017), UEA record", "url": "https://ueaeprints.uea.ac.uk/id/eprint/87984"}
+      ]
+    },
+    {
+      "title": "The ZymoBIOMICS D6300 even mock: what is in the tube",
+      "plain": "D6300 has eight bacteria and two yeasts, made by pooling pure cultures that were each quantified (cells and DNA) before mixing. The tube holds about 1.4 x 10^10 cells per milliliter in Zymo's DNA/RNA Shield, with the microbes inactivated (no live biohazard). The nominal recipe is by genomic DNA: 12% for each bacterium and 2% for each yeast. Zymo states impurity below 0.01% foreign microbial DNA and relative abundance deviation under 15% on average, and each lot is measured by shotgun sequencing after mixing, with a Certificate of Analysis per lot number.",
+      "deeper": [
+        {
+          "q": "Which microbes are in it?",
+          "a": "Bacteria: Pseudomonas aeruginosa, Escherichia coli, Salmonella enterica, Lactobacillus fermentum, Enterococcus faecalis, Staphylococcus aureus, Listeria monocytogenes, Bacillus subtilis. Yeasts: Saccharomyces cerevisiae and Cryptococcus neoformans. Three bacteria are Gram-negative and five Gram-positive (Zymo manual)."
+        },
+        {
+          "q": "Why does Zymo say the GC content spans 15 to 85%?",
+          "a": "The manual states the GC content of the contained genomes 'covers a wide range from 15% to 85%' and notes GC content can bias coverage in PCR-based library preparation. I did not verify which genome gives the extremes; the manual's Table 2 per-species GC values for the bacteria are in the mid 30s to mid 60s, so treat the 15 to 85 figure as a vendor statement."
+        },
+        {
+          "q": "Is the genome for each species a single fixed strain?",
+          "a": "No. Zymo replaced five strains in D6300 (and related D6305, D6306) with similar strains beginning with Lot ZRC190633, and publishes different reference genome sets for older and newer lots. Species composition is unchanged, but the exact genome differs. The Nicholls 2019 data pre-date this change, so the right reference depends on lot."
+        },
+        {
+          "q": "Is the 'foreign DNA below 0.01%' guarantee useful for us?",
+          "a": "Zymo says that any alien taxon observed above 0.01% by DNA abundance in analysis results was introduced by the workflow. In a classifier benchmark this means extra species at higher shares are likely classifier false positives or lab contamination, not tube impurity. Our reads come from a public sequencing run, not from our own tube, so lot-level purity is as certified by Zymo, not measured by us."
+        }
+      ],
+      "sources": [
+        {"title": "ZymoBIOMICS D6300 instruction manual (as hosted by a reseller)", "url": "https://www.bioscience.co.uk/resources/zymobiomics-microbial-community-standard-protocol.pdf"},
+        {"title": "ZymoBIOMICS D6300 datasheet (search result, not fetched: blocked)", "url": "https://www.szabo-scandic.com/media/product_data/datasheet/ZYM/ZYM-DATA-ZYMD6300.pdf"}
+      ]
+    },
+    {
+      "title": "Cells vs DNA vs genome copies vs reads: why 12% is not 12%",
+      "plain": "Four different things can all be called 'abundance'. (1) Share of DNA weight: the recipe, 12% each bacterium. (2) Share of genome copies: DNA weight divided by genome size, so a small-genome microbe has more copies per gram. (3) Share of cells: genome copies divided by ploidy (yeasts carry two copies). (4) Share of 16S gene copies: each genome carries a different number of 16S/18S genes. Shotgun sequencing reads are roughly proportional to DNA bases sampled, which makes genome copies/DNA mass the nearest answer for whole-genome read counting, but real reads also depend on genome size, GC bias and library prep. In Zymo's table, the bacteria range from 6.1% to 21.9% of cells and the yeasts only 0.29% and 0.18%.",
+      "deeper": [
+        {
+          "q": "What are the actual numbers from the Zymo D6300 table?",
+          "a": "Percent of genomic DNA / genome copy / cell number: P. aeruginosa 12 / 6.1 / 6.1; E. coli 12 / 8.5 / 8.5; S. enterica 12 / 8.7 / 8.8; L. fermentum 12 / 21.6 / 21.9; E. faecalis 12 / 14.6 / 14.6; S. aureus 12 / 15.2 / 15.3; L. monocytogenes 12 / 13.9 / 13.9; B. subtilis 12 / 10.3 / 10.3; S. cerevisiae 2 / 0.57 / 0.29; C. neoformans 2 / 0.37 / 0.18. 16S-only shares (bacteria) are P. aeruginosa 4.2, E. coli 10.1, S. enterica 10.4, L. fermentum 18.4, E. faecalis 9.9, S. aureus 15.5, L. monocytogenes 14.1, B. subtilis 17.4."
+        },
+        {
+          "q": "Which column should our benchmark compare reads to?",
+          "a": "Zymo itself says to use the genome-copy column 'when inferring microbial abundance from shotgun sequencing data based on read depth/coverage' and the 16S column for 16S sequencing. A read-count classifier reports read share, which is closest to the DNA-mass column (reads are proportional to bases), while taxonomic profilers such as MetaPhlAn and Bracken may report relative abundance of cells or genomes. Which column is the fair answer depends on the tool's own definition, which is why the site should show more than one truth line."
+        },
+        {
+          "q": "How did the sequenced read shares compare in Nicholls 2019?",
+          "a": "Nanopore read shares of the even mock (GridION / PromethION): B. subtilis 19.3 / 19.0, L. monocytogenes 14.6 / 14.3, E. faecalis 12.2 / 12.1, S. aureus 11.3 / 11.1, S. enterica 10.0 / 10.3, E. coli 9.9 / 10.3, P. aeruginosa 9.7 / 10.1, L. fermentum 9.3 / 9.1, S. cerevisiae 1.9 / 1.9, C. neoformans 1.8 / 1.8. These are from the fetched article summary of the paper's Table 4, for nanopore, not the Illumina run we use. The Illumina MiSeq run was low coverage per the paper."
+        },
+        {
+          "q": "Why do the yeasts look so different in cell share versus read share?",
+          "a": "Yeast genomes are large (about 12 to 19 Mb) compared with bacterial genomes (about 1.9 to 6.8 Mb), and yeasts are diploid per Zymo's table. A fixed 2% of DNA mass therefore corresponds to very few cells (0.29% and 0.18%) while still producing roughly 2% of reads, because reads follow DNA mass."
+        }
+      ],
+      "sources": [
+        {"title": "ZymoBIOMICS D6300 instruction manual (Table 1 and Table 2)", "url": "https://www.bioscience.co.uk/resources/zymobiomics-microbial-community-standard-protocol.pdf"},
+        {"title": "Nicholls et al. 2019, GigaScience (article)", "url": "https://academic.oup.com/gigascience/article/doi/10.1093/gigascience/giz043/5486468"}
+      ]
+    },
+    {
+      "title": "The D6310 log mock and detection limits",
+      "plain": "The log mock is built so that abundance drops roughly tenfold at each step. According to Nicholls 2019, Listeria monocytogenes is about 89.1% and Staphylococcus aureus about 0.000089%. Zymo's DNA-based sibling (D6311) says 1 microliter (11 ng DNA) lets you test down to the abundance of S. aureus, equivalent to the DNA of about 3 cells. This shows where a pipeline stops seeing rare members. With only a few million read pairs, the rarest members will have at most a handful of reads or none, so 'not found' for them is not a classifier failure.",
+      "deeper": [
+        {
+          "q": "How many reads would the rarest organisms get in our subsample?",
+          "a": "That depends on N, our streamed read count. At 0.000089% of reads, one million read pairs would contain on the order of 1 read pair for S. aureus in an ideal sample; nanopore at roughly 150 Gb found 19 reads for it on PromethION and 4 on GridION per Nicholls. So the bottom three or four log members are essentially undetectable in a short first-N subset; this is arithmetic, not a measured result of ours."
+        },
+        {
+          "q": "Is D6310 the whole-cell or DNA product?",
+          "a": "I fetched the D6311 DNA Standard II (Log) manual, which gives the log table: genomic DNA shares of 89.1, 8.9, 0.89, 0.089, 0.0089, 0.00089, 0.000089 percent and so on. D6310 is, by catalogue numbering, the cell-based counterpart, but I did not open its page, so I do not claim its exact table."
+        },
+        {
+          "q": "What does the Illumina run for the log mock look like?",
+          "a": "Per Nicholls 2019 the Log community was sequenced on an Illumina HiSeq, giving 47.8 million read pairs (9.66 Gb, 95.71% bases at phred 30 or higher), accession ERR2935805. The even mock on MiSeq 2x151 gave 8.8 million read pairs (2.65 Gb), accession ERR2984773."
+        }
+      ],
+      "sources": [
+        {"title": "ZymoBIOMICS D6311 Log DNA standard manual", "url": "https://files.zymoresearch.com/protocols/_d6311_zymobiomics_microbial_community_dna_standard_ii_(log_distribution).pdf"},
+        {"title": "Nicholls et al. 2019, GigaScience (article)", "url": "https://academic.oup.com/gigascience/article/doi/10.1093/gigascience/giz043/5486468"}
+      ]
+    },
+    {
+      "title": "The Nicholls 2019 study itself",
+      "plain": "Nicholls et al. 2019, GigaScience 8(5):giz043, is a data note: a published description of a dataset. The team sequenced the two Zymo mocks (even and log, ten species each) with Oxford Nanopore GridION and PromethION, producing 335.1 Gb of nanopore data in four runs, to give the field long-read data from samples with known composition. They also sequenced each of the ten isolates on Illumina and the two mocks on Illumina, and used the Illumina data to build draft assemblies, align reads and polish. For our project, the Illumina runs are the relevant ones; the nanopore data are the paper's headline.",
+      "deeper": [
+        {
+          "q": "What exact Illumina data exist?",
+          "a": "Ten isolates on an Illumina HiSeq 1500 2x101, over 4 lanes, averaging 13.53 million read pairs each (range 7.1 to 23.2 million). Even community on a MiSeq 2x151, 8.8 million read pairs, ERR2984773. Log community on HiSeq, 47.8 million read pairs, ERR2935805. The article lists isolate accessions in its Table 1 (for example ERR2935851)."
+        },
+        {
+          "q": "Which nanopore runs were done?",
+          "a": "GridION Even (48 h, 3.49M reads, 14.38 Gb), GridION Log (48 h, 3.67M reads, 16.51 Gb), PromethION Even (64 h plus restarts, 35.7M reads, 150.88 Gb), PromethION Log (64 h plus restarts, 34.5M reads, 153.31 Gb). Read N50 was 5.3 to 5.4 kb and median read quality about Q10."
+        },
+        {
+          "q": "Did the paper find problems with the strains?",
+          "a": "Yes, two notes. The Salmonella enterica isolate is listed by the culture collection as Typhimurium LT2, but the authors' genomic analysis suggests it may be serotype Choleraesuis, a possible mis-annotation. The Cryptococcus neoformans strain is described as a diploid genetic cross, which may explain larger-than-expected assemblies."
+        },
+        {
+          "q": "Is the Illumina data of the even mock deep enough?",
+          "a": "The article states the Even community's Illumina coverage was low. For us it means a first-N subset is a small slice, and yeasts (about 2% of DNA, large genomes) get few reads."
+        }
+      ],
+      "sources": [
+        {"title": "Nicholls et al. 2019, GigaScience giz043", "url": "https://academic.oup.com/gigascience/article/doi/10.1093/gigascience/giz043/5486468"},
+        {"title": "Nicholls et al. 2019, DOI", "url": "https://doi.org/10.1093/gigascience/giz043"}
+      ]
+    },
+    {
+      "title": "Strain differences, lots, and the reference-genome problem",
+      "plain": "A reference database holds one or a few genomes per species. The microbe in the tube is a particular strain whose genome is not identical to the database entry. A classifier that matches reads to the nearest reference can lose accuracy when the strain is far from anything in the database, and can mislabel reads that fit a close cousin better. Mocks drift too: Zymo changed five strains from Lot ZRC190633 onward, and publishes a Certificate of Analysis for each lot. So 'the answer key' is partly lot-specific.",
+      "deeper": [
+        {
+          "q": "What does CAMI say about related strains?",
+          "a": "According to search summaries of Sczyrba et al. 2017, assemblers and binners did well on species with single reference genomes, but related strains degraded their performance, and taxonomic profilers dropped notably below family level. I read abstracts and library records, not the full paper."
+        },
+        {
+          "q": "Which strain names does Zymo list for D6300?",
+          "a": "Zymo's Appendix A names, for example, Bacillus subtilis ATCC 6633, Enterococcus faecalis ATCC 7080 (NRRL B-537), Pseudomonas aeruginosa ATCC 19117 and a Salmonella enterica strain TA1536. The appendix text was garbled when extracted, so I do not reproduce a full strain table. The manual's note says older lots used different strains and have a different reference set."
+        },
+        {
+          "q": "Do taxonomy changes matter?",
+          "a": "Yes. Names change over time (Zymo's appendix lists the Cryptococcus strain under the newer name Cryptococcus deneoformans), and databases from different dates (Kraken2 built 2025-04-02, MetaPhlAn mpa_vJan26) may disagree on names or place a species in a different genus. A scoring script needs a name-mapping step so a correct call is not marked wrong over a spelling or reclassification."
+        }
+      ],
+      "sources": [
+        {"title": "ZymoBIOMICS D6300 manual, Appendices A and B", "url": "https://www.bioscience.co.uk/resources/zymobiomics-microbial-community-standard-protocol.pdf"},
+        {"title": "CAMI benchmark (Sczyrba 2017), UEA record", "url": "https://ueaeprints.uea.ac.uk/id/eprint/87984"}
+      ]
+    },
+    {
+      "title": "Contamination and why negative controls matter",
+      "plain": "DNA from lab reagents, extraction kits and the environment ends up in sequencing data, especially when there is little real microbial DNA to drown it out. Salter et al. 2014 (BMC Biology) showed that contaminating DNA is present in commonly used extraction kits and varies between kits and between kit batches, affecting both 16S and shotgun results; in some control samples they saw 270 different bacteria where only one should have appeared. They advise sequencing negative controls alongside samples. In a rich mock, contamination is a small share; in the single-isolate runs, any second species is conspicuous.",
+      "deeper": [
+        {
+          "q": "How do the 10 single-isolate runs act as negative controls?",
+          "a": "Each isolate was grown and sequenced as a pure culture, so ideally every read belongs to one species. A classifier that reports many other species there is producing false positives (from lookalike genomes, database errors, or real contamination). This is a design property of the dataset, not a result of our run. Whether the cultures were perfectly pure is not something I verified."
+        },
+        {
+          "q": "Can we tell classifier error from real contamination?",
+          "a": "Not from the classifier output alone. A practical check is to map reads directly to the isolate's own assembled genome (Nicholls built Illumina SPAdes drafts) and see whether the unexplained reads align elsewhere. Zymo recommends direct read mapping to the reference genomes as a straightforward, accurate way to infer composition."
+        },
+        {
+          "q": "Is the mock guaranteed pure?",
+          "a": "Zymo certifies under 0.01% foreign microbial DNA per tube. Anything beyond that in analysis results is, per Zymo, introduced by the workflow. This certificate concerns the tube at the vendor, not downstream sequencing facility handling."
+        }
+      ],
+      "sources": [
+        {"title": "Salter et al. 2014, PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/25387460/"},
+        {"title": "ZymoBIOMICS D6300 manual", "url": "https://www.bioscience.co.uk/resources/zymobiomics-microbial-community-standard-protocol.pdf"}
+      ]
+    },
+    {
+      "title": "What a mock can and cannot prove about real samples",
+      "plain": "A mock is a best case: ten species with known, well-assembled, public genomes, no host DNA, no unknown relatives, and a clean lab process. A classifier that fails here will certainly fail on real samples, so a mock is a good screening test. A classifier that does well here may still struggle with real stool or soil, where most species have no close reference, abundances span many orders of magnitude, and there is human DNA. A mock also tests only the 10 species present; it cannot show how a tool behaves for a species it has never seen, unless you add outside negative controls.",
+      "deeper": [
+        {
+          "q": "Why can a database containing the mock species inflate scores?",
+          "a": "The standard Kraken2 and MetaPhlAn databases contain genomes of famous species like E. coli and S. aureus, often many strains each. The mock therefore sits in the database's best-covered region. This is my reasoning from how such databases are built, not a measurement from our run, and should be checked against our database contents."
+        },
+        {
+          "q": "What does CAMI add that a commercial mock does not?",
+          "a": "CAMI datasets include many strains, new genomes not in public databases, and viruses and plasmids, so they test closer to reality; commercial mocks are simple but real wet-lab data that carry real sequencing bias. The two answer different questions."
+        },
+        {
+          "q": "Is one sequencing run enough to rank tools?",
+          "a": "No. One lot, one run, and one read subset gives one data point per tool. Differences between tools smaller than run-to-run or lot-to-lot spread should not be called wins. Zymo itself quotes an average relative-abundance deviation up to 15% for the even mock and up to 30% for the DNA log standard, which is a floor on how closely any tool can be expected to match the nominal recipe."
+        }
+      ],
+      "sources": [
+        {"title": "CAMI benchmark (Sczyrba 2017), UEA record", "url": "https://ueaeprints.uea.ac.uk/id/eprint/87984"},
+        {"title": "ZymoBIOMICS D6300 manual", "url": "https://www.bioscience.co.uk/resources/zymobiomics-microbial-community-standard-protocol.pdf"},
+        {"title": "ZymoBIOMICS D6311 manual", "url": "https://files.zymoresearch.com/protocols/_d6311_zymobiomics_microbial_community_dna_standard_ii_(log_distribution).pdf"}
+      ]
+    }
+  ],
+  "glossary": [
+    {"term": "Mock community", "plain": "A tube of microbes (or their DNA) mixed in known amounts so the right answer is known.", "deeper": "Can be whole cells, extracted DNA, or fully simulated reads. What was mixed decides which steps of the workflow it tests."},
+    {"term": "Ground truth", "plain": "The known correct answer you grade software against.", "deeper": "For a mock it is the recipe, but the recipe can be expressed as DNA mass, genome copies, cells or 16S copies, which differ."},
+    {"term": "ZymoBIOMICS D6300", "plain": "A commercial even mock of 8 bacteria and 2 yeasts.", "deeper": "Nominal composition 12% per bacterium and 2% per yeast by genomic DNA; about 1.4 x 10^10 cells/ml; per-lot Certificate of Analysis."},
+    {"term": "ZymoBIOMICS D6310 / D6311", "plain": "The log-distribution mock, where each species is about ten times rarer than the previous one.", "deeper": "D6311 is the DNA version I read; D6310 is, by numbering, the cell version (not verified). Top species Listeria about 89%, bottom S. aureus about 0.000089%."},
+    {"term": "Genomic DNA share", "plain": "What fraction of the DNA by weight belongs to each species.", "deeper": "This is the basis of Zymo's recipe (12% / 2%)."},
+    {"term": "Genome copy number", "plain": "How many copies of a genome are present, found by dividing DNA mass by genome size.", "deeper": "Zymo recommends this column when inferring abundance from shotgun read depth."},
+    {"term": "Cell number", "plain": "How many actual cells are present.", "deeper": "Genome copies divided by ploidy (copies of the genome per cell); yeasts here are diploid per Zymo's table."},
+    {"term": "Ploidy", "plain": "How many copies of its genome a cell carries.", "deeper": "Bacteria in the table are 1; the two yeasts are 2."},
+    {"term": "Genome size", "plain": "Total length of an organism's DNA, in millions of letters (Mb).", "deeper": "Smaller genomes give more copies per gram, so their cell share is higher than their DNA share."},
+    {"term": "16S / 18S rRNA gene", "plain": "A gene used as a barcode to identify bacteria (16S) or yeasts (18S).", "deeper": "Copy number per genome varies, so 16S counts distort abundance; Zymo gives a separate 16S-based composition column."},
+    {"term": "Shotgun sequencing", "plain": "Reading small pieces of all the DNA in a sample, not just one barcode gene.", "deeper": "Reads are roughly proportional to DNA mass sampled, modulated by GC bias and library prep."},
+    {"term": "Read / read pair", "plain": "One short stretch of DNA letters read by the sequencer; paired reads come from both ends of one fragment.", "deeper": "Illumina MiSeq 2x151 and HiSeq 2x101 mean 151 or 101 letters from each end."},
+    {"term": "GC content", "plain": "The fraction of DNA letters that are G or C.", "deeper": "Extreme GC regions can be under-covered in PCR-based library prep, causing read share to drift from DNA share. Zymo states its genomes span 15 to 85% GC."},
+    {"term": "Gram-positive / Gram-negative", "plain": "Two broad bacterial cell-wall types; Gram-positives are usually tougher to break open.", "deeper": "D6300 has 5 Gram-positive and 3 Gram-negative bacteria, plus tough yeasts."},
+    {"term": "Lysis / DNA extraction bias", "plain": "Some microbes release their DNA more easily than others, so extraction skews the mix.", "deeper": "Zymo's manual shows several common extraction protocols producing biased profiles in 16S tests; relevant only to the wet-lab step."},
+    {"term": "Contamination", "plain": "Unwanted DNA from reagents, kits or the environment.", "deeper": "Salter 2014 showed kit contaminants vary between kits and batches and matter most for low-biomass samples."},
+    {"term": "Negative control", "plain": "A sample that should show nothing (or only one thing), used to catch false alarms.", "deeper": "Here the single-isolate runs play this role for classifiers."},
+    {"term": "False positive", "plain": "The software reports a microbe that is not really there.", "deeper": "May come from lookalike genomes, database errors, or real contamination."},
+    {"term": "Strain", "plain": "A specific variant of a species, like a breed of dog.", "deeper": "Two strains of one species can differ by hundreds of genes; reference databases hold only some."},
+    {"term": "Reference genome / database", "plain": "The library of known genomes a classifier compares reads against.", "deeper": "Kraken2 standard database (here 8 GB and 16 GB versions, built 2025-04-02) and MetaPhlAn index mpa_vJan26_CHOCOPhlAnSGB_202605."},
+    {"term": "Certificate of Analysis (CoA)", "plain": "A per-lot report from the vendor listing the measured composition of that batch.", "deeper": "Zymo measures each lot by shotgun sequencing after mixing."},
+    {"term": "CAMI", "plain": "A community benchmarking project that supplies realistic test datasets for metagenomics tools.", "deeper": "Sczyrba et al. 2017, Nature Methods; evaluated assembly, binning and taxonomic profiling."},
+    {"term": "mockrobiota", "plain": "A public catalogue of mock community datasets for amplicon benchmarking.", "deeper": "Bokulich et al. 2016, mSystems; stores metadata and expected composition, not physical samples."},
+    {"term": "ENA / accession", "plain": "The European public archive of sequencing data; an accession is a unique ID for a dataset.", "deeper": "Runs ERR2984773 (even, MiSeq) and ERR2935805 (log, HiSeq) are named in the article."}
+  ],
+  "failure_modes": [
+    {
+      "what_goes_wrong": "Scoring read-share output against the headline 12% / 2% as if it were cell share.",
+      "how_to_notice": "Yeasts look wildly 'overcalled' versus cell share (0.29% and 0.18%) but roughly right versus 2% DNA, or the opposite for a tool reporting cell abundance.",
+      "what_to_do": "State which truth column each tool is compared against (DNA mass, genome copies, cells) and show several truth lines."
+    },
+    {
+      "what_goes_wrong": "Using the wrong reference genome set for the lot (pre- versus post-ZRC190633).",
+      "how_to_notice": "Persistent strain-level mismatches or a handful of species with unexpectedly low similarity.",
+      "what_to_do": "Record which lot the public run used if known; use the Nicholls-era references or direct mapping to the paper's assemblies; note this as uncertainty."
+    },
+    {
+      "what_goes_wrong": "Blaming the classifier for sequencing and chemistry bias.",
+      "how_to_notice": "Even a direct read-mapping truth shows B. subtilis near 19% versus 12% nominal in the nanopore data; the classifier output matches the reads, not the recipe.",
+      "what_to_do": "Make a 'read-mapped truth' by aligning reads to the 10 reference genomes and compare tools to that as well as to the recipe."
+    },
+    {
+      "what_goes_wrong": "Name mismatches mark correct calls as wrong (synonyms, reclassified genera, subspecies).",
+      "how_to_notice": "A 'false positive' that is really a renamed or nested taxon, for example Cryptococcus neoformans versus deneoformans.",
+      "what_to_do": "Map names through taxonomy IDs and a synonym table before scoring; document the mapping."
+    },
+    {
+      "what_goes_wrong": "Calling rare log-mock members 'missed' when the subset simply contains almost no reads of them.",
+      "how_to_notice": "Expected reads for a species are below about 10 at the chosen read count N.",
+      "what_to_do": "Compute expected read counts per species and mark below-detection species as 'not testable at this N'."
+    },
+    {
+      "what_goes_wrong": "Contamination or mislabeled isolates treated as classifier error (or the reverse).",
+      "how_to_notice": "Single-isolate run shows a consistent second species that reads align to in direct mapping; or the Salmonella isolate labeled LT2 that may be Choleraesuis.",
+      "what_to_do": "Check by mapping unexplained reads to the isolate assembly; flag known annotation caveats from the paper."
+    },
+    {
+      "what_goes_wrong": "Generalizing from the mock to real samples.",
+      "how_to_notice": "Claims like 'tool X is 99% accurate' without saying 'on a ten-species clean mock with all species in the database'.",
+      "what_to_do": "Always attach scope statements; present mock results as a minimum bar."
+    },
+    {
+      "what_goes_wrong": "Treating first-N reads as a random sample.",
+      "how_to_notice": "Read order in an archive file can follow sequencer tile or lane order, so the first N pairs may not represent the whole run.",
+      "what_to_do": "State the first-N limitation; where possible compare against a second, larger or differently taken subset. This is a general caution, not a measured effect in our data."
+    }
+  ],
+  "aha_moments": [
+    "The famous '12% each' for D6300 is a share of DNA weight, not cells: by cell count L. fermentum is about 22% and P. aeruginosa about 6% (verified against Table 1 of the Zymo D6300 datasheet; its cell column sums to 99.9%).",
+    "The two yeasts are 2% of the DNA but under 0.3% of the cells, largely because yeast genomes are much larger than bacterial genomes (the Zymo table also lists them as diploid).",
+    "Even with a perfect recipe, the real sequencing read shares drift: Nicholls found B. subtilis at about 19% of nanopore reads versus 12% expected.",
+    "Zymo changed five strains of D6300 partway through its life (Lot ZRC190633), so the 'same' mock is not always the same genomes.",
+    "The log mock goes down to about 0.000089%, which is the DNA of roughly 3 cells in Zymo's DNA product, far below what a few million reads can see.",
+    "The vendor itself says to use different columns for 16S work and shotgun work, so there is no single 'true' percentage."
+  ],
+  "timeline": [
+    {"year": "2014", "event": "Salter et al. publish that reagent and laboratory contamination can critically affect sequencing-based microbiome results, and recommend negative controls.", "source_url": "https://pubmed.ncbi.nlm.nih.gov/25387460/"},
+    {"year": "2016", "event": "mockrobiota published in mSystems: a public resource of 11 mock-community datasets for amplicon benchmarking.", "source_url": "https://pubmed.ncbi.nlm.nih.gov/27822553/"},
+    {"year": "2017", "event": "CAMI benchmark paper published in Nature Methods (Sczyrba et al.), evaluating assembly, taxonomic profiling and binning tools.", "source_url": "https://ueaeprints.uea.ac.uk/id/eprint/87984"},
+    {"year": "2019", "event": "Nicholls et al. publish ultra-deep nanopore and Illumina sequencing of the ZymoBIOMICS even and log mocks in GigaScience 8(5):giz043 (335.1 Gb nanopore data).", "source_url": "https://academic.oup.com/gigascience/article/doi/10.1093/gigascience/giz043/5486468"},
+    {"year": "2019", "event": "Zymo begins replacing five strains in D6300/D6305/D6306 with similar strains from Lot ZRC190633 onward (the manual gives the lot number, not a date; the year is from the Lot number prefix and is unverified).", "source_url": "https://www.bioscience.co.uk/resources/zymobiomics-microbial-community-standard-protocol.pdf"},
+    {"year": "2025", "event": "Kraken2 standard databases used by this project were built on 2025-04-02 (project fact, not from an external source).", "source_url": "https://doi.org/10.1093/gigascience/giz043"}
+  ],
+  "what_this_supports": [
+    "A classifier that cannot find the eight bacteria and two yeasts in D6300 is failing a basic test.",
+    "The single-isolate runs show how many extra species each classifier invents on clean input.",
+    "Results can be explained honestly if both the nominal recipe and the read-mapped truth are shown.",
+    "Relative ranking of tools on the same reads, database dates and scoring rules is meaningful for this narrow setting."
+  ],
+  "what_this_does_not_support": [
+    "Claims about accuracy on real, complex samples such as stool, soil or clinical swabs.",
+    "Claims about tools' behavior on species or strains absent from the databases.",
+    "Claims that a classifier's output should equal 12% per bacterium, since 12% is DNA weight and reads add their own bias.",
+    "Strain-level conclusions, since the strain in the tube may differ from the database genome and from the lot Nicholls used.",
+    "Detection-limit claims for rare log-mock members from a small first-N subset.",
+    "General statements about lot-to-lot variation, as I only have Zymo's stated tolerances, not lot data."
+  ],
+  "check_next": [
+    "Find which D6300 lot the Nicholls team used, and which reference genomes match it (ask the paper's supplementary data or Zymo's CoA archive).",
+    "Open the D6310 product page and confirm its Table 1 (cell basis) and whether Nicholls used the cell or DNA log product.",
+    "Confirm PRJEB29504 is the ENA project for these runs by opening the ENA record directly.",
+    "Build a read-mapped truth by aligning the subset to the ten reference genomes and compare with the recipe columns.",
+    "Open the full CAMI paper and the mockrobiota paper rather than relying on abstracts and library records.",
+    "Read Salter 2014 in full for kit-contaminant genera lists to test against false positives.",
+    "Check ATCC and BEI species tables from primary sources if those mocks will be mentioned."
+  ],
+  "unverified": [
+    "The ENA project accession PRJEB29504: the article page I opened lists run accessions (ERR2984773, ERR2935805, ERR2935851) but I did not see the project ID.",
+    "That D6310 is the whole-cell log product and D6311 the DNA log product (inferred from catalogue numbers and from my reading of D6311 only).",
+    "Which D6300/D6310 lot Nicholls used, and therefore which strain set; the manual only says strains were replaced from Lot ZRC190633 onward.",
+    "The year 2019 for the Zymo strain replacement (inferred from the lot number prefix 19).",
+    "Zymo's statement that genome GC content spans 15 to 85%: quoted from the vendor manual, not checked against the genomes.",
+    "Whether GC bias or other chemistry explains the B. subtilis excess in Nicholls' Table 4; the page I read did not discuss GC bias or contamination.",
+    "Details of CAMI findings (only abstract-level summaries were read) and of mockrobiota beyond its 2016 abstract.",
+    "ATCC MSA-1002 species composition, and BEI HM-782D/HM-278D details; HM-278D could not be identified at all.",
+    "The claim that reads are roughly proportional to DNA mass: this is my general-knowledge statement, supported in spirit by Zymo's advice to use genome-copy columns for read depth, but not directly measured here.",
+    "Whether first-N read order is biased in the ENA files used; this is a general caution, not tested."
+  ]
+}

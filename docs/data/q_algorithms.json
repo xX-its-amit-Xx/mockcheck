@@ -1,0 +1,220 @@
+{
+  "id": "algorithms",
+  "title": "How read classifiers work",
+  "one_line": "Four families of tools turn a pile of DNA fragments into a list of microbes, each trading speed, memory, and caution differently, and each failing in its own predictable way.",
+  "layperson_story": [
+    "A metagenomic sample is a bag of millions of short DNA fragments (reads), each only 100 to 150 letters long, from many different microbes mixed together. A read classifier is a program that looks at each fragment and says which organism it probably came from, by comparing it against a library of known genomes. Think of identifying torn-up pages from many books by checking them against a library catalogue.",
+    "The oldest and most popular approach is the k-mer approach (Kraken, Kraken2). It chops every genome in the library into short exact words of fixed length (k-mers), and remembers which species own each word. A word shared by several species is filed under their closest common ancestor (the 'lowest common ancestor', or LCA). To classify a read, it looks up the read's words and votes. It is very fast because it only does exact lookups, not fuzzy alignment. The price is that it needs a big library in memory, and it can only recognise what is in that library.",
+    "Bracken is not a separate classifier. It is a bookkeeping step that runs after Kraken. Kraken often stops at a vague label (for example 'some Bacillus') when a read fits several close relatives. Bracken uses a table learned from the reference library to redistribute those vague reads down to species, giving better abundance estimates. It cannot create information that is not there: it only re-divides what Kraken found.",
+    "A different philosophy is the marker-gene approach (MetaPhlAn 4). Instead of using every part of every genome, it keeps a curated set of genes that are unique to each group of microbes, maps reads to just those, and infers abundance from them. It uses little memory and tends to report few false species, but it can only see organisms that have markers in its index, and it ignores reads that fall outside the markers. A third family (Centrifuge, Sylph) uses compressed alignment indexes or compact 'sketches' of genomes to ask how much of a genome is contained in the sample.",
+    "The practical lesson for a decision-maker: there is no single best tool. Kraken2 is fast and sensitive but its default settings report many species that are not really there; a confidence threshold trims those at the cost of leaving more reads unclassified. MetaPhlAn is cautious and light but sees less. That is exactly why a benchmark on mock communities, where the true answer is known, is useful: it shows how each tool errs in a controlled setting."
+  ],
+  "sections": [
+    {
+      "title": "K-mer lowest-common-ancestor classifiers: Kraken",
+      "plain": "Kraken breaks every genome in its library into exact fixed-length words (31 letters by default in the original version) and records, for each word, the closest common ancestor of all genomes that contain it. For each read it looks up all of the read's words, tallies the votes on the taxonomy tree, and picks the best-supported path from the root down. Reads whose words match nothing stay unclassified. It is very fast because exact lookup is cheap compared with alignment.",
+      "deeper": [
+        {"q": "How fast and how accurate was the original Kraken?", "a": "The 2014 paper reports over 4.1 million 100-bp reads per minute in its fastest mode, stated as 909 times faster than Megablast and 11 times faster than MetaPhlAn (the older MetaPhlAn of that time). At genus level, sensitivity was within about 2.5 percentage points of Megablast on three simulated metagenomes and precision was the highest of the classifiers tested; for example on the HiSeq simulation Kraken had 99.20% precision and 77.15% sensitivity versus 99.03% and 79.00% for Megablast."},
+        {"q": "What was the original memory cost?", "a": "The default database needed about 70 GB of RAM. A reduced 'MiniKraken' of about 4 GB traded some sensitivity for memory."},
+        {"q": "What happens with organisms that are not in the library?", "a": "In the paper's clade-exclusion tests, Kraken kept high precision for novel organisms but classified only about 33% of reads at best when the species was absent. In a human saliva dataset 68.2% of reads were unclassified; a follow-up BLAST check suggested most were too different from known genomes to identify."},
+        {"q": "Why not use every genome available?", "a": "The paper built a Kraken-GB database from draft and complete GenBank genomes. It gave higher sensitivity but picked up contamination errors, so the default database used only complete RefSeq genomes. Library quality matters as much as library size."},
+        {"q": "Why is exact matching a weakness?", "a": "A single sequencing error or a small genetic difference breaks the word. On a high-error simulated dataset (simBA-5), Kraken had 91.25% sensitivity versus 93.67% for Megablast, which tolerates mismatches."}
+      ],
+      "sources": [
+        {"title": "Wood and Salzberg 2014, Kraken (Genome Biology)", "url": "https://link.springer.com/article/10.1186/gb-2014-15-3-r46"}
+      ]
+    },
+    {
+      "title": "Kraken 2: minimizers, memory, and the confidence threshold",
+      "plain": "Kraken 2 keeps the same idea but stores far less. Instead of every word it stores only a 'minimizer' (the alphabetically smallest short piece inside each word), which shrinks the database and speeds up lookup. The confidence setting lets you demand that a larger share of a read's words agree before it is given a specific label; otherwise the label is moved up to a broader group or the read is left unclassified.",
+      "deeper": [
+        {"q": "How much smaller and faster is Kraken 2?", "a": "From the 2019 preprint: for a 9.1 Gbp reference set the index needed 10.6 GB at classification time versus 72.4 GB for Kraken 1 (an 85% reduction), and with 16 threads Kraken 2 classified paired-end reads at over 93 million reads per minute, more than five times faster than Kraken 1. These are the authors' numbers on their test set."},
+        {"q": "What are the default parameters?", "a": "Per the Kraken 2 manual: k = 35 and minimizer length 31 for nucleotide databases, with 7 masked 'spaced seed' positions. The hash table is probabilistic (default load factor 0.7); the manual says wrong LCA results or phantom minimizers occur in under 1% of queries, and that confidence thresholds can compensate."},
+        {"q": "Exactly how does the confidence score work?", "a": "A label's score is C/Q, where C is the number of the read's k-mers whose LCA lies in the clade under that label and Q is the number of k-mers without ambiguous letters. The classifier climbs the tree until the score meets the threshold; if even the root fails, the read is unclassified. The default is 0.0, meaning no filter. Example in the manual: with hits of 16 of 21 k-mers under taxon 562 and 20 of 21 under its parent 561, a threshold above 16/21 relabels the read to 561 and above 20/21 makes it unclassified."},
+        {"q": "What is minimum-hit-groups?", "a": "A second filter (default 2): a call needs at least that many 'hit groups', overlapping k-mers that share a minimizer, so a single stray match does not classify a read."},
+        {"q": "What do the 8 GB and 16 GB standard databases mean?", "a": "The manual says the default (full standard) database is tens of GB (29 GB as of 2018) and that --max-db-size can downsample the library to fit a memory budget. Capped builds like 8 GB and 16 GB therefore contain less reference sequence and are expected to classify fewer reads. The project's specific 8 GB and 16 GB databases were not described in a source I opened (see unverified)."}
+      ],
+      "sources": [
+        {"title": "Kraken 2 manual (GitHub wiki)", "url": "https://github.com/DerrickWood/kraken2/wiki/Manual"},
+        {"title": "Wood, Lu, Langmead 2019, Kraken 2 (bioRxiv preprint)", "url": "https://www.biorxiv.org/content/10.1101/762302v1.full"}
+      ]
+    },
+    {
+      "title": "What confidence thresholds really do",
+      "plain": "A confidence threshold is a pickiness dial. At 0 (the default), a read gets the most specific label supported by even a few matching words, which finds more organisms but also invents many that are not there. Raising the dial removes weakly supported calls (fewer false species) but also leaves more reads unclassified and can hide real low-abundance organisms. There is no universally right setting.",
+      "deeper": [
+        {"q": "What does evidence say about default versus raised thresholds?", "a": "A comparison of Kraken2 with MetaPhlAn 3 (PMC10132073) found the default 0.00 gave very low precision and overestimated species counts. The best mean F1 (0.684) was at 0.60, the lowest abundance error (L1 distance) at 0.15, precision peaked at a threshold of 0.80, and at 1.00 Kraken2 often identified almost no species in environmental samples. Those thresholds were tuned on that study's data and databases, so they are not transferable values."},
+        {"q": "Does database size interact with the threshold?", "a": "Yes. A search result summary (not a page I opened in full) said that with small databases such as Minikraken and Standard-16 the share of classified reads approaches zero once the threshold passes about 0.4. A smaller library means each read has fewer matching words, so a given threshold bites harder. This is a secondary report, so treat it as a lead (see unverified)."},
+        {"q": "Why not just always use a high threshold?", "a": "Because sensitivity drops: reads from divergent strains or novel species may share only part of their words with the library. The same Kraken2 vs MetaPhlAn 3 study concluded that default databases and parameters should not be used and that there is no one-size-fits-all best tool."}
+      ],
+      "sources": [
+        {"title": "Kraken2 vs MetaPhlAn 3 with databases and confidence thresholds (PMC10132073)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10132073"},
+        {"title": "Kraken 2 manual", "url": "https://github.com/DerrickWood/kraken2/wiki/Manual"}
+      ]
+    },
+    {
+      "title": "Bracken: turning read labels into abundance estimates",
+      "plain": "Kraken gives each read a label at whatever level the evidence allows, so many reads end up at genus or higher instead of species. Bracken (Bayesian Reestimation of Abundance with KrakEN) takes Kraken's report and pushes those higher-level reads down to the species level in proportion to how reads from each species are expected to distribute, learned by running simulated perfect reads from the library genomes through Kraken. The result is a better estimate of how much of each species is present.",
+      "deeper": [
+        {"q": "What does Bracken need as input?", "a": "A Kraken or Kraken 2 report, a k-mer distribution file built for the same database and the same read length, the taxonomic level wanted (species by default), and a threshold (default 10 reads). Per its README, the read length must match your data (a new distribution is needed for each read length), and the k-mer length must match the database (35 for Kraken 2)."},
+        {"q": "What are its documented limitations?", "a": "From the README: it needs the standard Kraken report format (not mpa-style); building the distribution is slow (recommend 10 to 20 threads); unclassified reads are dropped from the recalculated percentages; taxa at or below the threshold receive no redistributed reads. Version 2.7 fixed a bug that could remove species with no genome-specific reads by no longer redistributing reads at or below the estimation level."},
+        {"q": "Does Bracken fix false positives?", "a": "Not by design. It redistributes reads that Kraken already assigned; it does not verify that a species is truly present. A species falsely called by Kraken can receive reads in Bracken's output. This is my inference from how the method is described, not a finding stated in the README."},
+        {"q": "Is Bracken's accuracy better with Kraken 2?", "a": "The Kraken 2 preprint states Bracken abundance estimates were more accurate with Kraken 2 than with Kraken 1."}
+      ],
+      "sources": [
+        {"title": "Bracken README (GitHub)", "url": "https://github.com/jenniferlu717/Bracken"},
+        {"title": "Kraken 2 preprint", "url": "https://www.biorxiv.org/content/10.1101/762302v1.full"}
+      ]
+    },
+    {
+      "title": "Marker-gene profilers: MetaPhlAn 4",
+      "plain": "MetaPhlAn does not try to classify every read. It carries a pre-built catalogue of marker genes, stretches of DNA that are specific to a particular group of microbes, maps reads to those only (using the Bowtie2 aligner), and estimates relative abundance from how many reads hit each group's markers. Because the catalogue is small, it needs little memory and is conservative: it names what it has strong evidence for. The trade-off is that it only sees organisms its catalogue covers, and most reads in the sample are simply not used.",
+      "deeper": [
+        {"q": "What is a species-level genome bin (SGB)?", "a": "A group of genomes (from cultured isolates and from assembled metagenomes) clustered together as one species-like unit. MetaPhlAn 4 reports abundance per SGB. The MetaPhlAn wiki describes an older database build (vJan21) as holding about 5.1 million marker genes from about 1 million genomes (about 236,600 reference genomes and 771,500 metagenome-assembled genomes) in 26,970 SGBs, of which 4,992 are not taxonomically identified at species level. Counts for the newer vJan26 index used here were not in a page I opened."},
+        {"q": "What is the advantage over named-species databases?", "a": "Because SGBs include many groups with no formal name, MetaPhlAn 4 can report 'uncharacterized' species that name-based tools cannot. This is the stated point of the 2023 Nature Biotechnology paper's title (extending profiling with uncharacterized species). I did not open the paper text itself."},
+        {"q": "What are the documented practical limits?", "a": "Per the wiki: needs at least 15 GB memory; paired-end reads are handled but pairing information is not used; merged tables are valid only if all samples used the same database version; custom databases are a manual multi-step process. Pin the database with --index for reproducibility."},
+        {"q": "How does it compare with Kraken2 in one study?", "a": "In PMC10132073, MetaPhlAn 3 (the previous version) underestimated species richness (median difference of -71.5 species) and had taxa recall of 0.45 versus 0.66 to 0.76 for Kraken2, but used 2.8 GB memory versus about 956 GB for Kraken2 with the largest RefSeq database. That was MetaPhlAn 3, on that study's data, so it does not directly predict MetaPhlAn 4 behaviour."}
+      ],
+      "sources": [
+        {"title": "MetaPhlAn 4 wiki", "url": "https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4"},
+        {"title": "MetaPhlAn GitHub README", "url": "https://github.com/biobakery/MetaPhlAn"},
+        {"title": "Kraken2 vs MetaPhlAn 3 comparison", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10132073"}
+      ]
+    },
+    {
+      "title": "Alignment-index and sketch/containment tools: Centrifuge and Sylph",
+      "plain": "Centrifuge keeps something like a full-text search index of the genomes (the same Burrows-Wheeler / FM-index idea used by read aligners) and compresses near-duplicate genomes so the index stays small. Sylph works differently: it keeps a small random sample ('sketch') of each genome's words and estimates how much of each reference genome is contained in your reads, then reports species and an estimated nucleotide identity. Both try to be lighter than Kraken's huge hash table.",
+      "deeper": [
+        {"q": "Centrifuge: how small and how accurate?", "a": "The 2016 paper reports a 4.2 GB index for 4,078 bacterial and 200 archaeal genomes, whereas Kraken needed about 93 GB for that prokaryotic database. Near-identical genomes (at least 99% similar on 53-mers sampled at 1%) are merged. On simulated reads at species level, sensitivity was 76.9% for Centrifuge versus 73.9% for Kraken and 78.8% for MegaBLAST; Kraken was faster (about 1.06 million versus 0.56 million reads per minute). On 530 real bacterial datasets Centrifuge sensitivity was 0.6% higher and Kraken's precision about 2% higher."},
+        {"q": "Is Centrifuge still the current tool?", "a": "Its README says it is superseded by Centrifuger, described as more memory-efficient, more accurate and more actively maintained."},
+        {"q": "Sylph: what does it claim?", "a": "Its repository says it uses an abundance-corrected minhash approach, estimates containment ANI accurately down to 0.1x coverage, uses about 5 GB RAM to profile against a roughly 200k-genome GTDB database, can be more than 50x faster than other methods, has fewer false positives than Kraken, and is about as precise and sensitive as marker-gene tools. These are developer claims; the page does not name the comparison conditions."},
+        {"q": "Why does containment ANI matter?", "a": "It tells you not just that a species is present but how close the sample's strain is to the reference genome (for example 97% ANI means the sample's E. coli is about 97% identical to the reference), which helps distinguish a real match from a distant relative."},
+        {"q": "Who else is in this family?", "a": "Other sketch-based tools exist (for example sourmash-based search). The sourmash Branchwater preprint I opened reports reliable detection above about 90% ANI and a minimum of roughly 2 to 3 kb of matching sequence to detect something, illustrating that sketches have a detection floor. That paper is about searching public metagenomes, not read classification benchmarks."}
+      ],
+      "sources": [
+        {"title": "Centrifuge, Kim et al. 2016 (Genome Research, PMC)", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5131823/"},
+        {"title": "Centrifuge GitHub", "url": "https://github.com/DaehwanKimLab/centrifuge"},
+        {"title": "Sylph GitHub", "url": "https://github.com/bluenote-1577/sylph"},
+        {"title": "Sylph documentation", "url": "https://sylph-docs.github.io/"},
+        {"title": "Sourmash Branchwater preprint", "url": "https://www.biorxiv.org/content/10.1101/2022.11.02.514947v1.full"}
+      ]
+    },
+    {
+      "title": "Speed and memory trade-offs at a glance",
+      "plain": "The families differ mostly in how much computer memory they need and how much of each read they use. Kraken-style tools buy speed with a big in-memory table. Marker-gene tools buy low memory by ignoring most of the data. Compressed-index and sketch tools sit in between. Memory decides whether you can run a tool on a laptop or need a cluster node.",
+      "deeper": [
+        {"q": "What are the reported numbers?", "a": "Kraken 1: about 70 GB for its default database (2014 paper). Kraken 2: 10.6 GB versus 72.4 GB for Kraken 1 on one 9.1 Gbp reference set (preprint). Kraken2 with the largest RefSeq database in one comparison peaked at about 956 GB, versus 2.8 GB for MetaPhlAn 3 (PMC10132073). Centrifuge: 4.2 GB for about 4,300 prokaryotic genomes. Sylph: about 5 GB for a roughly 200k-genome database (developer claim). MetaPhlAn 4 wiki: at least 15 GB memory."},
+        {"q": "Why do the memory figures not line up neatly?", "a": "They were measured on different reference sets, versions and hardware, in different years. Compare within a paper, not across them."},
+        {"q": "What does the 8 GB / 16 GB cap mean for this benchmark?", "a": "It is a deliberate memory budget. Per the Kraken 2 manual, --max-db-size downsamples the library to fit; expect lower sensitivity than the full standard database, particularly for strains and species with fewer reference genomes. How exactly the project's capped databases were built is not verified here."}
+      ],
+      "sources": [
+        {"title": "Kraken 2 preprint", "url": "https://www.biorxiv.org/content/10.1101/762302v1.full"},
+        {"title": "Kraken2 vs MetaPhlAn 3 comparison", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10132073"},
+        {"title": "Centrifuge, Kim et al. 2016", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5131823/"}
+      ]
+    },
+    {
+      "title": "Reading a mock-community benchmark",
+      "plain": "A mock community is a lab-made mixture of known microbes in known proportions, so the right answer is known in advance. Anything a tool reports that is not in the mix is a false positive; anything in the mix it misses is a false negative; and the reported percentages can be compared with the true ones. Single-isolate runs serve as negative controls: a pure culture of one organism should produce exactly one organism, so every extra species is the tool's mistake (or contamination).",
+      "deeper": [
+        {"q": "What is in the benchmark data?", "a": "Per the project brief (not independently verified from the paper in this run): ZymoBIOMICS D6300 even mock, 8 bacteria at 12% and 2 yeasts at 2% (MiSeq 2x151, ERR2984773); D6310 log mock (HiSeq 2x101, ERR2935805); plus 10 single-isolate runs, all from Nicholls et al. 2019 (ENA PRJEB29504)."},
+        {"q": "Why do yeasts matter?", "a": "Bacteria-only or bacteria-heavy databases may not hold eukaryote references, and marker catalogues weight kingdoms differently, so the 2% yeasts test whether each tool sees beyond bacteria. Whether a given database includes fungal genomes should be checked per tool."},
+        {"q": "Why do read counts and DNA share differ from cell share?", "a": "Reads reflect DNA mass, not cell count, and genome sizes differ. A tool that reports fraction of reads and a tool that reports fraction of cells or taxa will differ even if both are right. The sylph docs reference a distinction between taxonomic and sequence abundance, which I could not read in detail (see unverified)."}
+      ],
+      "sources": [
+        {"title": "Kraken 2 manual (output and confidence)", "url": "https://github.com/DerrickWood/kraken2/wiki/Manual"},
+        {"title": "Sylph documentation", "url": "https://sylph-docs.github.io/"}
+      ]
+    }
+  ],
+  "glossary": [
+    {"term": "Read", "plain": "One short piece of DNA text (about 100 to 150 letters) produced by the sequencing machine.", "deeper": "Paired-end sequencing reads both ends of a fragment; many tools, including MetaPhlAn per its wiki, handle pairs but do not use the pairing information."},
+    {"term": "Metagenome", "plain": "All the DNA from a mixed community of organisms sequenced together.", "deeper": "Shotgun metagenomics sequences random fragments of everything, as opposed to 16S sequencing which targets one gene."},
+    {"term": "Taxonomic classification", "plain": "Deciding which named group of organisms (species, genus, family and so on) a read belongs to.", "deeper": "Labels sit on a tree; a read may be labelled at any level depending on how specific the evidence is."},
+    {"term": "Reference database / library", "plain": "The collection of known genomes a tool compares reads against.", "deeper": "A tool can only name what is in its database; quality (contamination, mislabelling) matters as much as size."},
+    {"term": "k-mer", "plain": "A short exact word of k letters cut from a DNA sequence.", "deeper": "Kraken 1 used k=31; Kraken 2 defaults to k=35 with 31-letter minimizers."},
+    {"term": "Lowest common ancestor (LCA)", "plain": "The closest shared ancestor on the taxonomy tree of several organisms.", "deeper": "If a k-mer occurs in two species of one genus, Kraken files it under that genus."},
+    {"term": "Minimizer", "plain": "A representative short piece chosen from inside each k-mer, used to shrink the database.", "deeper": "The smallest canonical l-mer in a k-mer; Kraken 2 stores only minimizers, causing the memory and speed gains but also a small chance of wrong lookups."},
+    {"term": "Spaced seed", "plain": "A word comparison that ignores some fixed positions, so a single-letter difference does not always break a match.", "deeper": "Kraken 2 masks 7 positions by default for nucleotide databases."},
+    {"term": "Hash table", "plain": "A lookup structure that finds an item's record in one step.", "deeper": "Kraken 2's is probabilistic, with a default load factor of 0.7 and under 1% erroneous queries per the manual."},
+    {"term": "Confidence threshold", "plain": "The share of a read's words that must agree before a specific label is accepted.", "deeper": "Score = C/Q as defined in the Kraken 2 manual; default 0.0; labels are raised toward the root until the score passes or the read is left unclassified."},
+    {"term": "Hit group", "plain": "A cluster of overlapping matching words that share a minimizer.", "deeper": "--minimum-hit-groups (default 2) requires several independent groups before classifying."},
+    {"term": "Unclassified read", "plain": "A read the tool could not assign to anything.", "deeper": "Can mean a novel organism, a divergent strain, host DNA, or a threshold that was too strict."},
+    {"term": "Bracken", "plain": "A follow-up program that redistributes Kraken's vague read labels down to species to estimate abundance.", "deeper": "Uses a per-database, per-read-length k-mer distribution; default threshold 10 reads."},
+    {"term": "Relative abundance", "plain": "The share of the sample each organism accounts for, summing to 100%.", "deeper": "Depends on what is counted (reads, DNA, cells) and on how unclassified reads are treated."},
+    {"term": "Marker gene", "plain": "A gene (or stretch of DNA) specific to one group of microbes, usable as a fingerprint.", "deeper": "MetaPhlAn 4 uses roughly 5 million clade-specific markers per its wiki (older database build)."},
+    {"term": "Species-level genome bin (SGB)", "plain": "A species-like group built by clustering genomes, including ones never formally named.", "deeper": "MetaPhlAn 4 reports abundance per SGB; some SGBs lack a taxonomic species name."},
+    {"term": "Metagenome-assembled genome (MAG)", "plain": "A genome reconstructed by computer from mixed environmental DNA rather than from a cultured isolate.", "deeper": "Make up the large majority of genomes behind the MetaPhlAn 4 catalogue per its wiki (about 771,500 MAGs versus 236,600 reference genomes)."},
+    {"term": "FM-index / Burrows-Wheeler transform", "plain": "A compressed full-text index that can find exact matches of any length quickly.", "deeper": "Used by Centrifuge and by aligners such as Bowtie."},
+    {"term": "Sketch / MinHash", "plain": "A small random sample of a genome's words that stands in for the whole genome.", "deeper": "Sylph uses an abundance-corrected minhash to estimate containment even at low coverage."},
+    {"term": "Containment ANI", "plain": "An estimate of how identical the sample's matching organism is to a reference genome, from the share of shared words.", "deeper": "Sylph claims accuracy down to 0.1x coverage."},
+    {"term": "Precision / sensitivity (recall)", "plain": "Precision: of what the tool reported, how much was right. Sensitivity: of what was really there, how much it found.", "deeper": "Raising a confidence threshold generally trades sensitivity for precision."},
+    {"term": "F1 score", "plain": "A single number blending precision and recall.", "deeper": "Used in the Kraken2 vs MetaPhlAn 3 comparison; the best F1 depends on threshold and database."},
+    {"term": "False positive", "plain": "A species reported that is not really in the sample.", "deeper": "In a pure single-isolate run, every non-target species is a false positive or contamination."},
+    {"term": "Negative control", "plain": "A sample where the right answer is known to be simple (here, a single organism), used to expose false calls.", "deeper": "Useful because the number and abundance of extra species directly measures a tool's noise."}
+  ],
+  "failure_modes": [
+    {"what_goes_wrong": "Kraken2 at default confidence 0 reports many species that are not in the sample.", "how_to_notice": "Long tail of low-abundance species in a pure single-isolate run or a mock with known members.", "what_to_do": "Report results at several thresholds and show the false-positive count in the negative controls; do not use the default blindly. One comparison found the default gave very low precision."},
+    {"what_goes_wrong": "Close relatives get credit for reads from a species missing from the database.", "how_to_notice": "A real organism appears as a sibling species or genus, or as unclassified, rather than itself.", "what_to_do": "Check whether the true species has a genome in the database; compare against a larger database."},
+    {"what_goes_wrong": "Capped (8 GB) databases classify fewer reads and may lose organisms.", "how_to_notice": "Higher unclassified share than the 16 GB database on the same reads; missing members of the mock.", "what_to_do": "Compare 8 GB versus 16 GB side by side and state the reference content of each."},
+    {"what_goes_wrong": "Contaminated or mislabelled reference genomes cause false calls.", "how_to_notice": "Unexpected species recur in unrelated samples. The original Kraken paper saw contamination errors with a draft-genome database.", "what_to_do": "Prefer curated complete genomes; investigate recurring odd species before trusting them."},
+    {"what_goes_wrong": "Exact-match classifiers lose reads to sequencing errors and strain divergence.", "how_to_notice": "Lower sensitivity on error-prone or divergent data; the original Kraken scored 91.25% versus Megablast's 93.67% on a high-error simulation.", "what_to_do": "Check per-dataset quality; note that the 2x101 HiSeq and 2x151 MiSeq runs differ in length and error profile."},
+    {"what_goes_wrong": "Bracken re-estimation relies on a distribution built for a specific read length and database.", "how_to_notice": "Bracken run with a mismatched read length setting, or a database not built for Bracken.", "what_to_do": "Use the read length of the actual data (101 and 151 differ) and rebuild or select the matching distribution file."},
+    {"what_goes_wrong": "Bracken can pass along Kraken false positives.", "how_to_notice": "Species present in the Bracken table that were weakly supported in the Kraken report.", "what_to_do": "Filter at a sensible Kraken confidence before Bracken; interpret as abundance re-allocation, not confirmation. This is an inference from method design."},
+    {"what_goes_wrong": "Marker-gene tools miss organisms outside the marker catalogue and use only a small part of the data.", "how_to_notice": "Low recall; reported richness below the truth (MetaPhlAn 3 underestimated richness by a median of 71.5 species in one study); few eukaryotes.", "what_to_do": "Check that yeasts appear; read the unclassified-estimation setting; pin the index version."},
+    {"what_goes_wrong": "Different tools report different quantities (reads, taxa, cells), so numbers are not directly comparable.", "how_to_notice": "Percentages that disagree even when the same organisms are named.", "what_to_do": "Convert to a common definition before comparing, and compare to the mock's stated composition, noting what that composition measures."},
+    {"what_goes_wrong": "Sketch-based tools have a detection floor and reference-dependence.", "how_to_notice": "Very short or very low-coverage genomes (small plasmids, tiny viruses) are missed; sourmash-style sketches needed roughly 2 to 3 kb of matching sequence in one report.", "what_to_do": "Do not read absence as proof of absence; validate low-abundance calls with a second method."},
+    {"what_goes_wrong": "Comparing tools run on different database versions or builds.", "how_to_notice": "Results change after a database update; merged MetaPhlAn tables are valid only with one database version per its wiki.", "what_to_do": "Record the exact database build and date (the Kraken2 databases here were built 2025-04-02, MetaPhlAn index vJan26) in every table."}
+  ],
+  "aha_moments": [
+    "Kraken does not align reads. It looks up exact words, which is why it is hundreds of times faster than BLAST-style search (the 2014 paper reports 909 times faster than Megablast; figure from the paper abstract, not re-opened here).",
+    "Kraken 2 gets its memory savings by storing only a representative piece of each word, and the price is a small built-in error rate (under 1% of lookups per the manual).",
+    "The confidence threshold is a fraction of a read's words that must agree. At 0 almost anything passes; at 1.0 every word must agree, which in one study left almost no species identified in environmental samples.",
+    "Bracken is a statistical redistribution step, not a second opinion: it cannot tell whether a species is truly there.",
+    "MetaPhlAn is quiet by design. It uses a small catalogue of unique genes, so it uses little memory and reports less, but that is also why it can undercount.",
+    "Kraken's 33% best-case classification rate for absent species (from the original paper's clade-exclusion test) shows that missing references, not the algorithm, often set the ceiling.",
+    "A pure-culture negative control is the cheapest honest test: any extra species is the tool's noise."
+  ],
+  "timeline": [
+    {"year": "2014", "event": "Kraken published (Wood and Salzberg, Genome Biology): exact 31-mer lookup with lowest-common-ancestor assignment, over 4.1 million reads per minute in fastest mode.", "source_url": "https://link.springer.com/article/10.1186/gb-2014-15-3-r46"},
+    {"year": "2016", "event": "Centrifuge published (Kim et al., Genome Research): FM-index classifier with a 4.2 GB index for about 4,300 prokaryotic genomes.", "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5131823/"},
+    {"year": "2019", "event": "Kraken 2 preprint (Wood, Lu, Langmead): minimizer-based database, 10.6 GB versus 72.4 GB for Kraken 1 on one reference set, over 93 million reads per minute with 16 threads.", "source_url": "https://www.biorxiv.org/content/10.1101/762302v1.full"},
+    {"year": "2023", "event": "MetaPhlAn 4 published in Nature Biotechnology, extending marker-gene profiling with uncharacterized species (publication per the MetaPhlAn README citation).", "source_url": "https://github.com/biobakery/MetaPhlAn"},
+    {"year": "2024", "event": "Sylph published (Shaw and Yu, Nature Biotechnology, per the sylph documentation): containment-ANI profiling with low-coverage correction.", "source_url": "https://sylph-docs.github.io/"},
+    {"year": "2025", "event": "Date the Kraken2 8 GB and 16 GB standard databases used in this project were built (2025-04-02), per the project brief; not independently verified from a Kraken source.", "source_url": "https://github.com/DerrickWood/kraken2/wiki/Manual"}
+  ],
+  "what_this_supports": [
+    "Explaining in plain language why different classifiers give different answers on the same reads.",
+    "Expecting the default Kraken2 confidence setting (0) to over-call species, and framing the confidence dial as a precision versus sensitivity trade-off.",
+    "Expecting smaller or capped databases to classify fewer reads and to depend more strongly on the confidence setting.",
+    "Treating Bracken as an abundance re-allocation step that needs a matching read length and database.",
+    "Describing MetaPhlAn as a low-memory, marker-based method that sees only what its catalogue covers.",
+    "Using single-isolate negative controls to measure each tool's false-positive noise."
+  ],
+  "what_this_does_not_support": [
+    "Declaring any single tool the best overall; the cited comparison itself concludes there is no one-size-fits-all choice.",
+    "Transferring specific optimal thresholds (such as 0.15 or 0.60) to this benchmark; those were tuned on another study's data and databases.",
+    "Using vendor or developer speed and accuracy claims (for example sylph's 50x faster) as independent evidence.",
+    "Assuming the 2014 to 2019 speed and memory numbers apply to current versions or to the 8 GB and 16 GB databases here.",
+    "Concluding that Bracken removes false positives."
+  ],
+  "check_next": [
+    "Open the MetaPhlAn 4 Nature Biotechnology paper and the Sylph paper full text (publisher pages blocked automated fetching) to verify SGB, kSGB/uSGB and sketch details.",
+    "Read the Kraken 2 Genome Biology paper and the Bracken PeerJ paper directly to confirm published figures and Bracken's statistical method.",
+    "Read Nicholls et al. 2019 to confirm the mock composition, library prep and the contamination or bias findings.",
+    "Read the sylph-docs page 'What sylph can and cannot do' and the output-format page for taxonomic versus sequence abundance.",
+    "Look for independent benchmarks (for example CAMI) comparing Kraken2, Bracken, MetaPhlAn 4 and Sylph on mock data.",
+    "Confirm how the 8 GB and 16 GB Kraken2 databases were built (max-db-size or prebuilt index) and what kingdoms they contain."
+  ],
+  "unverified": [
+    "The Kraken 2 Genome Biology (2019) published paper was not opened; the figures used come from the bioRxiv preprint and may differ from the final version.",
+    "The Bracken peer-reviewed paper (PeerJ Computer Science) could not be opened (HTTP 403); Bracken's year and statistical details are not stated here beyond the README.",
+    "The MetaPhlAn 4 Nature Biotechnology paper and the Sylph Nature Biotechnology paper were not opened (publisher redirect). The terms kSGB and uSGB, and the exact counts for the vJan26 index, are unverified; the SGB numbers quoted come from the wiki's older vJan21 build.",
+    "The claim that Kraken2 classified-read share approaches zero above confidence 0.4 for Minikraken and Standard-16 comes from a search-result summary, not a page I read.",
+    "Composition of ZymoBIOMICS D6300 and D6310, sequencing platforms and run accessions are taken from the project brief; Nicholls et al. 2019 could not be fetched (PMC and PubMed blocked).",
+    "Whether Bracken passes along Kraken false positives is my inference from the method, not a source statement.",
+    "Sylph's speed, memory and accuracy figures are developer claims on its repository page; its c=200 subsampling parameter and how it separates taxonomic from sequence abundance were not confirmed.",
+    "History before 2014 (for example early alignment-based and composition-based classifiers) and the original MetaPhlAn release year were not researched or sourced.",
+    "The contents and exact construction of the project's 8 GB and 16 GB Kraken2 databases (built 2025-04-02) were not verified."
+  ]
+}
