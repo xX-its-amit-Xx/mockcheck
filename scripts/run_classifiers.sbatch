@@ -44,7 +44,7 @@ tail -n +2 "$REPO/config/samples.tsv" | while IFS=$'\t' read -r sample acc role 
   mp="$MC_OUT/metaphlan/$sample.profile.txt"
   if [ ! -s "$mp" ]; then
     timeit "metaphlan.$sample" env PATH="$MC_ENV_MPA/bin:$PATH" metaphlan "$r1,$r2" --input_type fastq --nproc $T \
-      --db_dir "$MC_DB/metaphlan" -x "$MPA_INDEX" --no_map -o "$mp"
+      --db_dir "$MC_DB/metaphlan" -x "$MPA_INDEX" --mapout "$MC_OUT/metaphlan/$sample.mapout.bz2" -o "$mp"
   fi
   echo "done $sample"
 done
