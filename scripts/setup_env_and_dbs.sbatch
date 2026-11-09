@@ -35,7 +35,7 @@ done
 # MetaPhlAn database
 if ! ls "$MC_DB"/metaphlan/*.bt2* >/dev/null 2>&1; then
   mkdir -p "$MC_DB/metaphlan"
-  PATH="$MC_ENV_MPA/bin:$PATH" "$MC_ENV_MPA/bin/metaphlan" --install --bowtie2db "$MC_DB/metaphlan"
+  PATH="$MC_ENV_MPA/bin:$PATH" "$MC_ENV_MPA/bin/metaphlan" --install --db_dir "$MC_DB/metaphlan"
 fi
 ls -la "$MC_DB" "$MC_DB"/metaphlan | head -40
 echo SETUP_DONE
