@@ -12,6 +12,9 @@ cd "$(dirname "$0")"
 if [ "${1:-}" = "--local" ]; then
   python scripts/evaluate.py     # needs: python3, pandas, matplotlib
   python scripts/build_site.py   # refreshes docs/data/results for the dashboard
+  python -m mockcheck demo --site docs/data/reports.json   # per-run reports (supports / does not support / check next)
+  python scripts/build_cookbook.py                         # COOKBOOK.md from docs/data/cookbook.json
+  python -m unittest discover -s tests
   echo "Done. Tables are in results/, figures in results/fig/, site in docs/."
   exit 0
 fi

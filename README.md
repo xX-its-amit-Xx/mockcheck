@@ -21,6 +21,22 @@ You have DNA from a mixed sample (gut, soil, a probiotic, a clinical swab) and a
 
 The biggest swings came from **what the database contains and what names it uses**, not from algorithm cleverness. Details, numbers and caveats: [REPORT.md](REPORT.md). Each run ends with three blocks: what the result **supports**, what it **does not**, and what to **check next**.
 
+## Use it on your own run (the tool)
+
+`mockcheck` reads a Kraken2, Bracken or MetaPhlAn output (or any two-column organism/percent file), scores it against a mock community with a known answer, and writes the report: **what it supports, what it does not, what to check next**, plus the microbiology behind each surprise. Python 3.9+, standard library only, no install step.
+
+```bash
+git clone https://github.com/xX-its-amit-Xx/mockcheck && cd mockcheck
+python -m mockcheck demo                                    # scores all 72 committed outputs, writes out/demo/reports/*.md
+python -m mockcheck report my_run.report --mock zymo-d6300-even
+python -m mockcheck compare run_a.report run_b.bracken run_c.profile.txt
+python -m mockcheck report my_isolate.report --isolate "Listeria monocytogenes"   # false-call floor
+```
+
+All recipes, with what you should see and what to do if it goes wrong, are in **[COOKBOOK.md](COOKBOOK.md)** (also on the dashboard, with a report explorer for every committed run). The tool's numbers match the benchmark tables exactly; `python -m unittest discover -s tests` checks that.
+
+**Why microbiology is in the report:** a species name from short reads is a lead, not an identification. `config/organisms.tsv` records, for each mock organism, its cell wall, genome size, look-alike relatives and why that matters for detection (for example: *E. coli* and *Shigella* are near-identical by k-mers; the *B. cereus* group, which includes the anthrax agent, cannot be told apart reliably from short reads; yeast has a tough wall and is invisible to bacteria-only databases). The report also flags species from pathogen-containing genera that appear in a harmless mix: in the committed Kraken2 run, *Mycobacterium canetti* reached 0.37% of the profile in a tube that contains no mycobacteria. That is the practical lesson for biosurveillance and biodefense teams (for example a company such as Valthos, which builds software to detect biological threats): classifier output needs corroboration and a negative control before anyone escalates. This repository is a benchmark of general-purpose tools on harmless standards, not a threat-detection system, and it makes no claim about any company's methods.
+
 ## What is in the box
 
 | Path | What |

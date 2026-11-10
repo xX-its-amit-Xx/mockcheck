@@ -1,0 +1,1055 @@
+{
+ "cutoff": 0.1,
+ "version": "0.1.0",
+ "runs": [
+  {
+   "sample": "even",
+   "method": "kraken2_08gb_c0_0",
+   "kind": "quantitative",
+   "supports": [
+    "7 of 10 organisms known to be in the tube were reported at or above 0.10% (Enterococcus faecalis, Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica, Staphylococcus aureus).",
+    "3 organisms were within two-fold of the expected share (Pseudomonas aeruginosa, Salmonella enterica, Enterococcus faecalis)."
+   ],
+   "not_supported": [
+    "Do not use these percentages: the profile is far from the known answer (Bray-Curtis 0.53 against genomic DNA).",
+    "Escherichia coli was reported at 2.21% versus 12.00% expected (0.2x): do not trust this organism's abundance from this run.",
+    "Lactobacillus fermentum was reported at 30.90% versus 12.00% expected (2.6x): do not trust this organism's abundance from this run.",
+    "Staphylococcus aureus was reported at 4.64% versus 12.00% expected (0.4x): do not trust this organism's abundance from this run.",
+    "Listeria monocytogenes was reported at 1.34% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.",
+    "Bacillus subtilis was reported at 0.08% versus 12.00% expected (0.0x): do not trust this organism's abundance from this run.",
+    "Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.",
+    "The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 23.57%, Mycobacterium canetti 0.56%, Xanthomonas euvesicatoria 0.30%, Listeria innocua 0.12%. At cutoff 0% this run reported 1019 species in total.",
+    "Species from pathogen-containing genera were reported (Mycobacterium canetti 0.56%, Xanthomonas euvesicatoria 0.30%) although nothing like them is in the tube. A species name on its own is not a detection of a threat.",
+    "25.6% of the profile sits on organisms that are not in the tube.",
+    "Only 30% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.",
+    "The mock's headline shares (for example 12% per bacterium) are genomic DNA, not cell counts. A tool that reports cells or taxa, not reads, should be compared against the cell column instead.",
+    "Nothing below 2.0% can be judged from this tube; sensitivity to rarer organisms is untested.",
+    "A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification."
+   ],
+   "check_next": [
+    "Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.",
+    "Before escalating any call from a pathogen-containing genus, require corroboration: many reads spread across the genome (not a few conserved regions), a second tool or a marker-gene check, and a negative control run through the same database.",
+    "Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.",
+    "False species fall as the cutoff rises. The lowest cutoff here with at most one false species is 1.00% (recall 0.70). This was tuned on one mock, so confirm it with a negative control from your own sample type before relying on it.",
+    "Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples."
+   ],
+   "microbiology": [
+    "**Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.",
+    "**Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.",
+    "**Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.",
+    "**Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria innocua** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Why a harmless mix produces pathogen-genus calls:** short reads from conserved genes (ribosomal and housekeeping genes) match many genomes in a database, and species in large genera such as Mycobacterium or Burkholderia share long stretches of sequence. A likely cause (not verified for this specific run): low-confidence k-mer assignment lands a few reads on a better-known relative."
+   ],
+   "scorecard": {
+    "found": 7,
+    "of": 10,
+    "false_species": 4,
+    "precision": 0.636,
+    "recall": 0.7,
+    "bray_curtis": 0.529,
+    "false_mass_pct": 25.6
+   },
+   "markdown": "# mockcheck report: even / kraken2_08gb_c0_0\n\n- Tool output type: **kraken2**\n- Mock: **ZymoBIOMICS D6300 (even)** (quantitative), truth basis for the score: **genomic DNA**\n- Species-call cutoff: **0.10%** of the species-level profile\n\n## Scorecard\n\n| Measure | Value |\n|---|---|\n| Organisms in tube found | 7 of 10 |\n| False species at cutoff | 4 |\n| Precision / recall / F1 | 0.64 / 0.70 / 0.67 |\n| Bray-Curtis distance to the known answer (0 best) | 0.529 |\n| Share of profile on organisms not in the tube | 25.6% |\n| Reads placed at species level | 30% |\n| Reads unclassified | 7% |\n\n_Relaxed reading (B. spizizenii counted as B. subtilis): 8 of 10 found, 3 false species. The strict numbers above stay the headline._\n\n## What this result supports\n\n- 7 of 10 organisms known to be in the tube were reported at or above 0.10% (Enterococcus faecalis, Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica, Staphylococcus aureus).\n- 3 organisms were within two-fold of the expected share (Pseudomonas aeruginosa, Salmonella enterica, Enterococcus faecalis).\n\n## What it does not support\n\n- Do not use these percentages: the profile is far from the known answer (Bray-Curtis 0.53 against genomic DNA).\n- Escherichia coli was reported at 2.21% versus 12.00% expected (0.2x): do not trust this organism's abundance from this run.\n- Lactobacillus fermentum was reported at 30.90% versus 12.00% expected (2.6x): do not trust this organism's abundance from this run.\n- Staphylococcus aureus was reported at 4.64% versus 12.00% expected (0.4x): do not trust this organism's abundance from this run.\n- Listeria monocytogenes was reported at 1.34% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.\n- Bacillus subtilis was reported at 0.08% versus 12.00% expected (0.0x): do not trust this organism's abundance from this run.\n- Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.\n- The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 23.57%, Mycobacterium canetti 0.56%, Xanthomonas euvesicatoria 0.30%, Listeria innocua 0.12%. At cutoff 0% this run reported 1019 species in total.\n- Species from pathogen-containing genera were reported (Mycobacterium canetti 0.56%, Xanthomonas euvesicatoria 0.30%) although nothing like them is in the tube. A species name on its own is not a detection of a threat.\n- 25.6% of the profile sits on organisms that are not in the tube.\n- Only 30% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.\n- The mock's headline shares (for example 12% per bacterium) are genomic DNA, not cell counts. A tool that reports cells or taxa, not reads, should be compared against the cell column instead.\n- Nothing below 2.0% can be judged from this tube; sensitivity to rarer organisms is untested.\n- A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification.\n\n## What to check next\n\n- Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.\n- Before escalating any call from a pathogen-containing genus, require corroboration: many reads spread across the genome (not a few conserved regions), a second tool or a marker-gene check, and a negative control run through the same database.\n- Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.\n- False species fall as the cutoff rises. The lowest cutoff here with at most one false species is 1.00% (recall 0.70). This was tuned on one mock, so confirm it with a negative control from your own sample type before relying on it.\n- Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples.\n\n## The microbiology behind the surprises\n\n- **Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.\n- **Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.\n- **Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.\n- **Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria innocua** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Why a harmless mix produces pathogen-genus calls:** short reads from conserved genes (ribosomal and housekeeping genes) match many genomes in a database, and species in large genera such as Mycobacterium or Burkholderia share long stretches of sequence. A likely cause (not verified for this specific run): low-confidence k-mer assignment lands a few reads on a better-known relative.\n\n## Cutoff sweep\n\n| Cutoff | Found | False species | Precision | Recall |\n|---|---|---|---|---|\n| 0.00% | 8 | 1011 | 0.01 | 0.80 |\n| 0.01% | 8 | 28 | 0.22 | 0.80 |\n| 0.05% | 8 | 6 | 0.57 | 0.80 |\n| 0.10% | 7 | 4 | 0.64 | 0.70 |\n| 0.50% | 7 | 2 | 0.78 | 0.70 |\n| 1.00% | 7 | 1 | 0.88 | 0.70 |\n| 2.00% | 6 | 1 | 0.86 | 0.60 |\n\n## Per organism\n\n| Organism | Expected | Observed | Fold |\n|---|---|---|---|\n| Pseudomonas aeruginosa | 12.00% | 8.17% | 0.68x |\n| Escherichia coli | 12.00% | 2.21% | 0.18x |\n| Salmonella enterica | 12.00% | 6.70% | 0.56x |\n| Lactobacillus fermentum | 12.00% | 30.90% | 2.58x |\n| Enterococcus faecalis | 12.00% | 20.35% | 1.70x |\n| Staphylococcus aureus | 12.00% | 4.64% | 0.39x |\n| Listeria monocytogenes | 12.00% | 1.34% | 0.11x |\n| Bacillus subtilis | 12.00% | 0.08% | 0.01x |\n| Saccharomyces cerevisiae | 2.00% | 0.00% | 0.00x |\n| Cryptococcus neoformans | 2.00% | 0.00% | 0.00x |\n\n_Truth source: Zymo D6300 datasheet Table 1 (lot ZRC190633 onward); lot confirmed in Nicholls 2019 giz043 Table 4. Generated by mockcheck; rule-based, no model involved._\n"
+  },
+  {
+   "sample": "even",
+   "method": "kraken2_08gb_c0_1",
+   "kind": "quantitative",
+   "supports": [
+    "7 of 10 organisms known to be in the tube were reported at or above 0.10% (Enterococcus faecalis, Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica, Staphylococcus aureus).",
+    "Few extra species: 1 organism(s) not in the tube passed the 0.10% cutoff (precision 0.88).",
+    "1 organisms were within two-fold of the expected share (Enterococcus faecalis)."
+   ],
+   "not_supported": [
+    "Do not use these percentages: the profile is far from the known answer (Bray-Curtis 0.69 against genomic DNA).",
+    "Pseudomonas aeruginosa was reported at 3.50% versus 12.00% expected (0.3x): do not trust this organism's abundance from this run.",
+    "Escherichia coli was reported at 0.91% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.",
+    "Salmonella enterica was reported at 0.98% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.",
+    "Lactobacillus fermentum was reported at 69.25% versus 12.00% expected (5.8x): do not trust this organism's abundance from this run.",
+    "Staphylococcus aureus was reported at 1.14% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.",
+    "Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.",
+    "The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 10.89%. At cutoff 0% this run reported 17 species in total.",
+    "11.0% of the profile sits on organisms that are not in the tube.",
+    "Only 3% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.",
+    "73% of reads were unclassified, so these percentages describe only the classified remainder.",
+    "The mock's headline shares (for example 12% per bacterium) are genomic DNA, not cell counts. A tool that reports cells or taxa, not reads, should be compared against the cell column instead.",
+    "Nothing below 2.0% can be judged from this tube; sensitivity to rarer organisms is untested.",
+    "A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification."
+   ],
+   "check_next": [
+    "Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.",
+    "Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.",
+    "Compare against a larger database or a lower confidence setting; a high unclassified share usually means the index is too small or the confidence threshold too strict.",
+    "Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples."
+   ],
+   "microbiology": [
+    "**Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.",
+    "**Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.",
+    "**Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.",
+    "**Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes."
+   ],
+   "scorecard": {
+    "found": 7,
+    "of": 10,
+    "false_species": 1,
+    "precision": 0.875,
+    "recall": 0.7,
+    "bray_curtis": 0.693,
+    "false_mass_pct": 10.96
+   },
+   "markdown": "# mockcheck report: even / kraken2_08gb_c0_1\n\n- Tool output type: **kraken2**\n- Mock: **ZymoBIOMICS D6300 (even)** (quantitative), truth basis for the score: **genomic DNA**\n- Species-call cutoff: **0.10%** of the species-level profile\n\n## Scorecard\n\n| Measure | Value |\n|---|---|\n| Organisms in tube found | 7 of 10 |\n| False species at cutoff | 1 |\n| Precision / recall / F1 | 0.88 / 0.70 / 0.78 |\n| Bray-Curtis distance to the known answer (0 best) | 0.693 |\n| Share of profile on organisms not in the tube | 11.0% |\n| Reads placed at species level | 3% |\n| Reads unclassified | 73% |\n\n_Relaxed reading (B. spizizenii counted as B. subtilis): 8 of 10 found, 0 false species. The strict numbers above stay the headline._\n\n## What this result supports\n\n- 7 of 10 organisms known to be in the tube were reported at or above 0.10% (Enterococcus faecalis, Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica, Staphylococcus aureus).\n- Few extra species: 1 organism(s) not in the tube passed the 0.10% cutoff (precision 0.88).\n- 1 organisms were within two-fold of the expected share (Enterococcus faecalis).\n\n## What it does not support\n\n- Do not use these percentages: the profile is far from the known answer (Bray-Curtis 0.69 against genomic DNA).\n- Pseudomonas aeruginosa was reported at 3.50% versus 12.00% expected (0.3x): do not trust this organism's abundance from this run.\n- Escherichia coli was reported at 0.91% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.\n- Salmonella enterica was reported at 0.98% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.\n- Lactobacillus fermentum was reported at 69.25% versus 12.00% expected (5.8x): do not trust this organism's abundance from this run.\n- Staphylococcus aureus was reported at 1.14% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.\n- Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.\n- The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 10.89%. At cutoff 0% this run reported 17 species in total.\n- 11.0% of the profile sits on organisms that are not in the tube.\n- Only 3% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.\n- 73% of reads were unclassified, so these percentages describe only the classified remainder.\n- The mock's headline shares (for example 12% per bacterium) are genomic DNA, not cell counts. A tool that reports cells or taxa, not reads, should be compared against the cell column instead.\n- Nothing below 2.0% can be judged from this tube; sensitivity to rarer organisms is untested.\n- A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification.\n\n## What to check next\n\n- Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.\n- Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.\n- Compare against a larger database or a lower confidence setting; a high unclassified share usually means the index is too small or the confidence threshold too strict.\n- Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples.\n\n## The microbiology behind the surprises\n\n- **Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.\n- **Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.\n- **Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.\n- **Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.\n\n## Cutoff sweep\n\n| Cutoff | Found | False species | Precision | Recall |\n|---|---|---|---|---|\n| 0.00% | 7 | 10 | 0.41 | 0.70 |\n| 0.01% | 7 | 3 | 0.70 | 0.70 |\n| 0.05% | 7 | 1 | 0.88 | 0.70 |\n| 0.10% | 7 | 1 | 0.88 | 0.70 |\n| 0.50% | 6 | 1 | 0.86 | 0.60 |\n| 1.00% | 4 | 1 | 0.80 | 0.40 |\n| 2.00% | 3 | 1 | 0.75 | 0.30 |\n\n## Per organism\n\n| Organism | Expected | Observed | Fold |\n|---|---|---|---|\n| Pseudomonas aeruginosa | 12.00% | 3.50% | 0.29x |\n| Escherichia coli | 12.00% | 0.91% | 0.08x |\n| Salmonella enterica | 12.00% | 0.98% | 0.08x |\n| Lactobacillus fermentum | 12.00% | 69.25% | 5.77x |\n| Enterococcus faecalis | 12.00% | 13.04% | 1.09x |\n| Staphylococcus aureus | 12.00% | 1.14% | 0.09x |\n| Listeria monocytogenes | 12.00% | 0.23% | 0.02x |\n| Bacillus subtilis | 12.00% | 0.00% | 0.00x |\n| Saccharomyces cerevisiae | 2.00% | 0.00% | 0.00x |\n| Cryptococcus neoformans | 2.00% | 0.00% | 0.00x |\n\n_Truth source: Zymo D6300 datasheet Table 1 (lot ZRC190633 onward); lot confirmed in Nicholls 2019 giz043 Table 4. Generated by mockcheck; rule-based, no model involved._\n"
+  },
+  {
+   "sample": "even",
+   "method": "kraken2_16gb_c0_0",
+   "kind": "quantitative",
+   "supports": [
+    "7 of 10 organisms known to be in the tube were reported at or above 0.10% (Enterococcus faecalis, Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica, Staphylococcus aureus).",
+    "3 organisms were within two-fold of the expected share (Pseudomonas aeruginosa, Salmonella enterica, Enterococcus faecalis)."
+   ],
+   "not_supported": [
+    "Do not read the percentages as quantities: the profile only roughly matches (Bray-Curtis 0.49 against genomic DNA). Rank order may still be useful; check which organisms are far off below.",
+    "Escherichia coli was reported at 2.71% versus 12.00% expected (0.2x): do not trust this organism's abundance from this run.",
+    "Lactobacillus fermentum was reported at 26.48% versus 12.00% expected (2.2x): do not trust this organism's abundance from this run.",
+    "Staphylococcus aureus was reported at 5.41% versus 12.00% expected (0.5x): do not trust this organism's abundance from this run.",
+    "Listeria monocytogenes was reported at 1.73% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.",
+    "Bacillus subtilis was reported at 0.09% versus 12.00% expected (0.0x): do not trust this organism's abundance from this run.",
+    "Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.",
+    "The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 23.52%, Mycobacterium canetti 0.37%, Listeria innocua 0.14%, Xanthomonas euvesicatoria 0.12%. At cutoff 0% this run reported 1116 species in total.",
+    "Species from pathogen-containing genera were reported (Mycobacterium canetti 0.37%, Xanthomonas euvesicatoria 0.12%) although nothing like them is in the tube. A species name on its own is not a detection of a threat.",
+    "25.4% of the profile sits on organisms that are not in the tube.",
+    "Only 38% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.",
+    "The mock's headline shares (for example 12% per bacterium) are genomic DNA, not cell counts. A tool that reports cells or taxa, not reads, should be compared against the cell column instead.",
+    "Nothing below 2.0% can be judged from this tube; sensitivity to rarer organisms is untested.",
+    "A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification."
+   ],
+   "check_next": [
+    "Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.",
+    "Before escalating any call from a pathogen-containing genus, require corroboration: many reads spread across the genome (not a few conserved regions), a second tool or a marker-gene check, and a negative control run through the same database.",
+    "Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.",
+    "False species fall as the cutoff rises. The lowest cutoff here with at most one false species is 0.50% (recall 0.70). This was tuned on one mock, so confirm it with a negative control from your own sample type before relying on it.",
+    "Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples."
+   ],
+   "microbiology": [
+    "**Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.",
+    "**Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.",
+    "**Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.",
+    "**Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria innocua** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Why a harmless mix produces pathogen-genus calls:** short reads from conserved genes (ribosomal and housekeeping genes) match many genomes in a database, and species in large genera such as Mycobacterium or Burkholderia share long stretches of sequence. A likely cause (not verified for this specific run): low-confidence k-mer assignment lands a few reads on a better-known relative."
+   ],
+   "scorecard": {
+    "found": 7,
+    "of": 10,
+    "false_species": 4,
+    "precision": 0.636,
+    "recall": 0.7,
+    "bray_curtis": 0.486,
+    "false_mass_pct": 25.41
+   },
+   "markdown": "# mockcheck report: even / kraken2_16gb_c0_0\n\n- Tool output type: **kraken2**\n- Mock: **ZymoBIOMICS D6300 (even)** (quantitative), truth basis for the score: **genomic DNA**\n- Species-call cutoff: **0.10%** of the species-level profile\n\n## Scorecard\n\n| Measure | Value |\n|---|---|\n| Organisms in tube found | 7 of 10 |\n| False species at cutoff | 4 |\n| Precision / recall / F1 | 0.64 / 0.70 / 0.67 |\n| Bray-Curtis distance to the known answer (0 best) | 0.486 |\n| Share of profile on organisms not in the tube | 25.4% |\n| Reads placed at species level | 38% |\n| Reads unclassified | 3% |\n\n_Relaxed reading (B. spizizenii counted as B. subtilis): 8 of 10 found, 3 false species. The strict numbers above stay the headline._\n\n## What this result supports\n\n- 7 of 10 organisms known to be in the tube were reported at or above 0.10% (Enterococcus faecalis, Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica, Staphylococcus aureus).\n- 3 organisms were within two-fold of the expected share (Pseudomonas aeruginosa, Salmonella enterica, Enterococcus faecalis).\n\n## What it does not support\n\n- Do not read the percentages as quantities: the profile only roughly matches (Bray-Curtis 0.49 against genomic DNA). Rank order may still be useful; check which organisms are far off below.\n- Escherichia coli was reported at 2.71% versus 12.00% expected (0.2x): do not trust this organism's abundance from this run.\n- Lactobacillus fermentum was reported at 26.48% versus 12.00% expected (2.2x): do not trust this organism's abundance from this run.\n- Staphylococcus aureus was reported at 5.41% versus 12.00% expected (0.5x): do not trust this organism's abundance from this run.\n- Listeria monocytogenes was reported at 1.73% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.\n- Bacillus subtilis was reported at 0.09% versus 12.00% expected (0.0x): do not trust this organism's abundance from this run.\n- Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.\n- The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 23.52%, Mycobacterium canetti 0.37%, Listeria innocua 0.14%, Xanthomonas euvesicatoria 0.12%. At cutoff 0% this run reported 1116 species in total.\n- Species from pathogen-containing genera were reported (Mycobacterium canetti 0.37%, Xanthomonas euvesicatoria 0.12%) although nothing like them is in the tube. A species name on its own is not a detection of a threat.\n- 25.4% of the profile sits on organisms that are not in the tube.\n- Only 38% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.\n- The mock's headline shares (for example 12% per bacterium) are genomic DNA, not cell counts. A tool that reports cells or taxa, not reads, should be compared against the cell column instead.\n- Nothing below 2.0% can be judged from this tube; sensitivity to rarer organisms is untested.\n- A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification.\n\n## What to check next\n\n- Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.\n- Before escalating any call from a pathogen-containing genus, require corroboration: many reads spread across the genome (not a few conserved regions), a second tool or a marker-gene check, and a negative control run through the same database.\n- Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.\n- False species fall as the cutoff rises. The lowest cutoff here with at most one false species is 0.50% (recall 0.70). This was tuned on one mock, so confirm it with a negative control from your own sample type before relying on it.\n- Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples.\n\n## The microbiology behind the surprises\n\n- **Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.\n- **Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.\n- **Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.\n- **Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria innocua** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Why a harmless mix produces pathogen-genus calls:** short reads from conserved genes (ribosomal and housekeeping genes) match many genomes in a database, and species in large genera such as Mycobacterium or Burkholderia share long stretches of sequence. A likely cause (not verified for this specific run): low-confidence k-mer assignment lands a few reads on a better-known relative.\n\n## Cutoff sweep\n\n| Cutoff | Found | False species | Precision | Recall |\n|---|---|---|---|---|\n| 0.00% | 8 | 1108 | 0.01 | 0.80 |\n| 0.01% | 8 | 31 | 0.21 | 0.80 |\n| 0.05% | 8 | 7 | 0.53 | 0.80 |\n| 0.10% | 7 | 4 | 0.64 | 0.70 |\n| 0.50% | 7 | 1 | 0.88 | 0.70 |\n| 1.00% | 7 | 1 | 0.88 | 0.70 |\n| 2.00% | 6 | 1 | 0.86 | 0.60 |\n\n## Per organism\n\n| Organism | Expected | Observed | Fold |\n|---|---|---|---|\n| Pseudomonas aeruginosa | 12.00% | 9.35% | 0.78x |\n| Escherichia coli | 12.00% | 2.71% | 0.23x |\n| Salmonella enterica | 12.00% | 8.10% | 0.67x |\n| Lactobacillus fermentum | 12.00% | 26.48% | 2.21x |\n| Enterococcus faecalis | 12.00% | 20.71% | 1.73x |\n| Staphylococcus aureus | 12.00% | 5.41% | 0.45x |\n| Listeria monocytogenes | 12.00% | 1.73% | 0.14x |\n| Bacillus subtilis | 12.00% | 0.09% | 0.01x |\n| Saccharomyces cerevisiae | 2.00% | 0.00% | 0.00x |\n| Cryptococcus neoformans | 2.00% | 0.00% | 0.00x |\n\n_Truth source: Zymo D6300 datasheet Table 1 (lot ZRC190633 onward); lot confirmed in Nicholls 2019 giz043 Table 4. Generated by mockcheck; rule-based, no model involved._\n"
+  },
+  {
+   "sample": "even",
+   "method": "kraken2_16gb_c0_1",
+   "kind": "quantitative",
+   "supports": [
+    "7 of 10 organisms known to be in the tube were reported at or above 0.10% (Enterococcus faecalis, Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica, Staphylococcus aureus).",
+    "Few extra species: 1 organism(s) not in the tube passed the 0.10% cutoff (precision 0.88).",
+    "1 organisms were within two-fold of the expected share (Enterococcus faecalis)."
+   ],
+   "not_supported": [
+    "Do not use these percentages: the profile is far from the known answer (Bray-Curtis 0.68 against genomic DNA).",
+    "Pseudomonas aeruginosa was reported at 3.80% versus 12.00% expected (0.3x): do not trust this organism's abundance from this run.",
+    "Escherichia coli was reported at 0.92% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.",
+    "Salmonella enterica was reported at 1.29% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.",
+    "Lactobacillus fermentum was reported at 61.52% versus 12.00% expected (5.1x): do not trust this organism's abundance from this run.",
+    "Staphylococcus aureus was reported at 1.51% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.",
+    "Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.",
+    "The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 15.95%. At cutoff 0% this run reported 20 species in total.",
+    "16.0% of the profile sits on organisms that are not in the tube.",
+    "Only 12% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.",
+    "The mock's headline shares (for example 12% per bacterium) are genomic DNA, not cell counts. A tool that reports cells or taxa, not reads, should be compared against the cell column instead.",
+    "Nothing below 2.0% can be judged from this tube; sensitivity to rarer organisms is untested.",
+    "A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification."
+   ],
+   "check_next": [
+    "Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.",
+    "Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.",
+    "Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples."
+   ],
+   "microbiology": [
+    "**Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.",
+    "**Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.",
+    "**Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.",
+    "**Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes."
+   ],
+   "scorecard": {
+    "found": 7,
+    "of": 10,
+    "false_species": 1,
+    "precision": 0.875,
+    "recall": 0.7,
+    "bray_curtis": 0.681,
+    "false_mass_pct": 15.99
+   },
+   "markdown": "# mockcheck report: even / kraken2_16gb_c0_1\n\n- Tool output type: **kraken2**\n- Mock: **ZymoBIOMICS D6300 (even)** (quantitative), truth basis for the score: **genomic DNA**\n- Species-call cutoff: **0.10%** of the species-level profile\n\n## Scorecard\n\n| Measure | Value |\n|---|---|\n| Organisms in tube found | 7 of 10 |\n| False species at cutoff | 1 |\n| Precision / recall / F1 | 0.88 / 0.70 / 0.78 |\n| Bray-Curtis distance to the known answer (0 best) | 0.681 |\n| Share of profile on organisms not in the tube | 16.0% |\n| Reads placed at species level | 12% |\n| Reads unclassified | 23% |\n\n_Relaxed reading (B. spizizenii counted as B. subtilis): 8 of 10 found, 0 false species. The strict numbers above stay the headline._\n\n## What this result supports\n\n- 7 of 10 organisms known to be in the tube were reported at or above 0.10% (Enterococcus faecalis, Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica, Staphylococcus aureus).\n- Few extra species: 1 organism(s) not in the tube passed the 0.10% cutoff (precision 0.88).\n- 1 organisms were within two-fold of the expected share (Enterococcus faecalis).\n\n## What it does not support\n\n- Do not use these percentages: the profile is far from the known answer (Bray-Curtis 0.68 against genomic DNA).\n- Pseudomonas aeruginosa was reported at 3.80% versus 12.00% expected (0.3x): do not trust this organism's abundance from this run.\n- Escherichia coli was reported at 0.92% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.\n- Salmonella enterica was reported at 1.29% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.\n- Lactobacillus fermentum was reported at 61.52% versus 12.00% expected (5.1x): do not trust this organism's abundance from this run.\n- Staphylococcus aureus was reported at 1.51% versus 12.00% expected (0.1x): do not trust this organism's abundance from this run.\n- Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.\n- The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 15.95%. At cutoff 0% this run reported 20 species in total.\n- 16.0% of the profile sits on organisms that are not in the tube.\n- Only 12% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.\n- The mock's headline shares (for example 12% per bacterium) are genomic DNA, not cell counts. A tool that reports cells or taxa, not reads, should be compared against the cell column instead.\n- Nothing below 2.0% can be judged from this tube; sensitivity to rarer organisms is untested.\n- A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification.\n\n## What to check next\n\n- Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.\n- Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.\n- Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples.\n\n## The microbiology behind the surprises\n\n- **Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.\n- **Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.\n- **Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.\n- **Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.\n\n## Cutoff sweep\n\n| Cutoff | Found | False species | Precision | Recall |\n|---|---|---|---|---|\n| 0.00% | 8 | 12 | 0.40 | 0.80 |\n| 0.01% | 7 | 3 | 0.70 | 0.70 |\n| 0.05% | 7 | 1 | 0.88 | 0.70 |\n| 0.10% | 7 | 1 | 0.88 | 0.70 |\n| 0.50% | 6 | 1 | 0.86 | 0.60 |\n| 1.00% | 5 | 1 | 0.83 | 0.50 |\n| 2.00% | 3 | 1 | 0.75 | 0.30 |\n\n## Per organism\n\n| Organism | Expected | Observed | Fold |\n|---|---|---|---|\n| Pseudomonas aeruginosa | 12.00% | 3.80% | 0.32x |\n| Escherichia coli | 12.00% | 0.92% | 0.08x |\n| Salmonella enterica | 12.00% | 1.29% | 0.11x |\n| Lactobacillus fermentum | 12.00% | 61.52% | 5.13x |\n| Enterococcus faecalis | 12.00% | 14.62% | 1.22x |\n| Staphylococcus aureus | 12.00% | 1.51% | 0.13x |\n| Listeria monocytogenes | 12.00% | 0.34% | 0.03x |\n| Bacillus subtilis | 12.00% | 0.00% | 0.00x |\n| Saccharomyces cerevisiae | 2.00% | 0.00% | 0.00x |\n| Cryptococcus neoformans | 2.00% | 0.00% | 0.00x |\n\n_Truth source: Zymo D6300 datasheet Table 1 (lot ZRC190633 onward); lot confirmed in Nicholls 2019 giz043 Table 4. Generated by mockcheck; rule-based, no model involved._\n"
+  },
+  {
+   "sample": "iso_Bacillus_subtilis",
+   "method": "kraken2_08gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Bacillus_subtilis / kraken2_08gb_c0_0\n\nTruth: **Bacillus subtilis** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 2 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Bacillus spizizenii 98.66%.\n- 99.5% went to other species of the same genus: the method cannot separate close relatives cleanly here.\n- The true organism is only 0.3% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 0.3464558846173587
+  },
+  {
+   "sample": "iso_Bacillus_subtilis",
+   "method": "kraken2_08gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Bacillus_subtilis / kraken2_08gb_c0_1\n\nTruth: **Bacillus subtilis** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 1 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Bacillus spizizenii 99.98%.\n- 100.0% went to other species of the same genus: the method cannot separate close relatives cleanly here.\n- The true organism is only 0.0% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 0.0
+  },
+  {
+   "sample": "iso_Bacillus_subtilis",
+   "method": "kraken2_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Bacillus_subtilis / kraken2_16gb_c0_0\n\nTruth: **Bacillus subtilis** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 3 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Bacillus spizizenii 98.50%.\n- 99.5% went to other species of the same genus: the method cannot separate close relatives cleanly here.\n- The true organism is only 0.4% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 0.39316903493191235
+  },
+  {
+   "sample": "iso_Bacillus_subtilis",
+   "method": "kraken2_16gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Bacillus_subtilis / kraken2_16gb_c0_1\n\nTruth: **Bacillus subtilis** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 1 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Bacillus spizizenii 99.97%.\n- 100.0% went to other species of the same genus: the method cannot separate close relatives cleanly here.\n- The true organism is only 0.0% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 0.0
+  },
+  {
+   "sample": "iso_Cryptococcus_neoformans",
+   "method": "kraken2_08gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Cryptococcus_neoformans / kraken2_08gb_c0_0\n\nTruth: **Cryptococcus neoformans** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 13 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Pseudomonas sp. cip-10 81.82%.\n- The true organism is only 0.0% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 0.0
+  },
+  {
+   "sample": "iso_Cryptococcus_neoformans",
+   "method": "kraken2_08gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Cryptococcus_neoformans / kraken2_08gb_c0_1\n\nTruth: **Cryptococcus neoformans** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 3 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Pseudomonas sp. cip-10 90.32%.\n- The true organism is only 0.0% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 0.0
+  },
+  {
+   "sample": "iso_Cryptococcus_neoformans",
+   "method": "kraken2_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Cryptococcus_neoformans / kraken2_16gb_c0_0\n\nTruth: **Cryptococcus neoformans** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 14 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Pseudomonas sp. cip-10 80.78%.\n- The true organism is only 0.0% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 0.0
+  },
+  {
+   "sample": "iso_Cryptococcus_neoformans",
+   "method": "kraken2_16gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Cryptococcus_neoformans / kraken2_16gb_c0_1\n\nTruth: **Cryptococcus neoformans** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 4 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Pseudomonas sp. cip-10 87.00%.\n- The true organism is only 0.0% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 0.0
+  },
+  {
+   "sample": "iso_Enterococcus_faecalis",
+   "method": "kraken2_08gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Enterococcus_faecalis / kraken2_08gb_c0_0\n\nTruth: **Enterococcus faecalis** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 99.8% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.76993756459446
+  },
+  {
+   "sample": "iso_Enterococcus_faecalis",
+   "method": "kraken2_08gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Enterococcus_faecalis / kraken2_08gb_c0_1\n\nTruth: **Enterococcus faecalis** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 100.0% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.98476770753999
+  },
+  {
+   "sample": "iso_Enterococcus_faecalis",
+   "method": "kraken2_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Enterococcus_faecalis / kraken2_16gb_c0_0\n\nTruth: **Enterococcus faecalis** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 99.8% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.77013982301797
+  },
+  {
+   "sample": "iso_Enterococcus_faecalis",
+   "method": "kraken2_16gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Enterococcus_faecalis / kraken2_16gb_c0_1\n\nTruth: **Enterococcus faecalis** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 100.0% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.98742270202285
+  },
+  {
+   "sample": "iso_Escherichia_coli",
+   "method": "kraken2_08gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Escherichia_coli / kraken2_08gb_c0_0\n\nTruth: **Escherichia coli** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 94.2% of the profile.\n\n## What it does not support\n\n- 11 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Shigella flexneri 0.67%.\n- 1.6% went to other species of the same genus: the method cannot separate close relatives cleanly here.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 94.17019587083112
+  },
+  {
+   "sample": "iso_Escherichia_coli",
+   "method": "kraken2_08gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Escherichia_coli / kraken2_08gb_c0_1\n\nTruth: **Escherichia coli** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 99.7% of the profile.\n\n## What it does not support\n\n- 2 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Citrobacter braakii 0.21%.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.67914438502673
+  },
+  {
+   "sample": "iso_Escherichia_coli",
+   "method": "kraken2_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Escherichia_coli / kraken2_16gb_c0_0\n\nTruth: **Escherichia coli** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 93.2% of the profile.\n\n## What it does not support\n\n- 11 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Shigella flexneri 0.70%.\n- 2.0% went to other species of the same genus: the method cannot separate close relatives cleanly here.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 93.17083162638264
+  },
+  {
+   "sample": "iso_Escherichia_coli",
+   "method": "kraken2_16gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Escherichia_coli / kraken2_16gb_c0_1\n\nTruth: **Escherichia coli** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 99.6% of the profile.\n\n## What it does not support\n\n- 1 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Homo sapiens 0.13%.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.63993453355155
+  },
+  {
+   "sample": "iso_Lactobacillus_fermentum",
+   "method": "kraken2_08gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Lactobacillus_fermentum / kraken2_08gb_c0_0\n\nTruth: **Lactobacillus fermentum** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 99.9% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.89735280519514
+  },
+  {
+   "sample": "iso_Lactobacillus_fermentum",
+   "method": "kraken2_08gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Lactobacillus_fermentum / kraken2_08gb_c0_1\n\nTruth: **Lactobacillus fermentum** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 100.0% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.99572868614386
+  },
+  {
+   "sample": "iso_Lactobacillus_fermentum",
+   "method": "kraken2_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Lactobacillus_fermentum / kraken2_16gb_c0_0\n\nTruth: **Lactobacillus fermentum** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 99.9% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.85506983164127
+  },
+  {
+   "sample": "iso_Lactobacillus_fermentum",
+   "method": "kraken2_16gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Lactobacillus_fermentum / kraken2_16gb_c0_1\n\nTruth: **Lactobacillus fermentum** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 100.0% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.99442668301506
+  },
+  {
+   "sample": "iso_Listeria_monocytogenes",
+   "method": "kraken2_08gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Listeria_monocytogenes / kraken2_08gb_c0_0\n\nTruth: **Listeria monocytogenes** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 83.9% of the profile.\n\n## What it does not support\n\n- 7 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Listeria innocua 7.33%.\n- 14.1% went to other species of the same genus: the method cannot separate close relatives cleanly here.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 83.93817861684437
+  },
+  {
+   "sample": "iso_Listeria_monocytogenes",
+   "method": "kraken2_08gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Listeria_monocytogenes / kraken2_08gb_c0_1\n\nTruth: **Listeria monocytogenes** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 100.0% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 100.0
+  },
+  {
+   "sample": "iso_Listeria_monocytogenes",
+   "method": "kraken2_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Listeria_monocytogenes / kraken2_16gb_c0_0\n\nTruth: **Listeria monocytogenes** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 85.1% of the profile.\n\n## What it does not support\n\n- 8 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Listeria innocua 6.42%.\n- 13.2% went to other species of the same genus: the method cannot separate close relatives cleanly here.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 85.07505117125312
+  },
+  {
+   "sample": "iso_Listeria_monocytogenes",
+   "method": "kraken2_16gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Listeria_monocytogenes / kraken2_16gb_c0_1\n\nTruth: **Listeria monocytogenes** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 99.4% of the profile.\n\n## What it does not support\n\n- 1 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Homo sapiens 0.39%.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.41291585127202
+  },
+  {
+   "sample": "iso_Pseudomonas_aeruginosa",
+   "method": "kraken2_08gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Pseudomonas_aeruginosa / kraken2_08gb_c0_0\n\nTruth: **Pseudomonas aeruginosa** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 93.0% of the profile.\n\n## What it does not support\n\n- 2 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Homo sapiens 5.51%.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 93.04488760481996
+  },
+  {
+   "sample": "iso_Pseudomonas_aeruginosa",
+   "method": "kraken2_08gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Pseudomonas_aeruginosa / kraken2_08gb_c0_1\n\nTruth: **Pseudomonas aeruginosa** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 98.0% of the profile.\n\n## What it does not support\n\n- 1 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Homo sapiens 1.83%.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 98.01359121798222
+  },
+  {
+   "sample": "iso_Pseudomonas_aeruginosa",
+   "method": "kraken2_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Pseudomonas_aeruginosa / kraken2_16gb_c0_0\n\nTruth: **Pseudomonas aeruginosa** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 89.4% of the profile.\n\n## What it does not support\n\n- 1 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Homo sapiens 9.09%.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 89.37306466813266
+  },
+  {
+   "sample": "iso_Pseudomonas_aeruginosa",
+   "method": "kraken2_16gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Pseudomonas_aeruginosa / kraken2_16gb_c0_1\n\nTruth: **Pseudomonas aeruginosa** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 93.0% of the profile.\n\n## What it does not support\n\n- 1 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Homo sapiens 6.77%.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 93.04013031245373
+  },
+  {
+   "sample": "iso_Saccharomyces_cerevisiae",
+   "method": "kraken2_08gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Saccharomyces_cerevisiae / kraken2_08gb_c0_0\n\nTruth: **Saccharomyces cerevisiae** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 16 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Actinomyces oris 28.56%.\n- The true organism is only 0.0% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 0.0
+  },
+  {
+   "sample": "iso_Saccharomyces_cerevisiae",
+   "method": "kraken2_08gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Saccharomyces_cerevisiae / kraken2_08gb_c0_1\n\nTruth: **Saccharomyces cerevisiae** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 7 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Actinomyces oris 43.46%.\n- The true organism is only 0.0% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 0.0
+  },
+  {
+   "sample": "iso_Saccharomyces_cerevisiae",
+   "method": "kraken2_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Saccharomyces_cerevisiae / kraken2_16gb_c0_0\n\nTruth: **Saccharomyces cerevisiae** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 20 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Homo sapiens 25.37%.\n- The true organism is only 0.0% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 0.0
+  },
+  {
+   "sample": "iso_Saccharomyces_cerevisiae",
+   "method": "kraken2_16gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Saccharomyces_cerevisiae / kraken2_16gb_c0_1\n\nTruth: **Saccharomyces cerevisiae** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 13 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Escherichia coli 35.80%.\n- The true organism is only 0.0% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 0.0
+  },
+  {
+   "sample": "iso_Salmonella_enterica",
+   "method": "kraken2_08gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Salmonella_enterica / kraken2_08gb_c0_0\n\nTruth: **Salmonella enterica** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 98.8% of the profile.\n\n## What it does not support\n\n- 2 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Salmonella bongori 0.28%.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 98.78073156106336
+  },
+  {
+   "sample": "iso_Salmonella_enterica",
+   "method": "kraken2_08gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Salmonella_enterica / kraken2_08gb_c0_1\n\nTruth: **Salmonella enterica** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 99.6% of the profile.\n\n## What it does not support\n\n- 2 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Enterococcus faecalis 0.31%.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.58419958419958
+  },
+  {
+   "sample": "iso_Salmonella_enterica",
+   "method": "kraken2_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Salmonella_enterica / kraken2_16gb_c0_0\n\nTruth: **Salmonella enterica** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 98.9% of the profile.\n\n## What it does not support\n\n- 2 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Salmonella bongori 0.29%.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 98.92036092585327
+  },
+  {
+   "sample": "iso_Salmonella_enterica",
+   "method": "kraken2_16gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Salmonella_enterica / kraken2_16gb_c0_1\n\nTruth: **Salmonella enterica** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 99.4% of the profile.\n\n## What it does not support\n\n- 1 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Enterococcus faecalis 0.37%.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.3953488372093
+  },
+  {
+   "sample": "iso_Staphylococcus_aureus",
+   "method": "kraken2_08gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Staphylococcus_aureus / kraken2_08gb_c0_0\n\nTruth: **Staphylococcus aureus** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 96.6% of the profile.\n\n## What it does not support\n\n- 7 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Staphylococcus agnetis 0.56%.\n- 2.4% went to other species of the same genus: the method cannot separate close relatives cleanly here.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 96.61026889129988
+  },
+  {
+   "sample": "iso_Staphylococcus_aureus",
+   "method": "kraken2_08gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Staphylococcus_aureus / kraken2_08gb_c0_1\n\nTruth: **Staphylococcus aureus** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 99.5% of the profile.\n\n## What it does not support\n\n- 5 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Staphylococcus schweitzeri 0.11%.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.45887445887446
+  },
+  {
+   "sample": "iso_Staphylococcus_aureus",
+   "method": "kraken2_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Staphylococcus_aureus / kraken2_16gb_c0_0\n\nTruth: **Staphylococcus aureus** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 96.0% of the profile.\n\n## What it does not support\n\n- 8 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Streptococcus agalactiae 1.19%.\n- 2.1% went to other species of the same genus: the method cannot separate close relatives cleanly here.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 95.98537394451147
+  },
+  {
+   "sample": "iso_Staphylococcus_aureus",
+   "method": "kraken2_16gb_c0_1",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Staphylococcus_aureus / kraken2_16gb_c0_1\n\nTruth: **Staphylococcus aureus** (single isolate). Tool output type: kraken2.\n\n## What this supports\n\n- The true organism holds 99.6% of the profile.\n\n## What it does not support\n\n- 1 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Homo sapiens 0.16%.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.61328480436761
+  },
+  {
+   "sample": "log",
+   "method": "kraken2_08gb_c0_0",
+   "kind": "presence",
+   "supports": [
+    "4 of 10 organisms known to be in the tube were reported at or above 0.10% (Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica)."
+   ],
+   "not_supported": [
+    "The dominant organism (Listeria monocytogenes) came out at 50.28% against 89.10% expected.",
+    "Staphylococcus aureus is expected at 8.9e-05%, so the run cannot show whether the method sees organisms that rare. That is about 0.4 expected reads in this sample.",
+    "Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Enterococcus faecalis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Escherichia coli was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Staphylococcus aureus was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.",
+    "The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 9.14%, Listeria innocua 4.60%, Listeria swaminathanii 1.56%, Listeria welshimeri 1.14%. At cutoff 0% this run reported 126 species in total.",
+    "Species from pathogen-containing genera were reported (Mycobacterium canetti 0.44%, Xanthomonas euvesicatoria 0.22%) although nothing like them is in the tube. A species name on its own is not a detection of a threat.",
+    "19.8% of the profile sits on organisms that are not in the tube.",
+    "Only 5% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.",
+    "A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification."
+   ],
+   "check_next": [
+    "Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.",
+    "Before escalating any call from a pathogen-containing genus, require corroboration: many reads spread across the genome (not a few conserved regions), a second tool or a marker-gene check, and a negative control run through the same database.",
+    "Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.",
+    "No cutoff up to 2% removes all but one false species. Consider a stricter confidence setting or a different tool for presence calls.",
+    "Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples."
+   ],
+   "microbiology": [
+    "**Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.",
+    "**Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.",
+    "**Enterococcus faecalis** (Gram-positive, about 3.0 Mb): Genus-level agreement is easy, species-level less so when relatives are in the database.",
+    "**Escherichia coli** (Gram-negative, about 4.6-5.0 Mb): By k-mers E. coli and Shigella are near-identical, so a species label cannot separate harmless from pathogenic lineages. Needs gene or strain-level follow-up.",
+    "**Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.",
+    "**Staphylococcus aureus** (Gram-positive, about 2.8 Mb): Very low-abundance S. aureus in the log mock (0.000089 percent) is below what 2 million reads can show at all; do not read its absence as a method failure.",
+    "**Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria innocua** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria swaminathanii** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria welshimeri** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria seeligeri** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria ivanovii** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Why a harmless mix produces pathogen-genus calls:** short reads from conserved genes (ribosomal and housekeeping genes) match many genomes in a database, and species in large genera such as Mycobacterium or Burkholderia share long stretches of sequence. A likely cause (not verified for this specific run): low-confidence k-mer assignment lands a few reads on a better-known relative."
+   ],
+   "scorecard": {
+    "found": 4,
+    "of": 10,
+    "false_species": 10,
+    "precision": 0.286,
+    "recall": 0.4,
+    "bray_curtis": null,
+    "false_mass_pct": 19.81
+   },
+   "markdown": "# mockcheck report: log / kraken2_08gb_c0_0\n\n- Tool output type: **kraken2**\n- Mock: **ZymoBIOMICS D6310 (log distribution)** (presence), truth basis for the score: **genomic DNA**\n- Species-call cutoff: **0.10%** of the species-level profile\n\n## Scorecard\n\n| Measure | Value |\n|---|---|\n| Organisms in tube found | 4 of 10 |\n| False species at cutoff | 10 |\n| Precision / recall / F1 | 0.29 / 0.40 / 0.33 |\n| Share of profile on organisms not in the tube | 19.8% |\n| Reads placed at species level | 5% |\n| Reads unclassified | 15% |\n\n_Relaxed reading (B. spizizenii counted as B. subtilis): 5 of 10 found, 9 false species. The strict numbers above stay the headline._\n\n## What this result supports\n\n- 4 of 10 organisms known to be in the tube were reported at or above 0.10% (Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica).\n\n## What it does not support\n\n- The dominant organism (Listeria monocytogenes) came out at 50.28% against 89.10% expected.\n- Staphylococcus aureus is expected at 8.9e-05%, so the run cannot show whether the method sees organisms that rare. That is about 0.4 expected reads in this sample.\n- Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Enterococcus faecalis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Escherichia coli was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Staphylococcus aureus was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.\n- The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 9.14%, Listeria innocua 4.60%, Listeria swaminathanii 1.56%, Listeria welshimeri 1.14%. At cutoff 0% this run reported 126 species in total.\n- Species from pathogen-containing genera were reported (Mycobacterium canetti 0.44%, Xanthomonas euvesicatoria 0.22%) although nothing like them is in the tube. A species name on its own is not a detection of a threat.\n- 19.8% of the profile sits on organisms that are not in the tube.\n- Only 5% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.\n- A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification.\n\n## What to check next\n\n- Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.\n- Before escalating any call from a pathogen-containing genus, require corroboration: many reads spread across the genome (not a few conserved regions), a second tool or a marker-gene check, and a negative control run through the same database.\n- Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.\n- No cutoff up to 2% removes all but one false species. Consider a stricter confidence setting or a different tool for presence calls.\n- Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples.\n\n## The microbiology behind the surprises\n\n- **Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.\n- **Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.\n- **Enterococcus faecalis** (Gram-positive, about 3.0 Mb): Genus-level agreement is easy, species-level less so when relatives are in the database.\n- **Escherichia coli** (Gram-negative, about 4.6-5.0 Mb): By k-mers E. coli and Shigella are near-identical, so a species label cannot separate harmless from pathogenic lineages. Needs gene or strain-level follow-up.\n- **Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.\n- **Staphylococcus aureus** (Gram-positive, about 2.8 Mb): Very low-abundance S. aureus in the log mock (0.000089 percent) is below what 2 million reads can show at all; do not read its absence as a method failure.\n- **Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria innocua** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria swaminathanii** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria welshimeri** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria seeligeri** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria ivanovii** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Why a harmless mix produces pathogen-genus calls:** short reads from conserved genes (ribosomal and housekeeping genes) match many genomes in a database, and species in large genera such as Mycobacterium or Burkholderia share long stretches of sequence. A likely cause (not verified for this specific run): low-confidence k-mer assignment lands a few reads on a better-known relative.\n\n## Cutoff sweep\n\n| Cutoff | Found | False species | Precision | Recall |\n|---|---|---|---|---|\n| 0.00% | 7 | 119 | 0.06 | 0.70 |\n| 0.01% | 7 | 30 | 0.19 | 0.70 |\n| 0.05% | 5 | 11 | 0.31 | 0.50 |\n| 0.10% | 4 | 10 | 0.29 | 0.40 |\n| 0.50% | 2 | 6 | 0.25 | 0.20 |\n| 1.00% | 2 | 5 | 0.29 | 0.20 |\n| 2.00% | 2 | 2 | 0.50 | 0.20 |\n\n_Truth source: Nicholls 2019 giz043 text, product D6310 lot ZRC190842. Generated by mockcheck; rule-based, no model involved._\n"
+  },
+  {
+   "sample": "log",
+   "method": "kraken2_08gb_c0_1",
+   "kind": "presence",
+   "supports": [
+    "5 of 10 organisms known to be in the tube were reported at or above 0.10% (Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica)."
+   ],
+   "not_supported": [
+    "The dominant organism (Listeria monocytogenes) came out at 32.42% against 89.10% expected.",
+    "Staphylococcus aureus is expected at 8.9e-05%, so the run cannot show whether the method sees organisms that rare. That is about 0.4 expected reads in this sample.",
+    "Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Enterococcus faecalis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Staphylococcus aureus was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.",
+    "The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 16.16%, Homo sapiens 0.32%, Actinomyces oris 0.21%, Listeria seeligeri 0.11%. At cutoff 0% this run reported 12 species in total.",
+    "Species from pathogen-containing genera were reported (Acinetobacter radioresistens 0.11%) although nothing like them is in the tube. A species name on its own is not a detection of a threat.",
+    "17.1% of the profile sits on organisms that are not in the tube.",
+    "Only 0% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.",
+    "71% of reads were unclassified, so these percentages describe only the classified remainder.",
+    "A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification."
+   ],
+   "check_next": [
+    "Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.",
+    "Before escalating any call from a pathogen-containing genus, require corroboration: many reads spread across the genome (not a few conserved regions), a second tool or a marker-gene check, and a negative control run through the same database.",
+    "Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.",
+    "Compare against a larger database or a lower confidence setting; a high unclassified share usually means the index is too small or the confidence threshold too strict.",
+    "False species fall as the cutoff rises. The lowest cutoff here with at most one false species is 0.50% (recall 0.40). This was tuned on one mock, so confirm it with a negative control from your own sample type before relying on it.",
+    "Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples."
+   ],
+   "microbiology": [
+    "**Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.",
+    "**Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.",
+    "**Enterococcus faecalis** (Gram-positive, about 3.0 Mb): Genus-level agreement is easy, species-level less so when relatives are in the database.",
+    "**Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.",
+    "**Staphylococcus aureus** (Gram-positive, about 2.8 Mb): Very low-abundance S. aureus in the log mock (0.000089 percent) is below what 2 million reads can show at all; do not read its absence as a method failure.",
+    "**Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria seeligeri** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Bacillus mycoides** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Bacillus atrophaeus** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Why a harmless mix produces pathogen-genus calls:** short reads from conserved genes (ribosomal and housekeeping genes) match many genomes in a database, and species in large genera such as Mycobacterium or Burkholderia share long stretches of sequence. A likely cause (not verified for this specific run): low-confidence k-mer assignment lands a few reads on a better-known relative."
+   ],
+   "scorecard": {
+    "found": 5,
+    "of": 10,
+    "false_species": 7,
+    "precision": 0.417,
+    "recall": 0.5,
+    "bray_curtis": null,
+    "false_mass_pct": 17.11
+   },
+   "markdown": "# mockcheck report: log / kraken2_08gb_c0_1\n\n- Tool output type: **kraken2**\n- Mock: **ZymoBIOMICS D6310 (log distribution)** (presence), truth basis for the score: **genomic DNA**\n- Species-call cutoff: **0.10%** of the species-level profile\n\n## Scorecard\n\n| Measure | Value |\n|---|---|\n| Organisms in tube found | 5 of 10 |\n| False species at cutoff | 7 |\n| Precision / recall / F1 | 0.42 / 0.50 / 0.45 |\n| Share of profile on organisms not in the tube | 17.1% |\n| Reads placed at species level | 0% |\n| Reads unclassified | 71% |\n\n_Relaxed reading (B. spizizenii counted as B. subtilis): 6 of 10 found, 6 false species. The strict numbers above stay the headline._\n\n## What this result supports\n\n- 5 of 10 organisms known to be in the tube were reported at or above 0.10% (Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica).\n\n## What it does not support\n\n- The dominant organism (Listeria monocytogenes) came out at 32.42% against 89.10% expected.\n- Staphylococcus aureus is expected at 8.9e-05%, so the run cannot show whether the method sees organisms that rare. That is about 0.4 expected reads in this sample.\n- Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Enterococcus faecalis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Staphylococcus aureus was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.\n- The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 16.16%, Homo sapiens 0.32%, Actinomyces oris 0.21%, Listeria seeligeri 0.11%. At cutoff 0% this run reported 12 species in total.\n- Species from pathogen-containing genera were reported (Acinetobacter radioresistens 0.11%) although nothing like them is in the tube. A species name on its own is not a detection of a threat.\n- 17.1% of the profile sits on organisms that are not in the tube.\n- Only 0% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.\n- 71% of reads were unclassified, so these percentages describe only the classified remainder.\n- A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification.\n\n## What to check next\n\n- Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.\n- Before escalating any call from a pathogen-containing genus, require corroboration: many reads spread across the genome (not a few conserved regions), a second tool or a marker-gene check, and a negative control run through the same database.\n- Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.\n- Compare against a larger database or a lower confidence setting; a high unclassified share usually means the index is too small or the confidence threshold too strict.\n- False species fall as the cutoff rises. The lowest cutoff here with at most one false species is 0.50% (recall 0.40). This was tuned on one mock, so confirm it with a negative control from your own sample type before relying on it.\n- Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples.\n\n## The microbiology behind the surprises\n\n- **Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.\n- **Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.\n- **Enterococcus faecalis** (Gram-positive, about 3.0 Mb): Genus-level agreement is easy, species-level less so when relatives are in the database.\n- **Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.\n- **Staphylococcus aureus** (Gram-positive, about 2.8 Mb): Very low-abundance S. aureus in the log mock (0.000089 percent) is below what 2 million reads can show at all; do not read its absence as a method failure.\n- **Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria seeligeri** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Bacillus mycoides** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Bacillus atrophaeus** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Why a harmless mix produces pathogen-genus calls:** short reads from conserved genes (ribosomal and housekeeping genes) match many genomes in a database, and species in large genera such as Mycobacterium or Burkholderia share long stretches of sequence. A likely cause (not verified for this specific run): low-confidence k-mer assignment lands a few reads on a better-known relative.\n\n## Cutoff sweep\n\n| Cutoff | Found | False species | Precision | Recall |\n|---|---|---|---|---|\n| 0.00% | 5 | 7 | 0.42 | 0.50 |\n| 0.01% | 5 | 7 | 0.42 | 0.50 |\n| 0.05% | 5 | 7 | 0.42 | 0.50 |\n| 0.10% | 5 | 7 | 0.42 | 0.50 |\n| 0.50% | 4 | 1 | 0.80 | 0.40 |\n| 1.00% | 3 | 1 | 0.75 | 0.30 |\n| 2.00% | 2 | 1 | 0.67 | 0.20 |\n\n_Truth source: Nicholls 2019 giz043 text, product D6310 lot ZRC190842. Generated by mockcheck; rule-based, no model involved._\n"
+  },
+  {
+   "sample": "log",
+   "method": "kraken2_16gb_c0_0",
+   "kind": "presence",
+   "supports": [
+    "4 of 10 organisms known to be in the tube were reported at or above 0.10% (Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica)."
+   ],
+   "not_supported": [
+    "The dominant organism (Listeria monocytogenes) came out at 54.29% against 89.10% expected.",
+    "Staphylococcus aureus is expected at 8.9e-05%, so the run cannot show whether the method sees organisms that rare. That is about 0.4 expected reads in this sample.",
+    "Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Enterococcus faecalis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Escherichia coli was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Staphylococcus aureus was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.",
+    "The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 7.70%, Listeria innocua 4.21%, Listeria swaminathanii 1.35%, Listeria welshimeri 1.22%. At cutoff 0% this run reported 155 species in total.",
+    "Species from pathogen-containing genera were reported (Mycobacterium canetti 0.40%, Xanthomonas euvesicatoria 0.12%) although nothing like them is in the tube. A species name on its own is not a detection of a threat.",
+    "17.6% of the profile sits on organisms that are not in the tube.",
+    "Only 8% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.",
+    "A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification."
+   ],
+   "check_next": [
+    "Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.",
+    "Before escalating any call from a pathogen-containing genus, require corroboration: many reads spread across the genome (not a few conserved regions), a second tool or a marker-gene check, and a negative control run through the same database.",
+    "Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.",
+    "No cutoff up to 2% removes all but one false species. Consider a stricter confidence setting or a different tool for presence calls.",
+    "Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples."
+   ],
+   "microbiology": [
+    "**Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.",
+    "**Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.",
+    "**Enterococcus faecalis** (Gram-positive, about 3.0 Mb): Genus-level agreement is easy, species-level less so when relatives are in the database.",
+    "**Escherichia coli** (Gram-negative, about 4.6-5.0 Mb): By k-mers E. coli and Shigella are near-identical, so a species label cannot separate harmless from pathogenic lineages. Needs gene or strain-level follow-up.",
+    "**Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.",
+    "**Staphylococcus aureus** (Gram-positive, about 2.8 Mb): Very low-abundance S. aureus in the log mock (0.000089 percent) is below what 2 million reads can show at all; do not read its absence as a method failure.",
+    "**Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria innocua** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria swaminathanii** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria welshimeri** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria seeligeri** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria ivanovii** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Why a harmless mix produces pathogen-genus calls:** short reads from conserved genes (ribosomal and housekeeping genes) match many genomes in a database, and species in large genera such as Mycobacterium or Burkholderia share long stretches of sequence. A likely cause (not verified for this specific run): low-confidence k-mer assignment lands a few reads on a better-known relative."
+   ],
+   "scorecard": {
+    "found": 4,
+    "of": 10,
+    "false_species": 9,
+    "precision": 0.308,
+    "recall": 0.4,
+    "bray_curtis": null,
+    "false_mass_pct": 17.64
+   },
+   "markdown": "# mockcheck report: log / kraken2_16gb_c0_0\n\n- Tool output type: **kraken2**\n- Mock: **ZymoBIOMICS D6310 (log distribution)** (presence), truth basis for the score: **genomic DNA**\n- Species-call cutoff: **0.10%** of the species-level profile\n\n## Scorecard\n\n| Measure | Value |\n|---|---|\n| Organisms in tube found | 4 of 10 |\n| False species at cutoff | 9 |\n| Precision / recall / F1 | 0.31 / 0.40 / 0.35 |\n| Share of profile on organisms not in the tube | 17.6% |\n| Reads placed at species level | 8% |\n| Reads unclassified | 2% |\n\n_Relaxed reading (B. spizizenii counted as B. subtilis): 5 of 10 found, 8 false species. The strict numbers above stay the headline._\n\n## What this result supports\n\n- 4 of 10 organisms known to be in the tube were reported at or above 0.10% (Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica).\n\n## What it does not support\n\n- The dominant organism (Listeria monocytogenes) came out at 54.29% against 89.10% expected.\n- Staphylococcus aureus is expected at 8.9e-05%, so the run cannot show whether the method sees organisms that rare. That is about 0.4 expected reads in this sample.\n- Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Enterococcus faecalis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Escherichia coli was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Staphylococcus aureus was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.\n- The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 7.70%, Listeria innocua 4.21%, Listeria swaminathanii 1.35%, Listeria welshimeri 1.22%. At cutoff 0% this run reported 155 species in total.\n- Species from pathogen-containing genera were reported (Mycobacterium canetti 0.40%, Xanthomonas euvesicatoria 0.12%) although nothing like them is in the tube. A species name on its own is not a detection of a threat.\n- 17.6% of the profile sits on organisms that are not in the tube.\n- Only 8% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.\n- A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification.\n\n## What to check next\n\n- Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.\n- Before escalating any call from a pathogen-containing genus, require corroboration: many reads spread across the genome (not a few conserved regions), a second tool or a marker-gene check, and a negative control run through the same database.\n- Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.\n- No cutoff up to 2% removes all but one false species. Consider a stricter confidence setting or a different tool for presence calls.\n- Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples.\n\n## The microbiology behind the surprises\n\n- **Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.\n- **Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.\n- **Enterococcus faecalis** (Gram-positive, about 3.0 Mb): Genus-level agreement is easy, species-level less so when relatives are in the database.\n- **Escherichia coli** (Gram-negative, about 4.6-5.0 Mb): By k-mers E. coli and Shigella are near-identical, so a species label cannot separate harmless from pathogenic lineages. Needs gene or strain-level follow-up.\n- **Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.\n- **Staphylococcus aureus** (Gram-positive, about 2.8 Mb): Very low-abundance S. aureus in the log mock (0.000089 percent) is below what 2 million reads can show at all; do not read its absence as a method failure.\n- **Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria innocua** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria swaminathanii** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria welshimeri** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria seeligeri** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria ivanovii** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Why a harmless mix produces pathogen-genus calls:** short reads from conserved genes (ribosomal and housekeeping genes) match many genomes in a database, and species in large genera such as Mycobacterium or Burkholderia share long stretches of sequence. A likely cause (not verified for this specific run): low-confidence k-mer assignment lands a few reads on a better-known relative.\n\n## Cutoff sweep\n\n| Cutoff | Found | False species | Precision | Recall |\n|---|---|---|---|---|\n| 0.00% | 8 | 147 | 0.05 | 0.80 |\n| 0.01% | 7 | 28 | 0.20 | 0.70 |\n| 0.05% | 6 | 11 | 0.35 | 0.60 |\n| 0.10% | 4 | 9 | 0.31 | 0.40 |\n| 0.50% | 2 | 6 | 0.25 | 0.20 |\n| 1.00% | 2 | 4 | 0.33 | 0.20 |\n| 2.00% | 2 | 2 | 0.50 | 0.20 |\n\n_Truth source: Nicholls 2019 giz043 text, product D6310 lot ZRC190842. Generated by mockcheck; rule-based, no model involved._\n"
+  },
+  {
+   "sample": "log",
+   "method": "kraken2_16gb_c0_1",
+   "kind": "presence",
+   "supports": [
+    "5 of 10 organisms known to be in the tube were reported at or above 0.10% (Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica)."
+   ],
+   "not_supported": [
+    "The dominant organism (Listeria monocytogenes) came out at 39.61% against 89.10% expected.",
+    "Staphylococcus aureus is expected at 8.9e-05%, so the run cannot show whether the method sees organisms that rare. That is about 0.4 expected reads in this sample.",
+    "Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Enterococcus faecalis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Staphylococcus aureus was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.",
+    "The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 16.83%, Homo sapiens 0.32%, Listeria innocua 0.15%. At cutoff 0% this run reported 16 species in total.",
+    "17.6% of the profile sits on organisms that are not in the tube.",
+    "Only 1% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.",
+    "A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification."
+   ],
+   "check_next": [
+    "Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.",
+    "Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.",
+    "False species fall as the cutoff rises. The lowest cutoff here with at most one false species is 0.50% (recall 0.30). This was tuned on one mock, so confirm it with a negative control from your own sample type before relying on it.",
+    "Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples."
+   ],
+   "microbiology": [
+    "**Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.",
+    "**Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.",
+    "**Enterococcus faecalis** (Gram-positive, about 3.0 Mb): Genus-level agreement is easy, species-level less so when relatives are in the database.",
+    "**Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.",
+    "**Staphylococcus aureus** (Gram-positive, about 2.8 Mb): Very low-abundance S. aureus in the log mock (0.000089 percent) is below what 2 million reads can show at all; do not read its absence as a method failure.",
+    "**Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria innocua** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes."
+   ],
+   "scorecard": {
+    "found": 5,
+    "of": 10,
+    "false_species": 3,
+    "precision": 0.625,
+    "recall": 0.5,
+    "bray_curtis": null,
+    "false_mass_pct": 17.58
+   },
+   "markdown": "# mockcheck report: log / kraken2_16gb_c0_1\n\n- Tool output type: **kraken2**\n- Mock: **ZymoBIOMICS D6310 (log distribution)** (presence), truth basis for the score: **genomic DNA**\n- Species-call cutoff: **0.10%** of the species-level profile\n\n## Scorecard\n\n| Measure | Value |\n|---|---|\n| Organisms in tube found | 5 of 10 |\n| False species at cutoff | 3 |\n| Precision / recall / F1 | 0.62 / 0.50 / 0.56 |\n| Share of profile on organisms not in the tube | 17.6% |\n| Reads placed at species level | 1% |\n| Reads unclassified | 22% |\n\n_Relaxed reading (B. spizizenii counted as B. subtilis): 6 of 10 found, 2 false species. The strict numbers above stay the headline._\n\n## What this result supports\n\n- 5 of 10 organisms known to be in the tube were reported at or above 0.10% (Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica).\n\n## What it does not support\n\n- The dominant organism (Listeria monocytogenes) came out at 39.61% against 89.10% expected.\n- Staphylococcus aureus is expected at 8.9e-05%, so the run cannot show whether the method sees organisms that rare. That is about 0.4 expected reads in this sample.\n- Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Enterococcus faecalis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Staphylococcus aureus was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.\n- The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 16.83%, Homo sapiens 0.32%, Listeria innocua 0.15%. At cutoff 0% this run reported 16 species in total.\n- 17.6% of the profile sits on organisms that are not in the tube.\n- Only 1% of reads were assigned at species level; the rest stopped at genus or above. Raw Kraken2 species percentages therefore do not add up to the sample, and read-share is not abundance.\n- A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification.\n\n## What to check next\n\n- Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.\n- Run Bracken on the same Kraken2 report to redistribute genus-level reads to species before quoting abundances.\n- False species fall as the cutoff rises. The lowest cutoff here with at most one false species is 0.50% (recall 0.30). This was tuned on one mock, so confirm it with a negative control from your own sample type before relying on it.\n- Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples.\n\n## The microbiology behind the surprises\n\n- **Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.\n- **Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.\n- **Enterococcus faecalis** (Gram-positive, about 3.0 Mb): Genus-level agreement is easy, species-level less so when relatives are in the database.\n- **Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.\n- **Staphylococcus aureus** (Gram-positive, about 2.8 Mb): Very low-abundance S. aureus in the log mock (0.000089 percent) is below what 2 million reads can show at all; do not read its absence as a method failure.\n- **Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria innocua** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n\n## Cutoff sweep\n\n| Cutoff | Found | False species | Precision | Recall |\n|---|---|---|---|---|\n| 0.00% | 5 | 11 | 0.31 | 0.50 |\n| 0.01% | 5 | 11 | 0.31 | 0.50 |\n| 0.05% | 5 | 4 | 0.56 | 0.50 |\n| 0.10% | 5 | 3 | 0.62 | 0.50 |\n| 0.50% | 3 | 1 | 0.75 | 0.30 |\n| 1.00% | 2 | 1 | 0.67 | 0.20 |\n| 2.00% | 2 | 1 | 0.67 | 0.20 |\n\n_Truth source: Nicholls 2019 giz043 text, product D6310 lot ZRC190842. Generated by mockcheck; rule-based, no model involved._\n"
+  },
+  {
+   "sample": "even",
+   "method": "bracken_16gb_c0_0",
+   "kind": "quantitative",
+   "supports": [
+    "8 of 10 organisms known to be in the tube were reported at or above 0.10% (Bacillus subtilis, Enterococcus faecalis, Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica, Staphylococcus aureus).",
+    "The abundance profile is close to the known answer (Bray-Curtis 0.22 against genomic DNA; 0 is perfect, 1 is no overlap).",
+    "7 organisms were within two-fold of the expected share (Pseudomonas aeruginosa, Escherichia coli, Salmonella enterica, Lactobacillus fermentum, Enterococcus faecalis, Staphylococcus aureus, Listeria monocytogenes)."
+   ],
+   "not_supported": [
+    "Bacillus subtilis was reported at 0.31% versus 12.00% expected (0.0x): do not trust this organism's abundance from this run.",
+    "Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 11.56%, Staphylococcus sp. sm9054 0.53%, Xanthomonas euvesicatoria 0.36%, Shigella flexneri 0.35%. At cutoff 0% this run reported 1116 species in total.",
+    "Species from pathogen-containing genera were reported (Xanthomonas euvesicatoria 0.36%, Shigella flexneri 0.35%, Mycobacterium canetti 0.15%) although nothing like them is in the tube. A species name on its own is not a detection of a threat.",
+    "14.2% of the profile sits on organisms that are not in the tube.",
+    "The mock's headline shares (for example 12% per bacterium) are genomic DNA, not cell counts. A tool that reports cells or taxa, not reads, should be compared against the cell column instead.",
+    "Nothing below 2.0% can be judged from this tube; sensitivity to rarer organisms is untested.",
+    "A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification."
+   ],
+   "check_next": [
+    "Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Before escalating any call from a pathogen-containing genus, require corroboration: many reads spread across the genome (not a few conserved regions), a second tool or a marker-gene check, and a negative control run through the same database.",
+    "False species fall as the cutoff rises. The lowest cutoff here with at most one false species is 1.00% (recall 0.70). This was tuned on one mock, so confirm it with a negative control from your own sample type before relying on it.",
+    "Run a single-organism control for the largest false call (Bacillus spizizenii) to see where the reads really come from.",
+    "Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples."
+   ],
+   "microbiology": [
+    "**Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.",
+    "**Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.",
+    "**Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Staphylococcus sp. sm9054** shares a genus with Staphylococcus aureus: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria innocua** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Why a harmless mix produces pathogen-genus calls:** short reads from conserved genes (ribosomal and housekeeping genes) match many genomes in a database, and species in large genera such as Mycobacterium or Burkholderia share long stretches of sequence. A likely cause (not verified for this specific run): low-confidence k-mer assignment lands a few reads on a better-known relative."
+   ],
+   "scorecard": {
+    "found": 8,
+    "of": 10,
+    "false_species": 6,
+    "precision": 0.571,
+    "recall": 0.8,
+    "bray_curtis": 0.223,
+    "false_mass_pct": 14.16
+   },
+   "markdown": "# mockcheck report: even / bracken_16gb_c0_0\n\n- Tool output type: **bracken**\n- Mock: **ZymoBIOMICS D6300 (even)** (quantitative), truth basis for the score: **genomic DNA**\n- Species-call cutoff: **0.10%** of the species-level profile\n\n## Scorecard\n\n| Measure | Value |\n|---|---|\n| Organisms in tube found | 8 of 10 |\n| False species at cutoff | 6 |\n| Precision / recall / F1 | 0.57 / 0.80 / 0.67 |\n| Bray-Curtis distance to the known answer (0 best) | 0.223 |\n| Share of profile on organisms not in the tube | 14.2% |\n| Reads placed at species level | 100% |\n\n## What this result supports\n\n- 8 of 10 organisms known to be in the tube were reported at or above 0.10% (Bacillus subtilis, Enterococcus faecalis, Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica, Staphylococcus aureus).\n- The abundance profile is close to the known answer (Bray-Curtis 0.22 against genomic DNA; 0 is perfect, 1 is no overlap).\n- 7 organisms were within two-fold of the expected share (Pseudomonas aeruginosa, Escherichia coli, Salmonella enterica, Lactobacillus fermentum, Enterococcus faecalis, Staphylococcus aureus, Listeria monocytogenes).\n\n## What it does not support\n\n- Bacillus subtilis was reported at 0.31% versus 12.00% expected (0.0x): do not trust this organism's abundance from this run.\n- Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 11.56%, Staphylococcus sp. sm9054 0.53%, Xanthomonas euvesicatoria 0.36%, Shigella flexneri 0.35%. At cutoff 0% this run reported 1116 species in total.\n- Species from pathogen-containing genera were reported (Xanthomonas euvesicatoria 0.36%, Shigella flexneri 0.35%, Mycobacterium canetti 0.15%) although nothing like them is in the tube. A species name on its own is not a detection of a threat.\n- 14.2% of the profile sits on organisms that are not in the tube.\n- The mock's headline shares (for example 12% per bacterium) are genomic DNA, not cell counts. A tool that reports cells or taxa, not reads, should be compared against the cell column instead.\n- Nothing below 2.0% can be judged from this tube; sensitivity to rarer organisms is untested.\n- A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification.\n\n## What to check next\n\n- Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Before escalating any call from a pathogen-containing genus, require corroboration: many reads spread across the genome (not a few conserved regions), a second tool or a marker-gene check, and a negative control run through the same database.\n- False species fall as the cutoff rises. The lowest cutoff here with at most one false species is 1.00% (recall 0.70). This was tuned on one mock, so confirm it with a negative control from your own sample type before relying on it.\n- Run a single-organism control for the largest false call (Bacillus spizizenii) to see where the reads really come from.\n- Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples.\n\n## The microbiology behind the surprises\n\n- **Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.\n- **Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.\n- **Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Staphylococcus sp. sm9054** shares a genus with Staphylococcus aureus: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria innocua** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Why a harmless mix produces pathogen-genus calls:** short reads from conserved genes (ribosomal and housekeeping genes) match many genomes in a database, and species in large genera such as Mycobacterium or Burkholderia share long stretches of sequence. A likely cause (not verified for this specific run): low-confidence k-mer assignment lands a few reads on a better-known relative.\n\n## Cutoff sweep\n\n| Cutoff | Found | False species | Precision | Recall |\n|---|---|---|---|---|\n| 0.00% | 8 | 158 | 0.05 | 0.80 |\n| 0.01% | 8 | 38 | 0.17 | 0.80 |\n| 0.05% | 8 | 10 | 0.44 | 0.80 |\n| 0.10% | 8 | 6 | 0.57 | 0.80 |\n| 0.50% | 7 | 2 | 0.78 | 0.70 |\n| 1.00% | 7 | 1 | 0.88 | 0.70 |\n| 2.00% | 7 | 1 | 0.88 | 0.70 |\n\n## Per organism\n\n| Organism | Expected | Observed | Fold |\n|---|---|---|---|\n| Pseudomonas aeruginosa | 12.00% | 15.88% | 1.32x |\n| Escherichia coli | 12.00% | 9.59% | 0.80x |\n| Salmonella enterica | 12.00% | 16.25% | 1.35x |\n| Lactobacillus fermentum | 12.00% | 10.81% | 0.90x |\n| Enterococcus faecalis | 12.00% | 12.01% | 1.00x |\n| Staphylococcus aureus | 12.00% | 9.80% | 0.82x |\n| Listeria monocytogenes | 12.00% | 11.19% | 0.93x |\n| Bacillus subtilis | 12.00% | 0.31% | 0.03x |\n| Saccharomyces cerevisiae | 2.00% | 0.00% | 0.00x |\n| Cryptococcus neoformans | 2.00% | 0.00% | 0.00x |\n\n_Truth source: Zymo D6300 datasheet Table 1 (lot ZRC190633 onward); lot confirmed in Nicholls 2019 giz043 Table 4. Generated by mockcheck; rule-based, no model involved._\n"
+  },
+  {
+   "sample": "iso_Bacillus_subtilis",
+   "method": "bracken_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Bacillus_subtilis / bracken_16gb_c0_0\n\nTruth: **Bacillus subtilis** (single isolate). Tool output type: bracken.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 6 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Bacillus spizizenii 94.17%.\n- 96.4% went to other species of the same genus: the method cannot separate close relatives cleanly here.\n- The true organism is only 3.2% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 3.2134139021169315
+  },
+  {
+   "sample": "iso_Cryptococcus_neoformans",
+   "method": "bracken_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Cryptococcus_neoformans / bracken_16gb_c0_0\n\nTruth: **Cryptococcus neoformans** (single isolate). Tool output type: bracken.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 10 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Pseudomonas sp. cip-10 74.39%.\n- The true organism is only 0.0% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 0.0
+  },
+  {
+   "sample": "iso_Enterococcus_faecalis",
+   "method": "bracken_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Enterococcus_faecalis / bracken_16gb_c0_0\n\nTruth: **Enterococcus faecalis** (single isolate). Tool output type: bracken.\n\n## What this supports\n\n- The true organism holds 99.8% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.8379659728543
+  },
+  {
+   "sample": "iso_Escherichia_coli",
+   "method": "bracken_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Escherichia_coli / bracken_16gb_c0_0\n\nTruth: **Escherichia coli** (single isolate). Tool output type: bracken.\n\n## What this supports\n\n- The true organism holds 93.4% of the profile.\n\n## What it does not support\n\n- 5 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Shigella flexneri 4.39%.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 93.38682567632463
+  },
+  {
+   "sample": "iso_Lactobacillus_fermentum",
+   "method": "bracken_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Lactobacillus_fermentum / bracken_16gb_c0_0\n\nTruth: **Lactobacillus fermentum** (single isolate). Tool output type: bracken.\n\n## What this supports\n\n- The true organism holds 99.9% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 99.85795880805435
+  },
+  {
+   "sample": "iso_Listeria_monocytogenes",
+   "method": "bracken_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Listeria_monocytogenes / bracken_16gb_c0_0\n\nTruth: **Listeria monocytogenes** (single isolate). Tool output type: bracken.\n\n## What this supports\n\n- The true organism holds 98.0% of the profile.\n\n## What it does not support\n\n- 5 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Listeria innocua 0.82%.\n- 1.9% went to other species of the same genus: the method cannot separate close relatives cleanly here.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 97.99451868448428
+  },
+  {
+   "sample": "iso_Pseudomonas_aeruginosa",
+   "method": "bracken_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Pseudomonas_aeruginosa / bracken_16gb_c0_0\n\nTruth: **Pseudomonas aeruginosa** (single isolate). Tool output type: bracken.\n\n## What this supports\n\n- The true organism holds 97.2% of the profile.\n\n## What it does not support\n\n- 1 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Homo sapiens 2.05%.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 97.16252535243632
+  },
+  {
+   "sample": "iso_Saccharomyces_cerevisiae",
+   "method": "bracken_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Saccharomyces_cerevisiae / bracken_16gb_c0_0\n\nTruth: **Saccharomyces cerevisiae** (single isolate). Tool output type: bracken.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 16 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Xanthomonas euvesicatoria 38.17%.\n- The true organism is only 0.0% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 0.0
+  },
+  {
+   "sample": "iso_Salmonella_enterica",
+   "method": "bracken_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Salmonella_enterica / bracken_16gb_c0_0\n\nTruth: **Salmonella enterica** (single isolate). Tool output type: bracken.\n\n## What this supports\n\n- The true organism holds 98.3% of the profile.\n\n## What it does not support\n\n- 3 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Salmonella sp. sal-020 0.52%.\n- 1.5% went to other species of the same genus: the method cannot separate close relatives cleanly here.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 98.31532613045218
+  },
+  {
+   "sample": "iso_Staphylococcus_aureus",
+   "method": "bracken_16gb_c0_0",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Staphylococcus_aureus / bracken_16gb_c0_0\n\nTruth: **Staphylococcus aureus** (single isolate). Tool output type: bracken.\n\n## What this supports\n\n- The true organism holds 96.4% of the profile.\n\n## What it does not support\n\n- 6 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Staphylococcus sp. mz8 0.87%.\n- 2.4% went to other species of the same genus: the method cannot separate close relatives cleanly here.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 96.40659857344365
+  },
+  {
+   "sample": "log",
+   "method": "bracken_16gb_c0_0",
+   "kind": "presence",
+   "supports": [
+    "3 of 10 organisms known to be in the tube were reported at or above 0.10% (Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica).",
+    "The dominant organism (Listeria monocytogenes) was quantified well: 85.85% against 89.10% expected."
+   ],
+   "not_supported": [
+    "Staphylococcus aureus is expected at 8.9e-05%, so the run cannot show whether the method sees organisms that rare.",
+    "Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Enterococcus faecalis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Escherichia coli was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Lactobacillus fermentum was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Staphylococcus aureus was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.",
+    "The extra species are not evidence those organisms are present. Largest: Listeria innocua 1.02%, Bacillus spizizenii 0.76%, Listeria sp. lm90sb2 0.27%, Xanthomonas euvesicatoria 0.17%. At cutoff 0% this run reported 155 species in total.",
+    "Species from pathogen-containing genera were reported (Xanthomonas euvesicatoria 0.17%) although nothing like them is in the tube. A species name on its own is not a detection of a threat.",
+    "A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification."
+   ],
+   "check_next": [
+    "Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).",
+    "Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.",
+    "Before escalating any call from a pathogen-containing genus, require corroboration: many reads spread across the genome (not a few conserved regions), a second tool or a marker-gene check, and a negative control run through the same database.",
+    "False species fall as the cutoff rises. The lowest cutoff here with at most one false species is 1.00% (recall 0.20). This was tuned on one mock, so confirm it with a negative control from your own sample type before relying on it.",
+    "Run a single-organism control for the largest false call (Listeria innocua) to see where the reads really come from.",
+    "Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples."
+   ],
+   "microbiology": [
+    "**Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.",
+    "**Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.",
+    "**Enterococcus faecalis** (Gram-positive, about 3.0 Mb): Genus-level agreement is easy, species-level less so when relatives are in the database.",
+    "**Escherichia coli** (Gram-negative, about 4.6-5.0 Mb): By k-mers E. coli and Shigella are near-identical, so a species label cannot separate harmless from pathogenic lineages. Needs gene or strain-level follow-up.",
+    "**Lactobacillus fermentum** (Gram-positive, about 2.1 Mb): Small genome plus the name change: databases disagree on the label, so strict string matching undercounts it. Aliases are listed in config/aliases.tsv.",
+    "**Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.",
+    "**Staphylococcus aureus** (Gram-positive, about 2.8 Mb): Very low-abundance S. aureus in the log mock (0.000089 percent) is below what 2 million reads can show at all; do not read its absence as a method failure.",
+    "**Listeria innocua** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria sp. lm90sb2** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria swaminathanii** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria seeligeri** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Listeria welshimeri** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.",
+    "**Why a harmless mix produces pathogen-genus calls:** short reads from conserved genes (ribosomal and housekeeping genes) match many genomes in a database, and species in large genera such as Mycobacterium or Burkholderia share long stretches of sequence. A likely cause (not verified for this specific run): low-confidence k-mer assignment lands a few reads on a better-known relative."
+   ],
+   "scorecard": {
+    "found": 3,
+    "of": 10,
+    "false_species": 7,
+    "precision": 0.3,
+    "recall": 0.3,
+    "bray_curtis": null,
+    "false_mass_pct": 2.77
+   },
+   "markdown": "# mockcheck report: log / bracken_16gb_c0_0\n\n- Tool output type: **bracken**\n- Mock: **ZymoBIOMICS D6310 (log distribution)** (presence), truth basis for the score: **genomic DNA**\n- Species-call cutoff: **0.10%** of the species-level profile\n\n## Scorecard\n\n| Measure | Value |\n|---|---|\n| Organisms in tube found | 3 of 10 |\n| False species at cutoff | 7 |\n| Precision / recall / F1 | 0.30 / 0.30 / 0.30 |\n| Share of profile on organisms not in the tube | 2.8% |\n| Reads placed at species level | 100% |\n\n_Relaxed reading (B. spizizenii counted as B. subtilis): 4 of 10 found, 6 false species. The strict numbers above stay the headline._\n\n## What this result supports\n\n- 3 of 10 organisms known to be in the tube were reported at or above 0.10% (Listeria monocytogenes, Pseudomonas aeruginosa, Salmonella enterica).\n- The dominant organism (Listeria monocytogenes) was quantified well: 85.85% against 89.10% expected.\n\n## What it does not support\n\n- Staphylococcus aureus is expected at 8.9e-05%, so the run cannot show whether the method sees organisms that rare.\n- Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Enterococcus faecalis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Escherichia coli was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Lactobacillus fermentum was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Staphylococcus aureus was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.\n- The extra species are not evidence those organisms are present. Largest: Listeria innocua 1.02%, Bacillus spizizenii 0.76%, Listeria sp. lm90sb2 0.27%, Xanthomonas euvesicatoria 0.17%. At cutoff 0% this run reported 155 species in total.\n- Species from pathogen-containing genera were reported (Xanthomonas euvesicatoria 0.17%) although nothing like them is in the tube. A species name on its own is not a detection of a threat.\n- A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification.\n\n## What to check next\n\n- Cryptococcus neoformans is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Saccharomyces cerevisiae is a eukaryote. If this run used the Kraken2 standard database, that database has no fungi, so check what the reads were forced onto (rerun with a database that includes fungi, or use a marker-gene tool).\n- Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.\n- Before escalating any call from a pathogen-containing genus, require corroboration: many reads spread across the genome (not a few conserved regions), a second tool or a marker-gene check, and a negative control run through the same database.\n- False species fall as the cutoff rises. The lowest cutoff here with at most one false species is 1.00% (recall 0.20). This was tuned on one mock, so confirm it with a negative control from your own sample type before relying on it.\n- Run a single-organism control for the largest false call (Listeria innocua) to see where the reads really come from.\n- Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples.\n\n## The microbiology behind the surprises\n\n- **Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.\n- **Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.\n- **Enterococcus faecalis** (Gram-positive, about 3.0 Mb): Genus-level agreement is easy, species-level less so when relatives are in the database.\n- **Escherichia coli** (Gram-negative, about 4.6-5.0 Mb): By k-mers E. coli and Shigella are near-identical, so a species label cannot separate harmless from pathogenic lineages. Needs gene or strain-level follow-up.\n- **Lactobacillus fermentum** (Gram-positive, about 2.1 Mb): Small genome plus the name change: databases disagree on the label, so strict string matching undercounts it. Aliases are listed in config/aliases.tsv.\n- **Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.\n- **Staphylococcus aureus** (Gram-positive, about 2.8 Mb): Very low-abundance S. aureus in the log mock (0.000089 percent) is below what 2 million reads can show at all; do not read its absence as a method failure.\n- **Listeria innocua** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria sp. lm90sb2** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria swaminathanii** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria seeligeri** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Listeria welshimeri** shares a genus with Listeria monocytogenes: a close-relative false call, typical when reads match conserved regions of related genomes.\n- **Why a harmless mix produces pathogen-genus calls:** short reads from conserved genes (ribosomal and housekeeping genes) match many genomes in a database, and species in large genera such as Mycobacterium or Burkholderia share long stretches of sequence. A likely cause (not verified for this specific run): low-confidence k-mer assignment lands a few reads on a better-known relative.\n\n## Cutoff sweep\n\n| Cutoff | Found | False species | Precision | Recall |\n|---|---|---|---|---|\n| 0.00% | 7 | 45 | 0.13 | 0.70 |\n| 0.01% | 6 | 10 | 0.38 | 0.60 |\n| 0.05% | 4 | 8 | 0.33 | 0.40 |\n| 0.10% | 3 | 7 | 0.30 | 0.30 |\n| 0.50% | 2 | 2 | 0.50 | 0.20 |\n| 1.00% | 2 | 1 | 0.67 | 0.20 |\n| 2.00% | 2 | 0 | 1.00 | 0.20 |\n\n_Truth source: Nicholls 2019 giz043 text, product D6310 lot ZRC190842. Generated by mockcheck; rule-based, no model involved._\n"
+  },
+  {
+   "sample": "even",
+   "method": "metaphlan",
+   "kind": "quantitative",
+   "supports": [
+    "8 of 10 organisms known to be in the tube were reported at or above 0.10% (Enterococcus faecalis, Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Saccharomyces cerevisiae, Salmonella enterica, Staphylococcus aureus).",
+    "Few extra species: 1 organism(s) not in the tube passed the 0.10% cutoff (precision 0.89).",
+    "The abundance profile is close to the known answer (Bray-Curtis 0.16 against cells; 0 is perfect, 1 is no overlap).",
+    "8 organisms were within two-fold of the expected share (Lactobacillus fermentum, Staphylococcus aureus, Enterococcus faecalis, Listeria monocytogenes, Salmonella enterica, Escherichia coli, Pseudomonas aeruginosa, Saccharomyces cerevisiae)."
+   ],
+   "not_supported": [
+    "Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.",
+    "The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 11.20%. At cutoff 0% this run reported 9 species in total.",
+    "11.2% of the profile sits on organisms that are not in the tube.",
+    "This tool reports a taxon-level (cell-like) abundance, so it was scored against the cell-number column, not the DNA column.",
+    "Nothing below 0.18% can be judged from this tube; sensitivity to rarer organisms is untested.",
+    "A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification."
+   ],
+   "check_next": [
+    "Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.",
+    "Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples."
+   ],
+   "microbiology": [
+    "**Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.",
+    "**Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.",
+    "**Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes."
+   ],
+   "scorecard": {
+    "found": 8,
+    "of": 10,
+    "false_species": 1,
+    "precision": 0.889,
+    "recall": 0.8,
+    "bray_curtis": 0.163,
+    "false_mass_pct": 11.2
+   },
+   "markdown": "# mockcheck report: even / metaphlan\n\n- Tool output type: **metaphlan4**\n- Mock: **ZymoBIOMICS D6300 (even)** (quantitative), truth basis for the score: **cell number**\n- Species-call cutoff: **0.10%** of the species-level profile\n\n## Scorecard\n\n| Measure | Value |\n|---|---|\n| Organisms in tube found | 8 of 10 |\n| False species at cutoff | 1 |\n| Precision / recall / F1 | 0.89 / 0.80 / 0.84 |\n| Bray-Curtis distance to the known answer (0 best) | 0.163 |\n| Share of profile on organisms not in the tube | 11.2% |\n\n_Relaxed reading (B. spizizenii counted as B. subtilis): 9 of 10 found, 0 false species. The strict numbers above stay the headline._\n\n## What this result supports\n\n- 8 of 10 organisms known to be in the tube were reported at or above 0.10% (Enterococcus faecalis, Escherichia coli, Lactobacillus fermentum, Listeria monocytogenes, Pseudomonas aeruginosa, Saccharomyces cerevisiae, Salmonella enterica, Staphylococcus aureus).\n- Few extra species: 1 organism(s) not in the tube passed the 0.10% cutoff (precision 0.89).\n- The abundance profile is close to the known answer (Bray-Curtis 0.16 against cells; 0 is perfect, 1 is no overlap).\n- 8 organisms were within two-fold of the expected share (Lactobacillus fermentum, Staphylococcus aureus, Enterococcus faecalis, Listeria monocytogenes, Salmonella enterica, Escherichia coli, Pseudomonas aeruginosa, Saccharomyces cerevisiae).\n\n## What it does not support\n\n- Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.\n- The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 11.20%. At cutoff 0% this run reported 9 species in total.\n- 11.2% of the profile sits on organisms that are not in the tube.\n- This tool reports a taxon-level (cell-like) abundance, so it was scored against the cell-number column, not the DNA column.\n- Nothing below 0.18% can be judged from this tube; sensitivity to rarer organisms is untested.\n- A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification.\n\n## What to check next\n\n- Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.\n- Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples.\n\n## The microbiology behind the surprises\n\n- **Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.\n- **Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.\n- **Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.\n\n## Cutoff sweep\n\n| Cutoff | Found | False species | Precision | Recall |\n|---|---|---|---|---|\n| 0.00% | 8 | 1 | 0.89 | 0.80 |\n| 0.01% | 8 | 1 | 0.89 | 0.80 |\n| 0.05% | 8 | 1 | 0.89 | 0.80 |\n| 0.10% | 8 | 1 | 0.89 | 0.80 |\n| 0.50% | 7 | 1 | 0.88 | 0.70 |\n| 1.00% | 7 | 1 | 0.88 | 0.70 |\n| 2.00% | 7 | 1 | 0.88 | 0.70 |\n\n## Per organism\n\n| Organism | Expected | Observed | Fold |\n|---|---|---|---|\n| Lactobacillus fermentum | 21.90% | 20.25% | 0.92x |\n| Staphylococcus aureus | 15.30% | 13.35% | 0.87x |\n| Enterococcus faecalis | 14.60% | 15.26% | 1.05x |\n| Listeria monocytogenes | 13.90% | 11.72% | 0.84x |\n| Bacillus subtilis | 10.30% | 0.00% | 0.00x |\n| Salmonella enterica | 8.80% | 9.63% | 1.09x |\n| Escherichia coli | 8.50% | 9.04% | 1.06x |\n| Pseudomonas aeruginosa | 6.10% | 9.20% | 1.51x |\n| Saccharomyces cerevisiae | 0.29% | 0.34% | 1.17x |\n| Cryptococcus neoformans | 0.18% | 0.00% | 0.00x |\n\n_Truth source: Zymo D6300 datasheet Table 1 (lot ZRC190633 onward); lot confirmed in Nicholls 2019 giz043 Table 4. Generated by mockcheck; rule-based, no model involved._\n"
+  },
+  {
+   "sample": "iso_Bacillus_subtilis",
+   "method": "metaphlan",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Bacillus_subtilis / metaphlan\n\nTruth: **Bacillus subtilis** (single isolate). Tool output type: metaphlan4.\n\n## What this supports\n\n- Nothing strong.\n\n## What it does not support\n\n- 1 other species passed the 0.10% cutoff although only one organism was sequenced. Largest: Bacillus spizizenii 100.00%.\n- 100.0% went to other species of the same genus: the method cannot separate close relatives cleanly here.\n- The true organism is only 0.0% of the profile; check naming differences and whether the organism is in the database.\n\n## What to check next\n\n- Check whether the database contains this organism, and under which name.\n",
+   "truth_pct": 0.0
+  },
+  {
+   "sample": "iso_Cryptococcus_neoformans",
+   "method": "metaphlan",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Cryptococcus_neoformans / metaphlan\n\nTruth: **Cryptococcus neoformans** (single isolate). Tool output type: metaphlan4.\n\n## What this supports\n\n- The true organism holds 100.0% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 100.0
+  },
+  {
+   "sample": "iso_Enterococcus_faecalis",
+   "method": "metaphlan",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Enterococcus_faecalis / metaphlan\n\nTruth: **Enterococcus faecalis** (single isolate). Tool output type: metaphlan4.\n\n## What this supports\n\n- The true organism holds 100.0% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 100.0
+  },
+  {
+   "sample": "iso_Escherichia_coli",
+   "method": "metaphlan",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Escherichia_coli / metaphlan\n\nTruth: **Escherichia coli** (single isolate). Tool output type: metaphlan4.\n\n## What this supports\n\n- The true organism holds 100.0% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 100.00000000000001
+  },
+  {
+   "sample": "iso_Lactobacillus_fermentum",
+   "method": "metaphlan",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Lactobacillus_fermentum / metaphlan\n\nTruth: **Lactobacillus fermentum** (single isolate). Tool output type: metaphlan4.\n\n## What this supports\n\n- The true organism holds 100.0% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 100.0
+  },
+  {
+   "sample": "iso_Listeria_monocytogenes",
+   "method": "metaphlan",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Listeria_monocytogenes / metaphlan\n\nTruth: **Listeria monocytogenes** (single isolate). Tool output type: metaphlan4.\n\n## What this supports\n\n- The true organism holds 100.0% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 100.0
+  },
+  {
+   "sample": "iso_Pseudomonas_aeruginosa",
+   "method": "metaphlan",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Pseudomonas_aeruginosa / metaphlan\n\nTruth: **Pseudomonas aeruginosa** (single isolate). Tool output type: metaphlan4.\n\n## What this supports\n\n- The true organism holds 100.0% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 100.0
+  },
+  {
+   "sample": "iso_Saccharomyces_cerevisiae",
+   "method": "metaphlan",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Saccharomyces_cerevisiae / metaphlan\n\nTruth: **Saccharomyces cerevisiae** (single isolate). Tool output type: metaphlan4.\n\n## What this supports\n\n- The true organism holds 100.0% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 100.0
+  },
+  {
+   "sample": "iso_Salmonella_enterica",
+   "method": "metaphlan",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Salmonella_enterica / metaphlan\n\nTruth: **Salmonella enterica** (single isolate). Tool output type: metaphlan4.\n\n## What this supports\n\n- The true organism holds 100.0% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 100.0
+  },
+  {
+   "sample": "iso_Staphylococcus_aureus",
+   "method": "metaphlan",
+   "kind": "isolate",
+   "markdown": "# mockcheck isolate control: iso_Staphylococcus_aureus / metaphlan\n\nTruth: **Staphylococcus aureus** (single isolate). Tool output type: metaphlan4.\n\n## What this supports\n\n- The true organism holds 100.0% of the profile.\n\n## What it does not support\n\n- No failure seen at this cutoff.\n\n## What to check next\n\n- Use this as the false-call floor for the tool: anything it reports above this level in a real sample is more likely signal.\n",
+   "truth_pct": 100.0
+  },
+  {
+   "sample": "log",
+   "method": "metaphlan",
+   "kind": "presence",
+   "supports": [
+    "2 of 10 organisms known to be in the tube were reported at or above 0.10% (Listeria monocytogenes, Pseudomonas aeruginosa).",
+    "Few extra species: 1 organism(s) not in the tube passed the 0.10% cutoff (precision 0.67).",
+    "The dominant organism (Listeria monocytogenes) was quantified well: 93.45% against 89.10% expected."
+   ],
+   "not_supported": [
+    "Staphylococcus aureus is expected at 8.9e-05%, so the run cannot show whether the method sees organisms that rare.",
+    "Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Enterococcus faecalis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Escherichia coli was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Lactobacillus fermentum was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Salmonella enterica was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Staphylococcus aureus was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.",
+    "Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.",
+    "The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 0.44%. At cutoff 0% this run reported 3 species in total.",
+    "A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification."
+   ],
+   "check_next": [
+    "Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.",
+    "Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples."
+   ],
+   "microbiology": [
+    "**Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.",
+    "**Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.",
+    "**Enterococcus faecalis** (Gram-positive, about 3.0 Mb): Genus-level agreement is easy, species-level less so when relatives are in the database.",
+    "**Escherichia coli** (Gram-negative, about 4.6-5.0 Mb): By k-mers E. coli and Shigella are near-identical, so a species label cannot separate harmless from pathogenic lineages. Needs gene or strain-level follow-up.",
+    "**Lactobacillus fermentum** (Gram-positive, about 2.1 Mb): Small genome plus the name change: databases disagree on the label, so strict string matching undercounts it. Aliases are listed in config/aliases.tsv.",
+    "**Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.",
+    "**Salmonella enterica** (Gram-negative, about 4.8 Mb): A species call says nothing about serovar or virulence. Serovar-level questions need dedicated typing.",
+    "**Staphylococcus aureus** (Gram-positive, about 2.8 Mb): Very low-abundance S. aureus in the log mock (0.000089 percent) is below what 2 million reads can show at all; do not read its absence as a method failure.",
+    "**Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes."
+   ],
+   "scorecard": {
+    "found": 2,
+    "of": 10,
+    "false_species": 1,
+    "precision": 0.667,
+    "recall": 0.2,
+    "bray_curtis": null,
+    "false_mass_pct": 0.44
+   },
+   "markdown": "# mockcheck report: log / metaphlan\n\n- Tool output type: **metaphlan4**\n- Mock: **ZymoBIOMICS D6310 (log distribution)** (presence), truth basis for the score: **genomic DNA**\n- Species-call cutoff: **0.10%** of the species-level profile\n\n## Scorecard\n\n| Measure | Value |\n|---|---|\n| Organisms in tube found | 2 of 10 |\n| False species at cutoff | 1 |\n| Precision / recall / F1 | 0.67 / 0.20 / 0.31 |\n| Share of profile on organisms not in the tube | 0.4% |\n\n_Relaxed reading (B. spizizenii counted as B. subtilis): 3 of 10 found, 0 false species. The strict numbers above stay the headline._\n\n## What this result supports\n\n- 2 of 10 organisms known to be in the tube were reported at or above 0.10% (Listeria monocytogenes, Pseudomonas aeruginosa).\n- Few extra species: 1 organism(s) not in the tube passed the 0.10% cutoff (precision 0.67).\n- The dominant organism (Listeria monocytogenes) was quantified well: 93.45% against 89.10% expected.\n\n## What it does not support\n\n- Staphylococcus aureus is expected at 8.9e-05%, so the run cannot show whether the method sees organisms that rare.\n- Bacillus subtilis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Cryptococcus neoformans was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Enterococcus faecalis was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Escherichia coli was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Lactobacillus fermentum was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Saccharomyces cerevisiae was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Salmonella enterica was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Staphylococcus aureus was not reported at 0.10% or above. Its absence from the output is not evidence it is absent.\n- Strict scoring counts Bacillus subtilis as missed, but the tool reported Bacillus spizizenii, a former subspecies of B. subtilis that databases now treat as its own species. This is a naming difference, not a missed organism.\n- The extra species are not evidence those organisms are present. Largest: Bacillus spizizenii 0.44%. At cutoff 0% this run reported 3 species in total.\n- A species label from short reads does not tell you the strain, serovar or whether an organism is harmful. Treat it as a lead to confirm, not a final identification.\n\n## What to check next\n\n- Check the species names your database uses (taxonomy renames are common) and add an alias line in config/aliases.tsv before judging recall.\n- Repeat on a second mock or a negative control from your own lab before choosing this tool for real samples.\n\n## The microbiology behind the surprises\n\n- **Bacillus subtilis** (Gram-positive, spore-former, about 4.2 Mb): Naming trap: every tool here labels the isolate B. spizizenii. The B. cereus group (cereus, thuringiensis, anthracis) is so close genomically that species labels from short reads are not a reliable way to tell them apart. Spores also resist DNA extraction, so wet-lab recovery can be low.\n- **Cryptococcus neoformans** (polysaccharide capsule over cell wall, about 19 Mb): Largest genome in the mock and not in bacteria-only databases: 74 to 90 percent of its reads were pushed into Pseudomonas in this repo's Kraken2 runs. Capsule and wall make extraction harder.\n- **Enterococcus faecalis** (Gram-positive, about 3.0 Mb): Genus-level agreement is easy, species-level less so when relatives are in the database.\n- **Escherichia coli** (Gram-negative, about 4.6-5.0 Mb): By k-mers E. coli and Shigella are near-identical, so a species label cannot separate harmless from pathogenic lineages. Needs gene or strain-level follow-up.\n- **Lactobacillus fermentum** (Gram-positive, about 2.1 Mb): Small genome plus the name change: databases disagree on the label, so strict string matching undercounts it. Aliases are listed in config/aliases.tsv.\n- **Saccharomyces cerevisiae** (thick glucan and chitin cell wall, about 12 Mb): Eukaryote: absent from bacteria-only databases such as Kraken2 standard, so its reads are forced onto wrong bacteria or a human call. Tough cell wall lowers extraction yield, so yeast is under-represented in DNA from cells.\n- **Salmonella enterica** (Gram-negative, about 4.8 Mb): A species call says nothing about serovar or virulence. Serovar-level questions need dedicated typing.\n- **Staphylococcus aureus** (Gram-positive, about 2.8 Mb): Very low-abundance S. aureus in the log mock (0.000089 percent) is below what 2 million reads can show at all; do not read its absence as a method failure.\n- **Bacillus spizizenii** shares a genus with Bacillus subtilis: a close-relative false call, typical when reads match conserved regions of related genomes.\n\n## Cutoff sweep\n\n| Cutoff | Found | False species | Precision | Recall |\n|---|---|---|---|---|\n| 0.00% | 2 | 1 | 0.67 | 0.20 |\n| 0.01% | 2 | 1 | 0.67 | 0.20 |\n| 0.05% | 2 | 1 | 0.67 | 0.20 |\n| 0.10% | 2 | 1 | 0.67 | 0.20 |\n| 0.50% | 2 | 0 | 1.00 | 0.20 |\n| 1.00% | 2 | 0 | 1.00 | 0.20 |\n| 2.00% | 2 | 0 | 1.00 | 0.20 |\n\n_Truth source: Nicholls 2019 giz043 text, product D6310 lot ZRC190842. Generated by mockcheck; rule-based, no model involved._\n"
+  }
+ ]
+}

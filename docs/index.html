@@ -60,6 +60,12 @@ input[type=text]{width:100%;padding:8px;border:1px solid var(--line);border-radi
 .hit-a{background:#2a7d3f33}.hit-b{background:#b4531a33}.hit-c{background:#3b6fb533}
 footer{padding:30px 0;color:var(--mut);font:14px system-ui,sans-serif}
 button.tog{font:14px system-ui,sans-serif;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;padding:6px 10px;cursor:pointer}
+
+.rep select{font:inherit;padding:6px 8px;margin:0 8px 8px 0;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit;max-width:100%}
+.rep h4{margin:14px 0 4px}.rep ul{margin:4px 0 4px 18px;padding:0}.rep li{margin:4px 0}
+.rep pre,.cook pre{white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:.85rem}
+.sc{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.sc div{border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:.9rem}
+.cook details{margin:8px 0}.cook summary{cursor:pointer;font-weight:600}.cook button{font:inherit;margin:2px 0 8px;padding:4px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit;cursor:pointer}
 </style>
 </head>
 <body>
@@ -70,7 +76,7 @@ button.tog{font:14px system-ui,sans-serif;border:1px solid var(--line);backgroun
   <div class="tldr" id="tldr">Loading the headline&hellip;</div>
 </div></header>
 <nav><div class="wrap">
-  <a href="#story">The story</a><a href="#results">Live results</a><a href="#toy">Try it</a><a href="#fail">What goes wrong</a><a href="#analogy">Other fields</a><a href="#ideas">Untried ideas</a><a href="#gloss">Glossary</a><a href="#timeline">Timeline</a><a href="#devlog">Dev log</a><a href="#sources">Sources</a>
+  <a href="#story">The story</a><a href="#results">Live results</a><a href="#reports">Run reports</a><a href="#cookbook">Cookbook</a><a href="#toy">Try it</a><a href="#fail">What goes wrong</a><a href="#analogy">Other fields</a><a href="#ideas">Untried ideas</a><a href="#gloss">Glossary</a><a href="#timeline">Timeline</a><a href="#devlog">Dev log</a><a href="#sources">Sources</a>
 </div></nav>
 <main class="wrap">
 
@@ -81,6 +87,14 @@ button.tog{font:14px system-ui,sans-serif;border:1px solid var(--line);backgroun
 <section id="results"><h2>Live results</h2>
 <p class="sub">Computed from the committed result tables in this repo. Nothing on this page is typed in by hand.</p>
 <div id="res-body"><p class="mut">Loading results&hellip;</p></div></section>
+
+<section id="reports"><h2>Run reports: what each result supports</h2>
+<p class="sub">This is the report layer. Pick a sample and a method: the same rule-based tool you can run yourself (<code>python -m mockcheck report</code>) says what the run supports, what it does not, what to check next, and the microbiology behind the surprises. Generated, not typed in.</p>
+<div id="rep-body"><p class="mut">Loading reports&hellip;</p></div></section>
+
+<section id="cookbook"><h2>Cookbook: use it yourself</h2>
+<p class="sub">Copy-paste recipes. Python 3.9+ and nothing else is needed to score a run. The same text is in COOKBOOK.md in the repo.</p>
+<div id="cook-body"><p class="mut">Loading recipes&hellip;</p></div></section>
 
 <section id="toy"><h2>Try it: a toy classifier</h2>
 <p class="sub">This is a teaching toy with three <b>made-up</b> mini genomes, not real data. It shows the core idea behind k-mer classifiers such as Kraken2: chop a read into short words, look each word up, let the words vote.</p>
@@ -265,11 +279,39 @@ function toy(){
 }
 ["toy-read","toy-k","toy-c"].forEach(id=>$("#"+id).addEventListener("input",toy));
 
+async function renderReports(){
+  const D=await j("data/reports.json"),box=$("#rep-body");
+  if(!D){box.textContent="Reports file not found.";return}
+  const samples=[...new Set(D.runs.map(r=>r.sample))];
+  const s1=el("select",{"aria-label":"sample"},samples.map(x=>el("option",{value:x},x)));
+  const s2=el("select",{"aria-label":"method"}),out=el("div",{class:"card"});
+  const lst=(t,a)=>a&&a.length?el("div",{},el("h4",{},t),el("ul",{},a.map(x=>el("li",{},x.replace(/\*\*/g,""))))):null;
+  function show(){
+    const r=D.runs.find(x=>x.sample===s1.value&&x.method===s2.value);
+    if(!r){out.replaceChildren();return}
+    if(r.kind==="isolate"){out.replaceChildren(el("pre",{},r.markdown.split("**").join("")));return}
+    const c=r.scorecard,chip=(k,v)=>el("div",{},k+": ",el("b",{},v));
+    out.replaceChildren(el("div",{class:"sc"},chip("found",c.found+" of "+c.of),chip("false species",c.false_species),chip("precision",c.precision),chip("recall",c.recall),chip("Bray-Curtis",c.bray_curtis==null?"n/a":c.bray_curtis),chip("profile on wrong organisms",c.false_mass_pct+"%")),
+      lst("What this result supports",r.supports),lst("What it does not support",r.not_supported),lst("What to check next",r.check_next),lst("The microbiology behind the surprises",r.microbiology));
+  }
+  function fill(){const ms=D.runs.filter(r=>r.sample===s1.value).map(r=>r.method);s2.replaceChildren(...ms.map(m=>el("option",{value:m},m)));show()}
+  s1.addEventListener("change",fill);s2.addEventListener("change",show);
+  box.replaceChildren(el("div",{class:"rep"},el("label",{},"Sample ",s1),el("label",{},"Method ",s2),out));
+  s1.value=samples.includes("even")?"even":samples[0];fill();
+}
+async function renderCookbook(){
+  const D=await j("data/cookbook.json"),box=$("#cook-body");
+  if(!D){box.textContent="Cookbook file not found.";return}
+  box.replaceChildren(el("div",{class:"cook"},D.recipes.map((r,i)=>{
+    const code=r.steps.join("\n"),btn=el("button",{type:"button",onclick:async()=>{try{await navigator.clipboard.writeText(code);btn.textContent="Copied"}catch{btn.textContent="Select and copy by hand"}}},"Copy commands");
+    const d=el("details",{},el("summary",{},r.title),el("p",{},el("b",{},"For: "),r.for),el("pre",{},code),btn,el("p",{},el("b",{},"You should see: "),r.expect),el("p",{},el("b",{},"If it goes wrong: "),r.if_wrong));
+    if(i===0)d.open=true;return d})));
+}
 (async function init(){
   for(const id of QIDS){Q[id]=await j("data/q_"+id+".json")}
   KING=await j("data/king.json");CRIT=await j("data/critic.json");
   buildGloss();renderTabs();renderFails();renderKing();renderTimeline();renderSources();
-  await renderDev();await renderResults();toy();
+  await renderDev();await renderResults();await renderReports();await renderCookbook();toy();
 })();
 </script>
 </body>

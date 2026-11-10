@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mockcheck"
+version = "0.1.0"
+description = "Check a metagenomic classifier run against a mock community and say what it supports, what it does not, and what to check next."
+requires-python = ">=3.9"
+dependencies = []          # standard library only
+
+[project.scripts]
+mockcheck = "mockcheck.cli:main"
+
+[tool.setuptools]
+packages = ["mockcheck"]

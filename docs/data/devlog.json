@@ -1,22 +1,123 @@
 {
-  "updated": "2026-11-09",
-  "agents": {
-    "emperor": "Decided the structure: 6 queens (one per subdomain: ground truth, sequencing, algorithms, databases, evaluation, decisions), 1 king (cross-domain analogies and serendipity), 1 completeness critic. Queens do not talk to each other; only the king links them, to keep each context small.",
-    "king": "Forces cross-domain analogies (law, medicine, art, philosophy) and 'how others overcame it' stories.",
-    "queens": ["ground_truth", "sequencing", "algorithms", "databases", "evaluation", "decisions"],
-    "critic": "Re-opens cited sources and flags anything stated as fact that is not supported."
+ "updated": "2026-11-10",
+ "agents": {
+  "emperor": "Decided the structure: 6 queens (one per subdomain: ground truth, sequencing, algorithms, databases, evaluation, decisions), 1 king (cross-domain analogies and serendipity), 1 completeness critic. Queens do not talk to each other; only the king links them, to keep each context small.",
+  "king": "Forces cross-domain analogies (law, medicine, art, philosophy) and 'how others overcame it' stories.",
+  "queens": [
+   "ground_truth",
+   "sequencing",
+   "algorithms",
+   "databases",
+   "evaluation",
+   "decisions"
+  ],
+  "critic": "Re-opens cited sources and flags anything stated as fact that is not supported."
+ },
+ "entries": [
+  {
+   "date": "2026-11-09",
+   "status": "done",
+   "title": "Plan written into the repo",
+   "story": "Before any code, PLAN.md fixed the question (which classifier should I trust, and what should I check?), the data, the tools, the metrics and the report format.",
+   "commit": "PLAN.md"
   },
-  "entries": [
-    {"date": "2026-11-09", "status": "done", "title": "Plan written into the repo", "story": "Before any code, PLAN.md fixed the question (which classifier should I trust, and what should I check?), the data, the tools, the metrics and the report format.", "commit": "PLAN.md"},
-    {"date": "2026-11-09", "status": "done", "title": "Ground truth read from the vendor datasheet, not memory", "story": "The source paper says 'eight bacteria at 12%' but not on what basis. The research agents claimed the 12% was DNA, not cells, and the critic could not confirm their cell-share numbers. So the vendor's datasheet table was extracted directly from two independent copies: 12% and 2% are theoretical genomic DNA, and by cell number the same tube is very different (L. fermentum 21.9%, the yeasts 0.29% and 0.18%; the cell column sums to 99.9%). Tools that report reads are now scored against DNA, and tools that report cells against cells.", "commit": "config/expected.tsv"},
-    {"date": "2026-11-09", "status": "problem", "title": "No local Linux tooling", "story": "This Windows machine has no WSL distribution and Docker's engine returned an error, so the classifiers cannot run locally. Decision: run them on the Explorer cluster (public 'short' partition only) and keep only small result tables in git.", "commit": ""},
-    {"date": "2026-11-09", "status": "problem", "title": "SSH refused the config file", "story": "ssh rejected the user config because Windows gave 'Everyone' full access to it. Instead of changing the user's permissions, a private copy of the config (no secrets) was used for this session.", "commit": ""},
-    {"date": "2026-11-09", "status": "done", "title": "Reads streamed, never downloaded in full", "story": "Only the first N read pairs of each run were streamed from ENA (12 samples, under 1 GB in total). No FASTQ is committed.", "commit": "scripts/fetch_reads.sh"},
-    {"date": "2026-11-09", "status": "problem", "title": "Setup bugs, found by running it", "story": "1) Slurm runs a copy of the script so relative paths broke. 2) MetaPhlAn needs Python 3.11 because Python 3.12+ removed a module it imports. 3) A check tested for a folder, not its contents, so an empty database folder looked finished. 4) MetaPhlAn 4.x renamed two flags. Each was fixed and committed.", "commit": "several"},
-    {"date": "2026-11-09", "status": "problem", "title": "A silent empty file nearly corrupted one result", "story": "For the log mock, the second mate of the read pair downloaded as an empty file, yet the fetch script reported success because it only counted the first mate. Kraken2 then wrote empty reports without failing. It was caught because Bracken crashed on the empty report. The fetch script now verifies both mates match and retries.", "commit": "scripts/fetch_reads.sh"},
-    {"date": "2026-11-09", "status": "done", "title": "All 12 samples classified", "story": "Kraken2 (2 databases x 2 confidence settings), Bracken and MetaPhlAn 4 ran on every sample on the public queue.", "commit": "results/raw"},
-    {"date": "2026-11-09", "status": "done", "title": "Surprising results were checked before being believed", "story": "Only 3% to 38% of Kraken2 reads looked species-level, which seemed too low. Checking the raw report showed 97% were classified, but many stopped at genus level (218,000 reads at Listeria genus, 13,000 at the species) because close relatives make the evidence ambiguous. A real property of the method, not a bug.", "commit": "results/even_summary.tsv"},
-    {"date": "2026-11-09", "status": "done", "title": "A naming trap found and reported both ways", "story": "All six methods labelled the single Bacillus subtilis isolate as Bacillus spizizenii, a former subspecies now treated as a species. Strict scoring counts that as a miss, so the headline stays strict and a clearly labelled relaxed score is shown beside it.", "commit": "results/even_summary.tsv"},
-    {"date": "2026-11-09", "status": "done", "title": "Decision report written", "story": "REPORT.md gives a recommendation by use case, then for every run what the result supports, what it does not, and what to check next. Claims were re-checked against the tables before committing; three wrong numbers were fixed.", "commit": "REPORT.md"}
-  ]
+  {
+   "date": "2026-11-09",
+   "status": "done",
+   "title": "Ground truth read from the vendor datasheet, not memory",
+   "story": "The source paper says 'eight bacteria at 12%' but not on what basis. The research agents claimed the 12% was DNA, not cells, and the critic could not confirm their cell-share numbers. So the vendor's datasheet table was extracted directly from two independent copies: 12% and 2% are theoretical genomic DNA, and by cell number the same tube is very different (L. fermentum 21.9%, the yeasts 0.29% and 0.18%; the cell column sums to 99.9%). Tools that report reads are now scored against DNA, and tools that report cells against cells.",
+   "commit": "config/expected.tsv"
+  },
+  {
+   "date": "2026-11-09",
+   "status": "problem",
+   "title": "No local Linux tooling",
+   "story": "This Windows machine has no WSL distribution and Docker's engine returned an error, so the classifiers cannot run locally. Decision: run them on the Explorer cluster (public 'short' partition only) and keep only small result tables in git.",
+   "commit": ""
+  },
+  {
+   "date": "2026-11-09",
+   "status": "problem",
+   "title": "SSH refused the config file",
+   "story": "ssh rejected the user config because Windows gave 'Everyone' full access to it. Instead of changing the user's permissions, a private copy of the config (no secrets) was used for this session.",
+   "commit": ""
+  },
+  {
+   "date": "2026-11-09",
+   "status": "done",
+   "title": "Reads streamed, never downloaded in full",
+   "story": "Only the first N read pairs of each run were streamed from ENA (12 samples, under 1 GB in total). No FASTQ is committed.",
+   "commit": "scripts/fetch_reads.sh"
+  },
+  {
+   "date": "2026-11-09",
+   "status": "problem",
+   "title": "Setup bugs, found by running it",
+   "story": "1) Slurm runs a copy of the script so relative paths broke. 2) MetaPhlAn needs Python 3.11 because Python 3.12+ removed a module it imports. 3) A check tested for a folder, not its contents, so an empty database folder looked finished. 4) MetaPhlAn 4.x renamed two flags. Each was fixed and committed.",
+   "commit": "several"
+  },
+  {
+   "date": "2026-11-09",
+   "status": "problem",
+   "title": "A silent empty file nearly corrupted one result",
+   "story": "For the log mock, the second mate of the read pair downloaded as an empty file, yet the fetch script reported success because it only counted the first mate. Kraken2 then wrote empty reports without failing. It was caught because Bracken crashed on the empty report. The fetch script now verifies both mates match and retries.",
+   "commit": "scripts/fetch_reads.sh"
+  },
+  {
+   "date": "2026-11-09",
+   "status": "done",
+   "title": "All 12 samples classified",
+   "story": "Kraken2 (2 databases x 2 confidence settings), Bracken and MetaPhlAn 4 ran on every sample on the public queue.",
+   "commit": "results/raw"
+  },
+  {
+   "date": "2026-11-09",
+   "status": "done",
+   "title": "Surprising results were checked before being believed",
+   "story": "Only 3% to 38% of Kraken2 reads looked species-level, which seemed too low. Checking the raw report showed 97% were classified, but many stopped at genus level (218,000 reads at Listeria genus, 13,000 at the species) because close relatives make the evidence ambiguous. A real property of the method, not a bug.",
+   "commit": "results/even_summary.tsv"
+  },
+  {
+   "date": "2026-11-09",
+   "status": "done",
+   "title": "A naming trap found and reported both ways",
+   "story": "All six methods labelled the single Bacillus subtilis isolate as Bacillus spizizenii, a former subspecies now treated as a species. Strict scoring counts that as a miss, so the headline stays strict and a clearly labelled relaxed score is shown beside it.",
+   "commit": "results/even_summary.tsv"
+  },
+  {
+   "date": "2026-11-09",
+   "status": "done",
+   "title": "Decision report written",
+   "story": "REPORT.md gives a recommendation by use case, then for every run what the result supports, what it does not, and what to check next. Claims were re-checked against the tables before committing; three wrong numbers were fixed.",
+   "commit": "REPORT.md"
+  },
+  {
+   "date": "2026-11-10",
+   "status": "done",
+   "title": "From a report to a tool",
+   "story": "Feedback: the work scored tools but you could not run it on your own output, and it said little about the organisms. Built the mockcheck command-line tool (standard library only): it reads Kraken2, Bracken and MetaPhlAn output, scores it against a mock, and writes the supports / does not support / check next report. Its numbers are tested to match the benchmark tables exactly.",
+   "commit": "mockcheck/"
+  },
+  {
+   "date": "2026-11-10",
+   "status": "problem",
+   "title": "The tests caught a real bug",
+   "story": "A custom mock with two organisms was silently treated as presence-only and got no abundance score, because the check wanted more than two. The unit test on a tiny custom mock failed; fixed to two or more.",
+   "commit": "mockcheck/truth.py"
+  },
+  {
+   "date": "2026-11-10",
+   "status": "done",
+   "title": "Microbiology added to every report",
+   "story": "For the intended reader (a biodefense company such as Valthos) a species name is only a lead. Added an organism knowledge table (cell wall, genome size, look-alike relatives, why it matters) and a flag for pathogen-genus calls in a harmless mix: Mycobacterium canetti reached 0.37% in the Kraken2 run on a tube with no mycobacteria.",
+   "commit": "config/organisms.tsv"
+  },
+  {
+   "date": "2026-11-10",
+   "status": "done",
+   "title": "Cookbook and run-report explorer on the dashboard",
+   "story": "Eight copy-paste recipes (score one run, compare tools, own mock, negative control, make outputs, pathogen-name triage, add a tool) from one JSON file that generates both COOKBOOK.md and the dashboard section. A report explorer shows the generated report for every committed run. Checked in a real browser: no console errors, no sideways scroll.",
+   "commit": "docs/index.html"
+  }
+ ]
 }

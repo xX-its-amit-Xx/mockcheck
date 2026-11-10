@@ -1,0 +1,99 @@
+{
+  "intro": "Copy-paste recipes. Everything runs with Python 3.9 or newer and nothing else installed; the classifiers themselves are only needed if you want to make new outputs (recipe 6).",
+  "recipes": [
+    {
+      "id": "check-install",
+      "title": "1. Check it works on your machine (30 seconds)",
+      "for": "Anyone. No data, no cluster, no downloads.",
+      "steps": [
+        "git clone https://github.com/xX-its-amit-Xx/mockcheck && cd mockcheck",
+        "python -m unittest discover -s tests",
+        "python -m mockcheck demo"
+      ],
+      "expect": "Tests print OK. The demo scores 72 committed classifier outputs and writes one plain-language report per run to out/demo/reports/ and a table to out/demo/summary.tsv.",
+      "if_wrong": "'No module named mockcheck' means you are not in the repo folder. 'results/raw not found' means you ran it from a copy without the results folder."
+    },
+    {
+      "id": "score-one",
+      "title": "2. Score one classifier run you already have",
+      "for": "You ran Kraken2, Bracken or MetaPhlAn on a ZymoBIOMICS mock community and want to know whether to trust it.",
+      "steps": [
+        "python -m mockcheck report my_run.report --mock zymo-d6300-even --out my_run.md",
+        "python -m mockcheck report my_run.bracken --mock zymo-d6300-even",
+        "python -m mockcheck report my_profile.txt --mock zymo-d6310-log"
+      ],
+      "expect": "A markdown report with a scorecard, then three lists: what the result supports, what it does not support, what to check next. A last section explains the microbiology behind each surprise.",
+      "if_wrong": "The file type is detected automatically. If it guesses wrong, add --format kraken2 | bracken | metaphlan | generic. An empty or wrong file gives a one-line error, not a traceback."
+    },
+    {
+      "id": "compare",
+      "title": "3. Choose between tools or settings",
+      "for": "You have several outputs from the same mock and need one ranking.",
+      "steps": [
+        "python -m mockcheck compare results/raw/kraken2/even.16gb.c0.0.report.gz results/raw/kraken2/even.16gb.c0.1.report.gz results/raw/bracken/even.16gb.c0.0.bracken results/raw/metaphlan/even.profile.txt"
+      ],
+      "expect": "A table sorted by Bray-Curtis distance to the known answer (lower is better), with how many expected organisms were found and how many false species appeared.",
+      "if_wrong": "Compare only runs of the same mock. A tool scored on a different basis (cells versus DNA) is handled for MetaPhlAn automatically."
+    },
+    {
+      "id": "own-mock",
+      "title": "4. Use your own mock community",
+      "for": "Your lab has a different standard, or an in-house spike-in.",
+      "steps": [
+        "printf 'organism\\texpected_percent\\nEscherichia coli\\t50\\nListeria monocytogenes\\t50\\n' > my_truth.tsv",
+        "python -m mockcheck report my_run.report --truth my_truth.tsv"
+      ],
+      "expect": "Same report, scored against your table. Percentages summing to about 100 give abundance scoring; anything else gives presence scoring only. Add an expected_cell_percent column if the standard publishes cell shares.",
+      "if_wrong": "Names must match the database naming after lower-casing. If a tool uses a renamed species, add one line to config/aliases.tsv (alias, canonical)."
+    },
+    {
+      "id": "negative-control",
+      "title": "5. Measure a tool's false-call floor with a single-organism control",
+      "for": "You want to know how many wrong species a tool invents when only one organism is present.",
+      "steps": [
+        "python -m mockcheck report results/raw/kraken2/iso_Listeria_monocytogenes.16gb.c0.0.report.gz --isolate \"Listeria monocytogenes\"",
+        "python -m mockcheck report results/raw/metaphlan/iso_Listeria_monocytogenes.profile.txt --isolate \"Listeria monocytogenes\""
+      ],
+      "expect": "How much of the profile is the true organism, how many other species passed the cutoff, and how much went to close relatives. Anything a tool reports above that level in a real sample is more likely a real signal.",
+      "if_wrong": "Use a sequenced pure isolate, not a mix."
+    },
+    {
+      "id": "make-outputs",
+      "title": "6. Make the classifier outputs yourself (fresh data, fresh databases)",
+      "for": "You want to reproduce the benchmark from public reads, or run the same tools on your own reads.",
+      "steps": [
+        "bash run_all.sh                       # on a Slurm cluster: installs tools and databases, streams the reads, runs everything",
+        "bash scripts/collect_raw.sh           # shrinks outputs into results/raw (small enough to commit)",
+        "bash run_all.sh --local               # re-scores the benchmark, rebuilds the tables and dashboard data",
+        "kraken2 --db DB --paired r1.fq.gz r2.fq.gz --report run.report --output -",
+        "bracken -d DB -i run.report -o run.bracken -r 150 -l S -t 0",
+        "metaphlan r1.fq.gz,r2.fq.gz --input_type fastq --mapout run.bt2out --nproc 8 --db_dir MPA_DB -o run.profile.txt"
+      ],
+      "expect": "The first three lines reproduce this repository. The last three are the exact tool calls to run on your own reads; their outputs go straight into recipe 2.",
+      "if_wrong": "Tool versions and database dates are pinned in env/environment.lock.txt and the README. A different database changes the results: say which one you used."
+    },
+    {
+      "id": "pathogen-genus",
+      "title": "7. A pathogen-sounding name appeared. What now?",
+      "for": "Biosurveillance and biodefense readers, for example a founder or analyst at a company such as Valthos, who need to know whether a species call is a signal or noise.",
+      "steps": [
+        "python -m mockcheck report my_run.report --mock zymo-d6300-even",
+        "python -m mockcheck report results/raw/kraken2/iso_Bacillus_subtilis.16gb.c0.0.report.gz --isolate \"Bacillus subtilis\"       # a pure Bacillus isolate: what do the tools say?"
+      ],
+      "expect": "The report lists species from pathogen-containing genera that are not in the tube, and says why a harmless mix can produce them. In the committed Kraken2 run on the harmless even mock, Mycobacterium canetti reached 0.37% and Xanthomonas euvesicatoria 0.12%, so a name alone is not a detection.",
+      "if_wrong": "This tool only tells you how reliable the classifier was on a known mix. It is not a threat assessment: a species label from short reads does not give strain, virulence or intent. Corroborate with reads spread across the genome, a second method and a negative control before escalating."
+    },
+    {
+      "id": "add-tool",
+      "title": "8. Add another classifier",
+      "for": "You use Centrifuge, Kaiju, mOTUs or similar.",
+      "steps": [
+        "# 1. write a reader in mockcheck/parsers.py that returns Profile(tool, {species: percent}, path, meta)",
+        "# 2. register it in READERS",
+        "python -m mockcheck report my_output.tsv --format generic      # works today with any 'organism<TAB>percent' file"
+      ],
+      "expect": "The generic format needs two columns, organism and percent, and already gets the full report. A proper reader adds the tool-specific warnings (such as Kraken2's reads stuck at genus level).",
+      "if_wrong": "Check tests/test_mockcheck.py for how a reader is tested against the committed tables."
+    }
+  ]
+}
