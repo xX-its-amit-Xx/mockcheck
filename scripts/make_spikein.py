@@ -50,7 +50,7 @@ for name, assign in panels:
     # human reads: the first n_h pairs of the human file, streamed (no need to hold 4M pairs in memory)
     outs = [gzip.open(f"{out_dir}/{name}_{i}.fastq.gz", "wt", compresslevel=1) for i in (1, 2)]
     n = 0
-    for a, b in zip(records(f"{reads_dir}/human_1.fastq.gz"), records(f"{reads_dir}/human_2.fastq.gz")):
+    for a, b in zip(records(f"{reads_dir}/p2/human_1.fastq.gz"), records(f"{reads_dir}/p2/human_2.fastq.gz")):
         outs[0].writelines(a); outs[1].writelines(b); n += 1
         if n >= n_h:
             break
