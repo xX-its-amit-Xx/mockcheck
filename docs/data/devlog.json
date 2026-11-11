@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-10",
+ "updated": "2026-11-11",
  "agents": {
   "emperor": "Decided the structure: 6 queens (one per subdomain: ground truth, sequencing, algorithms, databases, evaluation, decisions), 1 king (cross-domain analogies and serendipity), 1 completeness critic. Queens do not talk to each other; only the king links them, to keep each context small.",
   "king": "Forces cross-domain analogies (law, medicine, art, philosophy) and 'how others overcame it' stories.",
@@ -118,6 +118,20 @@
    "title": "Cookbook and run-report explorer on the dashboard",
    "story": "Eight copy-paste recipes (score one run, compare tools, own mock, negative control, make outputs, pathogen-name triage, add a tool) from one JSON file that generates both COOKBOOK.md and the dashboard section. A report explorer shows the generated report for every committed run. Checked in a real browser: no console errors, no sideways scroll.",
    "commit": "docs/index.html"
+  },
+  {
+   "date": "2026-11-11",
+   "status": "done",
+   "title": "Phase 2: constructed spike-in and real plasma classified",
+   "story": "4M real human pairs plus real reads of 10 isolates at 1e-2 to 1e-5 (truth by construction), and 16 public Uganda sepsis plasma runs. Kraken2 at two confidence settings and MetaPhlAn 4. Jobs ran on Explorer (build 6 min, classify 76 min).",
+   "commit": "results/spike_*.tsv"
+  },
+  {
+   "date": "2026-11-11",
+   "status": "done",
+   "title": "Finding: species recovery is low even when detection works",
+   "story": "Detection at 10 or more pairs holds down to 40 pairs for most bacteria, but only about 20% of spiked pairs reach the species (2% at confidence 0.1), because related genomes share k-mers. Both yeasts were missed by Kraken2.",
+   "commit": "docs/data/findings.json"
   }
  ]
 }

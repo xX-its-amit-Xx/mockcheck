@@ -1,0 +1,25 @@
+method	fraction	expected_pairs	group	n	detected_ge1	detected_ge3	detected_ge10	median_recovery
+kraken2_16gb_c0_0	0.01	40000	bacteria	8	8	8	8	0.209
+kraken2_16gb_c0_0	0.01	40000	yeast	2	0	0	0	0.0
+kraken2_16gb_c0_0	0.001	4000	bacteria	8	8	8	8	0.205
+kraken2_16gb_c0_0	0.001	4000	yeast	2	0	0	0	0.0
+kraken2_16gb_c0_0	0.0001	400	bacteria	8	8	8	8	0.22
+kraken2_16gb_c0_0	0.0001	400	yeast	2	0	0	0	0.0
+kraken2_16gb_c0_0	1e-05	40	bacteria	8	8	8	6	0.375
+kraken2_16gb_c0_0	1e-05	40	yeast	2	0	0	0	0.0
+kraken2_16gb_c0_1	0.01	40000	bacteria	8	8	8	8	0.02
+kraken2_16gb_c0_1	0.01	40000	yeast	2	0	0	0	0.0
+kraken2_16gb_c0_1	0.001	4000	bacteria	8	8	8	8	0.02
+kraken2_16gb_c0_1	0.001	4000	yeast	2	0	0	0	0.0
+kraken2_16gb_c0_1	0.0001	400	bacteria	8	7	7	3	0.018
+kraken2_16gb_c0_1	0.0001	400	yeast	2	0	0	0	0.0
+kraken2_16gb_c0_1	1e-05	40	bacteria	8	5	3	1	0.05
+kraken2_16gb_c0_1	1e-05	40	yeast	2	0	0	0	0.0
+metaphlan4	0.01	40000	bacteria	8	8	8	8	
+metaphlan4	0.01	40000	yeast	2	1	1	1	
+metaphlan4	0.001	4000	bacteria	8	8	8	8	
+metaphlan4	0.001	4000	yeast	2	1	1	1	
+metaphlan4	0.0001	400	bacteria	8	2	2	2	
+metaphlan4	0.0001	400	yeast	2	0	0	0	
+metaphlan4	1e-05	40	bacteria	8	0	0	0	
+metaphlan4	1e-05	40	yeast	2	0	0	0	

@@ -45,7 +45,7 @@ def metaphlan(path):
 
 def label(path, suffix):
     b = os.path.basename(path)[: -len(suffix)]
-    sample, rest = b.split(".", 1)
+    sample, _, rest = b.partition(".")
     return sample, rest
 
 

@@ -86,3 +86,9 @@ report opens with a one-paragraph recommendation by use case.
   synonyms) can look like errors; aliases are explicit and listed.
 - First-N-reads subsampling assumes reads are not ordered by taxon; checked
   by comparing a second window for the even mock.
+
+## Phase 2 (real reads, constructed truth)
+- Spike-in: 4,000,000 human pairs (ERR194147) plus 10 isolates at 1e-2..1e-5, four rotating panels and a human-only control (`scripts/make_spikein.py`, truth in `results/spike_manifest.tsv`). Deterministic read selection, no RNG.
+- Real plasma: 16 of 263 runs of PRJNA898830, first 500,000 pairs each (`config/phase2_uganda_runs.tsv`). No per-sample truth public.
+- Tools: Kraken2 16 GB at confidence 0.0 and 0.1; MetaPhlAn 4.2.6. No Bracken. HMP mock skipped (composition not verifiable).
+- Run: `scripts/phase2_build.sbatch`, `scripts/phase2_classify.sbatch`, `scripts/collect_phase2.sh`, `scripts/evaluate_phase2.py`.

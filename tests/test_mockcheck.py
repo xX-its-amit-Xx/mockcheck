@@ -51,6 +51,14 @@ class T(unittest.TestCase):
             self.assertNotEqual(r.returncode, 0)
             self.assertNotIn("Traceback", r.stderr)
 
+    def test_spike_report_on_real_phase2_output(self):
+        from mockcheck.spike import analyze_spike, render_spike
+        rep = os.path.join(ROOT, "results", "raw", "phase2", "kraken2", "spike_P0.16gb.c0.0.report.gz")
+        r = analyze_spike(rep, "spike_P0")
+        text = render_spike(r, "spike_P0")
+        self.assertIn("pseudomonas aeruginosa", text.lower())
+        self.assertNotIn("Traceback", text)
+
 
 if __name__ == "__main__":
     unittest.main()

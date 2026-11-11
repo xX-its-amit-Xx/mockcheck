@@ -1,0 +1,53 @@
+{
+  "findings": [
+    {
+      "tier": "T2",
+      "title": "Bacteria are found down to 40 read pairs in 4M, but the species label is often wrong or missing",
+      "what": "Ten isolates' real reads were mixed into 4,000,000 real human read pairs at 1e-2 to 1e-5. Kraken2 (16 GB, confidence 0.0) called all 8 bacteria at 1e-2, 1e-3 and 1e-4 with 10 or more read pairs, and 6 of 8 at 1e-5 (40 pairs). With confidence 0.1 detection falls: 7 of 8 at 1e-4 with 1 or more pairs, only 3 of 8 at 10 or more; at 1e-5 only 1 of 8.",
+      "caveat": "Reads come from clean isolates, so real samples with kit contamination and a more varied background will do worse. One run per level, no replicates.",
+      "evidence": "results/spike_summary.tsv, results/spike_detection.tsv"
+    },
+    {
+      "tier": "T2",
+      "title": "Most spiked reads do not land on the species",
+      "what": "Median species-level recovery of spiked pairs was about 20% at confidence 0.0 and 2% at 0.1. Example: E. coli isolate reads mostly stop at the family Enterobacteriaceae (198,238 of 300,000 pairs) because many Escherichia, Shigella and Salmonella genomes share k-mers. So a species count is a poor measure of load, and a genus or family count may be the honest unit.",
+      "caveat": "Specific to Kraken2 with the 16 GB capped standard database; not tested with Bracken or a larger database in Phase 2.",
+      "evidence": "results/spike_detection.tsv (recovery_relaxed, genus_reads); results/raw/kraken2/iso_Escherichia_coli.16gb.c0.1.report.gz"
+    },
+    {
+      "tier": "T2",
+      "title": "Both yeasts were invisible to Kraken2",
+      "what": "Saccharomyces cerevisiae and Cryptococcus neoformans got 0 read pairs at every level, even at 40,000 pairs (1%). The standard database has no fungal genomes. MetaPhlAn 4 saw one of the two yeasts at 1e-2 and 1e-3.",
+      "caveat": "A database choice, not a property of the algorithm. A fungal database would be needed; not run here.",
+      "evidence": "results/spike_summary.tsv (group = yeast)"
+    },
+    {
+      "tier": "T2",
+      "title": "MetaPhlAn 4 loses the rare end first",
+      "what": "MetaPhlAn 4 found 8 of 8 bacteria at 1e-2 and 1e-3, 2 of 8 at 1e-4 and 0 of 8 at 1e-5. It reports a relative abundance for species with marker genes, so it is built for communities, not for a 0.001% pathogen in blood.",
+      "caveat": "Different question from Kraken2: marker genes, no read counts.",
+      "evidence": "results/spike_summary.tsv (metaphlan4)"
+    },
+    {
+      "tier": "T2",
+      "title": "False alarms: zero on human-only at 10 pairs, but noise rises with the microbe load",
+      "what": "The human-only control (spike_H0) had 0 false species at 10 or more pairs in both settings, and 2 false species of pathogen genera at 3 pairs (Mycobacterium, confidence 0.0). In the spiked panels at confidence 0.0, 6 to 16 wrong species passed 10 pairs, mostly near relatives of the spiked organism (Listeria, Bacillus, Burkholderia, Actinomyces). Confidence 0.1 cut that to 0 or 1.",
+      "caveat": "The human-only floor does not carry over to samples with real contaminants. Near-relative calls look like a species-naming problem, not a new organism.",
+      "evidence": "results/spike_false_positives.tsv"
+    },
+    {
+      "tier": "T4",
+      "title": "Real plasma runs: the species list is mostly skin, kit and viral commensals",
+      "what": "16 Uganda sepsis plasma runs (500,000 pairs each, human rRNA depleted): 1 to 32% human by Kraken2, 58 to 90% unclassified. Species with 10 or more pairs per run ranged 0 to 10. The most common calls were Cutibacterium acnes (12 of 16 runs), E. coli (8), Acidovorax (5), Ralstonia and Brevundimonas, plus torque teno virus and pegivirus. Where a species was called, a large share of reads was in known reagent-contaminant genera (up to 74%).",
+      "caveat": "No per-sample truth exists in the open data (qPCR results are not public), so this shows behaviour, not accuracy. Cutibacterium, Escherichia and Ralstonia can be contaminants or real infections; the data cannot tell.",
+      "evidence": "results/uganda_summary.tsv, results/uganda_top_species.tsv"
+    },
+    {
+      "tier": "T4",
+      "title": "Kraken2 and MetaPhlAn almost never agree on plasma",
+      "what": "On the first 6 plasma runs the two tools shared at most 1 species (Jaccard 0.0 to 0.1). MetaPhlAn called almost nothing, Kraken2 called up to 10.",
+      "caveat": "Six runs only. Disagreement flags where a human should look; it does not say which tool is right.",
+      "evidence": "results/uganda_tool_agreement.tsv"
+    }
+  ]
+}

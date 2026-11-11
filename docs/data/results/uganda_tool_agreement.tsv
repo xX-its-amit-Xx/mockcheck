@@ -1,0 +1,7 @@
+run	kraken2_species	metaphlan_species	shared	jaccard
+SRR22211815	9	0	0	0.0
+SRR22211832	1	0	0	0.0
+SRR22211848	10	0	0	0.0
+SRR22211864	10	1	1	0.1
+SRR22211880	7	0	0	0.0
+SRR22211897	1	0	0	0.0

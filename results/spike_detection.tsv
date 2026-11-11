@@ -1,0 +1,121 @@
+sample	method	organism	fraction	expected_pairs	species_reads_strict	species_reads_relaxed	genus_reads	recovery_relaxed	detected_ge1	detected_ge3	detected_ge10
+spike_P1	kraken2_16gb_c0_0	bacillus subtilis	0.01	40000	118	28441	37812	0.711	1	1	1
+spike_P3	kraken2_16gb_c0_0	cryptococcus neoformans	0.01	40000	0	0	0	0.0	0	0	0
+spike_P0	kraken2_16gb_c0_0	enterococcus faecalis	0.01	40000	25847	25847	37915	0.646	1	1	1
+spike_P3	kraken2_16gb_c0_0	escherichia coli	0.01	40000	3031	3031	3664	0.076	1	1	1
+spike_P1	kraken2_16gb_c0_0	lactobacillus fermentum	0.01	40000	36623	36623	36756	0.916	1	1	1
+spike_P2	kraken2_16gb_c0_0	listeria monocytogenes	0.01	40000	1945	1945	38042	0.049	1	1	1
+spike_P0	kraken2_16gb_c0_0	pseudomonas aeruginosa	0.01	40000	5215	5215	24640	0.13	1	1	1
+spike_P0	kraken2_16gb_c0_0	saccharomyces cerevisiae	0.01	40000	0	0	0	0.0	0	0	0
+spike_P2	kraken2_16gb_c0_0	salmonella enterica	0.01	40000	8343	8343	36934	0.209	1	1	1
+spike_P3	kraken2_16gb_c0_0	staphylococcus aureus	0.01	40000	6869	6869	34779	0.172	1	1	1
+spike_P2	kraken2_16gb_c0_0	bacillus subtilis	0.001	4000	11	2813	3781	0.703	1	1	1
+spike_P0	kraken2_16gb_c0_0	cryptococcus neoformans	0.001	4000	0	0	0	0.0	0	0	0
+spike_P1	kraken2_16gb_c0_0	enterococcus faecalis	0.001	4000	2598	2598	3811	0.649	1	1	1
+spike_P0	kraken2_16gb_c0_0	escherichia coli	0.001	4000	386	386	460	0.097	1	1	1
+spike_P2	kraken2_16gb_c0_0	lactobacillus fermentum	0.001	4000	3637	3637	3652	0.909	1	1	1
+spike_P3	kraken2_16gb_c0_0	listeria monocytogenes	0.001	4000	195	195	3790	0.049	1	1	1
+spike_P1	kraken2_16gb_c0_0	pseudomonas aeruginosa	0.001	4000	482	482	2486	0.12	1	1	1
+spike_P1	kraken2_16gb_c0_0	saccharomyces cerevisiae	0.001	4000	0	0	0	0.0	0	0	0
+spike_P3	kraken2_16gb_c0_0	salmonella enterica	0.001	4000	821	821	3684	0.205	1	1	1
+spike_P0	kraken2_16gb_c0_0	staphylococcus aureus	0.001	4000	679	679	3448	0.17	1	1	1
+spike_P3	kraken2_16gb_c0_0	bacillus subtilis	0.0001	400	1	285	457	0.713	1	1	1
+spike_P1	kraken2_16gb_c0_0	cryptococcus neoformans	0.0001	400	0	0	0	0.0	0	0	0
+spike_P2	kraken2_16gb_c0_0	enterococcus faecalis	0.0001	400	272	272	406	0.68	1	1	1
+spike_P1	kraken2_16gb_c0_0	escherichia coli	0.0001	400	43	43	48	0.107	1	1	1
+spike_P3	kraken2_16gb_c0_0	lactobacillus fermentum	0.0001	400	359	359	360	0.897	1	1	1
+spike_P0	kraken2_16gb_c0_0	listeria monocytogenes	0.0001	400	30	30	411	0.075	1	1	1
+spike_P2	kraken2_16gb_c0_0	pseudomonas aeruginosa	0.0001	400	50	50	255	0.125	1	1	1
+spike_P2	kraken2_16gb_c0_0	saccharomyces cerevisiae	0.0001	400	0	0	0	0.0	0	0	0
+spike_P0	kraken2_16gb_c0_0	salmonella enterica	0.0001	400	88	88	378	0.22	1	1	1
+spike_P1	kraken2_16gb_c0_0	staphylococcus aureus	0.0001	400	72	72	349	0.18	1	1	1
+spike_P0	kraken2_16gb_c0_0	bacillus subtilis	1e-05	40	7	38	155	0.95	1	1	1
+spike_P2	kraken2_16gb_c0_0	cryptococcus neoformans	1e-05	40	0	0	0	0.0	0	0	0
+spike_P3	kraken2_16gb_c0_0	enterococcus faecalis	1e-05	40	34	34	49	0.85	1	1	1
+spike_P2	kraken2_16gb_c0_0	escherichia coli	1e-05	40	15	15	20	0.375	1	1	1
+spike_P0	kraken2_16gb_c0_0	lactobacillus fermentum	1e-05	40	40	40	41	1.0	1	1	1
+spike_P1	kraken2_16gb_c0_0	listeria monocytogenes	1e-05	40	10	10	134	0.25	1	1	1
+spike_P3	kraken2_16gb_c0_0	pseudomonas aeruginosa	1e-05	40	4	4	347	0.1	1	1	0
+spike_P3	kraken2_16gb_c0_0	saccharomyces cerevisiae	1e-05	40	0	0	0	0.0	0	0	0
+spike_P1	kraken2_16gb_c0_0	salmonella enterica	1e-05	40	10	10	37	0.25	1	1	1
+spike_P2	kraken2_16gb_c0_0	staphylococcus aureus	1e-05	40	8	8	35	0.2	1	1	0
+spike_P1	kraken2_16gb_c0_1	bacillus subtilis	0.01	40000	0	5896	26917	0.147	1	1	1
+spike_P3	kraken2_16gb_c0_1	cryptococcus neoformans	0.01	40000	0	0	0	0.0	0	0	0
+spike_P0	kraken2_16gb_c0_1	enterococcus faecalis	0.01	40000	6457	6457	28314	0.161	1	1	1
+spike_P3	kraken2_16gb_c0_1	escherichia coli	0.01	40000	439	439	540	0.011	1	1	1
+spike_P1	kraken2_16gb_c0_1	lactobacillus fermentum	0.01	40000	26412	26412	26693	0.66	1	1	1
+spike_P2	kraken2_16gb_c0_1	listeria monocytogenes	0.01	40000	117	117	28906	0.003	1	1	1
+spike_P0	kraken2_16gb_c0_1	pseudomonas aeruginosa	0.01	40000	811	811	16228	0.02	1	1	1
+spike_P0	kraken2_16gb_c0_1	saccharomyces cerevisiae	0.01	40000	0	0	0	0.0	0	0	0
+spike_P2	kraken2_16gb_c0_1	salmonella enterica	0.01	40000	591	591	21734	0.015	1	1	1
+spike_P3	kraken2_16gb_c0_1	staphylococcus aureus	0.01	40000	575	575	26258	0.014	1	1	1
+spike_P2	kraken2_16gb_c0_1	bacillus subtilis	0.001	4000	0	610	2709	0.152	1	1	1
+spike_P0	kraken2_16gb_c0_1	cryptococcus neoformans	0.001	4000	0	0	0	0.0	0	0	0
+spike_P1	kraken2_16gb_c0_1	enterococcus faecalis	0.001	4000	671	671	2880	0.168	1	1	1
+spike_P0	kraken2_16gb_c0_1	escherichia coli	0.001	4000	72	72	79	0.018	1	1	1
+spike_P2	kraken2_16gb_c0_1	lactobacillus fermentum	0.001	4000	2598	2598	2622	0.649	1	1	1
+spike_P3	kraken2_16gb_c0_1	listeria monocytogenes	0.001	4000	12	12	2890	0.003	1	1	1
+spike_P1	kraken2_16gb_c0_1	pseudomonas aeruginosa	0.001	4000	79	79	1648	0.02	1	1	1
+spike_P1	kraken2_16gb_c0_1	saccharomyces cerevisiae	0.001	4000	0	0	0	0.0	0	0	0
+spike_P3	kraken2_16gb_c0_1	salmonella enterica	0.001	4000	52	52	2166	0.013	1	1	1
+spike_P0	kraken2_16gb_c0_1	staphylococcus aureus	0.001	4000	54	54	2571	0.013	1	1	1
+spike_P3	kraken2_16gb_c0_1	bacillus subtilis	0.0001	400	0	54	279	0.135	1	1	1
+spike_P1	kraken2_16gb_c0_1	cryptococcus neoformans	0.0001	400	0	0	0	0.0	0	0	0
+spike_P2	kraken2_16gb_c0_1	enterococcus faecalis	0.0001	400	65	65	295	0.163	1	1	1
+spike_P1	kraken2_16gb_c0_1	escherichia coli	0.0001	400	5	5	5	0.013	1	1	0
+spike_P3	kraken2_16gb_c0_1	lactobacillus fermentum	0.0001	400	261	261	261	0.652	1	1	1
+spike_P0	kraken2_16gb_c0_1	listeria monocytogenes	0.0001	400	0	0	315	0.0	0	0	0
+spike_P2	kraken2_16gb_c0_1	pseudomonas aeruginosa	0.0001	400	7	7	181	0.018	1	1	0
+spike_P2	kraken2_16gb_c0_1	saccharomyces cerevisiae	0.0001	400	0	0	0	0.0	0	0	0
+spike_P0	kraken2_16gb_c0_1	salmonella enterica	0.0001	400	4	4	219	0.01	1	1	0
+spike_P1	kraken2_16gb_c0_1	staphylococcus aureus	0.0001	400	7	7	258	0.018	1	1	0
+spike_P0	kraken2_16gb_c0_1	bacillus subtilis	1e-05	40	2	9	36	0.225	1	1	0
+spike_P2	kraken2_16gb_c0_1	cryptococcus neoformans	1e-05	40	0	0	0	0.0	0	0	0
+spike_P3	kraken2_16gb_c0_1	enterococcus faecalis	1e-05	40	5	5	38	0.125	1	1	0
+spike_P2	kraken2_16gb_c0_1	escherichia coli	1e-05	40	2	2	2	0.05	1	0	0
+spike_P0	kraken2_16gb_c0_1	lactobacillus fermentum	1e-05	40	26	26	26	0.65	1	1	1
+spike_P1	kraken2_16gb_c0_1	listeria monocytogenes	1e-05	40	0	0	97	0.0	0	0	0
+spike_P3	kraken2_16gb_c0_1	pseudomonas aeruginosa	1e-05	40	0	0	49	0.0	0	0	0
+spike_P3	kraken2_16gb_c0_1	saccharomyces cerevisiae	1e-05	40	0	0	0	0.0	0	0	0
+spike_P1	kraken2_16gb_c0_1	salmonella enterica	1e-05	40	0	0	27	0.0	0	0	0
+spike_P2	kraken2_16gb_c0_1	staphylococcus aureus	1e-05	40	1	1	27	0.025	1	0	0
+spike_P1	metaphlan4	bacillus subtilis	0.01	40000					1	1	1
+spike_P3	metaphlan4	cryptococcus neoformans	0.01	40000					0	0	0
+spike_P0	metaphlan4	enterococcus faecalis	0.01	40000					1	1	1
+spike_P3	metaphlan4	escherichia coli	0.01	40000					1	1	1
+spike_P1	metaphlan4	lactobacillus fermentum	0.01	40000					1	1	1
+spike_P2	metaphlan4	listeria monocytogenes	0.01	40000					1	1	1
+spike_P0	metaphlan4	pseudomonas aeruginosa	0.01	40000					1	1	1
+spike_P0	metaphlan4	saccharomyces cerevisiae	0.01	40000					1	1	1
+spike_P2	metaphlan4	salmonella enterica	0.01	40000					1	1	1
+spike_P3	metaphlan4	staphylococcus aureus	0.01	40000					1	1	1
+spike_P2	metaphlan4	bacillus subtilis	0.001	4000					1	1	1
+spike_P0	metaphlan4	cryptococcus neoformans	0.001	4000					0	0	0
+spike_P1	metaphlan4	enterococcus faecalis	0.001	4000					1	1	1
+spike_P0	metaphlan4	escherichia coli	0.001	4000					1	1	1
+spike_P2	metaphlan4	lactobacillus fermentum	0.001	4000					1	1	1
+spike_P3	metaphlan4	listeria monocytogenes	0.001	4000					1	1	1
+spike_P1	metaphlan4	pseudomonas aeruginosa	0.001	4000					1	1	1
+spike_P1	metaphlan4	saccharomyces cerevisiae	0.001	4000					1	1	1
+spike_P3	metaphlan4	salmonella enterica	0.001	4000					1	1	1
+spike_P0	metaphlan4	staphylococcus aureus	0.001	4000					1	1	1
+spike_P3	metaphlan4	bacillus subtilis	0.0001	400					0	0	0
+spike_P1	metaphlan4	cryptococcus neoformans	0.0001	400					0	0	0
+spike_P2	metaphlan4	enterococcus faecalis	0.0001	400					1	1	1
+spike_P1	metaphlan4	escherichia coli	0.0001	400					0	0	0
+spike_P3	metaphlan4	lactobacillus fermentum	0.0001	400					1	1	1
+spike_P0	metaphlan4	listeria monocytogenes	0.0001	400					0	0	0
+spike_P2	metaphlan4	pseudomonas aeruginosa	0.0001	400					0	0	0
+spike_P2	metaphlan4	saccharomyces cerevisiae	0.0001	400					0	0	0
+spike_P0	metaphlan4	salmonella enterica	0.0001	400					0	0	0
+spike_P1	metaphlan4	staphylococcus aureus	0.0001	400					0	0	0
+spike_P0	metaphlan4	bacillus subtilis	1e-05	40					0	0	0
+spike_P2	metaphlan4	cryptococcus neoformans	1e-05	40					0	0	0
+spike_P3	metaphlan4	enterococcus faecalis	1e-05	40					0	0	0
+spike_P2	metaphlan4	escherichia coli	1e-05	40					0	0	0
+spike_P0	metaphlan4	lactobacillus fermentum	1e-05	40					0	0	0
+spike_P1	metaphlan4	listeria monocytogenes	1e-05	40					0	0	0
+spike_P3	metaphlan4	pseudomonas aeruginosa	1e-05	40					0	0	0
+spike_P3	metaphlan4	saccharomyces cerevisiae	1e-05	40					0	0	0
+spike_P1	metaphlan4	salmonella enterica	1e-05	40					0	0	0
+spike_P2	metaphlan4	staphylococcus aureus	1e-05	40					0	0	0

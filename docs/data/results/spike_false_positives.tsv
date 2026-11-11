@@ -1,0 +1,31 @@
+sample	method	min_reads	false_species	false_species_pathogen_genus	top3	human_clade_reads	total_pairs
+spike_H0	kraken2_16gb_c0_0	1	76	6	mycobacterium spongiae:3; mycobacterium canetti:3; lymphocryptovirus humangamma4:3	3947380	4000000
+spike_H0	kraken2_16gb_c0_0	3	3	2	mycobacterium spongiae:3; mycobacterium canetti:3; lymphocryptovirus humangamma4:3	3947380	4000000
+spike_H0	kraken2_16gb_c0_0	10	0	0		3947380	4000000
+spike_H0	kraken2_16gb_c0_1	1	1	0	lymphocryptovirus humangamma4:2	3223753	4000000
+spike_H0	kraken2_16gb_c0_1	3	0	0		3223753	4000000
+spike_H0	kraken2_16gb_c0_1	10	0	0		3223753	4000000
+spike_P0	kraken2_16gb_c0_0	1	204	18	burkholderia multivorans:227; actinomyces oris:208; bacillus cereus:44	3816596	4000000
+spike_P0	kraken2_16gb_c0_0	3	22	8	burkholderia multivorans:227; actinomyces oris:208; bacillus cereus:44	3816596	4000000
+spike_P0	kraken2_16gb_c0_0	10	7	4	burkholderia multivorans:227; actinomyces oris:208; bacillus cereus:44	3816596	4000000
+spike_P0	kraken2_16gb_c0_1	1	9	2	actinomyces oris:15; vibrio anguillarum:8; burkholderia multivorans:6	3117739	4000000
+spike_P0	kraken2_16gb_c0_1	3	4	2	actinomyces oris:15; vibrio anguillarum:8; burkholderia multivorans:6	3117739	4000000
+spike_P0	kraken2_16gb_c0_1	10	1	0	actinomyces oris:15	3117739	4000000
+spike_P1	kraken2_16gb_c0_0	1	160	14	bacillus inaquosorum:71; bacillus vallismortis:45; bacillus rugosus:27	3855095	4000000
+spike_P1	kraken2_16gb_c0_0	3	21	4	bacillus inaquosorum:71; bacillus vallismortis:45; bacillus rugosus:27	3855095	4000000
+spike_P1	kraken2_16gb_c0_0	10	10	1	bacillus inaquosorum:71; bacillus vallismortis:45; bacillus rugosus:27	3855095	4000000
+spike_P1	kraken2_16gb_c0_1	1	5	0	lymphocryptovirus humangamma4:2; actinomyces oris:2; phocaeicola vulgatus:1	3149267	4000000
+spike_P1	kraken2_16gb_c0_1	3	0	0		3149267	4000000
+spike_P1	kraken2_16gb_c0_1	10	0	0		3149267	4000000
+spike_P2	kraken2_16gb_c0_0	1	150	14	listeria innocua:152; listeria swaminathanii:55; listeria welshimeri:49	3858916	4000000
+spike_P2	kraken2_16gb_c0_0	3	18	4	listeria innocua:152; listeria swaminathanii:55; listeria welshimeri:49	3858916	4000000
+spike_P2	kraken2_16gb_c0_0	10	6	0	listeria innocua:152; listeria swaminathanii:55; listeria welshimeri:49	3858916	4000000
+spike_P2	kraken2_16gb_c0_1	1	2	0	lymphocryptovirus humangamma4:2; ligilactobacillus ruminis:1	3152265	4000000
+spike_P2	kraken2_16gb_c0_1	3	0	0		3152265	4000000
+spike_P2	kraken2_16gb_c0_1	10	0	0		3152265	4000000
+spike_P3	kraken2_16gb_c0_0	1	200	20	pseudomonas sp. cip-10:318; streptococcus agalactiae:79; staphylococcus argenteus:38	3819760	4000000
+spike_P3	kraken2_16gb_c0_0	3	37	10	pseudomonas sp. cip-10:318; streptococcus agalactiae:79; staphylococcus argenteus:38	3819760	4000000
+spike_P3	kraken2_16gb_c0_0	10	16	5	pseudomonas sp. cip-10:318; streptococcus agalactiae:79; staphylococcus argenteus:38	3819760	4000000
+spike_P3	kraken2_16gb_c0_1	1	3	0	pseudomonas sp. cip-10:30; lymphocryptovirus humangamma4:2; escherichia albertii:1	3120748	4000000
+spike_P3	kraken2_16gb_c0_1	3	1	0	pseudomonas sp. cip-10:30	3120748	4000000
+spike_P3	kraken2_16gb_c0_1	10	1	0	pseudomonas sp. cip-10:30	3120748	4000000

@@ -1,0 +1,118 @@
+run	confidence	species	pairs	reagent_contaminant_genus
+SRR22211815	0.0	escherichia coli	5883	1
+SRR22211815	0.0	verrucomicrobium spinosum	2598	0
+SRR22211815	0.0	gammatorquevirus homidi15	922	0
+SRR22211815	0.0	torque teno virus 28	741	0
+SRR22211815	0.0	alphatorquevirus homin18	724	0
+SRR22211815	0.1	torque teno virus 27	142	0
+SRR22211815	0.1	gammatorquevirus homidi15	121	0
+SRR22211815	0.1	cutibacterium acnes	69	1
+SRR22211815	0.1	escherichia coli	26	1
+SRR22211815	0.1	terribium terrae	25	0
+SRR22211832	0.0	alphatorquevirus homin5	183	0
+SRR22211832	0.1	alphatorquevirus homin5	50	0
+SRR22211848	0.0	escherichia coli	4870	1
+SRR22211848	0.0	klebsiella pneumoniae	631	0
+SRR22211848	0.0	salmonella enterica	584	0
+SRR22211848	0.0	acidovorax sp. jmule5	529	1
+SRR22211848	0.0	cutibacterium acnes	375	1
+SRR22211848	0.1	ralstonia pickettii	150	1
+SRR22211848	0.1	acidovorax sp. jmule5	127	1
+SRR22211848	0.1	cutibacterium acnes	98	1
+SRR22211848	0.1	escherichia coli	48	1
+SRR22211848	0.1	human immunodeficiency virus 1	42	0
+SRR22211864	0.0	escherichia coli	14751	1
+SRR22211864	0.0	brevundimonas bullata	4680	1
+SRR22211864	0.0	klebsiella pneumoniae	1868	0
+SRR22211864	0.0	salmonella enterica	1600	0
+SRR22211864	0.0	staphylococcus epidermidis	1564	0
+SRR22211864	0.1	cutibacterium acnes	524	1
+SRR22211864	0.1	acidovorax sp. jmule5	331	1
+SRR22211864	0.1	staphylococcus epidermidis	182	0
+SRR22211864	0.1	escherichia coli	154	1
+SRR22211864	0.1	equine infectious anemia virus	132	0
+SRR22211880	0.0	pegivirus hominis	27842	0
+SRR22211880	0.0	escherichia coli	2776	1
+SRR22211880	0.0	cutibacterium acnes	1229	1
+SRR22211880	0.0	xanthomonas albilineans	1192	1
+SRR22211880	0.0	klebsiella pneumoniae	719	0
+SRR22211880	0.1	xanthomonas albilineans	376	1
+SRR22211880	0.1	pegivirus hominis	254	0
+SRR22211880	0.1	cutibacterium acnes	101	1
+SRR22211880	0.1	acidovorax sp. jmule5	22	1
+SRR22211880	0.1	escherichia coli	21	1
+SRR22211897	0.0	escherichia coli	130	1
+SRR22211897	0.0	diaminobutyricimonas sp. lj205	41	0
+SRR22211897	0.0	klebsiella pneumoniae	26	0
+SRR22211897	0.0	cutibacterium acnes	21	1
+SRR22211897	0.0	acidovorax sp. jmule5	16	1
+SRR22211897	0.1	cutibacterium acnes	17	1
+SRR22211913	0.0	torque teno virus	95	0
+SRR22211913	0.0	alphatorquevirus homin29	42	0
+SRR22211913	0.1	torque teno virus	21	0
+SRR22211929	0.0	pegivirus hominis	12787	0
+SRR22211929	0.0	escherichia coli	1606	1
+SRR22211929	0.0	planktothrix agardhii	582	0
+SRR22211929	0.0	human immunodeficiency virus 1	159	0
+SRR22211929	0.0	borrelia sp. p9f1	135	0
+SRR22211929	0.1	pegivirus hominis	143	0
+SRR22211929	0.1	planktothrix agardhii	14	0
+SRR22211929	0.1	escherichia coli	11	1
+SRR22211929	0.1	terribium terrae	10	0
+SRR22211929	0.1	cutibacterium acnes	10	1
+SRR22211945	0.0	escherichia coli	1294	1
+SRR22211945	0.0	cutibacterium acnes	200	1
+SRR22211945	0.0	klebsiella pneumoniae	165	0
+SRR22211945	0.0	nanchangia anserum	128	0
+SRR22211945	0.0	bosea sp. tri-49	108	1
+SRR22211945	0.1	cutibacterium acnes	59	1
+SRR22211945	0.1	escherichia coli	40	1
+SRR22211945	0.1	acidovorax sp. jmule5	14	1
+SRR22211945	0.1	brevundimonas bullata	11	1
+SRR22211961	0.0	human immunodeficiency virus 1	2488	0
+SRR22211961	0.0	pseudanabaena galeata	1303	0
+SRR22211961	0.0	escherichia coli	527	1
+SRR22211961	0.0	vibrio parahaemolyticus	179	0
+SRR22211961	0.0	dissulfurimicrobium hydrothermale	126	0
+SRR22211961	0.1	human immunodeficiency virus 1	399	0
+SRR22211961	0.1	cutibacterium acnes	32	1
+SRR22211961	0.1	sphingomonas leidyi	13	1
+SRR22211961	0.1	escherichia coli	13	1
+SRR22211977	0.0	bacillus cereus	1167	1
+SRR22211977	0.0	escherichia coli	851	1
+SRR22211977	0.0	cutibacterium acnes	617	1
+SRR22211977	0.0	ralstonia pickettii	284	1
+SRR22211977	0.0	salmonella enterica	198	0
+SRR22211977	0.1	cutibacterium acnes	260	1
+SRR22211977	0.1	ralstonia pickettii	119	1
+SRR22211977	0.1	cutibacterium granulosum	13	1
+SRR22211977	0.1	terribium terrae	10	0
+SRR22211993	0.0	gammatorquevirus homidi15	26	0
+SRR22211993	0.0	escherichia coli	20	1
+SRR22211993	0.0	salinispira pacifica	10	0
+SRR22212009	0.0	bordetella bronchialis	298	0
+SRR22212009	0.0	pedobacter sp. klb.chid	11	1
+SRR22212009	0.0	romboutsia hominis	10	0
+SRR22212025	0.0	escherichia coli	172	1
+SRR22212025	0.0	lactiplantibacillus plantarum	58	0
+SRR22212025	0.0	tissierella carlieri	48	0
+SRR22212025	0.0	human immunodeficiency virus 1	47	0
+SRR22212025	0.0	clostridium perfringens	46	0
+SRR22212025	0.1	cutibacterium acnes	19	1
+SRR22212041	0.0	escherichia coli	3094	1
+SRR22212041	0.0	cutibacterium acnes	855	1
+SRR22212041	0.0	acidovorax sp. jmule5	506	1
+SRR22212041	0.0	klebsiella pneumoniae	457	0
+SRR22212041	0.0	salmonella enterica	282	0
+SRR22212041	0.1	acidovorax sp. jmule5	133	1
+SRR22212041	0.1	cutibacterium acnes	65	1
+SRR22212041	0.1	brevundimonas bullata	47	1
+SRR22212041	0.1	escherichia coli	33	1
+SRR22212041	0.1	methylorubrum extorquens	21	0
+SRR22212057	0.0	escherichia coli	86	1
+SRR22212057	0.0	alphatorquevirus homin7	86	0
+SRR22212057	0.0	cutibacterium acnes	39	1
+SRR22212057	0.0	enhydrobacter sp.	24	1
+SRR22212057	0.0	klebsiella pneumoniae	23	0
+SRR22212057	0.1	alphatorquevirus homin7	30	0
+SRR22212057	0.1	cutibacterium acnes	18	1

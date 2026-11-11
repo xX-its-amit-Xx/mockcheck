@@ -1,0 +1,6 @@
+#mpa_vJan26_CHOCOPhlAnSGB_202605
+#$MOCKCHECK_SCRATCH/env_mpa/bin/metaphlan $MOCKCHECK_SCRATCH/reads/p2/spike_H0_1.fastq.gz,$MOCKCHECK_SCRATCH/reads/p2/spike_H0_2.fastq.gz --input_type fastq --nproc 8 --db_dir $MOCKCHECK_SCRATCH/db/metaphlan -x mpa_vJan26_CHOCOPhlAnSGB_202605 --mapout $MOCKCHECK_SCRATCH/out/p2/metaphlan/spike_H0.mapout.bz2 -o $MOCKCHECK_SCRATCH/out/p2/metaphlan/spike_H0.profile.txt
+#8000000 reads processed
+#SampleID	Metaphlan_Analysis
+#clade_name	NCBI_tax_id	relative_abundance	additional_species
+UNCLASSIFIED	-1	100.0	

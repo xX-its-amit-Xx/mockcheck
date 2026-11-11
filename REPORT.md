@@ -151,3 +151,21 @@ Even mock, 2 million read pairs, 8 cores: Kraken2 14 to 27 s, Bracken under 1 s,
 ## Reproduce
 
 See the README. Versions are pinned in `env/environment.lock.txt`; databases and read sources are listed in `PLAN.md` and `config/`.
+
+## Phase 2: real reads, constructed truth (host-heavy samples)
+
+Question: does classification hold up when the sample is mostly human, as in blood? Truth tiers: T2 = real reads, truth by construction; T4 = real, no truth.
+
+**Design.** 4,000,000 real human read pairs (NA12878, ERR194147) plus real reads of 10 isolates (the Phase 1 isolate runs) at 1e-2, 1e-3, 1e-4, 1e-5 of the total (40,000 down to 40 pairs). Four panels rotate which organism sits at which level; a human-only sample is the negative control. Truth: `results/spike_manifest.tsv`. Detection is counted in absolute read pairs, not percent.
+
+**Results (Kraken2 16 GB; MetaPhlAn 4.2.6).**
+- Detection: with confidence 0.0, 8 of 8 bacteria were detected at 10+ pairs down to 400 pairs, and 6 of 8 at 40 pairs. With confidence 0.1, 3 of 8 at 400 pairs and 1 of 8 at 40 pairs (10+ pairs).
+- Species-level recovery is low: about 20% of spiked pairs at confidence 0.0, 2% at 0.1. E. coli reads mostly stop at the family Enterobacteriaceae. A species count is a poor measure of load.
+- Both yeasts: 0 pairs at every level in Kraken2 (the standard database has no fungi). MetaPhlAn 4 saw one.
+- MetaPhlAn 4: 8/8 bacteria at 1e-2 and 1e-3, 2/8 at 1e-4, 0/8 at 1e-5.
+- False alarms: human-only control 0 wrong species at 10 pairs; spiked panels at confidence 0.0 had 6 to 16 wrong species at 10 pairs, mostly near relatives of the spiked organism.
+- Real plasma (T4, 16 Uganda sepsis runs, 500,000 pairs each): 0 to 10 species per run; Cutibacterium acnes in 12 of 16; many calls are in reagent-contaminant genera. Kraken2 and MetaPhlAn shared at most 1 species on the first 6 runs. No per-sample truth is public, so this shows behaviour, not accuracy.
+
+**What this supports.** Kraken2 at low confidence can flag a bacterium at 1 in 100,000 read pairs in a human background, with a few extra species to triage.
+**What it does not support.** Species-level load estimates; fungal detection with the standard database; anything about real infections (no T3 data: confirmed clinical samples with open raw reads were not found). Isolate reads are cleaner than real samples, so these limits are optimistic. One run per level, no replicates.
+**What to check next.** Replicates; a database with fungi; genus or family reporting for load; a T3 dataset with confirmed pathogens and a blank control.
