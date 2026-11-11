@@ -8,6 +8,7 @@ from . import __version__
 from .parsers import read_profile
 from .report import render_isolate, render_markdown, build_findings
 from .score import analyze, analyze_isolate
+from .spike import DEFAULT_MANIFEST, analyze_spike, render_spike
 from .truth import ROOT, list_mocks, load_mock
 
 
@@ -32,6 +33,16 @@ def cmd_report(a):
         sys.stdout.write(text)
     else:
         os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)
+        with open(a.out, "w", encoding="utf-8", newline="\n") as f:
+            f.write(text)
+        print(f"wrote {a.out}")
+
+
+def cmd_spike(a):
+    text = render_spike(analyze_spike(a.report, a.sample, a.manifest, a.min_reads), _label(a.report))
+    if a.out in (None, "-"):
+        sys.stdout.write(text)
+    else:
         with open(a.out, "w", encoding="utf-8", newline="\n") as f:
             f.write(text)
         print(f"wrote {a.out}")
@@ -124,6 +135,13 @@ def main(argv=None):
     r.add_argument("--isolate", help="the run is a single organism, e.g. 'Escherichia coli' (negative control)")
     r.add_argument("--out", help="markdown file to write (default: print)")
     r.set_defaults(fn=cmd_report)
+    sp = sub.add_parser("spike", help="score a Kraken2 report against a constructed host-background spike-in (absolute read pairs)")
+    sp.add_argument("report")
+    sp.add_argument("--sample", required=True, help="sample name in the manifest, e.g. spike_P0 or spike_H0")
+    sp.add_argument("--manifest", default=DEFAULT_MANIFEST)
+    sp.add_argument("--min-reads", type=int, default=10, help="read pairs needed to call a species (default 10)")
+    sp.add_argument("--out")
+    sp.set_defaults(fn=cmd_spike)
     c = sub.add_parser("compare", help="rank several runs against the same mock")
     c.add_argument("profiles", nargs="+")
     common(c)

@@ -44,6 +44,12 @@ def _num(x):
         return None
 
 
+def load_contaminants():
+    """Genera found in sequenced blank controls (Salter et al. 2014, BMC Biol 12:87, Table 1)."""
+    p = os.path.join(CONFIG, "reagent_contaminant_genera.tsv")
+    return {r["genus"] for r in _tsv(p)} if os.path.exists(p) else set()
+
+
 def list_mocks():
     return [(k, v[1], v[2]) for k, v in BUILTIN.items()]
 

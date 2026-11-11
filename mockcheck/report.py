@@ -1,6 +1,7 @@
 """Turn numbers into the report layer: what the run supports, what it does not, what to check next,
 plus the microbiology behind each surprise. Rule-based and deterministic: no model is called."""
 from .parsers import genus
+from .truth import load_contaminants
 
 EUK_GENERA = {"saccharomyces", "cryptococcus", "candida", "aspergillus", "malassezia", "penicillium", "fusarium"}
 KRAKEN_LIKE = ("kraken2", "bracken")
@@ -88,6 +89,12 @@ def build_findings(a, mock):
         N.append(f"Species from pathogen-containing genera were reported ({names}) although nothing like them is in the tube. A species name on its own is not a detection of a threat.")
         C.append("Before escalating any call from a pathogen-containing genus, require corroboration: many reads spread across the genome (not a few conserved regions), a second tool or a marker-gene check, and a negative control run through the same database.")
         M.append("**Why a harmless mix produces pathogen-genus calls:** short reads from conserved genes (ribosomal and housekeeping genes) match many genomes in a database, and species in large genera such as Mycobacterium or Burkholderia share long stretches of sequence. A likely cause (not verified for this specific run): low-confidence k-mer assignment lands a few reads on a better-known relative.")
+    contam = load_contaminants()
+    cfp = [(k, v) for k, v in a["false_positives"] if genus(k) in contam and genus(k) not in {genus(o) for o in mock.species}]
+    if cfp:
+        names = ", ".join(f"{title_case(k)} {pct(v)}" for k, v in cfp[:4])
+        N.append(f"Some false species belong to genera that are well known reagent and laboratory contaminants ({names}). In a real low-biomass sample these are often background, not infection.")
+        C.append("Run a blank (water or buffer) through the same extraction and database, and discount genera that also appear in it. The genus list comes from Salter et al. 2014 (BMC Biology), which is a prompt to check a blank, not a verdict: some listed genera are also real pathogens.")
     if a["false_positive_mass_pct"] > 5:
         N.append(f"{pct(a['false_positive_mass_pct'], 1)} of the profile sits on organisms that are not in the tube.")
     # ---- kraken-specific

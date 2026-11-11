@@ -100,7 +100,21 @@ python -m mockcheck report results/raw/kraken2/iso_Bacillus_subtilis.16gb.c0.0.r
 
 **If it goes wrong:** This tool only tells you how reliable the classifier was on a known mix. It is not a threat assessment: a species label from short reads does not give strain, virulence or intent. Corroborate with reads spread across the genome, a second method and a negative control before escalating.
 
-## 8. Add another classifier
+## 8. How rare can a microbe be before my pipeline misses it? (blood-like, host-heavy samples)
+
+**For:** Anyone who classifies samples that are mostly human (blood, plasma, tissue) and needs a detection limit, not just a species list.
+
+```bash
+python -m mockcheck spike results/raw/phase2/kraken2/spike_P0.16gb.c0.1.report.gz --sample spike_P0
+python -m mockcheck spike results/raw/phase2/kraken2/spike_H0.16gb.c0.1.report.gz --sample spike_H0 --min-reads 3
+python scripts/make_spikein.py READS_DIR OUT_DIR 4000000      # build your own: your human reads + your isolate reads at 1e-2 to 1e-5
+```
+
+**You should see:** A report in absolute read pairs: which added organisms were detected at which fraction, how many wrong species appeared (the human-only sample is your false-alarm floor), and what each result does not support. Truth tier T2: real reads, constructed mixture.
+
+**If it goes wrong:** The spike-in truth lives in results/spike_manifest.tsv. Species are called at a minimum number of read pairs (default 10); change it with --min-reads. Detection limits here are optimistic for real samples: reads come from clean isolates, with no kit contamination.
+
+## 9. Add another classifier
 
 **For:** You use Centrifuge, Kaiju, mOTUs or similar.
 

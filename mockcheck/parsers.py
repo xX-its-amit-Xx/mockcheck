@@ -92,6 +92,30 @@ def read_kraken(path):
     return Profile("kraken2", _renorm(sp), path, meta)
 
 
+def read_kraken_counts(path):
+    """Kraken2 report -> (species {name: clade read pairs}, genera {name: clade reads}, totals)."""
+    sp, ge = {}, {}
+    tot = dict(root=0, unclassified=0)
+    with _open(path) as f:
+        for line in f:
+            p = line.rstrip("\n").split("\t")
+            if len(p) < 6:
+                continue
+            reads, rank, name = int(p[1]), p[3], p[5].strip()
+            if rank == "U":
+                tot["unclassified"] = reads
+            elif rank == "R" and name == "root":
+                tot["root"] = reads
+            elif rank == "D":
+                tot[name.lower()] = reads
+            elif rank == "S":
+                sp[norm(name)] = sp.get(norm(name), 0) + reads
+            elif rank == "G":
+                ge[norm(name)] = ge.get(norm(name), 0) + reads
+    tot["total"] = tot["root"] + tot["unclassified"]
+    return sp, ge, tot
+
+
 def read_bracken(path):
     sp, frac = {}, 0.0
     with _open(path) as f:

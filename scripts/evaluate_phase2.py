@@ -12,7 +12,7 @@ import csv, glob, gzip, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
-from mockcheck.parsers import norm, genus, load_aliases  # noqa: E402
+from mockcheck.parsers import norm, genus, load_aliases, read_kraken_counts  # noqa: E402
 from mockcheck.report import WATCH_GENERA  # noqa: E402
 
 load_aliases(f"{ROOT}/config/aliases.tsv")
@@ -27,27 +27,7 @@ def tsv(path):
         return list(csv.DictReader(f, delimiter="\t"))
 
 
-def kraken(path):
-    """-> species {name: clade reads}, genera {name: clade reads}, totals dict."""
-    sp, ge, tot = {}, {}, dict(root=0, unclassified=0, bacteria=0, viruses=0, eukaryota=0)
-    with gzip.open(path, "rt") as f:
-        for line in f:
-            p = line.rstrip("\n").split("\t")
-            if len(p) < 6:
-                continue
-            reads, rank, name = int(p[1]), p[3], p[5].strip()
-            if rank == "U":
-                tot["unclassified"] = reads
-            elif rank == "R" and name == "root":
-                tot["root"] = reads
-            elif rank == "D":
-                tot[name.lower()] = reads
-            elif rank == "S":
-                sp[norm(name)] = sp.get(norm(name), 0) + reads
-            elif rank == "G":
-                ge[norm(name)] = ge.get(norm(name), 0) + reads
-    tot["total"] = tot["root"] + tot["unclassified"]
-    return sp, ge, tot
+kraken = read_kraken_counts   # species, genera, totals (one parser, shared with the mockcheck tool)
 
 
 def metaphlan(path):
