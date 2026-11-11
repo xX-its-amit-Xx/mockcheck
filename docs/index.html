@@ -66,7 +66,15 @@ button.tog{font:14px system-ui,sans-serif;border:1px solid var(--line);backgroun
 .rep pre,.cook pre{white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:.85rem}
 .sc{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.sc div{border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:.9rem}
 .cook details{margin:8px 0}.cook summary{cursor:pointer;font-weight:600}.cook button{font:inherit;margin:2px 0 8px;padding:4px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit;cursor:pointer}
+
+.tier{display:inline-block;font-weight:700;font-size:.8rem;border-radius:6px;padding:1px 7px;border:1px solid var(--line);background:var(--chip)}
+.t-t1{color:var(--ok)}.t-t2{color:var(--acc)}.t-t3{color:var(--warn)}.t-t4{color:var(--bad)}
+.tiercard h3{margin-top:0}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.tw{overflow-x:auto}table.mini{border-collapse:collapse;font-size:.88rem;width:100%}table.mini th,table.mini td{border-bottom:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top}
+.dl{display:grid;grid-template-columns:minmax(120px,max-content) 1fr;gap:2px 12px;font-size:.9rem}.dl dt{font-weight:600;word-break:break-word}.dl dd{margin:0}
+#realdata select,#represent select{font:inherit;padding:6px 8px;margin:0 8px 8px 0;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit;max-width:100%}
 </style>
+<link rel="icon" href="data:,">
 </head>
 <body>
 <header class="hero"><div class="wrap">
@@ -76,7 +84,7 @@ button.tog{font:14px system-ui,sans-serif;border:1px solid var(--line);backgroun
   <div class="tldr" id="tldr">Loading the headline&hellip;</div>
 </div></header>
 <nav><div class="wrap">
-  <a href="#story">The story</a><a href="#results">Live results</a><a href="#reports">Run reports</a><a href="#cookbook">Cookbook</a><a href="#toy">Try it</a><a href="#fail">What goes wrong</a><a href="#analogy">Other fields</a><a href="#ideas">Untried ideas</a><a href="#gloss">Glossary</a><a href="#timeline">Timeline</a><a href="#devlog">Dev log</a><a href="#sources">Sources</a>
+  <a href="#story">The story</a><a href="#results">Live results</a><a href="#reports">Run reports</a><a href="#cookbook">Cookbook</a><a href="#realdata">Real data</a><a href="#decisions">Decisions</a><a href="#innovation">Innovation</a><a href="#needdata">More data</a><a href="#represent">Data guide</a><a href="#toy">Try it</a><a href="#fail">What goes wrong</a><a href="#analogy">Other fields</a><a href="#ideas">Untried ideas</a><a href="#gloss">Glossary</a><a href="#timeline">Timeline</a><a href="#devlog">Dev log</a><a href="#sources">Sources</a>
 </div></nav>
 <main class="wrap">
 
@@ -95,6 +103,23 @@ button.tog{font:14px system-ui,sans-serif;border:1px solid var(--line);backgroun
 <section id="cookbook"><h2>Cookbook: use it yourself</h2>
 <p class="sub">Copy-paste recipes. Python 3.9+ and nothing else is needed to score a run. The same text is in COOKBOOK.md in the repo.</p>
 <div id="cook-body"><p class="mut">Loading recipes&hellip;</p></div></section>
+
+<section id="realdata"><h2>Phase 2: real data, constructed truth</h2>
+<p class="sub">Phase 1 used tubes made for the purpose. Here we ask the harder question: what happens when the sample is mostly human, as blood is, and the microbe is rare? Every result carries a <b>truth tier</b> that says how much you can trust the answer key.</p>
+<div id="rd-tiers"></div>
+<h3>Findings</h3><div id="rd-findings"></div>
+<h3>Detection limit: how rare can a microbe get before the tool misses it?</h3><div id="rd-spike"></div>
+<h3>False alarms with nothing there</h3><div id="rd-fp"></div>
+<h3>Real patient plasma (no answer key)</h3>
+<p class="small mut">16 public runs from a sepsis study in Uganda (PRJNA898830). The study's per-patient lab results are not public, so this shows how the tools behave, not whether they are right.</p><div id="rd-uganda"></div></section>
+
+<section id="decisions"><h2>Decisions and why</h2><p class="sub">Each choice made in Phase 2, what it costs, and why it was made.</p><div id="dec-body"></div></section>
+
+<section id="innovation"><h2>Areas for innovation</h2><p class="sub">Ideas to test, not findings. Each says the first step that would test it.</p><div id="inn-body"></div></section>
+
+<section id="needdata"><h2>What is just a matter of collecting more data</h2><p class="sub">Gaps that better analysis cannot fix: they need new or newly released data.</p><div id="need-body"></div></section>
+
+<section id="represent"><h2>How each kind of data is represented</h2><div id="rep-intro"></div><div id="rep-dict"></div></section>
 
 <section id="toy"><h2>Try it: a toy classifier</h2>
 <p class="sub">This is a teaching toy with three <b>made-up</b> mini genomes, not real data. It shows the core idea behind k-mer classifiers such as Kraken2: chop a read into short words, look each word up, let the words vote.</p>
@@ -314,5 +339,6 @@ async function renderCookbook(){
   await renderDev();await renderResults();await renderReports();await renderCookbook();toy();
 })();
 </script>
+<script src="phase2.js"></script>
 </body>
 </html>
