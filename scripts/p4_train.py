@@ -60,7 +60,12 @@ class Net(nn.Module):
         return (h * m).sum(1) / m.sum(1)
 
     def forward(self, ids, mask):
-        e = self.embed(ids, mask)
+        # encoder in fp16 autocast on GPU (about 3x faster on V100); pooling, heads and the loss stay in fp32
+        with torch.autocast(device_type="cuda", dtype=torch.float16, enabled=ids.is_cuda):
+            h = self.enc(input_ids=ids, attention_mask=mask).last_hidden_state
+        h = h.float()
+        m = mask.unsqueeze(-1).float()
+        e = (h * m).sum(1) / m.sum(1)
         return self.hh(e), self.rh(e)
 
 
@@ -111,6 +116,7 @@ def main():
             if cond != "probe":
                 params.append({"params": net.enc.parameters(), "lr": a.lr_enc})
             opt = torch.optim.AdamW(params, weight_decay=0.01)
+            scaler = torch.amp.GradScaler("cuda", enabled=(dev == "cuda" and cond != "probe"))
             steps = a.steps if cond != "probe" else 200
             if cond == "probe":
                 with torch.no_grad():
@@ -142,7 +148,8 @@ def main():
                         else:   # util_worst: softmin weights put most weight on the lowest-utility strata
                             w = F.softmax(-us.detach() / a.tau, 0)
                             loss = -(w * us).sum()
-                opt.zero_grad(); loss.backward(); torch.nn.utils.clip_grad_norm_(net.parameters(), 1.0); opt.step()
+                opt.zero_grad(); scaler.scale(loss).backward(); scaler.unscale_(opt)
+                torch.nn.utils.clip_grad_norm_(net.parameters(), 1.0); scaler.step(opt); scaler.update()
                 if step % 100 == 0:
                     print(f"  {tag} step {step} loss {loss.item():.4f}", flush=True)
             # predictions for every row (all splits), deterministic policy = argmax action

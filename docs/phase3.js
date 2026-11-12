@@ -2,11 +2,12 @@
 /* Phase 3 dashboard: nested dropdowns from data/p3_*.json, plus live blocks from results tables and agent traces.
    Uses helpers from index.html: $, el, j, tsv, detailsFrom. */
 (async function renderPhase3() {
-  const FILES = ["p3_geohost", "p3_landscape", "p3_methods"];
+  const FILES = ["p3_geohost", "p3_landscape", "p3_methods", "p4_groundtruth", "p4_experiment"];
   const secs = [];
   for (const f of FILES) { const d = await j("data/" + f + ".json"); if (d && d.sections) secs.push(...d.sections); }
   const root = $("#p3-root");
   if (!root || !secs.length) return;
+  const f = (x, d = 2) => (x === "" || x == null || isNaN(Number(x)) ? "n/a" : Number(x).toFixed(d));
   const num = x => (x === "" || x == null ? NaN : Number(x));
   const table = (head, rows) => el("div", { class: "tw" }, el("table", { class: "mini" },
     el("thead", {}, el("tr", {}, head.map(h => el("th", {}, h)))),
@@ -87,6 +88,63 @@
       if (!rows.length) continue;
       box.append(detailsFrom(s + " (" + rows.length + " listed)", table(["Query", "Title", "Date", "License", "Link"], rows.map(r => [r.query, r.title, r.date, r.license, el("a", { href: r.url, target: "_blank", rel: "noopener" }, "open")]))));
     }
+  };
+
+  // ------------------------------------------------------------------ Phase 4 live blocks
+  const pct = x => (isNaN(x) ? "" : (100 * x).toFixed(0) + "%");
+  live.p4curation = async box => {
+    const t = await tsv("data/results/p4_curation_summary.tsv");
+    if (!t) { box.append(el("p", { class: "mut" }, "Curation table not published.")); return; }
+    const vs = [...new Set(t.map(r => r.virus))], get = (v, s) => { const r = t.find(x => x.virus === v && x.step === s); return r ? r.count : "0"; };
+    const steps = [["fetched", "records fetched"], ["drop_virus_not_in_scope", "dropped: virus out of scope"], ["drop_protein_qc", "dropped: protein length or quality"], ["drop_lab_or_passage_or_construct", "dropped: vaccine, reassortant or lab construct"], ["drop_exact_duplicate", "dropped: exact duplicate"], ["drop_no_label", "dropped: no usable label"], ["kept_total", "KEPT"], ["conflict_host", "host labels blanked (conflict)"], ["conflict_geo", "place labels blanked (conflict)"], ["conflict_year", "year labels blanked (conflict)"], ["host_tier_A", "host label gold (tier A)"], ["host_tier_B", "host label weak (tier B)"], ["geo_tier_A", "place label gold (tier A)"], ["geo_tier_B", "place label weak (tier B)"]];
+    box.append(table(["Step", ...vs], steps.map(([k, lab]) => [lab, ...vs.map(v => get(v, k))])));
+  };
+  live.p4consistency = async box => {
+    const t = await tsv("data/results/p4_label_consistency.tsv"), p = await tsv("data/results/p4_label_consistency_pairs.tsv");
+    if (!t) return;
+    box.append(table(["Virus", "Similarity (5-mer Jaccard)", "Sequences with a near neighbour", "Neighbour has a different host", "Rate"], t.map(r => [r.virus, r.similarity_threshold, r.sequences_with_near_neighbour, r.host_disagrees, pct(num(r.disagreement_rate))])));
+    if (p && p.length) box.append(el("p", { class: "small mut" }, "Which host pairs disagree at similarity 0.9: " + p.slice(0, 6).map(r => r.virus + " " + r["host_pair_at_J0.9"] + " (" + r.count + ")").join("; ") + ". Human vs swine influenza and bovine vs swine rotavirus are well-documented cross-species links, so many of these are likely real."));
+  };
+  live.p4counts = async box => {
+    const t = await tsv("data/results/p4_gt_counts.tsv");
+    if (!t) return;
+    const splits = ["train", "dev", "test_geo", "test_host", "test_time", "blind"], vs = [...new Set(t.map(r => r.virus))];
+    box.append(el("p", { class: "small mut" }, "All sequences by split (any label tier)."));
+    box.append(table(["Virus", ...splits, "Total"], vs.map(v => { const c = s => t.filter(r => r.virus === v && r.split === s).reduce((a, r) => a + num(r.n), 0); return [v, ...splits.map(c), splits.reduce((a, s) => a + c(s), 0)]; })));
+    const both = t.filter(r => r.host_tier === "A" && r.geo_tier === "A");
+    const strata = [...new Set(both.map(r => r.virus + " | " + r.region))].sort();
+    box.append(el("p", { class: "small mut" }, "Fully labelled (gold host and gold region) by virus and region."));
+    box.append(table(["Virus | region", ...splits, "Total"], strata.map(s => { const c = sp => both.filter(r => r.virus + " | " + r.region === s && r.split === sp).reduce((a, r) => a + num(r.n), 0); return [s, ...splits.map(c), splits.reduce((a, sp) => a + c(sp), 0)]; })));
+  };
+  live.p4results = async box => {
+    const S = await tsv("data/results/p4_condition_summary.tsv");
+    if (!S) { box.append(el("p", { class: "mut" }, "Training results are not published yet.")); return; }
+    const NAMES = { "majority": "Majority class per virus (baseline)", "knn+abstain": "Nearest neighbour, 5-mers (baseline)", "probe+abstain": "Vanilla: frozen ESM-2 + linear heads", "ce+abstain": "Fine-tune, cross-entropy (+ abstain rule)", "util_avg": "Fine-tune, utility loss, average of all strata", "util_worst": "Fine-tune, utility loss, worst-stratum weighted" };
+    const grp = g => S.filter(r => r.group === g);
+    for (const g of ["dev", "heldout", "blind"]) {
+      const rows = grp(g).filter(r => !r.condition.startsWith("util_single"));
+      if (!rows.length) continue;
+      box.append(el("h4", {}, g === "dev" ? "In-distribution (dev)" : g === "heldout" ? "Held out: unseen countries, unseen host genera, 2022 and later" : "Blind holdout (looked at once, after all design was frozen)"));
+      box.append(table(["Condition", "Seeds", "Average utility [95% CI]", "Worst stratum [95% CI]"], rows.map(r => [NAMES[r.condition] || r.condition, r.seeds, f(r.macro_utility) + " [" + f(r.macro_ci_lo) + ", " + f(r.macro_ci_hi) + "]", f(r.worst_stratum_utility) + " [" + f(r.worst_ci_lo) + ", " + f(r.worst_ci_hi) + "]"])));
+    }
+    const singles = grp("heldout").filter(r => r.condition.startsWith("util_single"));
+    if (singles.length) {
+      const avg = grp("heldout").find(r => r.condition === "util_avg");
+      box.append(el("h4", {}, "Optimise one stratum only: average held-out utility over all strata"));
+      box.append(table(["Trained on only", "Average utility [95% CI]", "Worst stratum", "vs optimising the average"], singles.map(r => [r.condition.replace("util_single-", "").replace("_", " | "), f(r.macro_utility) + " [" + f(r.macro_ci_lo) + ", " + f(r.macro_ci_hi) + "]", f(r.worst_stratum_utility), avg ? (num(r.macro_utility) - num(avg.macro_utility) >= 0 ? "+" : "") + f(num(r.macro_utility) - num(avg.macro_utility)) : ""])));
+    }
+  };
+  live.p4transfer = async box => {
+    const M = await tsv("data/results/p4_transfer_matrix.tsv");
+    if (!M) { box.append(el("p", { class: "mut" }, "Transfer matrix not published yet.")); return; }
+    const rows = [...new Set(M.map(r => r.trained_on))].sort(), cols = [...new Set(M.map(r => r.evaluated_on))].sort();
+    const val = (a, b) => { const r = M.find(x => x.trained_on === a && x.evaluated_on === b); return r ? num(r.utility) : NaN; };
+    const colour = v => isNaN(v) ? "" : "background:" + (v >= 0 ? "rgba(46,160,120," + Math.min(0.75, v) + ")" : "rgba(210,70,60," + Math.min(0.75, -v) + ")");
+    const ref = c => { const r = M.find(x => x.evaluated_on === c); return r ? num(r.util_avg_reference) : NaN; };
+    const tbl = el("div", { class: "tw" }, el("table", { class: "mini" }, el("thead", {}, el("tr", {}, [el("th", {}, "trained on ↓ / evaluated on →"), ...cols.map(c => el("th", {}, c.replace("|", " | ")))])),
+      el("tbody", {}, [...rows.map(a => el("tr", {}, [el("th", {}, a.replace("_", "|").replace("|", " | ")), ...cols.map(c => { const v = val(a, c); return el("td", { style: colour(v) + ((a.replace("_", "|") === c || a === c.replace("|", "_")) ? ";font-weight:700;outline:1px solid var(--fg)" : "") }, isNaN(v) ? "" : v.toFixed(2)); })])),
+        el("tr", {}, [el("th", {}, "optimise the average (reference)"), ...cols.map(c => el("td", { style: colour(ref(c)) }, isNaN(ref(c)) ? "" : ref(c).toFixed(2)))])])));
+    box.append(el("p", { class: "small mut" }, "Cell = held-out selective utility on the column stratum for a model trained only on the row stratum (+1 right, -1 wrong, 0 abstain). Boxed cells are the stratum the model was trained on; the last row is the model trained on the average of all strata."), tbl);
   };
 
   // ------------------------------------------------------------------ generic nested renderer

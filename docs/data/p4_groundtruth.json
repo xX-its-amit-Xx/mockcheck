@@ -1,0 +1,235 @@
+{
+ "sections": [
+  {
+   "id": "groundtruth",
+   "nav": "Ground truth set",
+   "title": "Phase 4: the ground-truth set. What each label means, where it came from, how far to trust it",
+   "intro": "The point of this phase: a labelled set, with a holdout no model trains on, where we can say what each label means and how we checked it. Everything here is built from public GenBank records with a script in the repo (scripts/p4_fetch_labels.py, scripts/p4_build_groundtruth.py); the set itself is data/groundtruth/p4_groundtruth.tsv.gz.",
+   "items": [
+    {
+     "t": "Scope and guardrails",
+     "s": "Classification of existing public sequences only.",
+     "list": [
+      "Three non-select-agent viruses: influenza A (HA protein), rabies virus (nucleoprotein), rotavirus A (VP7).",
+      "The task is to label sequences that already exist (which host class, which region). No sequence generation or design, nothing aimed at making a virus more capable.",
+      "GISAID is not used (its terms bar redistribution). Everything comes from INSDC records, which are public.",
+      "SARS-CoV-2 was dropped: 686 of 836 nucleocapsid proteins were exact duplicates, so it added almost no information. Hepatitis E was dropped: almost all records were 100 to 199 residue amplicon fragments with lab-style names and no independent evidence."
+     ],
+     "basis": "our reasoning",
+     "open": true
+    },
+    {
+     "t": "1. The categories we decided on",
+     "s": "What each label is, and what it is not.",
+     "table": {
+      "head": [
+       "Label",
+       "Values",
+       "Means",
+       "Does not mean",
+       "Status"
+      ],
+      "rows": [
+       [
+        "host_class",
+        "avian, human, swine, equine, canine, bovine, feline, other_mammal, bat",
+        "Host class the sample was taken from (sampled host)",
+        "Natural reservoir, or everything it can infect",
+        "Gold when independent evidence agrees"
+       ],
+       [
+        "region (and country)",
+        "africa, asia, europe, north_america, oceania, south_america",
+        "Where the sample was collected",
+        "Where the lineage arose; where a traveller was infected",
+        "Gold when independent evidence agrees"
+       ],
+       [
+        "year",
+        "collection year",
+        "When sampled",
+        "When the lineage emerged",
+        "Gold when independent evidence agrees"
+       ],
+       [
+        "cluster-observed hosts (derived)",
+        "set of host classes seen in the same similarity cluster",
+        "Weak evidence that a lineage has been seen in those hosts",
+        "Proof of compatibility",
+        "Derived, never gold"
+       ],
+       [
+        "experimentally infectable host",
+        "none yet",
+        "Infection shown in a lab",
+        "",
+        "MISSING: 0% coverage. Needs literature or wet-lab data"
+       ],
+       [
+        "receptor-binding compatible host",
+        "none yet",
+        "Binding or entry shown in vitro",
+        "",
+        "MISSING: 0% coverage. Needs binding assays"
+       ],
+       [
+        "natural reservoir",
+        "none yet",
+        "Where the virus persists",
+        "",
+        "MISSING: we did not invent it"
+       ]
+      ]
+     },
+     "basis": "our reasoning",
+     "kids": [
+      {
+       "t": "Why these",
+       "p": [
+        "Three questions a biosecurity buyer asks of an unknown sequence: where did it come from, which host does it circulate in (the spillover signal), and is it new. These map to region, host class and year. The three missing labels are what a buyer would most like and what public databases mostly lack, so we leave them empty and say so rather than guess."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "2. Where the samples came from",
+     "s": "NCBI GenBank through the public E-utilities.",
+     "list": [
+      "For each virus we queried six world regions (long country lists) and several host groups, took a fixed window of records from each query (the window position is a hash of the query, so it is repeatable), and fetched the GenBank files.",
+      "We kept the raw strings of every field (host, geo_loc_name, collection date, strain name) next to the cleaned label, so nothing is lost.",
+      "About 6,300 records fetched, 3,177 kept after quality control. The funnel is shown below, live from the committed table."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "NCBI E-utilities documentation",
+       "https://www.ncbi.nlm.nih.gov/books/NBK25497/"
+      ],
+      [
+       "INSDC: country and collection date requirements",
+       "https://www.insdc.org/?p=317"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "Funnel by virus (live)",
+       "live": "p4curation",
+       "open": true
+      }
+     ]
+    },
+    {
+     "t": "3. How we made the labels trustworthy",
+     "s": "A label is gold only when an independent field agrees with it.",
+     "p": [
+      "The rule: the submitter's host field must agree with the host written in the strain name (A/swine/Iowa/...; RVA/Cow-tc/NGA/...), and the submitter's place must agree with the place in the strain name. If they agree, the label is tier A (gold). If the strain name says nothing, tier B (weak, train only). If they disagree, the label is blanked and counted. Lab constructs (vaccine, reassortant, reverse genetics) are excluded; passaged samples are kept and flagged, because passage does not change where a sample came from."
+     ],
+     "list": [
+      "Of 2,997 influenza records, only 3 had a host conflict and 1 a place conflict: the two fields almost always agree.",
+      "Rabies strain names rarely encode host, so only 21 rabies host labels reach gold. Rotavirus year labels had 54 conflicts, so year is the weakest label there.",
+      "Result: 2,268 sequences have a gold host label, 1,721 have a gold region, and 1,648 have both (1,388 influenza, 250 rotavirus, 10 rabies)."
+     ],
+     "basis": "our reasoning",
+     "kids": [
+      {
+       "t": "What tier A does and does not prove",
+       "p": [
+        "Both fields are typed by the same submitter, often from the same sheet. Agreement rules out a transcription error. It does not rule out a consistent mistake, for example a host recorded wrongly everywhere, or a sample from an imported animal labelled with the importing country. It is internal consistency, not external truth. A human audit sheet of 60 random gold rows (data/groundtruth/p4_audit_sample.tsv) has empty reviewer columns: an outside check against the source papers is still to do."
+       ],
+       "basis": "our reasoning"
+      },
+      {
+       "t": "A check that does not rely on the submitter (live)",
+       "p": [
+        "For every gold-host sequence we found its nearest other sequence of the same virus. If the two are near-identical but carry different host classes, either a real cross-species event happened or a label is wrong. The rate is an upper bound on label noise nearby, because it also counts real host switches."
+       ],
+       "basis": "our data",
+       "live": "p4consistency"
+      }
+     ],
+     "open": true
+    },
+    {
+     "t": "4. Holdouts: what each one tests",
+     "s": "Sequences the models never see in training.",
+     "table": {
+      "head": [
+       "Split",
+       "How it is built",
+       "What it tests"
+      ],
+      "rows": [
+       [
+        "train",
+        "Everything not held out",
+        "What the model learns from"
+       ],
+       [
+        "dev",
+        "Random 10% of similarity clusters",
+        "In-distribution check; used only to tune abstain thresholds for baselines"
+       ],
+       [
+        "test_geo",
+        "Whole countries removed from training (11 countries, at most 3 per region; the two largest per region always stay in training)",
+        "Does it transfer to places it has not seen"
+       ],
+       [
+        "test_host",
+        "Whole host genera removed (at most 2 per host class, never the two most common)",
+        "Does it handle hosts it has not seen"
+       ],
+       [
+        "test_time",
+        "Collected in 2022 or later",
+        "Does it hold on newer sequences"
+       ],
+       [
+        "blind",
+        "A sealed 10% of clusters, chosen by hash before any model was run",
+        "One-time final check; not used for any decision"
+       ]
+      ]
+     },
+     "basis": "our reasoning",
+     "kids": [
+      {
+       "t": "Counts (live)",
+       "live": "p4counts"
+      },
+      {
+       "t": "Honest limits of the holdouts",
+       "list": [
+        "Time and geography holdouts are by sample, so a new sample can still sit in an old lineage. Every held-out row records its similarity to the nearest training sequence so results can be split by novelty.",
+        "Held-out places are chosen by hash with the biggest countries kept in training; that is a design choice, and a different choice would change difficulty."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "5. Incomplete and derived labels",
+     "s": "Some sequences are rich in one label and missing another. We keep that visible.",
+     "list": [
+      "620 sequences have a gold host but no gold region, and 73 the other way. They stay in the file with the missing label empty. Experiments that need both labels use only the 1,648 fully labelled rows (a 1,626-row pool across the 9 strata we use).",
+      "We created no synthetic labels. The only derived column is the cluster-observed host set, marked weak and never used as truth.",
+      "Missing categories (experimentally infectable, receptor-compatible, reservoir) are listed as gaps, not filled."
+     ],
+     "basis": "our reasoning"
+    },
+    {
+     "t": "6. Known gaps",
+     "list": [
+      "Influenza dominates (1,388 of 1,648 fully labelled). Rabies has only 10 fully labelled rows, so it is training-only here.",
+      "The set mirrors what GenBank holds: rich in the United States, China and Europe even after we queried each region separately.",
+      "Collection place is not lineage origin. A migratory duck sampled in Alaska is labelled Alaska.",
+      "Tier A is internal consistency; the outside audit is pending.",
+      "Only three viruses: results say nothing about other families."
+     ],
+     "basis": "our reasoning"
+    }
+   ]
+  }
+ ]
+}
