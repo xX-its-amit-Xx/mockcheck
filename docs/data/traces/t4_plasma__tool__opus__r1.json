@@ -1,0 +1,111 @@
+{
+ "run": "t4_plasma__tool__opus__r1",
+ "task": "t4_plasma",
+ "condition": "tool",
+ "model": "opus",
+ "gold": {
+  "verdict": "cannot_determine",
+  "top_species": [
+   "cutibacterium acnes",
+   "acidovorax sp. jmule5",
+   "staphylococcus epidermidis"
+  ],
+  "reagent_genus_flagged": [
+   "acidovorax sp. jmule5"
+  ],
+  "reagent_flagged_rename_aware": [
+   "acidovorax sp. jmule5",
+   "cutibacterium acnes"
+  ]
+ },
+ "result": {
+  "verdict": "cannot_determine",
+  "top_species": [
+   "cutibacterium acnes",
+   "acidovorax sp. jmule5",
+   "staphylococcus epidermidis"
+  ],
+  "reagent_genus_flagged": [
+   "acidovorax sp. jmule5"
+  ]
+ },
+ "final_text": "I can't tell the team which organism caused the sepsis from this report. The three most abundant non-human species are typical skin or reagent contaminants. The one large bacterial signal can't be pinned to a genus or species.\n\n**Top non-human species (species rank, clade reads \u2265 10):**\n\n| # | Species | Clade reads | Notes |\n|---|---|---|---|\n| 1 | Cutibacterium acnes | 524 | Skin commensal; the old genus name *Propionibacterium* is on the contaminant list |\n| 2 | Acidovorax sp. JMULE5 | 331 | Genus *Acidovorax* is on the contaminant list |\n| 3 | Staphylococcus epidermidis | 182 | Skin commensal; common contaminant from the blood draw |\n\nNext were *E. coli* (154 reads), equine infectious anemia virus (132, which usually comes from lentiviral vector material in the lab) and *Methylorubrum extorquens* (88). Other contaminant genera also show up: *Brevundimonas* (1,473), *Ralstonia*, *Pseudomonas*, *Acinetobacter* and *Methylobacterium/Methylorubrum*.\n\n**Why I can't identify the cause:**\n- **Contamination:** at 524 reads or fewer out of 500,000 pairs (\u2264 0.1%), each top species looks like contamination, not infection.\n- **Unresolved family signal:** the biggest non-human signal is 44,302 reads (8.9%) in Enterobacteriaceae. Of these, 44,055 were assigned only at family level, and just 232 reached *Escherichia*. This could point to a gram-negative enteric organism, but it can't say which one. It could also be an artefact of the database or the classification.\n- **No controls or con",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 1,
+  "L1_tool_calls": 8,
+  "L1_tool_errors": 5,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 3,
+  "L2_fields_total": 3,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "PowerShell",
+   "input": "python -m mockcheck --help; Get-Content data/reagent_contaminant_genera.tsv; python -I -c \"import gzip;[print(l.rstrip()) for l in gzip.open('data/plasma.report.gz','rt') if l.split('\\t')[3].strip() in ('S','G','U','R','D')]\"",
+   "output": "This PowerShell command contains multiple operations. The following part requires approval: python -m mockcheck --help; Get-Content data/reagent_contaminant_genera.tsv; python -I -c \"import gzip;[print(l.rstrip()) for l in gzip.open('data/plasma.report.gz','rt') if l.split('\\t')[3].strip() in ('S','G','U','R','D')]\"",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Read",
+   "input": "<sandbox>\\data\\reagent_contaminant_genera.tsv",
+   "output": "1\tgenus\tsource\n2\tabiotrophia\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\n3\tacidovorax\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\n4\tacinetobacter\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\n5\taeromicrobium\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\n6\tafipia\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\n7\taquabacterium\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\n8\tarthrobacter\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced ",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "PowerShell",
+   "input": "python -I -c \"import gzip;[print(l.rstrip()) for l in gzip.open('data/plasma.report.gz','rt') if l.split('\\t')[3].strip() in ('S','G','U','R','D')]\"",
+   "output": "This PowerShell command contains multiple operations. The following part requires approval: python -I -c \"import gzip;[print(l.rstrip()) for l in gzip.open('data/plasma.report.gz','rt') if l.split('\\t')[3].strip() in ('S','G','U','R','D')]\"",
+   "error": true
+  },
+  {
+   "kind": "say",
+   "text": "Let me try the mockcheck tool directly."
+  },
+  {
+   "kind": "tool",
+   "name": "PowerShell",
+   "input": "python -m mockcheck --help",
+   "output": "Command contains malformed syntax that cannot be parsed: pwsh timed out after 5000ms (2 attempts)",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "python -m mockcheck --help",
+   "output": "usage: mockcheck [-h] [--version] {mocks,report,spike,compare,demo} ...\r\n\r\nCheck a classifier run against a mock community and say what it supports.\r\n\r\npositional arguments:\r\n  {mocks,report,spike,compare,demo}\r\n    mocks               list built-in mock communities\r\n    report              write the supports / does-not-support / check-next\r\n                        report for one run\r\n    spike               score a Kraken2 report against a constructed host-\r\n                        background spike-in (absolute read pairs)\r\n    compare             rank several runs against the same mock\r\n    demo                run end to end on the committed raw outputs (no\r\n                        cluster",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "zcat data/plasma.report.gz | awk -F'\\t' '$4 ~ /^(U|R|D|G|S)$/' | sort -t$'\\t' -k2,2nr | head -40",
+   "output": "Text with escape codes in this command can't be checked before it runs",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "zcat data/plasma.report.gz | awk -F'\\t' '$4==\"U\"||$4==\"R\"||$4==\"D\"||$4==\"G\"||$4==\"S\"' | sort -t\"\t\" -k2,2nr | head -40",
+   "output": "This Bash command contains multiple operations. The following parts require approval: awk -F'\\t' '$4==\"U\"||$4==\"R\"||$4==\"D\"||$4==\"G\"||$4==\"S\"', sort -t\"\t\" -k2,2nr",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "zcat data/plasma.report.gz",
+   "output": " 57.71\t288547\t288547\tU\t0\tunclassified\n 42.29\t211453\t40005\tR\t1\troot\n 34.26\t171316\t11546\tR1\t131567\t  cellular organisms\n 24.96\t124779\t54385\tD\t2\t    Bacteria\n 13.59\t67943\t967\tK\t3379134\t      Pseudomonadati\n 13.38\t66916\t4977\tP\t1224\t        Pseudomonadota\n 11.46\t57310\t8012\tC\t1236\t          Gammaproteobacteria\n  9.78\t48881\t4578\tO\t91347\t            Enterobacterales\n  8.86\t44302\t44055\tF\t543\t              Enterobacteriaceae\n  0.05\t232\t78\tG\t561\t                Escherichia\n  0.03\t154\t154\tS\t562\t                  Escherichia coli\n  0.00\t9\t9\tG\t544\t                Citrobacter\n  0.00\t3\t0\tF1\t2890311\t                Klebsiella/Raoultella group\n  0.00\t3\t1\tG\t570\t                  Klebsiella\n  0.00\t2\t0\tG1\t339027",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "I can't tell the team which organism caused the sepsis from this report. The three most abundant non-human species are typical skin or reagent contaminants. The one large bacterial signal can't be pinned to a genus or species.\n\n**Top non-human species (species rank, clade reads \u2265 10):**\n\n| # | Species | Clade reads | Notes |\n|---|---|---|---|\n| 1 | Cutibacterium acnes | 524 | Skin commensal; the old genus name *Propionibacterium* is on the contaminant list |\n| 2 | Acidovorax sp. JMULE5 | 331 | Genus *Acidovorax* is on the contaminant list |\n| 3 | Staphylococcus epidermidis | 182 | Skin commens"
+  }
+ ]
+}

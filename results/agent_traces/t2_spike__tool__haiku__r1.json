@@ -1,0 +1,78 @@
+{
+ "run": "t2_spike__tool__haiku__r1",
+ "task": "t2_spike",
+ "condition": "tool",
+ "model": "haiku",
+ "gold": {
+  "detected": [
+   "enterococcus faecalis",
+   "escherichia coli",
+   "lactobacillus fermentum",
+   "pseudomonas aeruginosa",
+   "staphylococcus aureus"
+  ],
+  "missed": [
+   "bacillus subtilis",
+   "cryptococcus neoformans",
+   "listeria monocytogenes",
+   "saccharomyces cerevisiae",
+   "salmonella enterica"
+  ]
+ },
+ "result": {
+  "detected": [
+   "pseudomonas aeruginosa",
+   "enterococcus faecalis",
+   "escherichia coli",
+   "staphylococcus aureus",
+   "lactobacillus fermentum"
+  ],
+  "missed": [
+   "salmonella enterica",
+   "bacillus subtilis",
+   "listeria monocytogenes",
+   "saccharomyces cerevisiae",
+   "cryptococcus neoformans"
+  ]
+ },
+ "final_text": "The P0 sample has 10 spiked organisms. Five are at species level with at least 10 clade reads, and five are not.\n\n| Organism | Species row (S) clade reads | Result |\n|---|---|---|\n| Pseudomonas aeruginosa | 811 | detected |\n| Enterococcus faecalis | 6457 | detected |\n| Escherichia coli | 72 | detected |\n| Staphylococcus aureus | 54 | detected |\n| Lactobacillus fermentum (report: Limosilactobacillus fermentum) | 26 | detected |\n| Salmonella enterica | 4 | missed (below 10) |\n| Bacillus subtilis | 2 | missed (below 10) |\n| Listeria monocytogenes | no species row (genus Listeria has 315 reads) | missed |\n| Saccharomyces cerevisiae | not in report | missed |\n| Cryptococcus neoformans | not in report | missed |\n\nI read the report directly with zcat and grep rather than running `mockcheck`.\n\nRESULT: {\"detected\": [\"pseudomonas aeruginosa\", \"enterococcus faecalis\", \"escherichia coli\", \"staphylococcus aureus\", \"lactobacillus fermentum\"], \"missed\": [\"salmonella enterica\", \"bacillus subtilis\", \"listeria monocytogenes\", \"saccharomyces cerevisiae\", \"cryptococcus neoformans\"]}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 3,
+  "L1_tool_errors": 1,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && ls -la && ls -la data truth && cat truth/spike_manifest.tsv && zcat data/spike_P0.report.gz | head -20",
+   "output": "total 16\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 ./\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 ../\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 11 18:53 config/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 data/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 mockcheck/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 truth/\ndata:\ntotal 36\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ./\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ../\n-rw-r--r-- 1 ashenoy00000 1049089 2265 Nov 12 08:55 even.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 3967 Nov 12 08:55 plasma.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 9075 Nov 12 08:55 reagent_contaminant_genera.tsv\n-rw-r--r-- 1 ",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && zcat data/spike_P0.report.gz | awk -F'\\t' '{n=$6; sub(/^ +/,\"\",n); print $4\"\\t\"$2\"\\t\"$5\"\\t\"n}' | grep -iE 'pseudomonas|escherichia|salmonella|lactobacill|limosilact|enterococcus|staphylococcus|listeria|bacillus|saccharomyces|cryptococcus' ; echo ---; zcat data/spike_P0.report.gz | awk -F'\\t' '$4 ~ /^S/' | head -100",
+   "output": "This Bash command contains multiple operations. The following parts require approval: awk -F'\\t' '{n=$6; sub(/^ +/,\"\",n); print $4\"\\t\"$2\"\\t\"$5\"\\t\"n}', awk -F'\\t' '$4 ~ /^S/'",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && zcat data/spike_P0.report.gz | grep -iE 'pseudomonas|escherichia|salmonella|lactobacill|limosilact|enterococcus|staphylococcus|listeria|bacillus|saccharomyces|cryptococcus'; echo ---; zcat data/spike_P0.report.gz | grep -P '\\tS\\t' | wc -l; zcat data/spike_P0.report.gz | wc -l",
+   "output": "  0.72\t28816\t334\tO\t186826\t            Lactobacillales\n  0.71\t28314\t21857\tG\t1350\t                Enterococcus\n  0.16\t6457\t6457\tS\t1351\t                  Enterococcus faecalis\n  0.00\t29\t2\tF\t33958\t              Lactobacillaceae\n  0.00\t26\t0\tG\t2742598\t                Limosilactobacillus\n  0.00\t26\t26\tS\t1613\t                  Limosilactobacillus fermentum\n  0.00\t1\t0\tG\t2767887\t                Ligilactobacillus\n  0.00\t1\t1\tS\t1623\t                  Ligilactobacillus ruminis\n  0.06\t2571\t2517\tG\t1279\t                Staphylococcus\n  0.00\t54\t54\tS\t1280\t                  Staphylococcus aureus\n  0.01\t315\t0\tF\t186820\t              Listeriaceae\n  0.01\t315\t315\tG\t1637\t                Listeria\n  0.00\t36\t24\tG\t1386\t  ",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "The P0 sample has 10 spiked organisms. Five are at species level with at least 10 clade reads, and five are not.\n\n| Organism | Species row (S) clade reads | Result |\n|---|---|---|\n| Pseudomonas aeruginosa | 811 | detected |\n| Enterococcus faecalis | 6457 | detected |\n| Escherichia coli | 72 | detected |\n| Staphylococcus aureus | 54 | detected |\n| Lactobacillus fermentum (report: Limosilactobacillus fermentum) | 26 | detected |\n| Salmonella enterica | 4 | missed (below 10) |\n| Bacillus subtilis | 2 | missed (below 10) |\n| Listeria monocytogenes | no species row (genus Listeria has 315 reads) | "
+  }
+ ]
+}

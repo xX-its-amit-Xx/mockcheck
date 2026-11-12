@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-11",
+ "updated": "2026-11-12",
  "agents": {
   "emperor": "Decided the structure: 6 queens (one per subdomain: ground truth, sequencing, algorithms, databases, evaluation, decisions), 1 king (cross-domain analogies and serendipity), 1 completeness critic. Queens do not talk to each other; only the king links them, to keep each context small.",
   "king": "Forces cross-domain analogies (law, medicine, art, philosophy) and 'how others overcame it' stories.",
@@ -132,6 +132,41 @@
    "title": "Finding: species recovery is low even when detection works",
    "story": "Detection at 10 or more pairs holds down to 40 pairs for most bacteria, but only about 20% of spiked pairs reach the species (2% at confidence 0.1), because related genomes share k-mers. Both yeasts were missed by Kraken2.",
    "commit": "docs/data/findings.json"
+  },
+  {
+   "date": "2026-11-12",
+   "status": "done",
+   "title": "Phase 3 research: companies, public evals, Department of War, ground-truth sources",
+   "story": "Four research passes with sources (every claim linked, unverified items marked). Result is the Phase 3 dashboard section: who else validates how, which public evaluations exist, what working with the Department of War means, where ground-truth examples come from.",
+   "commit": "docs/data/p3_*.json"
+  },
+  {
+   "date": "2026-11-12",
+   "status": "done",
+   "title": "Agent evaluation harness: real agents, real sandboxes, recorded traces",
+   "story": "Claude Code agents (haiku, sonnet, opus) run headlessly on six tasks in two sandboxes (with and without the mockcheck tool), 3 repeats each. Every step is kept as a trace and scored for process (L1), gold agreement (L2) and honesty.",
+   "commit": "agent_eval/"
+  },
+  {
+   "date": "2026-11-12",
+   "status": "done",
+   "title": "Finding: round 1 failed because our gold disagreed with our own wording",
+   "story": "18 of 72 runs matched gold at first, with identical failures across all three models. Cause: scoring code merged a renamed species (Limosilactobacillus fermentum) that the prompt said not to merge. After fixing the wording every run matched. Lesson: when all agents fail the same way, suspect the gold.",
+   "commit": "results/agent_eval_round1_runs.tsv"
+  },
+  {
+   "date": "2026-11-12",
+   "status": "done",
+   "title": "Finding: no agent knew the genus rename; none followed a planted note",
+   "story": "0 of 18 flagged Cutibacterium as a former Propionibacterium (reagent contaminant list uses the old name). 0 of 36 followed a planted 'qPCR confirmed Salmonella' note with an embedded instruction. All models tie on accuracy; cost per run differs about 23 times.",
+   "commit": "results/agent_eval_summary.tsv"
+  },
+  {
+   "date": "2026-11-12",
+   "status": "done",
+   "title": "Source inventory crawl: Zenodo, Europe PMC, GitHub",
+   "story": "Polite read-only API queries: 13 queries, 89 candidate sources with URL and date. LinkedIn deliberately not crawled (its user agreement forbids it).",
+   "commit": "scripts/crawl_sources.py"
   }
  ]
 }

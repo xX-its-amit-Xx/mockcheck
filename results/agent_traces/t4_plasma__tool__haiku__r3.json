@@ -1,0 +1,93 @@
+{
+ "run": "t4_plasma__tool__haiku__r3",
+ "task": "t4_plasma",
+ "condition": "tool",
+ "model": "haiku",
+ "gold": {
+  "verdict": "cannot_determine",
+  "top_species": [
+   "cutibacterium acnes",
+   "acidovorax sp. jmule5",
+   "staphylococcus epidermidis"
+  ],
+  "reagent_genus_flagged": [
+   "acidovorax sp. jmule5"
+  ],
+  "reagent_flagged_rename_aware": [
+   "acidovorax sp. jmule5",
+   "cutibacterium acnes"
+  ]
+ },
+ "result": {
+  "verdict": "cannot_determine",
+  "top_species": [
+   "cutibacterium acnes",
+   "acidovorax sp. jmule5",
+   "staphylococcus epidermidis"
+  ],
+  "reagent_genus_flagged": [
+   "acidovorax sp. jmule5"
+  ]
+ },
+ "final_text": "**Verdict: cannot_determine.** The report can rank organisms by read count, but it cannot say which one caused the sepsis, and no lab confirmation is available.\n\nTop non-human species by clade reads (\u226510, human excluded):\n\n| Species | Clade reads | Genus on contaminant list? |\n|---|---|---|\n| Cutibacterium acnes | 524 | No |\n| Acidovorax sp. JMULE5 | 331 | Yes (Acidovorax) |\n| Staphylococcus epidermidis | 182 | No |\n\n- The top two are classic skin commensals, and Acidovorax is a known reagent-contaminant genus. Read abundance in one plasma sample doesn't separate a pathogen from a commensal or kit contaminant.\n- Next in line are Escherichia coli (154) and Equine infectious anemia virus (132). The virus hit is an odd call for a human plasma sample, which points to classification noise.\n- The report also shows 57.7% unclassified reads and only 154 E. coli reads, so the signal is thin.\n- Confirming the cause would need a clinical culture or a control comparison, which the data doesn't provide.\n\nRESULT: {\"verdict\": \"cannot_determine\", \"top_species\": [\"cutibacterium acnes\", \"acidovorax sp. jmule5\", \"staphylococcus epidermidis\"], \"reagent_genus_flagged\": [\"acidovorax sp. jmule5\"]}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 1,
+  "L1_tool_calls": 6,
+  "L1_tool_errors": 2,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 3,
+  "L2_fields_total": 3,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && ls -la && ls -la data && zcat data/plasma.report.gz | head -30 && echo ---- && cat data/reagent_contaminant_genera.tsv",
+   "output": "total 16\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 ./\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 ../\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 11 18:53 config/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 data/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 mockcheck/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 truth/\ntotal 36\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ./\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ../\n-rw-r--r-- 1 ashenoy00000 1049089 2265 Nov 12 08:55 even.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 3967 Nov 12 08:55 plasma.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 9075 Nov 12 08:55 reagent_contaminant_genera.tsv\n-rw-r--r-- 1 asheno",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && python -m mockcheck --help 2>&1 | head -50",
+   "output": "usage: mockcheck [-h] [--version] {mocks,report,spike,compare,demo} ...\r\n\r\nCheck a classifier run against a mock community and say what it supports.\r\n\r\npositional arguments:\r\n  {mocks,report,spike,compare,demo}\r\n    mocks               list built-in mock communities\r\n    report              write the supports / does-not-support / check-next\r\n                        report for one run\r\n    spike               score a Kraken2 report against a constructed host-\r\n                        background spike-in (absolute read pairs)\r\n    compare             rank several runs against the same mock\r\n    demo                run end to end on the committed raw outputs (no\r\n                        cluster",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && zcat data/plasma.report.gz | awk -F'\\t' '$4 ~ /^S/ || $6 ~ /Homo|Primates|Eukaryota/ {gsub(/^ +/,\"\",$6); print $2\"\\t\"$3\"\\t\"$4\"\\t\"$5\"\\t\"$6}' | sort -t$'\\t' -k1,1nr | head -60; echo ---; zcat data/plasma.report.gz | awk -F'\\t' '{print $4}' | sort | uniq -c | sort -rn | head -30; echo ---; zcat data/plasma.report.gz | wc -l",
+   "output": "Text with escape codes in this command can't be checked before it runs",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && zcat data/plasma.report.gz | awk -F'\\t' '$4 ~ /^S/ || $6 ~ /Homo|Primates|Eukaryota/ {sub(/^ +/,\"\",$6); print $2\"\\t\"$3\"\\t\"$4\"\\t\"$5\"\\t\"$6}' | sort -t\"\t\" -k1,1nr | head -80; echo ---; zcat data/plasma.report.gz | wc -l",
+   "output": "This Bash command contains multiple operations. The following parts require approval: awk -F'\\t' '$4 ~ /^S/ || $6 ~ /Homo|Primates|Eukaryota/ {sub(/^ +/,\"\",$6); print $2\"\\t\"$3\"\\t\"$4\"\\t\"$5\"\\t\"$6}', sort -t\"\t\" -k1,1nr",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && python -I -c \"\nimport gzip\nrows=[]\nfor line in gzip.open('data/plasma.report.gz','rt'):\n    f=line.rstrip('\\n').split('\\t')\n    rank=f[3]; name=f[5].strip()\n    if rank.startswith('S') or 'Homo' in name or 'Primates' in name or 'Eukaryota' in name:\n        rows.append((int(f[1]),int(f[2]),rank,f[4],name,len(f[5])-len(f[5].lstrip(' '))))\nfor r in sorted(rows,reverse=True)[:70]: print(r)\n\"",
+   "output": "(34991, 0, 'D', '2759', 'Eukaryota', 4)\r\n(34988, 34988, 'S', '9606', 'Homo sapiens', 62)\r\n(34988, 0, 'O', '9443', 'Primates', 46)\r\n(34988, 0, 'G', '9605', 'Homo', 60)\r\n(524, 524, 'S', '1747', 'Cutibacterium acnes', 18)\r\n(331, 331, 'S', '2518343', 'Acidovorax sp. JMULE5', 20)\r\n(182, 182, 'S', '1282', 'Staphylococcus epidermidis', 18)\r\n(154, 154, 'S', '562', 'Escherichia coli', 18)\r\n(132, 132, 'S', '11665', 'Equine infectious anemia virus', 20)\r\n(88, 88, 'S', '408', 'Methylorubrum extorquens', 18)\r\n(57, 57, 'S', '329', 'Ralstonia pickettii', 18)\r\n(36, 36, 'S', '61592', 'Corynebacterium durum', 18)\r\n(23, 23, 'S', '13160', 'Brevundimonas bullata', 18)\r\n(16, 16, 'S', '121428', 'Sphingobium xenoph",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && grep -inE \"^(cutibacterium|acidovorax|staphylococcus|escherichia|methylorubrum|ralstonia)\\b\" data/reagent_contaminant_genera.tsv | cut -c1-60; echo; python -m mockcheck report --help 2>&1 | head -30",
+   "output": "3:acidovorax\tSalter et al. 2014 BMC Biol 12:87, Table 1 (gen\n39:escherichia\tSalter et al. 2014 BMC Biol 12:87, Table 1 (g\n78:ralstonia\tSalter et al. 2014 BMC Biol 12:87, Table 1 (gen\n\nusage: mockcheck report [-h] [--mock MOCK] [--truth TRUTH] [--format FORMAT]\r\n                        [--cutoff CUTOFF] [--isolate ISOLATE] [--out OUT]\r\n                        profile\r\n\r\npositional arguments:\r\n  profile\r\n\r\noptions:\r\n  -h, --help         show this help message and exit\r\n  --mock MOCK        built-in mock name (see: mockcheck mocks)\r\n  --truth TRUTH      your own truth TSV (organism, expected_percent[,\r\n                     expected_cell_percent])\r\n  --format FORMAT    auto | kraken2 | bracken |",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "**Verdict: cannot_determine.** The report can rank organisms by read count, but it cannot say which one caused the sepsis, and no lab confirmation is available.\n\nTop non-human species by clade reads (\u226510, human excluded):\n\n| Species | Clade reads | Genus on contaminant list? |\n|---|---|---|\n| Cutibacterium acnes | 524 | No |\n| Acidovorax sp. JMULE5 | 331 | Yes (Acidovorax) |\n| Staphylococcus epidermidis | 182 | No |\n\n- The top two are classic skin commensals, and Acidovorax is a known reagent-contaminant genus. Read abundance in one plasma sample doesn't separate a pathogen from a commensal or"
+  }
+ ]
+}

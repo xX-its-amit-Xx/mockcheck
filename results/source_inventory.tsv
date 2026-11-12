@@ -1,0 +1,90 @@
+source	title	date	license	url	query
+zenodo	IMP simulated mock community data set	2016-10-12	cc-by-4.0	https://zenodo.org/records/160261	"""mock community"" metagenomic"
+zenodo	Scalable single-cell metagenomic analysis with Bascet and Zorn - simulated mock community	2026-09-25	cc-by-4.0	https://zenodo.org/records/22965345	"""mock community"" metagenomic"
+zenodo	Shotgun metagenomic sequencing dataset of a synthetic mock community containing 20 genomes spiked-in at even and staggered concentrations.	2022-10-03	cc-by-4.0	https://zenodo.org/records/7140752	"""mock community"" metagenomic"
+zenodo	LMAS Test Dataset	2021-03-08	cc-zero	https://zenodo.org/records/5579145	"""mock community"" metagenomic"
+zenodo	Metagenome quality metrics and taxonomical annotation visualization through the integration of MAGFlow and BIgMAG (Sup. Material)	2024-09-02	cc-by-4.0	https://zenodo.org/records/13628330	"""mock community"" metagenomic"
+zenodo	MetAnoDe: Mock-community benchmark, simulated amplicon metabarcoding data, scripts and results	2026-11-03	cc-by-4.0	https://zenodo.org/records/23918277	"""mock community"" metagenomic"
+zenodo	ATCC Even Mock Community full length 16S rRNA gene reference sequences in DADA2 format	2021-05-22	cc-by-4.0	https://zenodo.org/records/4781067	"""mock community"" metagenomic"
+zenodo	Mock community REMEI	2019-06-03	cc-by-4.0	https://zenodo.org/records/3237823	"""mock community"" metagenomic"
+zenodo	HAVEN Datasets	2025-05-28	cc-by-4.0	https://zenodo.org/records/15540220	viral host prediction dataset
+zenodo	Spatial structuring of phage communities across a tropical lagoon	2026-11-10	cc-by-4.0	https://zenodo.org/records/24099555	viral host prediction dataset
+zenodo	Structural comparisons of viral proteins against host proteins for prediction of viral protein structural mimicry	2025-04-18	cc-by-4.0	https://zenodo.org/records/15242980	viral host prediction dataset
+zenodo	Data from: Viral dark matter and virus–host interactions resolved from publicly available microbial genomes	2015-07-28	cc-zero	https://zenodo.org/records/4940617	viral host prediction dataset
+zenodo	Benchmark datasets for evaluating viromic tools	2025-06-22	cc-by-4.0	https://zenodo.org/records/15716005	viral host prediction dataset
+zenodo	[Accompanying Dataset for PHIStruct] ColabFold-Predicted Structures of Receptor-Binding Proteins	2024-05-16	mit-license	https://zenodo.org/records/11202338	viral host prediction dataset
+zenodo	GenBank Accession Numbers of H6N8 avian influenza virus in Antarctic seabirds demonstrates connectivity between South America and Antarctica	2022-10-10	cc-by-4.0	https://zenodo.org/records/15530405	viral host prediction dataset
+zenodo	Data from: Viral pathogen production in a wild grass host driven by host growth and soil nitrogen	2016-02-01	cc-zero	https://zenodo.org/records/5022602	viral host prediction dataset
+zenodo	Curated Antibody Binding Affinity Datasets (AbCDR-Binding)	2026-02-24	cc-by-4.0	https://zenodo.org/records/18762978	SARS-CoV-2 deep mutational scanning
+zenodo	Data from: On the (un)predictability of a large intragenic fitness landscape	2017-11-04	cc-zero	https://zenodo.org/records/5011607	SARS-CoV-2 deep mutational scanning
+zenodo	"Underlying data for ""A deep mutational scanning platform to characterize the fitness landscape  of anti-CRISPR proteins"""	2024	cc-by-4.0	https://zenodo.org/records/13374667	SARS-CoV-2 deep mutational scanning
+zenodo	fuNTRp training dataset	2019-05-20	nosl3.0	https://zenodo.org/records/3066344	SARS-CoV-2 deep mutational scanning
+zenodo	Solubility Dataset for SoluProtMut: Siamese Deep Learning for Predicting Solubility Effects of Protein Mutations with Experimental Validatio	2026-08-24	cc-by-4.0	https://zenodo.org/records/22080131	SARS-CoV-2 deep mutational scanning
+zenodo	"Deep mutation scanning raw data and pipeline of  ""Harnessing Natural Immunity in Pediatricians to Develop Ultra-potent Broad Antibodies agai"	2026-01-05	cc-by-4.0	https://zenodo.org/records/18150586	SARS-CoV-2 deep mutational scanning
+zenodo	Deep mutational scanning of MaPylRS for ncMs	2026-08-24	cc-by-4.0	https://zenodo.org/records/22072844	SARS-CoV-2 deep mutational scanning
+zenodo	Machine Learning on the Impacts of Mutations in the SARS-CoV-2 Spike RBD on Binding Affinity to Human ACE2 based on Deep Mutational Scanning	2024-09-14	cc-by-4.0	https://zenodo.org/records/13762646	SARS-CoV-2 deep mutational scanning
+zenodo	Supplementary Data for GCB-23-0339	2023-05-01	cc-by-4.0	https://zenodo.org/records/7884663	pathogen metagenomics benchmark
+zenodo	UEA-Cancer-Genetics-Lab/ARKS: Initial Release	2026-07-30	cc-by-4.0	https://zenodo.org/records/21694562	pathogen metagenomics benchmark
+zenodo	Ancestry representative k-mer Set for Host Depletion in Low-Biomass Microbial Studies	2026-07-30	cc-by-4.0	https://zenodo.org/records/21694712	pathogen metagenomics benchmark
+zenodo	SPAAM Summer School 2022: Introduction to Ancient Metagenomics - 5b Introduction to Phylogenomics	2022-08-11	cc-by-4.0	https://zenodo.org/records/6983185	pathogen metagenomics benchmark
+zenodo	Benchmark data for shotgun metagenomics	2023-11-19	cc-by-4.0	https://zenodo.org/records/10157719	pathogen metagenomics benchmark
+zenodo	SPAAM Summer School 2022: Introduction to Ancient Metagenomics - 2b Introduction to Github	2022-08-11	cc-by-4.0	https://zenodo.org/records/6983120	pathogen metagenomics benchmark
+zenodo	SPAAM Summer School 2022: Introduction to Ancient Metagenomics - 2c Introduction to AncientMetagenomeDir	2022-08-11	cc-by-4.0	https://zenodo.org/records/6983131	pathogen metagenomics benchmark
+zenodo	Introduction to Ancient Metagenomics Textbook (Edition 2025): Authentication	2025-09-18	cc-by-4.0	https://zenodo.org/records/17152964	pathogen metagenomics benchmark
+zenodo	Non-redundant metagenome-assembled genomes of activated sludge reactors at different disturbances and scales	2023-12-18	cc-by-4.0	https://zenodo.org/records/8405311	wastewater metagenomics sequencing
+zenodo	Urban wastewater virome by viral metagenomics and target enrichment sequencing	2021-01-31	cc-by-4.0	https://zenodo.org/records/4252765	wastewater metagenomics sequencing
+zenodo	Citrus Rootstocks Microbiome in Abiotic Stress	2026-06-24	cc-by-4.0	https://zenodo.org/records/20829953	wastewater metagenomics sequencing
+zenodo	Long-read metagenomics and methylation-based binning support the discovery of antibiotic resistance gene–host associations in complex commun	2026-01-14	cc-by-4.0	https://zenodo.org/records/18239684	wastewater metagenomics sequencing
+zenodo	"Supporting data for ""Plasmid–Host Networks Reveal Persistent Mobile Elements Across Wastewater Treatment"""	2026-07-15	cc-by-4.0	https://zenodo.org/records/21381023	wastewater metagenomics sequencing
+zenodo	Benthic Cyanobacteria Metabarcoding data 16s rDNA (V4).	2024-12-12	cc-by-4.0	https://zenodo.org/records/14407006	wastewater metagenomics sequencing
+zenodo	Data from: Deciphering conjugative plasmid permissiveness dynamics in wastewater microbiomes	2017-04-06	cc-zero	https://zenodo.org/records/4991397	wastewater metagenomics sequencing
+zenodo	Gut microbiota in OVX mice	2025-11-06	cc-by-4.0	https://zenodo.org/records/17546827	wastewater metagenomics sequencing
+europepmc	Fast and sensitive taxonomic classification for metagenomics with Kaiju.	2016-04-13		https://europepmc.org/article/MED/27071849	mock community benchmark metagenomic classifier
+europepmc	Evaluation of 16S rRNA gene sequencing for species and strain-level microbiome analysis.	2019-11-06		https://europepmc.org/article/MED/31695033	mock community benchmark metagenomic classifier
+europepmc	Identification of mobile genetic elements with geNomad.	2023-09-21		https://europepmc.org/article/MED/37735266	mock community benchmark metagenomic classifier
+europepmc	Bacterial phylogeny structures soil resistomes across habitats.	2014-05-21		https://europepmc.org/article/MED/24847883	mock community benchmark metagenomic classifier
+europepmc	Primer and platform effects on 16S rRNA tag sequencing.	2015-08-04		https://europepmc.org/article/MED/26300854	mock community benchmark metagenomic classifier
+europepmc	Emu: species-level microbial community profiling of full-length 16S rRNA Oxford Nanopore sequencing data.	2022-06-30		https://europepmc.org/article/MED/35773532	mock community benchmark metagenomic classifier
+europepmc	A comprehensive benchmarking study of protocols and sequencing platforms for 16S rRNA community profiling.	2016-01-14		https://europepmc.org/article/MED/26763898	mock community benchmark metagenomic classifier
+europepmc	Accuracy of taxonomy prediction for 16S rRNA and fungal ITS sequences.	2018-04-18		https://europepmc.org/article/MED/29682424	mock community benchmark metagenomic classifier
+europepmc	CHARMM: the biomolecular simulation program.	2009-07-01		https://europepmc.org/article/MED/19444816	viral host range prediction benchmark
+europepmc	Predictive functional profiling of microbial communities using 16S rRNA marker gene sequences.	2013-08-25		https://europepmc.org/article/MED/23975157	viral host range prediction benchmark
+europepmc	Hepatocellular carcinoma.	2021-01-21		https://europepmc.org/article/MED/33479224	viral host range prediction benchmark
+europepmc	Rapid phylogenetic analysis of large samples of recombinant bacterial whole genome sequences using Gubbins.	2014-11-20		https://europepmc.org/article/MED/25414349	viral host range prediction benchmark
+europepmc	Integrating taxonomic, functional, and strain-level profiling of diverse microbial communities with bioBakery 3.	2021-05-04		https://europepmc.org/article/MED/33944776	viral host range prediction benchmark
+europepmc	Cholangiocarcinoma 2020: the next horizon in mechanisms and management.	2020-06-30		https://europepmc.org/article/MED/32606456	viral host range prediction benchmark
+europepmc	The Halogen Bond.	2016-01-26		https://europepmc.org/article/MED/26812185	viral host range prediction benchmark
+europepmc	Community-Acquired Pneumonia Requiring Hospitalization among U.S. Adults.	2015-07-14		https://europepmc.org/article/MED/26172429	viral host range prediction benchmark
+europepmc	The treatment-naive microbiome in new-onset Crohn's disease.	2014-03-01		https://europepmc.org/article/MED/24629344	pathogen detection metagenomic clinical validation
+europepmc	Dysfunction of the intestinal microbiome in inflammatory bowel disease and treatment.	2012-04-16		https://europepmc.org/article/MED/23013615	pathogen detection metagenomic clinical validation
+europepmc	CARD 2023: expanded curation, support for machine learning, and resistome prediction at the Comprehensive Antibiotic Resistance Database.	2023-01-01		https://europepmc.org/article/MED/36263822	pathogen detection metagenomic clinical validation
+europepmc	Fusobacterium nucleatum Promotes Chemoresistance to Colorectal Cancer by Modulating Autophagy.	2017-07-01		https://europepmc.org/article/MED/28753429	pathogen detection metagenomic clinical validation
+europepmc	Precision microbiome reconstitution restores bile acid mediated resistance to Clostridium difficile.	2014-10-22		https://europepmc.org/article/MED/25337874	pathogen detection metagenomic clinical validation
+europepmc	AMRFinderPlus and the Reference Gene Catalog facilitate examination of the genomic links among antimicrobial resistance, stress response, an	2021-06-16		https://europepmc.org/article/MED/34135355	pathogen detection metagenomic clinical validation
+europepmc	Clinical metagenomics.	2019-06-01		https://europepmc.org/article/MED/30918369	pathogen detection metagenomic clinical validation
+europepmc	Clinical Metagenomic Next-Generation Sequencing for Pathogen Detection.	2018-10-24		https://europepmc.org/article/MED/30355154	pathogen detection metagenomic clinical validation
+europepmc	Neoantigens: promising targets for cancer therapy.	2023-01-06		https://europepmc.org/article/MED/36604431	deep mutational scanning viral escape prediction benchmark
+europepmc	Learning the protein language: Evolution, structure, and function.	2021-06-01		https://europepmc.org/article/MED/34139171	deep mutational scanning viral escape prediction benchmark
+europepmc	Identification of neoantigens for individualized therapeutic cancer vaccines.	2022-02-01		https://europepmc.org/article/MED/35105974	deep mutational scanning viral escape prediction benchmark
+europepmc	Future cancer research priorities in the USA: a Lancet Oncology Commission.	2017-10-31		https://europepmc.org/article/MED/29208398	deep mutational scanning viral escape prediction benchmark
+europepmc	ECNet is an evolutionary context-integrated deep learning framework for protein engineering.	2021-09-30		https://europepmc.org/article/MED/34593817	deep mutational scanning viral escape prediction benchmark
+europepmc	Deep geometric representations for modeling effects of mutations on protein-protein binding affinity.	2021-08-04		https://europepmc.org/article/MED/34347784	deep mutational scanning viral escape prediction benchmark
+europepmc	Omicron BA.2 (B.1.1.529.2): High Potential for Becoming the Next Dominant Variant.	2022-04-25		https://europepmc.org/article/MED/35467344	deep mutational scanning viral escape prediction benchmark
+europepmc	Persistent Laplacian projected Omicron BA.4 and BA.5 to become new dominating variants.	2022-11-02		https://europepmc.org/article/MED/36379191	deep mutational scanning viral escape prediction benchmark
+github	HadrienG/2019_classifiers_benchmark: Benchmarking of metagenomic classifiers	2020-03-12		https://github.com/HadrienG/2019_classifiers_benchmark	metagenomic classifier benchmark
+github	roseedwin/Benchmarking-taxonomic-classifiers-for-soil-shotgun-data: Benchmarking various taxonomic classifiers for profiling soil metagenomi	2024-06-14		https://github.com/roseedwin/Benchmarking-taxonomic-classifiers-for-soil-shotgun-data	metagenomic classifier benchmark
+github	nkuyfq/metagenomic_classifiers_or_profilers: A repository recording state-of-the-art taxonomic classifiers or profilers for metagenomic sequ	2026-09-16	MIT	https://github.com/nkuyfq/metagenomic_classifiers_or_profilers	metagenomic classifier benchmark
+github	cmason-lab/benchmarking_metagenomic_classifiers: 	2020-12-14		https://github.com/cmason-lab/benchmarking_metagenomic_classifiers	metagenomic classifier benchmark
+github	FOI-Bioinformatics/taxbencher: taxbencher: A Nextflow framework for benchmarking metagenomic taxonomic classifiers and profilers.	2026-11-08	MIT	https://github.com/FOI-Bioinformatics/taxbencher	metagenomic classifier benchmark
+github	duttaprat/HViLM: HViLM: A Foundation Model for Viral Genomics Enables Multi-Task Prediction of Pathogenicity, Transmissibility, and Host Tro	2026-10-13		https://github.com/duttaprat/HViLM	viral host prediction
+github	ShivMC/ML-for-bioinformatics: Machine Learning applications in Bioinformatics: SARS-CoV-2 analysis, protein structure prediction, DNA/RNA se	2026-05-30		https://github.com/ShivMC/ML-for-bioinformatics	viral host prediction
+github	MoreiraLAB/VirHostAI: End-to-end pipeline for ViralBindPredict: harvesting viral PDB data, ligand curation, interaction extraction, feature 	2025-11-04	GPL-3.0	https://github.com/MoreiraLAB/VirHostAI	viral host prediction
+github	ataliaidan/esm-viral-host-prediction: Chronological Viral Host Prediction using ESM-2 Protein Language Models	2026-06-19	MIT	https://github.com/ataliaidan/esm-viral-host-prediction	viral host prediction
+github	kulohoma/SCALE-V-Scalable-Classifier-Alignment-free-Learning-Engine-for-Viruses: SCALE-V: A scalable, alignment-free deep-learning classifie	2026-08-19		https://github.com/kulohoma/SCALE-V-Scalable-Classifier-Alignment-free-Learning-Engine-for-Viruses	viral host prediction
+github	internalerror404/viralhostprediction: Viral Host Prediction Probability	2020-05-28		https://github.com/internalerror404/viralhostprediction	viral host prediction
+github	saba-anjum27/virus-host-prediction-ml: Viral Host Prediction using Machine Learning	2023-10-11		https://github.com/saba-anjum27/virus-host-prediction-ml	viral host prediction
+github	TJN25/Virus_Host_Prediction: The work on the viral host prediction tools are kept here.	2018-05-09		https://github.com/TJN25/Virus_Host_Prediction	viral host prediction
+github	dridieya768-creator/kraken2-benchmark-mock-community: 	2026-10-22	MIT	https://github.com/dridieya768-creator/kraken2-benchmark-mock-community	mock community kraken2
+github	AspaLav/Qiime2_DADA2_Kraken2_benchmarking: Benchmarking QIIME2, DADA2, and Kraken2 for species-level taxonomic classification of 16S rRNA mo	2026-07-14	MIT	https://github.com/AspaLav/Qiime2_DADA2_Kraken2_benchmarking	mock community kraken2
+github	DLopesCardoso/metagenomics-capstone: Reproducible Oxford Nanopore mock-community metagenomics workflow using Kraken2, Flye, Minimap2 and Sam	2026-09-24		https://github.com/DLopesCardoso/metagenomics-capstone	mock community kraken2
+github	bkhimek/nanopore-metagenomics-benchmark: Pre-registered, benchmark-led taxonomic profiling of nanopore metagenomic reads on a public mock co	2026-10-26	MIT	https://github.com/bkhimek/nanopore-metagenomics-benchmark	mock community kraken2

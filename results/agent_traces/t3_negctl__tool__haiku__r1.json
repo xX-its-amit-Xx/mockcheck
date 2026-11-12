@@ -1,0 +1,54 @@
+{
+ "run": "t3_negctl__tool__haiku__r1",
+ "task": "t3_negctl",
+ "condition": "tool",
+ "model": "haiku",
+ "gold": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "result": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "final_text": "Mycobacterium is not supported in this sample. The report has only 6 clade reads assigned to the genus, and no single species reaches the 10-read threshold.\n\n- **Genus *Mycobacterium* (taxid 1763):** 6 clade reads, 0 direct.\n- ***M. spongiae* (taxid 886343):** 3 clade reads, 3 direct.\n- ***M. canetti* (taxid 78331):** 3 clade reads, 3 direct.\n- ***M. tuberculosis* complex (taxid 77643):** 3 clade reads, but it is ranked G1 (a subgroup), not species, so it is not counted as a species call.\n\nThe largest species-level clade count is 3, which falls well below the 10-read minimum. The sample's human fraction is 98.68%.\n\nI parsed the report directly with Python. `python -m mockcheck` did not run because I used isolated mode (`-I`), which drops the working directory from the import path. The answer does not depend on that package.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 1,
+  "L1_tool_calls": 3,
+  "L1_tool_errors": 1,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_tool 2>/dev/null || cd \"<sandbox>\"; ls -la; ls -la data; python -I -m mockcheck --help 2>&1 | head -50",
+   "output": "total 16\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:49 ./\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:49 ../\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 11 18:53 config/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:49 data/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:49 mockcheck/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:49 truth/\ntotal 36\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:49 ./\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:49 ../\n-rw-r--r-- 1 ashenoy00000 1049089 2265 Nov 12 08:49 even.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 3967 Nov 12 08:49 plasma.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 9075 Nov 12 08:49 reagent_contaminant_genera.tsv\n-rw-r--r-- 1 asheno",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\"; python -I -c \"import gzip,sys; d=gzip.open('data/spike_H0.report.gz','rt').read(); print(d)\" | awk -F'\\t' '$4 ~ /^S/ || $6 ~ /Mycobacter/ {print}' | head -200",
+   "output": "This Bash command contains multiple operations. The following part requires approval: awk -F'\\t' '$4 ~ /^S/ || $6 ~ /Mycobacter/ {print}'",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\"; python -I -c \"\nimport gzip\nfor line in gzip.open('data/spike_H0.report.gz','rt'):\n    f=line.rstrip('\\n').split('\\t')\n    if len(f)<6: continue\n    if 'ycobacter' in f[5] or f[3].startswith('G'):\n        print(line.rstrip('\\n'))\n\"",
+   "output": " 98.68\t3947380\t0\tG\t9605\t                                                            Homo\r\n  0.00\t15\t0\tG\t1883\t                Streptomyces\r\n  0.00\t11\t2\tG1\t2593676\t                  unclassified Streptomyces\r\n  0.00\t1\t0\tG1\t629295\t                  Streptomyces griseus group\r\n  0.00\t1\t0\tG2\t1482599\t                    Streptomyces halstedii subgroup\r\n  0.00\t8\t0\tO\t85007\t            Mycobacteriales\r\n  0.00\t6\t0\tF\t1762\t              Mycobacteriaceae\r\n  0.00\t6\t0\tG\t1763\t                Mycobacterium\r\n  0.00\t3\t3\tS\t886343\t                  Mycobacterium spongiae\r\n  0.00\t3\t0\tG1\t77643\t                  Mycobacterium tuberculosis complex\r\n  0.00\t3\t3\tS\t78331\t                    Mycobacterium canetti\r\n  0.00",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "Mycobacterium is not supported in this sample. The report has only 6 clade reads assigned to the genus, and no single species reaches the 10-read threshold.\n\n- **Genus *Mycobacterium* (taxid 1763):** 6 clade reads, 0 direct.\n- ***M. spongiae* (taxid 886343):** 3 clade reads, 3 direct.\n- ***M. canetti* (taxid 78331):** 3 clade reads, 3 direct.\n- ***M. tuberculosis* complex (taxid 77643):** 3 clade reads, but it is ranked G1 (a subgroup), not species, so it is not counted as a species call.\n\nThe largest species-level clade count is 3, which falls well below the 10-read minimum. The sample's huma"
+  }
+ ]
+}

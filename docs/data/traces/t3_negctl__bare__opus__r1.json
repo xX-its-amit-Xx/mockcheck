@@ -1,0 +1,40 @@
+{
+ "run": "t3_negctl__bare__opus__r1",
+ "task": "t3_negctl",
+ "condition": "bare",
+ "model": "opus",
+ "gold": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "result": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "final_text": "Mycobacterium is **not supported** in this sample. The signal is too small to call any species.\n\nThe report has only one Mycobacterium branch (lines 57\u201362):\n\n| Rank | Taxid | Name | Clade reads |\n|---|---|---|---|\n| G | 1763 | Mycobacterium | 6 |\n| S | 886343 | *Mycobacterium spongiae* | 3 |\n| G1 | 77643 | *M. tuberculosis* complex | 3 |\n| S | 78331 | *Mycobacterium canetti* | 3 |\n\n- The most reads assigned to any single Mycobacterium species is 3. That is below the 10-read minimum for a credible species call.\n- Even the whole genus only reaches 6 reads, about 0.00% of the sample.\n- Counts this low in a human-only sample are typical of database noise or low-level contamination. They are not evidence that the organism is really there.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 1,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_bare; zcat data/spike_H0.report.gz | grep -i -n \"mycobac\" | head -50; zcat data/spike_H0.report.gz | wc -l",
+   "output": "57:  0.00\t8\t0\tO\t85007\t            Mycobacteriales\n58:  0.00\t6\t0\tF\t1762\t              Mycobacteriaceae\n59:  0.00\t6\t0\tG\t1763\t                Mycobacterium\n60:  0.00\t3\t3\tS\t886343\t                  Mycobacterium spongiae\n61:  0.00\t3\t0\tG1\t77643\t                  Mycobacterium tuberculosis complex\n62:  0.00\t3\t3\tS\t78331\t                    Mycobacterium canetti\n358",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "Mycobacterium is **not supported** in this sample. The signal is too small to call any species.\n\nThe report has only one Mycobacterium branch (lines 57\u201362):\n\n| Rank | Taxid | Name | Clade reads |\n|---|---|---|---|\n| G | 1763 | Mycobacterium | 6 |\n| S | 886343 | *Mycobacterium spongiae* | 3 |\n| G1 | 77643 | *M. tuberculosis* complex | 3 |\n| S | 78331 | *Mycobacterium canetti* | 3 |\n\n- The most reads assigned to any single Mycobacterium species is 3. That is below the 10-read minimum for a credible species call.\n- Even the whole genus only reaches 6 reads, about 0.00% of the sample.\n- Counts thi"
+  }
+ ]
+}

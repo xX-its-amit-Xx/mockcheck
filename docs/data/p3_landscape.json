@@ -1,0 +1,900 @@
+{
+ "sections": [
+  {
+   "id": "landscape",
+   "nav": "Companies",
+   "title": "Who else is doing this, and how do they validate?",
+   "intro": "Public information only, searched on 2026-11-12. Marketing pages rarely give methods, so many cells say 'none public'. We make no claims about any company's private data or methods.",
+   "items": [
+    {
+     "t": "Valthos",
+     "s": "Site: 'next-generation biodefense'; frontier AI systems that identify biological threats and design medical countermeasures in real time.",
+     "basis": "sourced",
+     "src": [
+      [
+       "Valthos site",
+       "https://valthos.com"
+      ],
+      [
+       "Decrypt, 2025-10-25",
+       "https://decrypt.co/345959/ai-biodefense-startup-valthos-launches-30-million-openai-backing"
+      ],
+      [
+       "Built In, 2025-11-03",
+       "https://builtin.com/articles/valthos-secures-30m-seed-funding-ai-biodefense-20251103"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "Proprietary data claimed",
+       "p": [
+        "None stated on the public site. Investors listed include OpenAI Startup Fund, Lux and Founders Fund; $30M announced Oct 2025. UNVERIFIED: any data claim."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How validation is described",
+       "p": [
+        "None public. A press piece quotes a response-time claim ('months to hours') and notes it is the company's own and has no independent testing cited."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How much to trust it (our reading)",
+       "p": [
+        "Cannot be compared with anyone until it publishes a benchmark or a customer test. For a buyer, the question is which of the validation types below it has done."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "SecureBio (and the Nucleic Acid Observatory work)",
+     "s": "AI-bio evaluations and early detection.",
+     "basis": "sourced",
+     "src": [
+      [
+       "VCT paper",
+       "https://arxiv.org/abs/2504.16137"
+      ],
+      [
+       "Wastewater sensitivity model (preprint)",
+       "https://medrxiv.org/content/10.1101/2023.12.22.23300450.full.pdf"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "Proprietary data claimed",
+       "p": [
+        "Expert-written Virology Capabilities Test: 322 multimodal questions."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How validation is described",
+       "p": [
+        "Public benchmark. Experts averaged 22.1% in their own sub-areas; o3 scored 43.8% (arXiv). Wastewater sensitivity is a statistical model on public-health data for 16 viruses (retrospective, preprint)."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How much to trust it (our reading)",
+       "p": [
+        "A knowledge test of models, not a test of a detector. Good for what it is."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "DNA synthesis screening: SecureDNA, IBBIS, Aclid",
+     "s": "Stop orders for dangerous sequences.",
+     "basis": "sourced",
+     "src": [
+      [
+       "NIST benchmark description",
+       "https://pmc.ncbi.nlm.nih.gov/articles/PMC12154891/"
+      ],
+      [
+       "Aclid",
+       "https://www.aclid.bio"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "Proprietary data claimed",
+       "p": [
+        "Curated sequence-of-concern databases."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How validation is described",
+       "p": [
+        "NIST built a blinded 200 bp benchmark and gave SecureDNA, IBBIS and MITRE sets of 1,000 sequences (200 true positive, 200 true negative, 600 ungraded). We did not find NIST's results. IBBIS's false-positive claim (under 2%) is UNVERIFIED. Aclid's site gives ROI numbers with no method."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How much to trust it (our reading)",
+       "p": [
+        "The NIST design is the most independent: the developers did not build the test. Marketing ROI figures tell you nothing about accuracy."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "Ginkgo Biosecurity / Perimeter (airport and wastewater surveillance)",
+     "s": "Close the gap between threat detection and response.",
+     "basis": "sourced",
+     "src": [
+      [
+       "Perimeter",
+       "https://www.perimeter.bio/"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "Proprietary data claimed",
+       "p": [
+        "Claimed: 8 airports, 135+ countries of origin, 2,600+ wastewater samples since 2021."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How validation is described",
+       "p": [
+        "Company-reported anecdotes: H3N2 subclade K flagged 7 days before public repositories; vancomycin-resistant Enterococci a week before clinical identification; four test-and-evaluation exercises. No denominators."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How much to trust it (our reading)",
+       "p": [
+        "Interesting data footprint, but 'we saw it first' stories without how many misses and false alarms cannot be scored. Whether Perimeter and Ginkgo Biosecurity are the same entity is inferred from a redirect."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "Biobot (wastewater)",
+     "s": "Wastewater epidemiology.",
+     "basis": "sourced",
+     "src": [
+      [
+       "JMIR Public Health 2025",
+       "https://publichealth.jmir.org/2025/1/e68213/"
+      ],
+      [
+       "Biobot",
+       "https://biobot.io/data/"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "Proprietary data claimed",
+       "p": [
+        "Plants covering about 30% of the US population (independent estimate)."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How validation is described",
+       "p": [
+        "Independent: 254 counties, median correlation with cases 0.904 in 107 counties, but 21.5% of counties below 0.8. Company: 0.96 correlation for influenza A in 2023-24 (not independently verified)."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How much to trust it (our reading)",
+       "p": [
+        "The independent analysis is the better model: it reports the weak tail, not only the median."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "CZ ID (open metagenomic detection)",
+     "s": "Open-source pathogen detection platform.",
+     "basis": "sourced",
+     "src": [
+      [
+       "czid-bench",
+       "https://github.com/chanzuckerberg/idseq-bench"
+      ],
+      [
+       "Genome Medicine 2025",
+       "https://pubmed.ncbi.nlm.nih.gov/40329334/"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "Proprietary data claimed",
+       "p": [
+        "No proprietary data; open platform."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How validation is described",
+       "p": [
+        "czid-bench generates simulated reads and scores recall and QC pass rate per organism. A Genome Medicine paper (2025) added resistance detection on four clinical cohorts plus wastewater. No prospective accuracy study found."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How much to trust it (our reading)",
+       "p": [
+        "Closest in spirit to our benchmark: constructed truth plus open code."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "Karius (plasma cell-free DNA test)",
+     "s": "Find bloodstream pathogens from plasma.",
+     "basis": "sourced",
+     "src": [
+      [
+       "Healio on SEP-SEQ",
+       "https://www.healio.com/news/infectious-disease/20190226/karius-test-identifies-pathogens-more-quickly-than-standard-tests"
+      ],
+      [
+       "Karius test validation page",
+       "https://www.kariusdx.com/karius-test/test-validation"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "Proprietary data claimed",
+       "p": [
+        "2,000 validation samples; 15,000+ patient dataset (company)."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How validation is described",
+       "p": [
+        "Prospective study of 350 sepsis patients (Nat Microbiol 2019): sensitivity about 93% against a composite standard; specificity 62.7% by microbiology alone, or 76.3% after clinician adjudication. A 2023 validation used 2,000 samples. The lead author is a company employee."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How much to trust it (our reading)",
+       "p": [
+        "The best lesson here: the same test goes from 62.7% to 76.3% specificity depending on the reference standard. Always ask what the truth was."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "Delve Bio (CSF and plasma metagenomics)",
+     "s": "Metagenomic sequencing for hard-to-diagnose infections.",
+     "basis": "sourced",
+     "src": [
+      [
+       "UCSF announcement",
+       "https://innovation.ucsf.edu/media/news/delve-bio-and-ucsf-publish-research-demonstrating-clinical-utility-metagenomic-next"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "Proprietary data claimed",
+       "p": [
+        "UCSF-derived clinical data (company)."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How validation is described",
+       "p": [
+        "Nature Medicine paper with UCSF; summaries report 21.8% (48 of 220) infections found by sequencing alone in a cohort over 1,000 patients (UNVERIFIED, paper not opened). Analytical validation used remnant CSF plus contrived samples; an RCT of about 400 patients was reportedly launched with no results found."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How much to trust it (our reading)",
+       "p": [
+        "Retrospective plus contrived samples: reasonable first steps; the RCT is the step that would matter."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "Day Zero Diagnostics (resistance from genomes)",
+     "s": "Predict antibiotic susceptibility from whole genomes.",
+     "basis": "sourced",
+     "src": [
+      [
+       "Medtech Innovator summary",
+       "https://medtechinnovator.org/evaluation-of-a-machine-learning-system-for-genomic-antimicrobial-susceptibility-determination-on-a-clinically-representative-test-set-featuring-day-zero-diagnostics/"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "Proprietary data claimed",
+       "p": [
+        "Genomes with measured susceptibility from 40,000+ isolates."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How validation is described",
+       "p": [
+        "Tested on 956 clinical isolates from a different site and time (April to August 2023): 96.9% categorical agreement over 7,801 calls; very major and major error 1.4% and 0.8%; ResFinder baseline 83.5%."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How much to trust it (our reading)",
+       "p": [
+        "The closest to the validation design we want: separate site, separate time, a baseline to beat, error types reported."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "Arc Institute (Evo 2) and protein-design companies (Profluent, Basecamp Research)",
+     "s": "Open genomic foundation model; AI-designed proteins; a biodiversity sequence dataset.",
+     "basis": "sourced",
+     "src": [
+      [
+       "Arc, Evo 2 one year later",
+       "https://arcinstitute.org/news/evo-2-one-year-later"
+      ],
+      [
+       "Fine-tuning preprint",
+       "https://arxiv.org/html/2511.19299v1"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "Proprietary data claimed",
+       "p": [
+        "Evo 2: open OpenGenome2. Eukaryotic viruses were excluded from training. Basecamp: BaseData in 28 to 30+ countries (company claim)."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How validation is described",
+       "p": [
+        "Evo 2: zero-shot variant effects and generation checks; Arc says the viral exclusion weakens prediction for human viruses and red-teaming found outputs 'effectively random' for pathogenic viral proteins. A fine-tuning preprint on 110 human viruses reported AUROC 0.6 for SARS-CoV-2 escape variants. Profluent: wet-lab editing in human cells (company figures). Basecamp: no independent validation found."
+       ],
+       "basis": "sourced"
+      },
+      {
+       "t": "How much to trust it (our reading)",
+       "p": [
+        "Honest about a limit (viral exclusion), which is rare. Not pathogen-detection evidence."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "What recurs, and what is worth believing",
+     "s": "Seven validation styles, ranked by how much they can tell you.",
+     "list": [
+      "Prospective cohort with an orthogonal reference (Karius, nanopore study): strongest, but the reference standard moves the answer.",
+      "Blinded or held-out testing by someone else (NIST benchmark, Genome Research CSF study): strong.",
+      "Separate site and separate time (Day Zero isolates): strong for genomic models.",
+      "Independent correlation that reports the weak tail (Biobot county analysis): good for surveillance.",
+      "Retrospective cohorts with clinician adjudication (Delve, Karius clinical impact): useful, softer.",
+      "Benchmarks and red-teaming (SecureBio, Evo 2): measure models, not detectors.",
+      "'We saw it first' anecdotes and ROI claims (Perimeter, Aclid): cannot be scored."
+     ],
+     "basis": "our reasoning"
+    },
+    {
+     "t": "The gap we can fill",
+     "s": "Almost nobody publishes a prospective, geographically separate, time-split test of AI pathogen identification.",
+     "p": [
+      "Day Zero comes closest, for resistance. For open metagenomic classification the public record is simulated data (CAMI, CZ ID) and a handful of PCR-confirmed clinical sets (a 13-dataset viral comparison found only 3 of 13 pipelines caught low-abundance and mixed infections). That is where a small, open, honest benchmark like this one can help."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "13-pipeline clinical viral mNGS comparison",
+       "https://www.medrxiv.org/content/10.1101/2021.05.04.21256618.full.pdf"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "pubevals",
+   "nav": "Public evals",
+   "title": "Public evaluations that exist today",
+   "intro": "What each measures, where its truth comes from, and its known weakness. Details from a literature search done 2026-11-12; several primary pages were not opened and are marked in the text.",
+   "items": [
+    {
+     "t": "CAMI I and II",
+     "s": "Taxonomic profiling, assembly, binning of simulated metagenomes",
+     "table": {
+      "head": [
+       "Measures",
+       "Truth source",
+       "Known weakness"
+      ],
+      "rows": [
+       [
+        "Taxonomic profiling, assembly, binning of simulated metagenomes",
+        "Simulated (truth known)",
+        "Strain-rich samples are hard; simulated, not clinical"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "Source",
+       "https://pmc.ncbi.nlm.nih.gov/articles/PMC5903868"
+      ]
+     ]
+    },
+    {
+     "t": "ESCV/ENNGS clinical viral mNGS comparison",
+     "s": "13 pipelines on 13 PCR-characterised clinical datasets",
+     "table": {
+      "head": [
+       "Measures",
+       "Truth source",
+       "Known weakness"
+      ],
+      "rows": [
+       [
+        "13 pipelines on 13 PCR-characterised clinical datasets",
+        "PCR",
+        "13 samples; only 3 of 13 pipelines caught low-abundance and mixed infections; read counts for the same virus varied 2 to 3 logs"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "Source",
+       "https://www.medrxiv.org/content/10.1101/2021.05.04.21256618.full.pdf"
+      ]
+     ]
+    },
+    {
+     "t": "ProteinGym",
+     "s": "Variant-effect prediction on 217 substitution assays",
+     "table": {
+      "head": [
+       "Measures",
+       "Truth source",
+       "Known weakness"
+      ],
+      "rows": [
+       [
+        "Variant-effect prediction on 217 substitution assays",
+        "Deep mutational scans",
+        "Only 24 of 217 assays are viral; ESM models reportedly drop on viral proteins; assays are proxies for fitness"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "Source",
+       "https://papers.neurips.cc/paper_files/paper/2023/file/cac723e5ff29f65e3fcbb0739ae91bee-Paper-Datasets_and_Benchmarks.pdf"
+      ]
+     ]
+    },
+    {
+     "t": "ViroGym and EVEREST",
+     "s": "Viral-specific DMS benchmarks (79 and 45 assays)",
+     "table": {
+      "head": [
+       "Measures",
+       "Truth source",
+       "Known weakness"
+      ],
+      "rows": [
+       [
+        "Viral-specific DMS benchmarks (79 and 45 assays)",
+        "Deep mutational scans",
+        "Preprints; EVEREST reportedly finds pLMs fail on more than half of viruses (second-hand, UNVERIFIED)"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "Source",
+       "https://arxiv.org/pdf/2603.06740v1"
+      ]
+     ]
+    },
+    {
+     "t": "EVEscape",
+     "s": "Escape-mutation ranking trained on pre-2020 sequences plus structure",
+     "table": {
+      "head": [
+       "Measures",
+       "Truth source",
+       "Known weakness"
+      ],
+      "rows": [
+       [
+        "Escape-mutation ranking trained on pre-2020 sequences plus structure",
+        "DMS and antibody data (SARS-CoV-2, HIV, influenza)",
+        "Authors' own evidence; Lassa and Nipah are predictions only; no independent critique found"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "Source",
+       "https://www.nature.com/articles/s41586-023-06617-0.pdf"
+      ]
+     ]
+    },
+    {
+     "t": "Bloom lab RBD escape calculator",
+     "s": "Antibody escape from RBD mutations",
+     "table": {
+      "head": [
+       "Measures",
+       "Truth source",
+       "Known weakness"
+      ],
+      "rows": [
+       [
+        "Antibody escape from RBD mutations",
+        "Yeast-display DMS, checked on sera",
+        "Escape only, no ACE2 or fitness term; tied to early-strain immunity"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "Source",
+       "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9092643/"
+      ]
+     ]
+    },
+    {
+     "t": "CoVFit and PyR0",
+     "s": "SARS-CoV-2 fitness and lineage growth",
+     "table": {
+      "head": [
+       "Measures",
+       "Truth source",
+       "Known weakness"
+      ],
+      "rows": [
+       [
+        "SARS-CoV-2 fitness and lineage growth",
+        "GISAID-derived frequencies (+DMS for CoVFit)",
+        "Frequencies reflect uneven sampling; count of fitness events differs between preprint and paper"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "Source",
+       "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9161372/"
+      ]
+     ]
+    },
+    {
+     "t": "Nextstrain flu forecasting",
+     "s": "Variant frequency forecasts",
+     "table": {
+      "head": [
+       "Measures",
+       "Truth source",
+       "Known weakness"
+      ],
+      "rows": [
+       [
+        "Variant frequency forecasts",
+        "Later observed frequencies",
+        "About 3 months submission lag; shorter horizon sharply cuts error"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "Source",
+       "https://pmc.ncbi.nlm.nih.gov/articles/PMC12677901"
+      ]
+     ]
+    },
+    {
+     "t": "Virology Capabilities Test",
+     "s": "322 multimodal virology troubleshooting questions",
+     "table": {
+      "head": [
+       "Measures",
+       "Truth source",
+       "Known weakness"
+      ],
+      "rows": [
+       [
+        "322 multimodal virology troubleshooting questions",
+        "Expert-written",
+        "Multiple choice; may not measure real-world risk"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "Source",
+       "https://arxiv.org/html/2504.16137v2"
+      ]
+     ]
+    },
+    {
+     "t": "LAB-Bench",
+     "s": "2,457 questions in 8 categories (SeqQA, ProtocolQA)",
+     "table": {
+      "head": [
+       "Measures",
+       "Truth source",
+       "Known weakness"
+      ],
+      "rows": [
+       [
+        "2,457 questions in 8 categories (SeqQA, ProtocolQA)",
+        "FutureHouse-written; 20% held out privately",
+        "Not designed for dual-use risk; realism of ProtocolQA questioned"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "Source",
+       "https://arxiv.org/pdf/2407.10362v1"
+      ]
+     ]
+    },
+    {
+     "t": "WMDP",
+     "s": "3,668 multiple-choice hazardous-knowledge proxies (1,273 bio)",
+     "table": {
+      "head": [
+       "Measures",
+       "Truth source",
+       "Known weakness"
+      ],
+      "rows": [
+       [
+        "3,668 multiple-choice hazardous-knowledge proxies (1,273 bio)",
+        "Expert-written",
+        "Weakly tied to real tasks; possible saturation"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "Source",
+       "https://arxiv.org/pdf/2403.03218"
+      ]
+     ]
+    },
+    {
+     "t": "BioLP-bench",
+     "s": "800 planted errors in public protocols",
+     "table": {
+      "head": [
+       "Measures",
+       "Truth source",
+       "Known weakness"
+      ],
+      "rows": [
+       [
+        "800 planted errors in public protocols",
+        "Public protocols",
+        "Protocols may be in training data"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "Source",
+       "https://www.biorxiv.org/content/10.1101/2024.08.21.608694.full.pdf"
+      ]
+     ]
+    },
+    {
+     "t": "BixBench",
+     "s": "53 analysis scenarios, 296 open-answer questions for agents",
+     "table": {
+      "head": [
+       "Measures",
+       "Truth source",
+       "Known weakness"
+      ],
+      "rows": [
+       [
+        "53 analysis scenarios, 296 open-answer questions for agents",
+        "FutureHouse-curated",
+        "Frontier models about 17% at publication; will date quickly"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "Source",
+       "https://arxiv.org/abs/2503.00096v3"
+      ]
+     ]
+    },
+    {
+     "t": "What is missing from the public list",
+     "list": [
+      "ProteinGym's own handling of sequence-similarity leakage",
+      "The time-held-out protocol of Huddleston et al. (eLife 2020)",
+      "EVEscape's detailed metrics (page needed authentication)",
+      "Agentic biosecurity benchmarks beyond ABC-Bench",
+      "Any audit of train and test leakage in host-range models",
+      "An ancestry-stratified measurement of host-read removal"
+     ],
+     "basis": "sourced"
+    }
+   ]
+  },
+  {
+   "id": "dow",
+   "nav": "Working with the DoW",
+   "title": "What working with the Department of War means, and what data moves",
+   "intro": "Facts from public sources, 2026-11-12. We describe the process in general and make no claims about any company's private contracts.",
+   "items": [
+    {
+     "t": "The name",
+     "s": "Department of War is a secondary title; the statutory name is still Department of Defense.",
+     "p": [
+      "A 2025-09-05 executive order authorised 'Department of War' for official correspondence and public communications. Contracts and statutes still say Department of Defense unless Congress acts. We did not check whether a rename has since been enacted."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "White House fact sheet",
+       "https://www.whitehouse.gov/briefings-statements/2025/09/fact-sheet-president-donald-j-trump-restores-the-united-states-department-of-war/"
+      ],
+      [
+       "Military.com on what the order does legally",
+       "https://www.military.com/feature/2025/10/17/department-of-war-not-legally-what-trumps-executive-order-really-does.html"
+      ]
+     ]
+    },
+    {
+     "t": "How a startup typically gets in",
+     "s": "A call or solicitation, a paid prototype, scenario tests, then maybe production.",
+     "list": [
+      "Entry points: JPEO-CBRND 'Work With Us' pages and requests for information, SBIR/STTR, consortium Other Transaction Agreements (for example the Medical CBRN Defense Consortium), and Defense Innovation Unit (DIU) commercial solutions openings.",
+      "DIU biosurveillance (2025-03-25): 78 responses; prototypes awarded to Bana Solutions, Booz Allen Hamilton and Cyberhill Partners with data.world and KUNGFU.AI; prototyping 12 to 24 months; next step is simulated scenarios. No metrics or production path published.",
+      "DIU ANTIDOTE wastewater (2025-01-22): three milestones, ingest genomic data and return results, report on chemical-biological-defense networks, and pass an independent verification and validation exercise in a remote, disconnected setting. No quantitative metrics published.",
+      "A prototype award is not a production contract. We found no production decision for these programs."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "DIU: AI-driven biosurveillance",
+       "https://www.diu.mil/latest/cbd-and-diu-strengthen-national-security-with-ai-driven-biosurveillance"
+      ],
+      [
+       "DIU: ANTIDOTE / novel threats",
+       "https://www.diu.mil/latest/diu-demonstrates-capability-to-find-novel-threats-in-high-complexity"
+      ],
+      [
+       "JPEO-CBRND Work With Us",
+       "https://www.jpeocbrnd.osd.mil/Work-With-Us/JETT-Joint-Enterprise-Technology-Tool"
+      ]
+     ]
+    },
+    {
+     "t": "What data is involved",
+     "s": "Public, controlled unclassified, or classified; the tier decides where the code can run.",
+     "basis": "sourced",
+     "kids": [
+      {
+       "t": "Impact levels (vendor sources, check the current guide)",
+       "list": [
+        "IL2: public or non-critical data",
+        "IL4: controlled unclassified information (CUI)",
+        "IL5: higher-sensitivity CUI and national security systems",
+        "IL6: classified up to SECRET",
+        "A July 2025 DISA update reportedly folded non-national-security CUI into IL4"
+       ],
+       "src": [
+        [
+         "Armis white paper",
+         "https://media.armis.com/wp-fed-disa-2025-IL4-IL5-changes-en.pdf"
+        ],
+        [
+         "Knox Systems",
+         "https://knoxsystems.com/resources/dod-impact-levels"
+        ]
+       ]
+      },
+      {
+       "t": "Sequence data rules",
+       "list": [
+        "GISAID: registration and a Database Access Agreement; no passing data to unregistered third parties; one feed was cut off in Jan 2026 over redistribution.",
+        "Select agents (42 CFR Part 73) govern possession, use and transfer of agents and toxins, not sequences.",
+        "Export controls: one DIU performer is described as covering threats on the Commerce Control List and Australia Group lists. Whether sequence data itself is export-controlled was UNVERIFIED."
+       ],
+       "src": [
+        [
+         "GISAID DAA",
+         "https://gisaid.org/daa"
+        ],
+        [
+         "Select agent program",
+         "https://selectagents.gov/overview/index.htm"
+        ]
+       ]
+      },
+      {
+       "t": "Inputs and outputs (from public descriptions)",
+       "list": [
+        "Inputs: wastewater genomic data and diverse data sources, plus manual methods tied to predefined pathogen lists",
+        "Outputs: early warnings, biorisk recommendations, analytic results on network reports, visualisations",
+        "Schemas, confidence formats and risk-score definitions are not public (UNVERIFIED)"
+       ]
+      },
+      {
+       "t": "Our own version of the shapes",
+       "p": [
+        "In this repo: input is a Kraken2 report, a MetaPhlAn profile or a table of species and percent; output is a report of what the result supports, does not support and what to check next. For a real deployment you would add the sample metadata (collection place, date, host, protocol) as required input and a calibrated confidence plus the evidence trail as output."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "How these tools get evaluated in public descriptions",
+     "list": [
+      "DARPA Bio-ALIRT: detection algorithms tested on real military and civilian data from five cities, with natural outbreaks standing in for releases.",
+      "Standard metrics: sensitivity, specificity, timeliness and false-alarm probability.",
+      "NIST CAISI and UK AISI public work mostly tests models for dual-use uplift, not detectors. NIST AI 800-3 asks benchmark reports to state statistical assumptions and uncertainty.",
+      "Frontier Model Forum: say whether a result is an automated benchmark, a red-team exercise or a controlled trial.",
+      "We found no public BARDA, CDC or DHS method for evaluating AI detection tools."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "Frontier Model Forum brief",
+       "https://www.frontiermodelforum.org/updates/issue-brief-preliminary-reporting-tiers-for-ai-bio-safety-evaluations/"
+      ],
+      [
+       "NIST CAISI DeepSeek report",
+       "https://www.nist.gov/document/caisi-evaluation-deepseek-ai-models-report"
+      ]
+     ]
+    },
+    {
+     "t": "What this implies for our evaluations",
+     "list": [
+      "Report sensitivity and false alarms with confidence intervals, plus time to detection.",
+      "Use realistic and held-out scenarios, including an independent run in a disconnected setting.",
+      "Keep the harness runnable offline on public or synthetic data and portable to a controlled enclave.",
+      "Make outputs auditable: calibrated confidence, abstention, and a saved evidence trail.",
+      "State the design: benchmark, red team or trial. Test contaminants, low abundance and missing metadata."
+     ],
+     "basis": "our reasoning"
+    }
+   ]
+  }
+ ]
+}

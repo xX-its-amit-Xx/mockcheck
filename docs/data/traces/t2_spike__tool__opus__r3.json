@@ -1,0 +1,89 @@
+{
+ "run": "t2_spike__tool__opus__r3",
+ "task": "t2_spike",
+ "condition": "tool",
+ "model": "opus",
+ "gold": {
+  "detected": [
+   "enterococcus faecalis",
+   "escherichia coli",
+   "lactobacillus fermentum",
+   "pseudomonas aeruginosa",
+   "staphylococcus aureus"
+  ],
+  "missed": [
+   "bacillus subtilis",
+   "cryptococcus neoformans",
+   "listeria monocytogenes",
+   "saccharomyces cerevisiae",
+   "salmonella enterica"
+  ]
+ },
+ "result": {
+  "detected": [
+   "Pseudomonas aeruginosa",
+   "Escherichia coli",
+   "Lactobacillus fermentum",
+   "Enterococcus faecalis",
+   "Staphylococcus aureus"
+  ],
+  "missed": [
+   "Salmonella enterica",
+   "Listeria monocytogenes",
+   "Bacillus subtilis",
+   "Saccharomyces cerevisiae",
+   "Cryptococcus neoformans"
+  ]
+ },
+ "final_text": "I couldn't run `python -m mockcheck --help` because the PowerShell call timed out, so I read the report directly. I took the 10 spike_P0 organisms from `truth/spike_manifest.tsv` and looked up each one's species-level (rank S) clade read count in `data/spike_P0.report.gz`. Each organism matched at most one species row.\n\n| Organism (manifest) | Spiked pairs | Report clade reads (S) | Call |\n|---|---|---|---|\n| Pseudomonas aeruginosa | 40,000 | 811 | detected |\n| Escherichia coli | 4,000 | 72 | detected |\n| Salmonella enterica | 400 | 4 | missed |\n| Lactobacillus fermentum (shown in the report as Limosilactobacillus fermentum) | 40 | 26 | detected |\n| Enterococcus faecalis | 40,000 | 6,457 | detected |\n| Staphylococcus aureus | 4,000 | 54 | detected |\n| Listeria monocytogenes | 400 | not in report | missed |\n| Bacillus subtilis | 40 | 2 | missed |\n| Saccharomyces cerevisiae | 40,000 | not in report | missed |\n| Cryptococcus neoformans | 4,000 | not in report | missed |\n\nFive of the ten added organisms reach the 10-read threshold. The counts in the report are far below the number of pairs spiked in, for every organism. Both fungi (Saccharomyces cerevisiae and Cryptococcus neoformans) are missing from the report entirely, even though S. cerevisiae was spiked at the highest level. That suggests the database used may not include fungi, but the report alone can't confirm that.\n\nRESULT: {\"detected\": [\"Pseudomonas aeruginosa\", \"Escherichia coli\", \"Lactobacillus fermentum\", \"Enterococc",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 1,
+  "L1_tool_calls": 4,
+  "L1_tool_errors": 2,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "PowerShell",
+   "input": "python -m mockcheck --help; Get-Content truth/spike_manifest.tsv",
+   "output": "This PowerShell command contains multiple operations. The following part requires approval: python -m mockcheck --help; Get-Content truth/spike_manifest.tsv",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Read",
+   "input": "<sandbox>\\truth\\spike_manifest.tsv",
+   "output": "1\tsample\torganism\tfraction\tspiked_pairs\ttotal_pairs\n2\tspike_P0\tPseudomonas aeruginosa\t0.01\t40000\t4000000\n3\tspike_P0\tEscherichia coli\t0.001\t4000\t4000000\n4\tspike_P0\tSalmonella enterica\t0.0001\t400\t4000000\n5\tspike_P0\tLactobacillus fermentum\t1e-05\t40\t4000000\n6\tspike_P0\tEnterococcus faecalis\t0.01\t40000\t4000000\n7\tspike_P0\tStaphylococcus aureus\t0.001\t4000\t4000000\n8\tspike_P0\tListeria monocytogenes\t0.0001\t400\t4000000\n9\tspike_P0\tBacillus subtilis\t1e-05\t40\t4000000\n10\tspike_P0\tSaccharomyces cerevisiae\t0.01\t40000\t4000000\n11\tspike_P0\tCryptococcus neoformans\t0.001\t4000\t4000000\n12\tspike_P1\tPseudomonas aeruginosa\t0.001\t4000\t4000000\n13\tspike_P1\tEscherichia coli\t0.0001\t400\t4000000\n14\tspike_P1\tSalmonella enteric",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "PowerShell",
+   "input": "python -m mockcheck --help",
+   "output": "Command contains malformed syntax that cannot be parsed: pwsh timed out after 5000ms (2 attempts)",
+   "error": true
+  },
+  {
+   "kind": "say",
+   "text": "I'll just parse the report directly with Python."
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "python -I -c \"\nimport gzip\nnames=['pseudomonas aeruginosa','escherichia coli','salmonella enterica','lactobacillus fermentum','limosilactobacillus fermentum','enterococcus faecalis','staphylococcus aureus','listeria monocytogenes','bacillus subtilis','saccharomyces cerevisiae','cryptococcus neoformans']\nfor l in gzip.open('data/spike_P0.report.gz','rt'):\n    f=l.rstrip('\\n').split('\\t')\n    if len(f)<6: continue\n    n=f[5].strip().lower()\n    if n in names or 'fermentum' in n: print(f[3],f[1],f[",
+   "output": "S 6457 6457 '                  Enterococcus faecalis'\r\nS 26 26 '                  Limosilactobacillus fermentum'\r\nS 54 54 '                  Staphylococcus aureus'\r\nS 2 2 '                    Bacillus subtilis'\r\nS 811 811 '                    Pseudomonas aeruginosa'\r\nS 4 4 '                  Salmonella enterica'\r\nS 72 72 '                  Escherichia coli'",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "I couldn't run `python -m mockcheck --help` because the PowerShell call timed out, so I read the report directly. I took the 10 spike_P0 organisms from `truth/spike_manifest.tsv` and looked up each one's species-level (rank S) clade read count in `data/spike_P0.report.gz`. Each organism matched at most one species row.\n\n| Organism (manifest) | Spiked pairs | Report clade reads (S) | Call |\n|---|---|---|---|\n| Pseudomonas aeruginosa | 40,000 | 811 | detected |\n| Escherichia coli | 4,000 | 72 | detected |\n| Salmonella enterica | 400 | 4 | missed |\n| Lactobacillus fermentum (shown in the report a"
+  }
+ ]
+}

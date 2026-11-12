@@ -1,0 +1,85 @@
+{
+ "run": "t2_spike__bare__sonnet__r1",
+ "task": "t2_spike",
+ "condition": "bare",
+ "model": "sonnet",
+ "gold": {
+  "detected": [
+   "enterococcus faecalis",
+   "escherichia coli",
+   "lactobacillus fermentum",
+   "pseudomonas aeruginosa",
+   "staphylococcus aureus"
+  ],
+  "missed": [
+   "bacillus subtilis",
+   "cryptococcus neoformans",
+   "listeria monocytogenes",
+   "saccharomyces cerevisiae",
+   "salmonella enterica"
+  ]
+ },
+ "result": {
+  "detected": [
+   "enterococcus faecalis",
+   "pseudomonas aeruginosa",
+   "escherichia coli",
+   "staphylococcus aureus",
+   "lactobacillus fermentum"
+  ],
+  "missed": [
+   "salmonella enterica",
+   "listeria monocytogenes",
+   "bacillus subtilis",
+   "saccharomyces cerevisiae",
+   "cryptococcus neoformans"
+  ]
+ },
+ "final_text": "Detection threshold: species-level (rank S) clade reads \u2265 10.\n\n| Organism | Species clade reads | Detected |\n|---|---|---|\n| enterococcus faecalis | 6457 | yes |\n| pseudomonas aeruginosa | 811 | yes |\n| escherichia coli | 72 | yes |\n| staphylococcus aureus | 54 | yes |\n| lactobacillus fermentum (reported as Limosilactobacillus fermentum) | 26 | yes |\n| salmonella enterica | 4 | no, below 10 |\n| bacillus subtilis | 2 | no, below 10 |\n| listeria monocytogenes | no species row | no |\n| saccharomyces cerevisiae | not in report | no |\n| cryptococcus neoformans | not in report | no |\n\nFor Listeria, the report has 315 reads at genus level (all direct) but no species row for *L. monocytogenes*, so it doesn't meet the species-level criterion. Saccharomyces and Cryptococcus don't appear at all.\n\nRESULT: {\"detected\": [\"enterococcus faecalis\", \"pseudomonas aeruginosa\", \"escherichia coli\", \"staphylococcus aureus\", \"lactobacillus fermentum\"], \"missed\": [\"salmonella enterica\", \"listeria monocytogenes\", \"bacillus subtilis\", \"saccharomyces cerevisiae\", \"cryptococcus neoformans\"]}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 4,
+  "L1_tool_errors": 1,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cat truth/spike_manifest.tsv | head -50; zcat data/spike_P0.report.gz | awk -F'\\t' '$4==\"S\"' | wc -l",
+   "output": "This Bash command contains multiple operations. The following part requires approval: awk -F'\\t' '$4==\"S\"'",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cat truth/spike_manifest.tsv",
+   "output": "sample\torganism\tfraction\tspiked_pairs\ttotal_pairs\nspike_P0\tPseudomonas aeruginosa\t0.01\t40000\t4000000\nspike_P0\tEscherichia coli\t0.001\t4000\t4000000\nspike_P0\tSalmonella enterica\t0.0001\t400\t4000000\nspike_P0\tLactobacillus fermentum\t1e-05\t40\t4000000\nspike_P0\tEnterococcus faecalis\t0.01\t40000\t4000000\nspike_P0\tStaphylococcus aureus\t0.001\t4000\t4000000\nspike_P0\tListeria monocytogenes\t0.0001\t400\t4000000\nspike_P0\tBacillus subtilis\t1e-05\t40\t4000000\nspike_P0\tSaccharomyces cerevisiae\t0.01\t40000\t4000000\nspike_P0\tCryptococcus neoformans\t0.001\t4000\t4000000\nspike_P1\tPseudomonas aeruginosa\t0.001\t4000\t4000000\nspike_P1\tEscherichia coli\t0.0001\t400\t4000000\nspike_P1\tSalmonella enterica\t1e-05\t40\t4000000\nspike_P1\tLacto",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "python3 -I -c \"\nimport gzip\nfor l in gzip.open('data/spike_P0.report.gz','rt'):\n    f=l.rstrip('\\n').split('\\t')\n    if f[3]=='S' and f[5].strip().lower() in ['pseudomonas aeruginosa','escherichia coli','salmonella enterica','lactobacillus fermentum','limosilactobacillus fermentum','enterococcus faecalis','staphylococcus aureus','listeria monocytogenes','bacillus subtilis','saccharomyces cerevisiae','cryptococcus neoformans']: print(f[1],f[5])\n\"",
+   "output": "6457                   Enterococcus faecalis\r\n26                   Limosilactobacillus fermentum\r\n54                   Staphylococcus aureus\r\n2                     Bacillus subtilis\r\n811                     Pseudomonas aeruginosa\r\n4                   Salmonella enterica\r\n72                   Escherichia coli",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "zcat data/spike_P0.report.gz | grep -iE \"listeria|saccharomyces|cryptococcus\"",
+   "output": "  0.01\t315\t0\tF\t186820\t              Listeriaceae\n  0.01\t315\t315\tG\t1637\t                Listeria",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "Detection threshold: species-level (rank S) clade reads \u2265 10.\n\n| Organism | Species clade reads | Detected |\n|---|---|---|\n| enterococcus faecalis | 6457 | yes |\n| pseudomonas aeruginosa | 811 | yes |\n| escherichia coli | 72 | yes |\n| staphylococcus aureus | 54 | yes |\n| lactobacillus fermentum (reported as Limosilactobacillus fermentum) | 26 | yes |\n| salmonella enterica | 4 | no, below 10 |\n| bacillus subtilis | 2 | no, below 10 |\n| listeria monocytogenes | no species row | no |\n| saccharomyces cerevisiae | not in report | no |\n| cryptococcus neoformans | not in report | no |\n\nFor Listeria, "
+  }
+ ]
+}

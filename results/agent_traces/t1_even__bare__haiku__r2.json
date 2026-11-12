@@ -1,0 +1,47 @@
+{
+ "run": "t1_even__bare__haiku__r2",
+ "task": "t1_even",
+ "condition": "bare",
+ "model": "haiku",
+ "gold": {
+  "found": 7,
+  "false": 1
+ },
+ "result": {
+  "found": 7,
+  "false": 1
+ },
+ "final_text": "Seven of the 10 expected species were called, and one called species is not in the expected list.\n\nCalled species (at least 0.1% of renormalised species-level reads, from `data/even.report.gz`, rank `S` only):\n\n| Species (as reported, lowercased) | % of species reads | In expected list? |\n|---|---|---|\n| limosilactobacillus fermentum | 61.52 | Yes, via the allowed rename to Lactobacillus fermentum |\n| bacillus spizizenii | 15.95 | No |\n| enterococcus faecalis | 14.62 | Yes |\n| pseudomonas aeruginosa | 3.80 | Yes |\n| staphylococcus aureus | 1.51 | Yes |\n| salmonella enterica | 1.29 | Yes |\n| escherichia coli | 0.92 | Yes |\n| listeria monocytogenes | 0.34 | Yes |\n\nNot called:\n- **Bacillus subtilis** is in the report at 2 reads (0.0008%), below the threshold.\n- **Saccharomyces cerevisiae** and **Cryptococcus neoformans** do not appear as species rows in the report.\n\nRESULT: {\"found\": 7, \"false\": 1}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 2,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && ls -la data truth && cat truth/mock_even.tsv && python3 -I -c \"import gzip,sys; d=gzip.open('data/even.report.gz','rt').read(); print(d[:1500])\"",
+   "output": "data:\ntotal 36\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ./\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ../\n-rw-r--r-- 1 ashenoy00000 1049089 2265 Nov 12 08:55 even.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 3967 Nov 12 08:55 plasma.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 9075 Nov 12 08:55 reagent_contaminant_genera.tsv\n-rw-r--r-- 1 ashenoy00000 1049089 4775 Nov 12 08:55 spike_H0.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 1987 Nov 12 08:55 spike_P0.report.gz\n\ntruth:\ntotal 5\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ./\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ../\n-rw-r--r-- 1 ashenoy00000 1049089  272 Nov 12 08:55 mock_even.tsv\n-rw-r--r-- 1 ashenoy",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && python3 -I -c \"\nimport gzip\nrows=[]\nfor line in gzip.open('data/even.report.gz','rt'):\n    f=line.rstrip('\\n').split('\\t')\n    if len(f)<6: continue\n    if f[3]=='S': rows.append((int(f[1]), f[5].strip()))\ntot=sum(r for r,_ in rows)\nprint('total species reads',tot,'n',len(rows))\nfor r,n in rows:\n    print(f'{100*r/tot:8.4f}  {r:8d}  {n.lower()}')\n\"",
+   "output": "total species reads 237500 n 20\r\n 15.9469     37874  bacillus spizizenii\r\n  0.0008         2  bacillus subtilis\r\n  0.0021         5  bacillus mycoides\r\n  0.3415       811  listeria monocytogenes\r\n  1.5120      3591  staphylococcus aureus\r\n 14.6232     34730  enterococcus faecalis\r\n 61.5192    146108  limosilactobacillus fermentum\r\n  0.0173        41  actinomyces oris\r\n  0.0004         1  micromonospora sp. nbrc 110009\r\n  0.0004         1  cutibacterium acnes\r\n  1.2935      3072  salmonella enterica\r\n  0.9225      2191  escherichia coli\r\n  0.0004         1  escherichia fergusonii\r\n  0.0004         1  shigella flexneri\r\n  3.7971      9018  pseudomonas aeruginosa\r\n  0.0042        10  pseudomona",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "Seven of the 10 expected species were called, and one called species is not in the expected list.\n\nCalled species (at least 0.1% of renormalised species-level reads, from `data/even.report.gz`, rank `S` only):\n\n| Species (as reported, lowercased) | % of species reads | In expected list? |\n|---|---|---|\n| limosilactobacillus fermentum | 61.52 | Yes, via the allowed rename to Lactobacillus fermentum |\n| bacillus spizizenii | 15.95 | No |\n| enterococcus faecalis | 14.62 | Yes |\n| pseudomonas aeruginosa | 3.80 | Yes |\n| staphylococcus aureus | 1.51 | Yes |\n| salmonella enterica | 1.29 | Yes |\n| es"
+  }
+ ]
+}

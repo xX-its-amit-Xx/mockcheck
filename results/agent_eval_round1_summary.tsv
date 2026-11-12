@@ -1,0 +1,7 @@
+condition	model	runs	all_correct	parsed	mean_tool_calls	mean_cost_usd	mean_seconds
+bare	haiku	12	3	12	2.6	0.003	14
+bare	opus	12	3	12	1.4	0.066	14
+bare	sonnet	12	3	12	1.8	0.029	10
+tool	haiku	12	3	12	4.0	0.004	16
+tool	opus	12	3	12	3.7	0.102	21
+tool	sonnet	12	3	12	3.3	0.033	16

@@ -92,3 +92,9 @@ report opens with a one-paragraph recommendation by use case.
 - Real plasma: 16 of 263 runs of PRJNA898830, first 500,000 pairs each (`config/phase2_uganda_runs.tsv`). No per-sample truth public.
 - Tools: Kraken2 16 GB at confidence 0.0 and 0.1; MetaPhlAn 4.2.6. No Bracken. HMP mock skipped (composition not verifiable).
 - Run: `scripts/phase2_build.sbatch`, `scripts/phase2_classify.sbatch`, `scripts/collect_phase2.sh`, `scripts/evaluate_phase2.py`.
+
+## Phase 3 (evaluation frameworks, agent traces)
+- Research with sources: companies, public evals, Department of War, ground-truth sources (dashboard sections, `docs/data/p3_*.json`).
+- Agent harness `agent_eval/`: six tasks with gold computed by mockcheck code, two sandboxes (with and without the package), haiku/sonnet/opus, 3 repeats. Scores: L1 process, L2 gold, honesty. Round 1 results kept in `results/agent_eval_round1_*.tsv`.
+- Source inventory: `scripts/crawl_sources.py` (Zenodo, Europe PMC, GitHub public APIs; LinkedIn not crawled).
+- Not done: protein language model runs; fine-tuning plus RL loop on Explorer (design only, needs Amit's approval for GPUs); subtler injection tests.

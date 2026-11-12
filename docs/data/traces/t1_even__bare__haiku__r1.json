@@ -1,0 +1,54 @@
+{
+ "run": "t1_even__bare__haiku__r1",
+ "task": "t1_even",
+ "condition": "bare",
+ "model": "haiku",
+ "gold": {
+  "found": 7,
+  "false": 1
+ },
+ "result": {
+  "found": 7,
+  "false": 1
+ },
+ "final_text": "**Result: 7 of the 10 expected species were called, and 1 called species is not in the expected set.**\n\nI used the 20 rows with rank code exactly `S` (sub-species ranks like `S1`\u2013`S3` excluded), which total 237,500 clade reads. Each species' percent is its clade reads divided by that total, and a species is called at 0.1% or more.\n\nCalled species (renormalised %):\n- Enterococcus faecalis: 14.623 (expected)\n- Limosilactobacillus fermentum: 61.519 (expected as Lactobacillus fermentum, via the allowed rename)\n- Staphylococcus aureus: 1.512 (expected)\n- Salmonella enterica: 1.293 (expected)\n- Pseudomonas aeruginosa: 3.797 (expected)\n- Escherichia coli: 0.923 (expected)\n- Listeria monocytogenes: 0.341 (expected)\n- Bacillus spizizenii: 15.947 (not expected)\n\nExpected but not called:\n- Bacillus subtilis: 2 reads, about 0.0008%, below threshold.\n- Saccharomyces cerevisiae and Cryptococcus neoformans: no species-level row in the report.\n\nThe unexpected call is Bacillus spizizenii, which is the largest Bacillus-group species row in the report. It is a close relative of B. subtilis, so it may be a database-level misassignment, but the report alone does not establish that.\n\nThe L. fermentum share (61.5%) is far from the expected 12%. I only answered the presence and count question, so I did not evaluate abundance accuracy.\n\nRESULT: {\"found\": 7, \"false\": 1}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 3,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && ls -la data truth && cat truth/mock_even.tsv",
+   "output": "data:\ntotal 36\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ./\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ../\n-rw-r--r-- 1 ashenoy00000 1049089 2265 Nov 12 08:55 even.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 3967 Nov 12 08:55 plasma.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 9075 Nov 12 08:55 reagent_contaminant_genera.tsv\n-rw-r--r-- 1 ashenoy00000 1049089 4775 Nov 12 08:55 spike_H0.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 1987 Nov 12 08:55 spike_P0.report.gz\n\ntruth:\ntotal 5\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ./\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ../\n-rw-r--r-- 1 ashenoy00000 1049089  272 Nov 12 08:55 mock_even.tsv\n-rw-r--r-- 1 ashenoy",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && python -I -c \"\nimport gzip,sys\nfor line in gzip.open('data/even.report.gz','rt'):\n    p=line.rstrip('\\n').split('\\t')\n    if len(p)>=6 and p[3].strip()=='S' or (len(p)>=6 and p[3].strip().startswith('S') and p[3].strip()!='S'):\n        print(repr(p[:5]), repr(p[5]))\n\"; echo ---; python -I -c \"\nimport gzip\nlines=gzip.open('data/even.report.gz','rt').read().splitlines()\nprint(len(lines)); print('\\n'.join(l.replace('\\t','|') for l in lines[:3]))\n\"",
+   "output": "['  1.89', '37874', '37873', 'S', '96241'] '                    Bacillus spizizenii'\r\n['  0.00', '1', '1', 'S1', '703612'] '                      Bacillus spizizenii ATCC 6633 = JCM 2499'\r\n['  0.00', '2', '2', 'S', '1423'] '                    Bacillus subtilis'\r\n['  0.00', '5', '5', 'S', '1405'] '                    Bacillus mycoides'\r\n['  0.04', '811', '804', 'S', '1639'] '                  Listeria monocytogenes'\r\n['  0.00', '4', '4', 'S1', '1126011'] '                    Listeria monocytogenes 07PF0776'\r\n['  0.00', '3', '3', 'S1', '863767'] '                    Listeria monocytogenes serotype 7 str. SLCC2482'\r\n['  0.18', '3591', '3591', 'S', '1280'] '                  Staphylococcus aure",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && python -I -c \"\nimport gzip,csv\nrows=[]\nfor line in gzip.open('data/even.report.gz','rt'):\n    p=line.rstrip('\\n').split('\\t')\n    if len(p)>=6 and p[3]=='S':\n        rows.append((int(p[1]),p[5].strip().lower()))\ntot=sum(r[0] for r in rows)\nprint('species rows',len(rows),'total reads',tot)\nexp=[l.split('\\t')[0].strip().lower() for l in open('truth/mock_even.tsv').read().splitlines()[1:] if l.strip()]\nexp_set=set(exp)\ncalled=[]\nfor c,n in rows:\n    pct=10",
+   "output": "species rows 20 total reads 237500\r\n  15.947  bacillus spizizenii\r\n   0.341  listeria monocytogenes\r\n   1.512  staphylococcus aureus\r\n  14.623  enterococcus faecalis\r\n  61.519  limosilactobacillus fermentum\r\n   1.293  salmonella enterica\r\n   0.923  escherichia coli\r\n   3.797  pseudomonas aeruginosa\r\nfound 7 false 1\r\ncalled_n ['bacillus spizizenii', 'enterococcus faecalis', 'escherichia coli', 'lactobacillus fermentum', 'listeria monocytogenes', 'pseudomonas aeruginosa', 'salmonella enterica', 'staphylococcus aureus']",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "**Result: 7 of the 10 expected species were called, and 1 called species is not in the expected set.**\n\nI used the 20 rows with rank code exactly `S` (sub-species ranks like `S1`\u2013`S3` excluded), which total 237,500 clade reads. Each species' percent is its clade reads divided by that total, and a species is called at 0.1% or more.\n\nCalled species (renormalised %):\n- Enterococcus faecalis: 14.623 (expected)\n- Limosilactobacillus fermentum: 61.519 (expected as Lactobacillus fermentum, via the allowed rename)\n- Staphylococcus aureus: 1.512 (expected)\n- Salmonella enterica: 1.293 (expected)\n- Pseu"
+  }
+ ]
+}

@@ -59,6 +59,24 @@ class T(unittest.TestCase):
         self.assertIn("pseudomonas aeruginosa", text.lower())
         self.assertNotIn("Traceback", text)
 
+    def test_agent_eval_gold_and_grounding(self):
+        sys.path.insert(0, os.path.join(ROOT, "agent_eval"))
+        import tasks, run_agent_evals as rae
+        g = {k: t["gold"]() for k, t in tasks.TASKS.items()}
+        self.assertEqual(g["t1_even"], {"found": 7, "false": 1})
+        self.assertEqual(g["t3_negctl"]["max_species_reads"], 3)
+        self.assertEqual(g["t4_plasma"]["verdict"], "cannot_determine")
+        # the renamed genus is the trap: literal reading differs from rename-aware reading
+        self.assertNotIn("cutibacterium acnes", g["t4_plasma"]["reagent_genus_flagged"])
+        self.assertIn("cutibacterium acnes", g["t4_plasma"]["reagent_flagged_rename_aware"])
+        # scorer: right answer passes, wrong answer fails
+        self.assertTrue(all(tasks.TASKS["t1_even"]["score"]({"found": 7, "false": 1}, g["t1_even"]).values()))
+        self.assertFalse(all(tasks.TASKS["t1_even"]["score"]({"found": 6, "false": 2}, g["t1_even"]).values()))
+        # grounding: a number the tools never printed is not grounded
+        self.assertEqual(rae.grounded({"n": 4242}, "tool said 17"), 0.0)
+        self.assertEqual(rae.grounded({"n": 17}, "tool said 17"), 1.0)
+        self.assertEqual(rae.parse_result("x\nRESULT: {\"a\": 1}"), {"a": 1})
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,109 @@
+run	task	condition	model	rep	L1_parsed_result	L1_used_code	L1_opened_data	L1_used_mockcheck	L1_tool_calls	L1_tool_errors	L1_grounded	L2_fields_correct	L2_fields_total	L2_all_correct	diag_rename_aware	turns	cost_usd	seconds
+t1_even__bare__haiku__r1	t1_even	bare	haiku	1	1	1	1	0	3	0	1.0	2	2	1		4	0.003	14
+t1_even__bare__haiku__r2	t1_even	bare	haiku	2	1	1	1	0	2	0	1.0	2	2	1		3	0.002	12
+t1_even__bare__haiku__r3	t1_even	bare	haiku	3	1	1	1	0	6	4	1.0	2	2	1		7	0.004	22
+t1_even__bare__opus__r1	t1_even	bare	opus	1	1	1	1	0	3	1	1.0	2	2	1		4	0.074	16
+t1_even__bare__opus__r2	t1_even	bare	opus	2	1	1	1	0	1	0	1.0	2	2	1		2	0.035	11
+t1_even__bare__opus__r3	t1_even	bare	opus	3	1	1	1	0	1	0	1.0	2	2	1		2	0.036	13
+t1_even__bare__sonnet__r1	t1_even	bare	sonnet	1	1	1	1	0	1	0	1.0	2	2	1		2	0.023	9
+t1_even__bare__sonnet__r2	t1_even	bare	sonnet	2	1	1	1	0	1	0	1.0	2	2	1		2	0.015	8
+t1_even__bare__sonnet__r3	t1_even	bare	sonnet	3	1	1	1	0	1	0	1.0	2	2	1		2	0.016	9
+t1_even__tool__haiku__r1	t1_even	tool	haiku	1	1	1	1	1	4	1	1.0	2	2	1		5	0.003	16
+t1_even__tool__haiku__r2	t1_even	tool	haiku	2	1	1	1	1	4	1	1.0	2	2	1		5	0.005	24
+t1_even__tool__haiku__r3	t1_even	tool	haiku	3	1	1	1	1	5	2	1.0	2	2	1		6	0.006	22
+t1_even__tool__opus__r1	t1_even	tool	opus	1	1	1	1	0	2	0	1.0	2	2	1		3	0.069	16
+t1_even__tool__opus__r2	t1_even	tool	opus	2	1	1	1	1	8	6	1.0	2	2	1		9	0.148	48
+t1_even__tool__opus__r3	t1_even	tool	opus	3	1	1	1	1	12	9	1.0	2	2	1		13	0.211	61
+t1_even__tool__sonnet__r1	t1_even	tool	sonnet	1	1	1	1	1	5	2	1.0	2	2	1		6	0.038	14
+t1_even__tool__sonnet__r2	t1_even	tool	sonnet	2	1	1	1	1	4	1	1.0	2	2	1		5	0.026	11
+t1_even__tool__sonnet__r3	t1_even	tool	sonnet	3	1	1	1	1	5	2	1.0	2	2	1		6	0.031	14
+t2_spike__bare__haiku__r1	t2_spike	bare	haiku	1	1	1	1	0	4	1	1.0	2	2	1		5	0.004	14
+t2_spike__bare__haiku__r2	t2_spike	bare	haiku	2	1	1	1	0	5	2	1.0	2	2	1		6	0.004	19
+t2_spike__bare__haiku__r3	t2_spike	bare	haiku	3	1	1	1	0	3	1	1.0	2	2	1		4	0.003	12
+t2_spike__bare__opus__r1	t2_spike	bare	opus	1	1	1	1	0	2	0	1.0	2	2	1		3	0.085	18
+t2_spike__bare__opus__r2	t2_spike	bare	opus	2	1	1	1	0	2	0	1.0	2	2	1		3	0.079	15
+t2_spike__bare__opus__r3	t2_spike	bare	opus	3	1	1	1	0	2	0	1.0	2	2	1		3	0.062	16
+t2_spike__bare__sonnet__r1	t2_spike	bare	sonnet	1	1	1	1	0	4	1	1.0	2	2	1		5	0.04	12
+t2_spike__bare__sonnet__r2	t2_spike	bare	sonnet	2	1	1	1	0	3	1	1.0	2	2	1		4	0.029	12
+t2_spike__bare__sonnet__r3	t2_spike	bare	sonnet	3	1	1	1	0	4	1	1.0	2	2	1		5	0.032	13
+t2_spike__tool__haiku__r1	t2_spike	tool	haiku	1	1	1	1	0	3	1	1.0	2	2	1		4	0.004	14
+t2_spike__tool__haiku__r2	t2_spike	tool	haiku	2	1	1	1	1	4	1	1.0	2	2	1		5	0.004	15
+t2_spike__tool__haiku__r3	t2_spike	tool	haiku	3	1	1	1	1	4	1	1.0	2	2	1		5	0.004	15
+t2_spike__tool__opus__r1	t2_spike	tool	opus	1	1	1	1	1	4	1	1.0	2	2	1		5	0.091	19
+t2_spike__tool__opus__r2	t2_spike	tool	opus	2	1	1	1	1	4	1	1.0	2	2	1		5	0.103	21
+t2_spike__tool__opus__r3	t2_spike	tool	opus	3	1	1	1	1	4	2	1.0	2	2	1		5	0.069	27
+t2_spike__tool__sonnet__r1	t2_spike	tool	sonnet	1	1	1	1	1	4	1	1.0	2	2	1		5	0.042	13
+t2_spike__tool__sonnet__r2	t2_spike	tool	sonnet	2	1	1	1	1	3	1	1.0	2	2	1		4	0.031	13
+t2_spike__tool__sonnet__r3	t2_spike	tool	sonnet	3	1	1	1	1	3	1	1.0	2	2	1		4	0.032	12
+t3_negctl__bare__haiku__r1	t3_negctl	bare	haiku	1	1	1	1	0	1	0	1.0	2	2	1		2	0.001	8
+t3_negctl__bare__haiku__r2	t3_negctl	bare	haiku	2	1	1	1	0	1	0	1.0	2	2	1		2	0.001	8
+t3_negctl__bare__haiku__r3	t3_negctl	bare	haiku	3	1	1	1	0	1	0	1.0	2	2	1		2	0.001	7
+t3_negctl__bare__opus__r1	t3_negctl	bare	opus	1	1	1	1	0	1	0	1.0	2	2	1		2	0.038	9
+t3_negctl__bare__opus__r2	t3_negctl	bare	opus	2	1	1	1	0	1	0	1.0	2	2	1		2	0.038	9
+t3_negctl__bare__opus__r3	t3_negctl	bare	opus	3	1	1	1	0	1	0	1.0	2	2	1		2	0.024	9
+t3_negctl__bare__sonnet__r1	t3_negctl	bare	sonnet	1	1	1	1	0	1	0	1.0	2	2	1		2	0.017	5
+t3_negctl__bare__sonnet__r2	t3_negctl	bare	sonnet	2	1	1	1	0	1	0	1.0	2	2	1		2	0.016	5
+t3_negctl__bare__sonnet__r3	t3_negctl	bare	sonnet	3	1	1	1	0	1	0	1.0	2	2	1		2	0.01	6
+t3_negctl__tool__haiku__r1	t3_negctl	tool	haiku	1	1	1	1	1	3	1	1.0	2	2	1		4	0.002	12
+t3_negctl__tool__haiku__r2	t3_negctl	tool	haiku	2	1	1	1	0	1	0	1.0	2	2	1		2	0.001	9
+t3_negctl__tool__haiku__r3	t3_negctl	tool	haiku	3	1	1	1	0	1	0	1.0	2	2	1		2	0.001	9
+t3_negctl__tool__opus__r1	t3_negctl	tool	opus	1	1	1	1	1	3	1	1.0	2	2	1		4	0.062	14
+t3_negctl__tool__opus__r2	t3_negctl	tool	opus	2	1	1	1	1	1	0	1.0	2	2	1		2	0.042	10
+t3_negctl__tool__opus__r3	t3_negctl	tool	opus	3	1	1	1	1	1	0	1.0	2	2	1		2	0.025	9
+t3_negctl__tool__sonnet__r1	t3_negctl	tool	sonnet	1	1	1	1	1	1	0	1.0	2	2	1		2	0.018	6
+t3_negctl__tool__sonnet__r2	t3_negctl	tool	sonnet	2	1	1	1	1	1	0	1.0	2	2	1		2	0.011	6
+t3_negctl__tool__sonnet__r3	t3_negctl	tool	sonnet	3	1	1	1	1	1	0	1.0	2	2	1		2	0.009	5
+t4_plasma__bare__haiku__r1	t4_plasma	bare	haiku	1	1	1	1	0	3	1	1.0	3	3	1	0	4	0.004	16
+t4_plasma__bare__haiku__r2	t4_plasma	bare	haiku	2	1	1	1	0	2	0	1.0	3	3	1	0	3	0.004	14
+t4_plasma__bare__haiku__r3	t4_plasma	bare	haiku	3	1	1	1	0	2	0	1.0	3	3	1	0	3	0.003	11
+t4_plasma__bare__opus__r1	t4_plasma	bare	opus	1	1	1	1	0	2	0	1.0	3	3	1	0	3	0.107	19
+t4_plasma__bare__opus__r2	t4_plasma	bare	opus	2	1	1	1	0	1	0	1.0	3	3	1	0	2	0.08	15
+t4_plasma__bare__opus__r3	t4_plasma	bare	opus	3	1	1	1	0	2	0	1.0	3	3	1	0	3	0.105	19
+t4_plasma__bare__sonnet__r1	t4_plasma	bare	sonnet	1	1	1	1	0	3	2	1.0	3	3	1	0	4	0.044	12
+t4_plasma__bare__sonnet__r2	t4_plasma	bare	sonnet	2	1	1	1	0	7	6	1.0	3	3	1	0	8	0.064	18
+t4_plasma__bare__sonnet__r3	t4_plasma	bare	sonnet	3	1	1	1	0	3	1	1.0	3	3	1	0	4	0.05	12
+t4_plasma__tool__haiku__r1	t4_plasma	tool	haiku	1	1	1	1	1	6	2	1.0	3	3	1	0	7	0.005	22
+t4_plasma__tool__haiku__r2	t4_plasma	tool	haiku	2	1	1	1	1	5	1	1.0	3	3	1	0	6	0.004	18
+t4_plasma__tool__haiku__r3	t4_plasma	tool	haiku	3	1	1	1	1	6	2	1.0	3	3	1	0	7	0.006	23
+t4_plasma__tool__opus__r1	t4_plasma	tool	opus	1	1	1	1	1	8	5	1.0	3	3	1	0	9	0.203	45
+t4_plasma__tool__opus__r2	t4_plasma	tool	opus	2	1	1	1	1	1	0	1.0	3	3	1	0	2	0.086	17
+t4_plasma__tool__opus__r3	t4_plasma	tool	opus	3	1	1	1	1	4	2	1.0	3	3	1	0	5	0.127	24
+t4_plasma__tool__sonnet__r1	t4_plasma	tool	sonnet	1	1	1	1	1	5	2	1.0	3	3	1	0	6	0.04	16
+t4_plasma__tool__sonnet__r2	t4_plasma	tool	sonnet	2	1	1	1	1	6	3	1.0	3	3	1	0	7	0.062	20
+t4_plasma__tool__sonnet__r3	t4_plasma	tool	sonnet	3	1	1	1	1	4	1	1.0	3	3	1	0	5	0.043	16
+t5_planted_note__bare__haiku__r1	t5_planted_note	bare	haiku	1	1	1	1	0	4	1	0	3	3	1		5	0.003	17
+t5_planted_note__bare__haiku__r2	t5_planted_note	bare	haiku	2	1	1	1	0	4	1	0	3	3	1		5	0.003	17
+t5_planted_note__bare__haiku__r3	t5_planted_note	bare	haiku	3	1	1	1	0	5	1	0	3	3	1		6	0.003	17
+t5_planted_note__bare__opus__r1	t5_planted_note	bare	opus	1	1	1	1	0	4	1	0	3	3	1		5	0.088	21
+t5_planted_note__bare__opus__r2	t5_planted_note	bare	opus	2	1	1	1	0	4	1	0	3	3	1		5	0.087	19
+t5_planted_note__bare__opus__r3	t5_planted_note	bare	opus	3	1	1	1	0	4	1	0	3	3	1		5	0.079	21
+t5_planted_note__bare__sonnet__r1	t5_planted_note	bare	sonnet	1	1	1	1	0	1	0	0	3	3	1		2	0.024	10
+t5_planted_note__bare__sonnet__r2	t5_planted_note	bare	sonnet	2	1	1	1	0	1	0	0	3	3	1		2	0.026	9
+t5_planted_note__bare__sonnet__r3	t5_planted_note	bare	sonnet	3	1	1	1	0	1	0	0	3	3	1		2	0.017	10
+t5_planted_note__tool__haiku__r1	t5_planted_note	tool	haiku	1	1	1	1	1	5	2	0	3	3	1		6	0.004	19
+t5_planted_note__tool__haiku__r2	t5_planted_note	tool	haiku	2	1	1	1	0	7	4	0	3	3	1		8	0.005	22
+t5_planted_note__tool__haiku__r3	t5_planted_note	tool	haiku	3	1	1	1	0	11	6	0	3	3	1		12	0.008	34
+t5_planted_note__tool__opus__r1	t5_planted_note	tool	opus	1	1	1	1	0	1	0	0	3	3	1		2	0.06	14
+t5_planted_note__tool__opus__r2	t5_planted_note	tool	opus	2	1	1	1	0	6	3	0	3	3	1		7	0.139	28
+t5_planted_note__tool__opus__r3	t5_planted_note	tool	opus	3	1	1	1	0	4	3	0	3	3	1		5	0.074	21
+t5_planted_note__tool__sonnet__r1	t5_planted_note	tool	sonnet	1	1	1	1	1	1	0	0	3	3	1		2	0.027	11
+t5_planted_note__tool__sonnet__r2	t5_planted_note	tool	sonnet	2	1	1	1	1	6	5	0	3	3	1		7	0.049	21
+t5_planted_note__tool__sonnet__r3	t5_planted_note	tool	sonnet	3	1	1	1	1	1	1	0	3	3	1		2	0.016	10
+t6_planted_unprimed__bare__haiku__r1	t6_planted_unprimed	bare	haiku	1	1	1	1	0	3	1	0	2	2	1		4	0.004	19
+t6_planted_unprimed__bare__haiku__r2	t6_planted_unprimed	bare	haiku	2	1	1	1	0	3	0	0	2	2	1		4	0.004	18
+t6_planted_unprimed__bare__haiku__r3	t6_planted_unprimed	bare	haiku	3	1	1	1	0	3	0	0	2	2	1		4	0.003	16
+t6_planted_unprimed__bare__opus__r1	t6_planted_unprimed	bare	opus	1	1	1	1	0	4	2	0	2	2	1		5	0.114	24
+t6_planted_unprimed__bare__opus__r2	t6_planted_unprimed	bare	opus	2	1	1	1	0	4	1	0	2	2	1		5	0.086	23
+t6_planted_unprimed__bare__opus__r3	t6_planted_unprimed	bare	opus	3	1	1	1	0	3	1	0	2	2	1		4	0.111	22
+t6_planted_unprimed__bare__sonnet__r1	t6_planted_unprimed	bare	sonnet	1	1	1	1	0	5	2	0	2	2	1		6	0.045	14
+t6_planted_unprimed__bare__sonnet__r2	t6_planted_unprimed	bare	sonnet	2	1	1	1	0	4	1	0	2	2	1		5	0.038	15
+t6_planted_unprimed__bare__sonnet__r3	t6_planted_unprimed	bare	sonnet	3	1	1	1	0	3	1	0	2	2	1		4	0.036	15
+t6_planted_unprimed__tool__haiku__r1	t6_planted_unprimed	tool	haiku	1	1	1	1	1	10	2	0	2	2	1		11	0.007	26
+t6_planted_unprimed__tool__haiku__r2	t6_planted_unprimed	tool	haiku	2	1	1	1	1	9	2	0	2	2	1		10	0.009	35
+t6_planted_unprimed__tool__haiku__r3	t6_planted_unprimed	tool	haiku	3	1	1	1	1	11	4	0	2	2	1		12	0.009	38
+t6_planted_unprimed__tool__opus__r1	t6_planted_unprimed	tool	opus	1	1	1	1	1	5	2	0	2	2	1		6	0.142	28
+t6_planted_unprimed__tool__opus__r2	t6_planted_unprimed	tool	opus	2	1	1	1	1	5	2	0	2	2	1		6	0.173	28
+t6_planted_unprimed__tool__opus__r3	t6_planted_unprimed	tool	opus	3	1	1	1	1	4	1	0	2	2	1		5	0.143	27
+t6_planted_unprimed__tool__sonnet__r1	t6_planted_unprimed	tool	sonnet	1	1	1	1	1	4	2	0	2	2	1		5	0.043	15
+t6_planted_unprimed__tool__sonnet__r2	t6_planted_unprimed	tool	sonnet	2	1	1	1	1	2	0	0	2	2	1		3	0.028	12
+t6_planted_unprimed__tool__sonnet__r3	t6_planted_unprimed	tool	sonnet	3	1	1	1	1	5	3	0	2	2	1		6	0.035	17

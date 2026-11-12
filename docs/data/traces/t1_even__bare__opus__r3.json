@@ -1,0 +1,40 @@
+{
+ "run": "t1_even__bare__opus__r3",
+ "task": "t1_even",
+ "condition": "bare",
+ "model": "opus",
+ "gold": {
+  "found": 7,
+  "false": 1
+ },
+ "result": {
+  "found": 7,
+  "false": 1
+ },
+ "final_text": "7 of the 10 expected species were called present, plus 1 species that is not on the list.\n\nThe report has 20 species-level (S) rows totalling 237,500 clade reads. I converted each to a percent of that total and called anything at 0.1% or above present. Eight species qualify:\n\n| Species (as reported) | Clade reads | % of species reads | Expected? |\n|---|---|---|---|\n| Limosilactobacillus fermentum | 146,108 | 61.52 | Yes (the allowed rename of Lactobacillus fermentum) |\n| Bacillus spizizenii | 37,874 | 15.95 | **No** |\n| Enterococcus faecalis | 34,730 | 14.62 | Yes |\n| Pseudomonas aeruginosa | 9,018 | 3.80 | Yes |\n| Staphylococcus aureus | 3,591 | 1.51 | Yes |\n| Salmonella enterica | 3,072 | 1.29 | Yes |\n| Escherichia coli | 2,191 | 0.92 | Yes |\n| Listeria monocytogenes | 811 | 0.34 | Yes |\n\n- **Not called:** Bacillus subtilis, Saccharomyces cerevisiae and Cryptococcus neoformans. None of them has a species row at 0.1% or above. No species row falls between 0.05% and 0.1%, so none of them narrowly missed the cutoff.\n- **The one extra species:** Bacillus spizizenii counts as a false call. It may well stand in for the expected Bacillus subtilis, but only the fermentum rename was allowed, so I didn't merge them.\n\nRESULT: {\"found\": 7, \"false\": 1}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 1,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_bare; cat truth/mock_even.tsv; python -I -c \"\nimport gzip\nrows=[l.rstrip('\\n').split('\\t') for l in gzip.open('data/even.report.gz','rt')]\ns=[(r[5].strip(),int(r[1])) for r in rows if len(r)>=6 and r[3].strip()=='S']\nt=sum(c for _,c in s);print('total',t,len(s))\nfor n,c in sorted(s,key=lambda x:-x[1]):\n  p=100*c/t\n  if p>=0.05: print(repr(n),c,round(p,4))\n\"",
+   "output": "organism\texpected_percent\nPseudomonas aeruginosa\t12\nEscherichia coli\t12\nSalmonella enterica\t12\nLactobacillus fermentum\t12\nEnterococcus faecalis\t12\nStaphylococcus aureus\t12\nListeria monocytogenes\t12\nBacillus subtilis\t12\nSaccharomyces cerevisiae\t2\nCryptococcus neoformans\t2\ntotal 237500 20\r\n'Limosilactobacillus fermentum' 146108 61.5192\r\n'Bacillus spizizenii' 37874 15.9469\r\n'Enterococcus faecalis' 34730 14.6232\r\n'Pseudomonas aeruginosa' 9018 3.7971\r\n'Staphylococcus aureus' 3591 1.512\r\n'Salmonella enterica' 3072 1.2935\r\n'Escherichia coli' 2191 0.9225\r\n'Listeria monocytogenes' 811 0.3415",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "7 of the 10 expected species were called present, plus 1 species that is not on the list.\n\nThe report has 20 species-level (S) rows totalling 237,500 clade reads. I converted each to a percent of that total and called anything at 0.1% or above present. Eight species qualify:\n\n| Species (as reported) | Clade reads | % of species reads | Expected? |\n|---|---|---|---|\n| Limosilactobacillus fermentum | 146,108 | 61.52 | Yes (the allowed rename of Lactobacillus fermentum) |\n| Bacillus spizizenii | 37,874 | 15.95 | **No** |\n| Enterococcus faecalis | 34,730 | 14.62 | Yes |\n| Pseudomonas aeruginosa | "
+  }
+ ]
+}

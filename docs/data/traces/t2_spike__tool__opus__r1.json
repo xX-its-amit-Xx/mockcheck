@@ -1,0 +1,85 @@
+{
+ "run": "t2_spike__tool__opus__r1",
+ "task": "t2_spike",
+ "condition": "tool",
+ "model": "opus",
+ "gold": {
+  "detected": [
+   "enterococcus faecalis",
+   "escherichia coli",
+   "lactobacillus fermentum",
+   "pseudomonas aeruginosa",
+   "staphylococcus aureus"
+  ],
+  "missed": [
+   "bacillus subtilis",
+   "cryptococcus neoformans",
+   "listeria monocytogenes",
+   "saccharomyces cerevisiae",
+   "salmonella enterica"
+  ]
+ },
+ "result": {
+  "detected": [
+   "pseudomonas aeruginosa",
+   "escherichia coli",
+   "lactobacillus fermentum",
+   "enterococcus faecalis",
+   "staphylococcus aureus"
+  ],
+  "missed": [
+   "salmonella enterica",
+   "listeria monocytogenes",
+   "bacillus subtilis",
+   "saccharomyces cerevisiae",
+   "cryptococcus neoformans"
+  ]
+ },
+ "final_text": "Seven of the ten organisms added to spike_P0 have a species-level (rank S) row with at least 10 clade reads, so they count as detected. The other three are missed.\n\n| Organism (manifest) | Pairs added | Species-level clade reads | Call |\n|---|---|---|---|\n| Pseudomonas aeruginosa | 40,000 | 811 | detected |\n| Enterococcus faecalis | 40,000 | 6,457 | detected |\n| Escherichia coli | 4,000 | 72 | detected |\n| Staphylococcus aureus | 4,000 | 54 | detected |\n| Lactobacillus fermentum | 40 | 26 (as Limosilactobacillus fermentum) | detected |\n| Salmonella enterica | 400 | 4 | missed |\n| Bacillus subtilis | 40 | 2 | missed |\n| Listeria monocytogenes | 400 | no species row (315 reads at genus Listeria only) | missed |\n| Saccharomyces cerevisiae | 40,000 | not in report | missed |\n| Cryptococcus neoformans | 4,000 | not in report | missed |\n\n- **Salmonella:** the genus Salmonella has 219 reads, but only 4 of them reach the species row. That is below the threshold of 10.\n- **Bacillus subtilis:** the \"Bacillus subtilis group\" row has 11 reads, but that row is not species rank, so it doesn't count.\n- **The two fungi:** Saccharomyces cerevisiae and Cryptococcus neoformans don't appear anywhere in the report. The data can't show why. One possible reason is that the database used had no fungal genomes.\n\nMany fewer reads were classified than were added. For example, Pseudomonas aeruginosa had 40,000 pairs added and 811 reads at species level.\n\nI found these by searching the report text direct",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 1,
+  "L1_tool_calls": 4,
+  "L1_tool_errors": 1,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_tool; ls -R | head -50; python -m mockcheck --help; grep spike_P0 truth/spike_manifest.tsv; head -1 truth/spike_manifest.tsv",
+   "output": ".:\nconfig/\ndata/\nmockcheck/\ntruth/\n\n./config:\naliases.tsv\nexpected.tsv\norganisms.tsv\nphase2_uganda_runs.tsv\nreagent_contaminant_genera.tsv\nsamples.tsv\n\n./data:\neven.report.gz\nplasma.report.gz\nreagent_contaminant_genera.tsv\nspike_H0.report.gz\nspike_P0.report.gz\n\n./mockcheck:\n__init__.py\n__main__.py\n__pycache__/\ncli.py\nparsers.py\nreport.py\nscore.py\nspike.py\ntruth.py\n\n./mockcheck/__pycache__:\n__init__.cpython-314.pyc\n__main__.cpython-314.pyc\ncli.cpython-314.pyc\nparsers.cpython-314.pyc\nreport.cpython-314.pyc\nscore.cpython-314.pyc\nspike.cpython-314.pyc\ntruth.cpython-314.pyc\n\n./truth:\nmock_even.tsv\nspike_manifest.tsv\nusage: mockcheck [-h] [--version] {mocks,report,spike,compare,demo} ...\r\n\r\nCheck ",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_tool; zcat data/spike_P0.report.gz | awk -F'\\t' '$4==\"S\"' | grep -iE \"aeruginosa|escherichia coli|enterica|fermentum|faecalis|aureus|monocytogenes|subtilis|cerevisiae|neoformans\"",
+   "output": "This Bash command contains multiple operations. The following part requires approval: awk -F'\\t' '$4==\"S\"'",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_tool; zcat data/spike_P0.report.gz | grep -iE \"aeruginosa|escherichia coli|enterica|fermentum|faecalis|aureus|monocytogenes|subtilis|cerevisiae|neoformans\"",
+   "output": "  0.16\t6457\t6457\tS\t1351\t                  Enterococcus faecalis\n  0.00\t26\t26\tS\t1613\t                  Limosilactobacillus fermentum\n  0.00\t54\t54\tS\t1280\t                  Staphylococcus aureus\n  0.00\t11\t2\tG1\t653685\t                  Bacillus subtilis group\n  0.00\t2\t2\tS\t1423\t                    Bacillus subtilis\n  0.02\t871\t60\tG1\t136841\t                  Pseudomonas aeruginosa group\n  0.02\t811\t811\tS\t287\t                    Pseudomonas aeruginosa\n  0.00\t4\t4\tS\t28901\t                  Salmonella enterica\n  0.00\t72\t72\tS\t562\t                  Escherichia coli",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_tool; zcat data/spike_P0.report.gz | grep -iE \"listeria|saccharomyces|cryptococcus|lactobacillus|salmonella\"",
+   "output": "  0.00\t26\t0\tG\t2742598\t                Limosilactobacillus\n  0.00\t26\t26\tS\t1613\t                  Limosilactobacillus fermentum\n  0.00\t1\t0\tG\t2767887\t                Ligilactobacillus\n  0.00\t1\t1\tS\t1623\t                  Ligilactobacillus ruminis\n  0.01\t315\t0\tF\t186820\t              Listeriaceae\n  0.01\t315\t315\tG\t1637\t                Listeria\n  0.01\t219\t215\tG\t590\t                Salmonella\n  0.00\t4\t4\tS\t28901\t                  Salmonella enterica",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "Seven of the ten organisms added to spike_P0 have a species-level (rank S) row with at least 10 clade reads, so they count as detected. The other three are missed.\n\n| Organism (manifest) | Pairs added | Species-level clade reads | Call |\n|---|---|---|---|\n| Pseudomonas aeruginosa | 40,000 | 811 | detected |\n| Enterococcus faecalis | 40,000 | 6,457 | detected |\n| Escherichia coli | 4,000 | 72 | detected |\n| Staphylococcus aureus | 4,000 | 54 | detected |\n| Lactobacillus fermentum | 40 | 26 (as Limosilactobacillus fermentum) | detected |\n| Salmonella enterica | 400 | 4 | missed |\n| Bacillus subt"
+  }
+ ]
+}

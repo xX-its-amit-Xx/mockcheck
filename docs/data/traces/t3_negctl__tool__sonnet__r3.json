@@ -1,0 +1,40 @@
+{
+ "run": "t3_negctl__tool__sonnet__r3",
+ "task": "t3_negctl",
+ "condition": "tool",
+ "model": "sonnet",
+ "gold": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "result": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "final_text": "Mycobacterium species in the report: M. spongiae has 3 clade reads and M. canetti has 3. The largest is 3, which is below the 10-read minimum.\n\nThe genus line shows 6 clade reads, but that is the sum of the two species (3 + 3). No single species reaches the threshold.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 1,
+  "L1_tool_calls": 1,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "python -m mockcheck --help; ls; zcat data/spike_H0.report.gz | grep -i mycobact",
+   "output": "usage: mockcheck [-h] [--version] {mocks,report,spike,compare,demo} ...\r\n\r\nCheck a classifier run against a mock community and say what it supports.\r\n\r\npositional arguments:\r\n  {mocks,report,spike,compare,demo}\r\n    mocks               list built-in mock communities\r\n    report              write the supports / does-not-support / check-next\r\n                        report for one run\r\n    spike               score a Kraken2 report against a constructed host-\r\n                        background spike-in (absolute read pairs)\r\n    compare             rank several runs against the same mock\r\n    demo                run end to end on the committed raw outputs (no\r\n                        cluster",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "Mycobacterium species in the report: M. spongiae has 3 clade reads and M. canetti has 3. The largest is 3, which is below the 10-read minimum.\n\nThe genus line shows 6 clade reads, but that is the sum of the two species (3 + 3). No single species reaches the threshold.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}"
+  }
+ ]
+}

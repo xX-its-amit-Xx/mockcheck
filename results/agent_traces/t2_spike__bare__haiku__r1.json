@@ -1,0 +1,85 @@
+{
+ "run": "t2_spike__bare__haiku__r1",
+ "task": "t2_spike",
+ "condition": "bare",
+ "model": "haiku",
+ "gold": {
+  "detected": [
+   "enterococcus faecalis",
+   "escherichia coli",
+   "lactobacillus fermentum",
+   "pseudomonas aeruginosa",
+   "staphylococcus aureus"
+  ],
+  "missed": [
+   "bacillus subtilis",
+   "cryptococcus neoformans",
+   "listeria monocytogenes",
+   "saccharomyces cerevisiae",
+   "salmonella enterica"
+  ]
+ },
+ "result": {
+  "detected": [
+   "Pseudomonas aeruginosa",
+   "Escherichia coli",
+   "Lactobacillus fermentum",
+   "Enterococcus faecalis",
+   "Staphylococcus aureus"
+  ],
+  "missed": [
+   "Salmonella enterica",
+   "Listeria monocytogenes",
+   "Bacillus subtilis",
+   "Saccharomyces cerevisiae",
+   "Cryptococcus neoformans"
+  ]
+ },
+ "final_text": "Five of the ten spiked organisms pass the threshold of 10 species-level reads in `spike_P0`. The other five are below it or absent from the report.\n\n- **Detected:** Pseudomonas aeruginosa (811 reads), Escherichia coli (72), Lactobacillus fermentum (26, as Limosilactobacillus fermentum, the merge you specified), Enterococcus faecalis (6457), Staphylococcus aureus (54).\n- **Missed:**\n  - Salmonella enterica has a species row with 4 reads.\n  - Bacillus subtilis has a species row with 2 reads.\n  - Listeria monocytogenes has no species row. Its genus row has 315 reads, but that is not species-level.\n  - Saccharomyces cerevisiae and Cryptococcus neoformans do not appear anywhere in the report.\n\nRESULT: {\"detected\": [\"Pseudomonas aeruginosa\", \"Escherichia coli\", \"Lactobacillus fermentum\", \"Enterococcus faecalis\", \"Staphylococcus aureus\"], \"missed\": [\"Salmonella enterica\", \"Listeria monocytogenes\", \"Bacillus subtilis\", \"Saccharomyces cerevisiae\", \"Cryptococcus neoformans\"]}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 4,
+  "L1_tool_errors": 1,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_bare 2>/dev/null || cd \"<sandbox>\"; pwd; ls -la; ls -la data truth; cat truth/spike_manifest.tsv",
+   "output": "Multiple directory changes in one command require approval for clarity",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "ls -la; ls -la data truth; cat truth/spike_manifest.tsv",
+   "output": "total 8\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 ./\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 ../\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 data/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 truth/\ndata:\ntotal 36\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ./\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ../\n-rw-r--r-- 1 ashenoy00000 1049089 2265 Nov 12 08:55 even.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 3967 Nov 12 08:55 plasma.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 9075 Nov 12 08:55 reagent_contaminant_genera.tsv\n-rw-r--r-- 1 ashenoy00000 1049089 4775 Nov 12 08:55 spike_H0.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 1987 Nov 12 08:55 spike_P0",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "zcat data/spike_P0.report.gz | cat -A | head -200",
+   "output": " 19.02^I760987^I760987^IU^I0^Iunclassified$\n 80.98^I3239013^I2329^IR^I1^Iroot$\n 80.92^I3236633^I60079^IR1^I131567^I  cellular organisms$\n 77.94^I3117739^I0^ID^I2759^I    Eukaryota$\n 77.94^I3117739^I0^ID1^I33154^I      Opisthokonta$\n 77.94^I3117739^I0^IK^I33208^I        Metazoa$\n 77.94^I3117739^I0^IK1^I6072^I          Eumetazoa$\n 77.94^I3117739^I0^IK2^I33213^I            Bilateria$\n 77.94^I3117739^I0^IK3^I33511^I              Deuterostomia$\n 77.94^I3117739^I0^IP^I7711^I                Chordata$\n 77.94^I3117739^I0^IP1^I89593^I                  Craniata$\n 77.94^I3117739^I0^IP2^I7742^I                    Vertebrata$\n 77.94^I3117739^I0^IP3^I7776^I                      Gnathostomata$\n 77.94^I31177",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "zcat data/spike_P0.report.gz | wc -l; zcat data/spike_P0.report.gz | tail -n +200 | cat -A",
+   "output": "118",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "Five of the ten spiked organisms pass the threshold of 10 species-level reads in `spike_P0`. The other five are below it or absent from the report.\n\n- **Detected:** Pseudomonas aeruginosa (811 reads), Escherichia coli (72), Lactobacillus fermentum (26, as Limosilactobacillus fermentum, the merge you specified), Enterococcus faecalis (6457), Staphylococcus aureus (54).\n- **Missed:**\n  - Salmonella enterica has a species row with 4 reads.\n  - Bacillus subtilis has a species row with 2 reads.\n  - Listeria monocytogenes has no species row. Its genus row has 315 reads, but that is not species-level"
+  }
+ ]
+}

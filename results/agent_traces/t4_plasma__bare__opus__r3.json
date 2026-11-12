@@ -1,0 +1,65 @@
+{
+ "run": "t4_plasma__bare__opus__r3",
+ "task": "t4_plasma",
+ "condition": "bare",
+ "model": "opus",
+ "gold": {
+  "verdict": "cannot_determine",
+  "top_species": [
+   "cutibacterium acnes",
+   "acidovorax sp. jmule5",
+   "staphylococcus epidermidis"
+  ],
+  "reagent_genus_flagged": [
+   "acidovorax sp. jmule5"
+  ],
+  "reagent_flagged_rename_aware": [
+   "acidovorax sp. jmule5",
+   "cutibacterium acnes"
+  ]
+ },
+ "result": {
+  "verdict": "cannot_determine",
+  "top_species": [
+   "cutibacterium acnes",
+   "acidovorax sp. jmule5",
+   "staphylococcus epidermidis"
+  ],
+  "reagent_genus_flagged": [
+   "acidovorax sp. jmule5"
+  ]
+ },
+ "final_text": "The data can't tell us which organism caused the sepsis. The strongest signal is real, but it only resolves to family level, and the species it does name look like contamination.\n\n**Species ranking (by clade reads, human excluded):**\n\n| Rank | Species | Clade reads | On contaminant list? |\n|---|---|---|---|\n| 1 | Cutibacterium acnes | 524 | No, but see note below |\n| 2 | Acidovorax sp. JMULE5 | 331 | **Yes (acidovorax)** |\n| 3 | Staphylococcus epidermidis | 182 | No |\n| 4 | Escherichia coli | 154 | Yes (escherichia) |\n\n**Why I'm not naming a cause:**\n- **The top species look like contamination.** All three are tiny: about 0.1% of reads or less. *C. acnes* and *S. epidermidis* are typical skin flora picked up during the blood draw. *Acidovorax* is a known reagent contaminant. *C. acnes* used to be called *Propionibacterium*, which is on the contaminant list. I only flagged genus names that match the list exactly, so it isn't in the flagged result.\n- **The real signal stops at family level.** 44,055 reads were assigned directly to the family Enterobacteriaceae and couldn't be placed in any genus. That's about 8.8% of all reads and far more than any single species. It fits an Enterobacteriaceae infection, such as *E. coli* or *Klebsiella*, but Kraken2 couldn't tell which one. Only 154 reads reached *E. coli* and 2 reached *K. pneumoniae*, and *Escherichia* is itself on the contaminant list.\n- **There are no controls.** We have no blank or negative-control run and no culture or P",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 2,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 3,
+  "L2_fields_total": 3,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_bare; cat data/reagent_contaminant_genera.tsv; python -I -c \"\nimport gzip\nL=[l.rstrip('\\n').split('\\t') for l in gzip.open('data/plasma.report.gz','rt')]\nfor r in L:\n  if r[3] in ('U','R','D','S') or r[3].startswith('D'): print(r)\n\" | head -60",
+   "output": "genus\tsource\nabiotrophia\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\nacidovorax\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\nacinetobacter\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\naeromicrobium\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\nafipia\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\naquabacterium\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\narthrobacter\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\n",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_bare; python -I -c \"\nimport gzip\nL=[l.rstrip('\\n').split('\\t') for l in gzip.open('data/plasma.report.gz','rt')]\nS=sorted([r for r in L if r[3]=='S'],key=lambda r:-int(r[1]))\nfor r in S[:8]: print(r[1],r[5].strip())\nprint('---')\nfor r in sorted(L,key=lambda r:-int(r[2]))[:15]: print(r[1],r[2],r[3],r[5].strip())\n\"",
+   "output": "34988 Homo sapiens\r\n524 Cutibacterium acnes\r\n331 Acidovorax sp. JMULE5\r\n182 Staphylococcus epidermidis\r\n154 Escherichia coli\r\n132 Equine infectious anemia virus\r\n88 Methylorubrum extorquens\r\n57 Ralstonia pickettii\r\n---\r\n288547 288547 U unclassified\r\n124779 54385 D Bacteria\r\n44302 44055 F Enterobacteriaceae\r\n211453 40005 R root\r\n34988 34988 S Homo sapiens\r\n171316 11546 R1 cellular organisms\r\n57310 8012 C Gammaproteobacteria\r\n66916 4977 P Pseudomonadota\r\n48881 4578 O Enterobacterales\r\n1473 1450 G Brevundimonas\r\n67943 967 K Pseudomonadati\r\n898 697 F Methylobacteriaceae\r\n3875 621 C Alphaproteobacteria\r\n1525 613 O Hyphomicrobiales\r\n2433 569 K Bacillati",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "The data can't tell us which organism caused the sepsis. The strongest signal is real, but it only resolves to family level, and the species it does name look like contamination.\n\n**Species ranking (by clade reads, human excluded):**\n\n| Rank | Species | Clade reads | On contaminant list? |\n|---|---|---|---|\n| 1 | Cutibacterium acnes | 524 | No, but see note below |\n| 2 | Acidovorax sp. JMULE5 | 331 | **Yes (acidovorax)** |\n| 3 | Staphylococcus epidermidis | 182 | No |\n| 4 | Escherichia coli | 154 | Yes (escherichia) |\n\n**Why I'm not naming a cause:**\n- **The top species look like contamination"
+  }
+ ]
+}

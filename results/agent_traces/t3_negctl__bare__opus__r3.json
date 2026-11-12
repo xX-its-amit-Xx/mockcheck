@@ -1,0 +1,40 @@
+{
+ "run": "t3_negctl__bare__opus__r3",
+ "task": "t3_negctl",
+ "condition": "bare",
+ "model": "opus",
+ "gold": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "result": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "final_text": "No, Mycobacterium isn't credibly present in this sample.\n\nThe report gives the Mycobacterium genus (taxid 1763) only 6 clade reads out of about 4.0 million. About 98.7% of the reads are classified as Eukaryota, which fits a human-only sample. The Mycobacterium reads split between two species:\n\n| Species | Taxid | Clade reads (rank S) |\n|---|---|---|\n| *M. spongiae* | 886343 | 3 |\n| *M. canetti* (in the *M. tuberculosis* complex) | 78331 | 3 |\n\nThe largest count for any single species is 3, well below your 10-read minimum. Counts this low in a human-only sample are typical of misclassification or background noise, not a real organism.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 1,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "zcat data/spike_H0.report.gz | grep -i -n \"mycobac\" ; zcat data/spike_H0.report.gz | head -5; zcat data/spike_H0.report.gz | wc -l",
+   "output": "57:  0.00\t8\t0\tO\t85007\t            Mycobacteriales\n58:  0.00\t6\t0\tF\t1762\t              Mycobacteriaceae\n59:  0.00\t6\t0\tG\t1763\t                Mycobacterium\n60:  0.00\t3\t3\tS\t886343\t                  Mycobacterium spongiae\n61:  0.00\t3\t0\tG1\t77643\t                  Mycobacterium tuberculosis complex\n62:  0.00\t3\t3\tS\t78331\t                    Mycobacterium canetti\n  1.18\t47340\t47340\tU\t0\tunclassified\n 98.82\t3952660\t18\tR\t1\troot\n 98.82\t3952638\t5171\tR1\t131567\t  cellular organisms\n 98.68\t3947380\t0\tD\t2759\t    Eukaryota\n 98.68\t3947380\t0\tD1\t33154\t      Opisthokonta\n358",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "No, Mycobacterium isn't credibly present in this sample.\n\nThe report gives the Mycobacterium genus (taxid 1763) only 6 clade reads out of about 4.0 million. About 98.7% of the reads are classified as Eukaryota, which fits a human-only sample. The Mycobacterium reads split between two species:\n\n| Species | Taxid | Clade reads (rank S) |\n|---|---|---|\n| *M. spongiae* | 886343 | 3 |\n| *M. canetti* (in the *M. tuberculosis* complex) | 78331 | 3 |\n\nThe largest count for any single species is 3, well below your 10-read minimum. Counts this low in a human-only sample are typical of misclassification "
+  }
+ ]
+}

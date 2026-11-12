@@ -1,0 +1,54 @@
+{
+ "run": "t3_negctl__tool__opus__r1",
+ "task": "t3_negctl",
+ "condition": "tool",
+ "model": "opus",
+ "gold": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "result": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "final_text": "The data doesn't support a Mycobacterium call. No Mycobacterium species reaches the 10 read pair threshold.\n\nWhat the report shows under Mycobacterium (taxid 1763), which has 6 clade reads in total:\n- *M. spongiae* (S, taxid 886343): 3 clade reads\n- *M. canetti* (S, taxid 78331), inside the *M. tuberculosis* complex: 3 clade reads\n\nThe most any single species gets is 3 read pairs. Counts this small are what you'd expect from misclassified reads or database noise in a human-only sample, so they don't show the organism is really there.\n\nI read these counts straight from the report and didn't run the `mockcheck` package.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 1,
+  "L1_tool_calls": 3,
+  "L1_tool_errors": 1,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "python -m mockcheck --help; zcat data/spike_H0.report.gz | grep -i -B2 -A0 mycobact | head -50",
+   "output": "usage: mockcheck [-h] [--version] {mocks,report,spike,compare,demo} ...\r\n\r\nCheck a classifier run against a mock community and say what it supports.\r\n\r\npositional arguments:\r\n  {mocks,report,spike,compare,demo}\r\n    mocks               list built-in mock communities\r\n    report              write the supports / does-not-support / check-next\r\n                        report for one run\r\n    spike               score a Kraken2 report against a constructed host-\r\n                        background spike-in (absolute read pairs)\r\n    compare             rank several runs against the same mock\r\n    demo                run end to end on the committed raw outputs (no\r\n                        cluster",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "zcat data/spike_H0.report.gz | awk -F'\\t' '$1+0>=0' | grep -A12 \"Mycobacteriaceae\"",
+   "output": "This Bash command contains multiple operations. The following part requires approval: awk -F'\\t' '$1+0>=0'",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "zcat data/spike_H0.report.gz | grep -A8 \"Mycobacteriaceae\"",
+   "output": "  0.00\t6\t0\tF\t1762\t              Mycobacteriaceae\n  0.00\t6\t0\tG\t1763\t                Mycobacterium\n  0.00\t3\t3\tS\t886343\t                  Mycobacterium spongiae\n  0.00\t3\t0\tG1\t77643\t                  Mycobacterium tuberculosis complex\n  0.00\t3\t3\tS\t78331\t                    Mycobacterium canetti\n  0.00\t2\t0\tF\t85025\t              Nocardiaceae\n  0.00\t2\t0\tG\t1817\t                Nocardia\n  0.00\t1\t1\tS\t2755382\t                  Nocardia huaxiensis\n  0.00\t1\t1\tS\t2382165\t                  Nocardia yunnanensis",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "The data doesn't support a Mycobacterium call. No Mycobacterium species reaches the 10 read pair threshold.\n\nWhat the report shows under Mycobacterium (taxid 1763), which has 6 clade reads in total:\n- *M. spongiae* (S, taxid 886343): 3 clade reads\n- *M. canetti* (S, taxid 78331), inside the *M. tuberculosis* complex: 3 clade reads\n\nThe most any single species gets is 3 read pairs. Counts this small are what you'd expect from misclassified reads or database noise in a human-only sample, so they don't show the organism is really there.\n\nI read these counts straight from the report and didn't run"
+  }
+ ]
+}

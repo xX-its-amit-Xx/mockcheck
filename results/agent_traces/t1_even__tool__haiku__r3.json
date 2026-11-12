@@ -1,0 +1,68 @@
+{
+ "run": "t1_even__tool__haiku__r3",
+ "task": "t1_even",
+ "condition": "tool",
+ "model": "haiku",
+ "gold": {
+  "found": 7,
+  "false": 1
+ },
+ "result": {
+  "found": 7,
+  "false": 1
+ },
+ "final_text": "Seven of the 10 expected species were called, and one called species is not in the expected list.\n\nCalled species (at least 0.1% of species-level reads):\n- **Expected (7):** Enterococcus faecalis (14.62%), Limosilactobacillus fermentum (61.52%, the allowed rename of Lactobacillus fermentum), Staphylococcus aureus (1.51%), Salmonella enterica (1.29%), Escherichia coli (0.92%), Pseudomonas aeruginosa (3.80%), Listeria monocytogenes (0.34%).\n- **Not expected (1):** Bacillus spizizenii (15.95%). The report uses this name, not Bacillus subtilis, and only the Lactobacillus rename was allowed, so it counts as false.\n\nExpected species not called:\n- Bacillus subtilis: 2 reads (0.0008%), below threshold.\n- Saccharomyces cerevisiae and Cryptococcus neoformans: no rows at any rank in the report, so the data cannot say whether they were detected.\n\nMethod: I used only the species rows with rank code exactly `S`, which excludes the `S1`/`S2`/`S3` strain and subspecies rows. The denominator is 237,500 species-level clade reads. I computed this directly from the gzipped report with a Python script rather than the `mockcheck` package.\n\nRESULT: {\"found\": 7, \"false\": 1}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 1,
+  "L1_tool_calls": 5,
+  "L1_tool_errors": 2,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_tool 2>/dev/null || cd \"<sandbox>\"; pwd; ls -la; ls -la data truth mockcheck 2>/dev/null; cat truth/mock_even.tsv 2>/dev/null",
+   "output": "Multiple directory changes in one command require approval for clarity",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "pwd; ls -la; ls -la data truth mockcheck; cat truth/mock_even.tsv",
+   "output": "/c/Temp/mc/agent_eval/sandbox_tool\ntotal 16\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 ./\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 ../\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 11 18:53 config/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 data/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 mockcheck/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:55 truth/\ndata:\ntotal 36\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ./\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ../\n-rw-r--r-- 1 ashenoy00000 1049089 2265 Nov 12 08:55 even.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 3967 Nov 12 08:55 plasma.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 9075 Nov 12 08:55 reagent_c",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "zcat data/even.report.gz | head -5; echo ---; zcat data/even.report.gz | awk -F'\\t' '$4==\"S\"' | cat -A | head -100",
+   "output": "This Bash command contains multiple operations. The following part requires approval: awk -F'\\t' '$4==\"S\"'",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "zcat data/even.report.gz | cat -A",
+   "output": " 22.77^I455376^I455376^IU^I0^Iunclassified$\n 77.23^I1544624^I30564^IR^I1^Iroot$\n 75.70^I1514002^I1274^IR1^I131567^I  cellular organisms$\n 75.64^I1512725^I57164^ID^I2^I    Bacteria$\n 41.62^I832436^I3336^IK^I1783272^I      Bacillati$\n 41.45^I829057^I1434^IP^I1239^I        Bacillota$\n 41.38^I827623^I11594^IC^I91061^I          Bacilli$\n 24.42^I488450^I7057^IO^I1385^I            Bacillales$\n  8.71^I174156^I2199^IF^I186817^I              Bacillaceae$\n  8.60^I171957^I114092^IG^I1386^I                Bacillus$\n  2.89^I57860^I19981^IG1^I653685^I                  Bacillus subtilis group$\n  1.89^I37874^I37873^IS^I96241^I                    Bacillus spizizenii$\n  0.00^I1^I1^IS1^I703612^I                ",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "zcat data/even.report.gz | python -I -c \"\nimport sys\nrows=[l.rstrip('\\n').split('\\t') for l in sys.stdin if l.strip()]\nsp=[(r[5].strip(),int(r[1])) for r in rows if r[3]=='S']\ntot=sum(c for _,c in sp)\nprint('S rows',len(sp),'total',tot)\nfor n,c in sp:\n    p=100*c/tot\n    if c: print(f'{n.lower():40s} {c:8d} {p:8.4f}', 'CALL' if p>=0.1 else '')\n\"",
+   "output": "S rows 20 total 237500\r\nbacillus spizizenii                         37874  15.9469 CALL\r\nbacillus subtilis                               2   0.0008 \r\nbacillus mycoides                               5   0.0021 \r\nlisteria monocytogenes                        811   0.3415 CALL\r\nstaphylococcus aureus                        3591   1.5120 CALL\r\nenterococcus faecalis                       34730  14.6232 CALL\r\nlimosilactobacillus fermentum              146108  61.5192 CALL\r\nactinomyces oris                               41   0.0173 \r\nmicromonospora sp. nbrc 110009                  1   0.0004 \r\ncutibacterium acnes                             1   0.0004 \r\nsalmonella enterica                          3",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "Seven of the 10 expected species were called, and one called species is not in the expected list.\n\nCalled species (at least 0.1% of species-level reads):\n- **Expected (7):** Enterococcus faecalis (14.62%), Limosilactobacillus fermentum (61.52%, the allowed rename of Lactobacillus fermentum), Staphylococcus aureus (1.51%), Salmonella enterica (1.29%), Escherichia coli (0.92%), Pseudomonas aeruginosa (3.80%), Listeria monocytogenes (0.34%).\n- **Not expected (1):** Bacillus spizizenii (15.95%). The report uses this name, not Bacillus subtilis, and only the Lactobacillus rename was allowed, so it "
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+ "run": "t4_plasma__bare__haiku__r2",
+ "task": "t4_plasma",
+ "condition": "bare",
+ "model": "haiku",
+ "gold": {
+  "verdict": "cannot_determine",
+  "top_species": [
+   "cutibacterium acnes",
+   "acidovorax sp. jmule5",
+   "staphylococcus epidermidis"
+  ],
+  "reagent_genus_flagged": [
+   "acidovorax sp. jmule5"
+  ],
+  "reagent_flagged_rename_aware": [
+   "acidovorax sp. jmule5",
+   "cutibacterium acnes"
+  ]
+ },
+ "result": {
+  "verdict": "cannot_determine",
+  "top_species": [
+   "cutibacterium acnes",
+   "acidovorax sp. jmule5",
+   "staphylococcus epidermidis"
+  ],
+  "reagent_genus_flagged": [
+   "acidovorax sp. jmule5"
+  ]
+ },
+ "final_text": "**Verdict: cannot_determine.** The report can rank organisms by read count, but it cannot show which one caused the sepsis. Metagenomic read abundance doesn't establish causation, and there is no lab confirmation. Two of the top three (*C. acnes* and *S. epidermidis*) are common skin flora and frequent collection or reagent contaminants, which makes them weak candidates on abundance alone.\n\n**Top non-human species by clade reads (\u226510):**\n1. *Cutibacterium acnes*: 524\n2. *Acidovorax* sp. JMULE5: 331\n3. *Staphylococcus epidermidis*: 182\n\n*Homo sapiens* (34,988 reads) is excluded as human. *Equine infectious anemia virus* (132 reads) ranks fourth, so it doesn't affect the top three.\n\n**Reagent contaminant check:** I matched genera against `data/reagent_contaminant_genera.tsv`. *Acidovorax* is on the list. *Cutibacterium* and *Staphylococcus* are not. Only *Acidovorax* sp. JMULE5 is flagged.\n\nAlso note that 57.7% of reads are unclassified, so the abundance ranking rests on a minority of the sample.\n\nRESULT: {\"verdict\": \"cannot_determine\", \"top_species\": [\"cutibacterium acnes\", \"acidovorax sp. jmule5\", \"staphylococcus epidermidis\"], \"reagent_genus_flagged\": [\"acidovorax sp. jmule5\"]}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 2,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 3,
+  "L2_fields_total": 3,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_bare 2>/dev/null || cd \"<sandbox>\"; ls -la data; zcat data/plasma.report.gz | head -60; echo ---; cat data/reagent_contaminant_genera.tsv",
+   "output": "total 36\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ./\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ../\n-rw-r--r-- 1 ashenoy00000 1049089 2265 Nov 12 08:55 even.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 3967 Nov 12 08:55 plasma.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 9075 Nov 12 08:55 reagent_contaminant_genera.tsv\n-rw-r--r-- 1 ashenoy00000 1049089 4775 Nov 12 08:55 spike_H0.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 1987 Nov 12 08:55 spike_P0.report.gz\n 57.71\t288547\t288547\tU\t0\tunclassified\n 42.29\t211453\t40005\tR\t1\troot\n 34.26\t171316\t11546\tR1\t131567\t  cellular organisms\n 24.96\t124779\t54385\tD\t2\t    Bacteria\n 13.59\t67943\t967\tK\t3379134\t      Pseudomonadati\n 13.38\t66916\t497",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\"; zcat data/plasma.report.gz | python3 -I -c '\nimport sys\nrows=[]\nfor line in sys.stdin:\n    f=line.rstrip(\"\\n\").split(\"\\t\")\n    if len(f)<6: continue\n    rows.append((float(f[0]),int(f[1]),int(f[2]),f[3],f[4],f[5].strip(), len(f[5])-len(f[5].lstrip(\" \"))))\nfor r in rows:\n    if r[3].startswith(\"S\") or r[3].startswith(\"G\") or \"Homo\" in r[5] or r[3].startswith(\"D\") or r[3].startswith(\"K\") or r[3].startswith(\"P\"):\n        pass\nprint(\"Eukaryota/Homo lines:\")\nf",
+   "output": "Eukaryota/Homo lines:\r\n(24.96, 124779, 54385, 'D', '2', 'Bacteria', 4)\r\n(7.0, 34991, 0, 'D', '2759', 'Eukaryota', 4)\r\n(7.0, 34988, 34988, 'S', '9606', 'Homo sapiens', 62)\r\nSpecies >=10 clade reads:\r\n154 154 Escherichia coli\r\n88 88 Methylorubrum extorquens\r\n23 23 Brevundimonas bullata\r\n16 16 Sphingobium xenophagum\r\n331 331 Acidovorax sp. JMULE5\r\n57 57 Ralstonia pickettii\r\n182 182 Staphylococcus epidermidis\r\n524 524 Cutibacterium acnes\r\n36 36 Corynebacterium durum\r\n34988 34988 Homo sapiens\r\n132 132 Equine infectious anemia virus\r\nGenus-level >=10:\r\n232 78 Escherichia\r\n236 233 Pseudomonas\r\n143 131 Acinetobacter\r\n199 111 Methylorubrum\r\n12 12 Bradyrhizobium\r\n1473 1450 Brevundimonas\r\n25 9 Sphingob",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "**Verdict: cannot_determine.** The report can rank organisms by read count, but it cannot show which one caused the sepsis. Metagenomic read abundance doesn't establish causation, and there is no lab confirmation. Two of the top three (*C. acnes* and *S. epidermidis*) are common skin flora and frequent collection or reagent contaminants, which makes them weak candidates on abundance alone.\n\n**Top non-human species by clade reads (\u226510):**\n1. *Cutibacterium acnes*: 524\n2. *Acidovorax* sp. JMULE5: 331\n3. *Staphylococcus epidermidis*: 182\n\n*Homo sapiens* (34,988 reads) is excluded as human. *Equin"
+  }
+ ]
+}

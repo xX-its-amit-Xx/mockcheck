@@ -1,0 +1,40 @@
+{
+ "run": "t3_negctl__tool__haiku__r2",
+ "task": "t3_negctl",
+ "condition": "tool",
+ "model": "haiku",
+ "gold": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "result": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "final_text": "Mycobacterium is not supported in this sample. The report has 6 clade reads assigned to the genus, and no single species reaches the 10-read minimum.\n\nThe `data/spike_H0.report.gz` file contains these Mycobacterium lines:\n\n| Clade reads | Rank | Taxon |\n|---|---|---|\n| 6 | G | Mycobacterium (genus total) |\n| 3 | S | Mycobacterium spongiae |\n| 3 | S | Mycobacterium canetti |\n| 3 | G1 | Mycobacterium tuberculosis complex (group, not a species) |\n\nThe largest species-level clade count is 3 (*M. spongiae* and *M. canetti*), well under 10. The genus-level 6 reads cannot be used as a species call, and the 3 reads under the *M. tuberculosis* complex group are not rank S. I did not run `mockcheck`, since reading the report directly answered the question.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 1,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_tool 2>/dev/null || cd \"<sandbox>\"; ls -la; ls -la data; zcat data/spike_H0.report.gz | wc -l; zcat data/spike_H0.report.gz | grep -i mycobact | head -100",
+   "output": "total 16\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:49 ./\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:49 ../\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 11 18:53 config/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:49 data/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:49 mockcheck/\ndrwxr-xr-x 1 ashenoy00000 1049089 0 Nov 12 08:49 truth/\ntotal 36\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:49 ./\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:49 ../\n-rw-r--r-- 1 ashenoy00000 1049089 2265 Nov 12 08:49 even.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 3967 Nov 12 08:49 plasma.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 9075 Nov 12 08:49 reagent_contaminant_genera.tsv\n-rw-r--r-- 1 asheno",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "Mycobacterium is not supported in this sample. The report has 6 clade reads assigned to the genus, and no single species reaches the 10-read minimum.\n\nThe `data/spike_H0.report.gz` file contains these Mycobacterium lines:\n\n| Clade reads | Rank | Taxon |\n|---|---|---|\n| 6 | G | Mycobacterium (genus total) |\n| 3 | S | Mycobacterium spongiae |\n| 3 | S | Mycobacterium canetti |\n| 3 | G1 | Mycobacterium tuberculosis complex (group, not a species) |\n\nThe largest species-level clade count is 3 (*M. spongiae* and *M. canetti*), well under 10. The genus-level 6 reads cannot be used as a species call, a"
+  }
+ ]
+}

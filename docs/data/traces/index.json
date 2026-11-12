@@ -1,0 +1,328 @@
+{
+ "runs": [
+  {
+   "run": "t1_even__bare__haiku__r1"
+  },
+  {
+   "run": "t1_even__bare__haiku__r2"
+  },
+  {
+   "run": "t1_even__bare__haiku__r3"
+  },
+  {
+   "run": "t1_even__bare__opus__r1"
+  },
+  {
+   "run": "t1_even__bare__opus__r2"
+  },
+  {
+   "run": "t1_even__bare__opus__r3"
+  },
+  {
+   "run": "t1_even__bare__sonnet__r1"
+  },
+  {
+   "run": "t1_even__bare__sonnet__r2"
+  },
+  {
+   "run": "t1_even__bare__sonnet__r3"
+  },
+  {
+   "run": "t1_even__tool__haiku__r1"
+  },
+  {
+   "run": "t1_even__tool__haiku__r2"
+  },
+  {
+   "run": "t1_even__tool__haiku__r3"
+  },
+  {
+   "run": "t1_even__tool__opus__r1"
+  },
+  {
+   "run": "t1_even__tool__opus__r2"
+  },
+  {
+   "run": "t1_even__tool__opus__r3"
+  },
+  {
+   "run": "t1_even__tool__sonnet__r1"
+  },
+  {
+   "run": "t1_even__tool__sonnet__r2"
+  },
+  {
+   "run": "t1_even__tool__sonnet__r3"
+  },
+  {
+   "run": "t2_spike__bare__haiku__r1"
+  },
+  {
+   "run": "t2_spike__bare__haiku__r2"
+  },
+  {
+   "run": "t2_spike__bare__haiku__r3"
+  },
+  {
+   "run": "t2_spike__bare__opus__r1"
+  },
+  {
+   "run": "t2_spike__bare__opus__r2"
+  },
+  {
+   "run": "t2_spike__bare__opus__r3"
+  },
+  {
+   "run": "t2_spike__bare__sonnet__r1"
+  },
+  {
+   "run": "t2_spike__bare__sonnet__r2"
+  },
+  {
+   "run": "t2_spike__bare__sonnet__r3"
+  },
+  {
+   "run": "t2_spike__tool__haiku__r1"
+  },
+  {
+   "run": "t2_spike__tool__haiku__r2"
+  },
+  {
+   "run": "t2_spike__tool__haiku__r3"
+  },
+  {
+   "run": "t2_spike__tool__opus__r1"
+  },
+  {
+   "run": "t2_spike__tool__opus__r2"
+  },
+  {
+   "run": "t2_spike__tool__opus__r3"
+  },
+  {
+   "run": "t2_spike__tool__sonnet__r1"
+  },
+  {
+   "run": "t2_spike__tool__sonnet__r2"
+  },
+  {
+   "run": "t2_spike__tool__sonnet__r3"
+  },
+  {
+   "run": "t3_negctl__bare__haiku__r1"
+  },
+  {
+   "run": "t3_negctl__bare__haiku__r2"
+  },
+  {
+   "run": "t3_negctl__bare__haiku__r3"
+  },
+  {
+   "run": "t3_negctl__bare__opus__r1"
+  },
+  {
+   "run": "t3_negctl__bare__opus__r2"
+  },
+  {
+   "run": "t3_negctl__bare__opus__r3"
+  },
+  {
+   "run": "t3_negctl__bare__sonnet__r1"
+  },
+  {
+   "run": "t3_negctl__bare__sonnet__r2"
+  },
+  {
+   "run": "t3_negctl__bare__sonnet__r3"
+  },
+  {
+   "run": "t3_negctl__tool__haiku__r1"
+  },
+  {
+   "run": "t3_negctl__tool__haiku__r2"
+  },
+  {
+   "run": "t3_negctl__tool__haiku__r3"
+  },
+  {
+   "run": "t3_negctl__tool__opus__r1"
+  },
+  {
+   "run": "t3_negctl__tool__opus__r2"
+  },
+  {
+   "run": "t3_negctl__tool__opus__r3"
+  },
+  {
+   "run": "t3_negctl__tool__sonnet__r1"
+  },
+  {
+   "run": "t3_negctl__tool__sonnet__r2"
+  },
+  {
+   "run": "t3_negctl__tool__sonnet__r3"
+  },
+  {
+   "run": "t4_plasma__bare__haiku__r1"
+  },
+  {
+   "run": "t4_plasma__bare__haiku__r2"
+  },
+  {
+   "run": "t4_plasma__bare__haiku__r3"
+  },
+  {
+   "run": "t4_plasma__bare__opus__r1"
+  },
+  {
+   "run": "t4_plasma__bare__opus__r2"
+  },
+  {
+   "run": "t4_plasma__bare__opus__r3"
+  },
+  {
+   "run": "t4_plasma__bare__sonnet__r1"
+  },
+  {
+   "run": "t4_plasma__bare__sonnet__r2"
+  },
+  {
+   "run": "t4_plasma__bare__sonnet__r3"
+  },
+  {
+   "run": "t4_plasma__tool__haiku__r1"
+  },
+  {
+   "run": "t4_plasma__tool__haiku__r2"
+  },
+  {
+   "run": "t4_plasma__tool__haiku__r3"
+  },
+  {
+   "run": "t4_plasma__tool__opus__r1"
+  },
+  {
+   "run": "t4_plasma__tool__opus__r2"
+  },
+  {
+   "run": "t4_plasma__tool__opus__r3"
+  },
+  {
+   "run": "t4_plasma__tool__sonnet__r1"
+  },
+  {
+   "run": "t4_plasma__tool__sonnet__r2"
+  },
+  {
+   "run": "t4_plasma__tool__sonnet__r3"
+  },
+  {
+   "run": "t5_planted_note__bare__haiku__r1"
+  },
+  {
+   "run": "t5_planted_note__bare__haiku__r2"
+  },
+  {
+   "run": "t5_planted_note__bare__haiku__r3"
+  },
+  {
+   "run": "t5_planted_note__bare__opus__r1"
+  },
+  {
+   "run": "t5_planted_note__bare__opus__r2"
+  },
+  {
+   "run": "t5_planted_note__bare__opus__r3"
+  },
+  {
+   "run": "t5_planted_note__bare__sonnet__r1"
+  },
+  {
+   "run": "t5_planted_note__bare__sonnet__r2"
+  },
+  {
+   "run": "t5_planted_note__bare__sonnet__r3"
+  },
+  {
+   "run": "t5_planted_note__tool__haiku__r1"
+  },
+  {
+   "run": "t5_planted_note__tool__haiku__r2"
+  },
+  {
+   "run": "t5_planted_note__tool__haiku__r3"
+  },
+  {
+   "run": "t5_planted_note__tool__opus__r1"
+  },
+  {
+   "run": "t5_planted_note__tool__opus__r2"
+  },
+  {
+   "run": "t5_planted_note__tool__opus__r3"
+  },
+  {
+   "run": "t5_planted_note__tool__sonnet__r1"
+  },
+  {
+   "run": "t5_planted_note__tool__sonnet__r2"
+  },
+  {
+   "run": "t5_planted_note__tool__sonnet__r3"
+  },
+  {
+   "run": "t6_planted_unprimed__bare__haiku__r1"
+  },
+  {
+   "run": "t6_planted_unprimed__bare__haiku__r2"
+  },
+  {
+   "run": "t6_planted_unprimed__bare__haiku__r3"
+  },
+  {
+   "run": "t6_planted_unprimed__bare__opus__r1"
+  },
+  {
+   "run": "t6_planted_unprimed__bare__opus__r2"
+  },
+  {
+   "run": "t6_planted_unprimed__bare__opus__r3"
+  },
+  {
+   "run": "t6_planted_unprimed__bare__sonnet__r1"
+  },
+  {
+   "run": "t6_planted_unprimed__bare__sonnet__r2"
+  },
+  {
+   "run": "t6_planted_unprimed__bare__sonnet__r3"
+  },
+  {
+   "run": "t6_planted_unprimed__tool__haiku__r1"
+  },
+  {
+   "run": "t6_planted_unprimed__tool__haiku__r2"
+  },
+  {
+   "run": "t6_planted_unprimed__tool__haiku__r3"
+  },
+  {
+   "run": "t6_planted_unprimed__tool__opus__r1"
+  },
+  {
+   "run": "t6_planted_unprimed__tool__opus__r2"
+  },
+  {
+   "run": "t6_planted_unprimed__tool__opus__r3"
+  },
+  {
+   "run": "t6_planted_unprimed__tool__sonnet__r1"
+  },
+  {
+   "run": "t6_planted_unprimed__tool__sonnet__r2"
+  },
+  {
+   "run": "t6_planted_unprimed__tool__sonnet__r3"
+  }
+ ]
+}

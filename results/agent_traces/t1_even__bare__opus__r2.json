@@ -1,0 +1,40 @@
+{
+ "run": "t1_even__bare__opus__r2",
+ "task": "t1_even",
+ "condition": "bare",
+ "model": "opus",
+ "gold": {
+  "found": 7,
+  "false": 1
+ },
+ "result": {
+  "found": 7,
+  "false": 1
+ },
+ "final_text": "**7 of the 10 expected species are called present, and 1 called species is not on the expected list.**\n\nThere are 20 species-level (S) rows in the report, with 237,500 clade reads in total. After renormalising so those rows sum to 100%, 8 species reach the 0.1% threshold:\n\n| Species (as reported) | % of species reads | Expected? |\n|---|---|---|\n| limosilactobacillus fermentum | 61.52 | yes (Lactobacillus fermentum, the allowed rename) |\n| bacillus spizizenii | 15.95 | **no** |\n| enterococcus faecalis | 14.62 | yes |\n| pseudomonas aeruginosa | 3.80 | yes |\n| staphylococcus aureus | 1.51 | yes |\n| salmonella enterica | 1.29 | yes |\n| escherichia coli | 0.92 | yes |\n| listeria monocytogenes | 0.34 | yes |\n\nThree expected species are not called:\n- **Bacillus subtilis** has only 2 reads (0.0008%), well below the threshold. Most Bacillus reads went to *bacillus spizizenii* instead, but that name is counted as a false call because only the fermentum rename is allowed.\n- **Saccharomyces cerevisiae** and **Cryptococcus neoformans** have no species-level rows in the report at all.\n\nThe other 11 species rows are all below 0.1%, so none of them count as calls.\n\nRESULT: {\"found\": 7, \"false\": 1}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 1,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_bare; cat truth/mock_even.tsv; python -I - <<'EOF'\nimport gzip,csv\nrows=[]\nfor l in gzip.open('data/even.report.gz','rt'):\n    p=l.rstrip('\\n').split('\\t')\n    if len(p)>=6 and p[3].strip()=='S':\n        rows.append((p[5].strip().lower(),int(p[1])))\ntot=sum(r[1] for r in rows)\nprint(len(rows),tot)\nfor n,c in sorted(rows,key=lambda x:-x[1])[:40]: print(n,c,round(100*c/tot,4))\nEOF",
+   "output": "organism\texpected_percent\nPseudomonas aeruginosa\t12\nEscherichia coli\t12\nSalmonella enterica\t12\nLactobacillus fermentum\t12\nEnterococcus faecalis\t12\nStaphylococcus aureus\t12\nListeria monocytogenes\t12\nBacillus subtilis\t12\nSaccharomyces cerevisiae\t2\nCryptococcus neoformans\t2\n20 237500\r\nlimosilactobacillus fermentum 146108 61.5192\r\nbacillus spizizenii 37874 15.9469\r\nenterococcus faecalis 34730 14.6232\r\npseudomonas aeruginosa 9018 3.7971\r\nstaphylococcus aureus 3591 1.512\r\nsalmonella enterica 3072 1.2935\r\nescherichia coli 2191 0.9225\r\nlisteria monocytogenes 811 0.3415\r\nactinomyces oris 41 0.0173\r\nburkholderia multivorans 28 0.0118\r\npseudomonas sp. cip-10 10 0.0042\r\nvibrio anguillarum 10 0.0042\r\nbac",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "**7 of the 10 expected species are called present, and 1 called species is not on the expected list.**\n\nThere are 20 species-level (S) rows in the report, with 237,500 clade reads in total. After renormalising so those rows sum to 100%, 8 species reach the 0.1% threshold:\n\n| Species (as reported) | % of species reads | Expected? |\n|---|---|---|\n| limosilactobacillus fermentum | 61.52 | yes (Lactobacillus fermentum, the allowed rename) |\n| bacillus spizizenii | 15.95 | **no** |\n| enterococcus faecalis | 14.62 | yes |\n| pseudomonas aeruginosa | 3.80 | yes |\n| staphylococcus aureus | 1.51 | yes |"
+  }
+ ]
+}

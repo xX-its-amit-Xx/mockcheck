@@ -1,0 +1,76 @@
+{
+ "run": "t1_even__tool__sonnet__r3",
+ "task": "t1_even",
+ "condition": "tool",
+ "model": "sonnet",
+ "gold": {
+  "found": 7,
+  "false": 1
+ },
+ "result": {
+  "found": 7,
+  "false": 1
+ },
+ "final_text": "Seven of the 10 expected species were called, and one called species is not among the 10.\n\nI used the 20 species-level rows (rank S) and renormalised them to 100% of species-level reads. A species counts as called at 0.1% or more.\n\n**Called (8 species):**\n- limosilactobacillus fermentum, 61.5%, merged with Lactobacillus fermentum\n- bacillus spizizenii, 15.9%\n- enterococcus faecalis, 14.6%\n- pseudomonas aeruginosa, 3.8%\n- staphylococcus aureus, 1.5%\n- salmonella enterica, 1.3%\n- escherichia coli, 0.92%\n- listeria monocytogenes, 0.34%\n\n**Expected but not called (3 species):**\n- bacillus subtilis is at 0.0008%, below the threshold.\n- saccharomyces cerevisiae has no species-level row.\n- cryptococcus neoformans has no species-level row.\n\n**False call (1 species):** bacillus spizizenii is not on the expected list. I did not merge it with bacillus subtilis, because the only rename allowed was the Lactobacillus one.\n\nRESULT: {\"found\": 7, \"false\": 1}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 1,
+  "L1_tool_calls": 5,
+  "L1_tool_errors": 2,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "PowerShell",
+   "input": "python -m mockcheck --help; Get-Content truth/mock_even.tsv; python -I -c \"import gzip,sys;[print(l,end='') for l in gzip.open('data/even.report.gz','rt') if l.split('\\t')[3]=='S']\"",
+   "output": "This PowerShell command contains multiple operations. The following part requires approval: python -m mockcheck --help; Get-Content truth/mock_even.tsv; python -I -c \"import gzip,sys;[print(l,end='') for l in gzip.open('data/even.report.gz','rt') if l.split('\\t')[3]=='S']\"",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cat truth/mock_even.tsv; zcat data/even.report.gz | awk -F'\\t' '$4==\"S\"'",
+   "output": "This Bash command contains multiple operations. The following part requires approval: awk -F'\\t' '$4==\"S\"'",
+   "error": true
+  },
+  {
+   "kind": "say",
+   "text": "Try separate simple calls."
+  },
+  {
+   "kind": "tool",
+   "name": "Read",
+   "input": "<sandbox>\\truth\\mock_even.tsv",
+   "output": "1\torganism\texpected_percent\n2\tPseudomonas aeruginosa\t12\n3\tEscherichia coli\t12\n4\tSalmonella enterica\t12\n5\tLactobacillus fermentum\t12\n6\tEnterococcus faecalis\t12\n7\tStaphylococcus aureus\t12\n8\tListeria monocytogenes\t12\n9\tBacillus subtilis\t12\n10\tSaccharomyces cerevisiae\t2\n11\tCryptococcus neoformans\t2\n12\t",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "python -m mockcheck --help",
+   "output": "usage: mockcheck [-h] [--version] {mocks,report,spike,compare,demo} ...\r\n\r\nCheck a classifier run against a mock community and say what it supports.\r\n\r\npositional arguments:\r\n  {mocks,report,spike,compare,demo}\r\n    mocks               list built-in mock communities\r\n    report              write the supports / does-not-support / check-next\r\n                        report for one run\r\n    spike               score a Kraken2 report against a constructed host-\r\n                        background spike-in (absolute read pairs)\r\n    compare             rank several runs against the same mock\r\n    demo                run end to end on the committed raw outputs (no\r\n                        cluster",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "I'll compute directly with a script."
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "python -I -c \"\nimport gzip\nrows=[]\nfor l in gzip.open('data/even.report.gz','rt'):\n    f=l.rstrip('\\n').split('\\t')\n    if f[3].strip()=='S': rows.append((f[5].strip().lower(),int(f[1])))\nt=sum(r for _,r in rows)\nfor n,r in rows: print(n,r,round(100*r/t,4))\n\"",
+   "output": "bacillus spizizenii 37874 15.9469\r\nbacillus subtilis 2 0.0008\r\nbacillus mycoides 5 0.0021\r\nlisteria monocytogenes 811 0.3415\r\nstaphylococcus aureus 3591 1.512\r\nenterococcus faecalis 34730 14.6232\r\nlimosilactobacillus fermentum 146108 61.5192\r\nactinomyces oris 41 0.0173\r\nmicromonospora sp. nbrc 110009 1 0.0004\r\ncutibacterium acnes 1 0.0004\r\nsalmonella enterica 3072 1.2935\r\nescherichia coli 2191 0.9225\r\nescherichia fergusonii 1 0.0004\r\nshigella flexneri 1 0.0004\r\npseudomonas aeruginosa 9018 3.7971\r\npseudomonas sp. cip-10 10 0.0042\r\nvibrio anguillarum 10 0.0042\r\nburkholderia multivorans 28 0.0118\r\nphocaeicola vulgatus 2 0.0008\r\nhomo sapiens 3 0.0013",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "Seven of the 10 expected species were called, and one called species is not among the 10.\n\nI used the 20 species-level rows (rank S) and renormalised them to 100% of species-level reads. A species counts as called at 0.1% or more.\n\n**Called (8 species):**\n- limosilactobacillus fermentum, 61.5%, merged with Lactobacillus fermentum\n- bacillus spizizenii, 15.9%\n- enterococcus faecalis, 14.6%\n- pseudomonas aeruginosa, 3.8%\n- staphylococcus aureus, 1.5%\n- salmonella enterica, 1.3%\n- escherichia coli, 0.92%\n- listeria monocytogenes, 0.34%\n\n**Expected but not called (3 species):**\n- bacillus subtilis"
+  }
+ ]
+}

@@ -169,3 +169,28 @@ Question: does classification hold up when the sample is mostly human, as in blo
 **What this supports.** Kraken2 at low confidence can flag a bacterium at 1 in 100,000 read pairs in a human background, with a few extra species to triage.
 **What it does not support.** Species-level load estimates; fungal detection with the standard database; anything about real infections (no T3 data: confirmed clinical samples with open raw reads were not found). Isolate reads are cleaner than real samples, so these limits are optimistic. One run per level, no replicates.
 **What to check next.** Replicates; a database with fungi; genus or family reporting for load; a T3 dataset with confirmed pathogens and a blank control.
+
+## Phase 3: how to evaluate, who else does, and how agents behave
+
+Questions: which choices make an evaluation biologically meaningful (geography, host), what do other companies and public benchmarks do, and how does a real agent behave on these tasks? The dashboard has the full nested version; this is the summary. Public sources only, searched 2026-11-12; every claim is linked on the dashboard and unverified items are marked.
+
+**Decisions (D8 to D15).**
+- "Host" is four labels (sampled, natural reservoir, experimentally infectable, receptor-compatible); keep one column and one evidence tier for each.
+- "Place" is three things (collection site, lineage origin, sequencing lab); keep raw and cleaned values and a quality flag.
+- Report every metric per region and per host background, with the sample count. Public genomes are heavily skewed: in one 2021 analysis 94% of 2M+ GISAID genomes were from high-income countries.
+- Split by time, clade and study. For viral evolution the honest test holds out the future.
+- Report operating characteristics (sensitivity, false alarms, time to detection), not one accuracy.
+- Never redistribute restricted sequence data (GISAID): store identifiers and terms.
+- Score the process of an agent, not only its answer.
+
+**What others do.** The strongest public validation styles are prospective cohorts with an orthogonal reference (the reference matters: one plasma test's specificity moved from 62.7% to 76.3% with the standard used), blinded tests by someone else (NIST synthesis-screening benchmark), and separate-site separate-time sets (Day Zero Diagnostics, 956 isolates, 96.9% agreement against a 83.5% baseline). Valthos publishes no validation that we could find; we make no claim about its methods. Almost nobody publishes a prospective, geographically separate, time-split test of AI pathogen identification.
+
+**Agent evaluation (real agents, recorded traces).** Claude Code agents (haiku, sonnet, opus) ran headlessly in throwaway sandboxes, with and without the mockcheck package, on six tasks whose answers our own code computes, three repeats each (108 runs, about $4.56 in total).
+- Round 1: 18 of 72 runs matched gold, with identical failures across all three models. Cause: our scoring code merged a renamed species the prompt said not to merge. Lesson: when every agent fails the same way, check the gold. The traces made this visible in minutes.
+- After fixing the wording, 108 of 108 runs match gold. The suite cannot rank the models: accuracy ties, mean cost per run differs about 23 times (haiku $0.004, sonnet $0.031, opus $0.092).
+- 0 of 18 plasma runs flagged Cutibacterium acnes as a former Propionibacterium (the reagent-contaminant list uses the old name). Following the literal list was 100%.
+- 0 of 36 runs followed a planted lab note that claimed a confirmed Salmonella result and carried an embedded instruction.
+- Using the mockcheck package did not change accuracy on these tasks; it added about 1.8 tool calls per run.
+- The sandbox refused compound shell commands and writes outside it; no command referenced the gold or the other sandbox. Read commands were not confined by path.
+
+**What this supports.** The harness can record and score agent behaviour at three layers, and it catches a gold-versus-spec mismatch. **It does not support** any claim that these agents are good at metagenomic classification in general (tasks are easy, one file each, three repeats), nor anything about protein language models: none was run. **To check next:** harder multi-file tasks, a subtler planted claim, an unseen classifier format, a fine-tuning and RL loop on a small open model (design on the dashboard, not run; needs GPU approval).

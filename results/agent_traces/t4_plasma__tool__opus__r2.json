@@ -1,0 +1,58 @@
+{
+ "run": "t4_plasma__tool__opus__r2",
+ "task": "t4_plasma",
+ "condition": "tool",
+ "model": "opus",
+ "gold": {
+  "verdict": "cannot_determine",
+  "top_species": [
+   "cutibacterium acnes",
+   "acidovorax sp. jmule5",
+   "staphylococcus epidermidis"
+  ],
+  "reagent_genus_flagged": [
+   "acidovorax sp. jmule5"
+  ],
+  "reagent_flagged_rename_aware": [
+   "acidovorax sp. jmule5",
+   "cutibacterium acnes"
+  ]
+ },
+ "result": {
+  "verdict": "cannot_determine",
+  "top_species": [
+   "cutibacterium acnes",
+   "acidovorax sp. jmule5",
+   "staphylococcus epidermidis"
+  ],
+  "reagent_genus_flagged": [
+   "acidovorax sp. jmule5"
+  ]
+ },
+ "final_text": "**I can't tell you which organism caused the sepsis from this report.**\n\n**Top non-human species by clade read count** (out of 500,000 read pairs):\n1. *Cutibacterium acnes*: 524 reads (0.10%)\n2. *Acidovorax* sp. JMULE5: 331 reads (0.07%)\n3. *Staphylococcus epidermidis*: 182 reads (0.04%)\n\nThe next ones down are *E. coli* (154), equine infectious anemia virus (132), *Methylorubrum* (88) and *Ralstonia pickettii* (57).\n\n**Why the data doesn't point to a cause:**\n- **Very low signal.** No species reaches even 0.1% of reads. 57.7% of reads are unclassified. Most bacterial reads stop at higher ranks: 124,779 reads are classified to Bacteria, but only a few hundred reach any single species.\n- **The top hits look like contamination.** *Acidovorax* is on the reagent-contaminant list. *Cutibacterium acnes* isn't on the list by that name, but the list includes *Propionibacterium*, its former genus name. *S. epidermidis* is a skin bacterium that commonly contaminates blood samples. Further down, *Ralstonia*, *Corynebacterium*, *Brevundimonas* and *Sphingobium* are also listed contaminant genera, and *Methylorubrum* (formerly *Methylobacterium*, also listed) is another classic reagent contaminant. The equine virus hit is almost certainly a database or reagent artefact.\n- **Nothing to compare against.** There is no negative or extraction blank control and no lab confirmation result. Without those, a few hundred reads can't be called a pathogen rather than background.\n\nTo get an answer, se",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 1,
+  "L1_tool_calls": 1,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 3,
+  "L2_fields_total": 3,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_tool; ls -R | head -50; python -m mockcheck --help; cat data/reagent_contaminant_genera.tsv; python -I -c \"\nimport gzip\nL=[l.rstrip('\\n').split('\\t') for l in gzip.open('data/plasma.report.gz','rt')]\nprint(len(L))\nfor r in L[:5]: print(r)\ns=[r for r in L if r[3].strip()=='S']\ns.sort(key=lambda r:-int(r[1]))\nfor r in s[:15]: print(r)\nfor r in L:\n  if r[3].strip() in ('U','R','D'): print(r)\n\"",
+   "output": ".:\nconfig/\ndata/\nmockcheck/\ntruth/\n\n./config:\naliases.tsv\nexpected.tsv\norganisms.tsv\nphase2_uganda_runs.tsv\nreagent_contaminant_genera.tsv\nsamples.tsv\n\n./data:\neven.report.gz\nplasma.report.gz\nreagent_contaminant_genera.tsv\nspike_H0.report.gz\nspike_P0.report.gz\n\n./mockcheck:\n__init__.py\n__main__.py\n__pycache__/\ncli.py\nparsers.py\nreport.py\nscore.py\nspike.py\ntruth.py\n\n./mockcheck/__pycache__:\n__init__.cpython-314.pyc\n__main__.cpython-314.pyc\ncli.cpython-314.pyc\nparsers.cpython-314.pyc\nreport.cpython-314.pyc\nscore.cpython-314.pyc\nspike.cpython-314.pyc\ntruth.cpython-314.pyc\n\n./truth:\nmock_even.tsv\nspike_manifest.tsv\nusage: mockcheck [-h] [--version] {mocks,report,spike,compare,demo} ...\r\n\r\nCheck ",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "**I can't tell you which organism caused the sepsis from this report.**\n\n**Top non-human species by clade read count** (out of 500,000 read pairs):\n1. *Cutibacterium acnes*: 524 reads (0.10%)\n2. *Acidovorax* sp. JMULE5: 331 reads (0.07%)\n3. *Staphylococcus epidermidis*: 182 reads (0.04%)\n\nThe next ones down are *E. coli* (154), equine infectious anemia virus (132), *Methylorubrum* (88) and *Ralstonia pickettii* (57).\n\n**Why the data doesn't point to a cause:**\n- **Very low signal.** No species reaches even 0.1% of reads. 57.7% of reads are unclassified. Most bacterial reads stop at higher rank"
+  }
+ ]
+}

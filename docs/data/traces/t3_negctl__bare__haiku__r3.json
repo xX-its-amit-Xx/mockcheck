@@ -1,0 +1,40 @@
+{
+ "run": "t3_negctl__bare__haiku__r3",
+ "task": "t3_negctl",
+ "condition": "bare",
+ "model": "haiku",
+ "gold": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "result": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "final_text": "The report does not support Mycobacterium being present at a credible level.\n\n- **Genus Mycobacterium:** 6 clade reads in total, with 0 direct reads, so all six sit under its species.\n- **M. spongiae** (rank S): 3 clade reads.\n- **M. canetti** (rank S, under M. tuberculosis complex): 3 clade reads.\n- **M. tuberculosis complex** (rank G1): 3 clade reads, but this is a group rank, not a species, and its reads are all accounted for by M. canetti.\n\nThe largest single-species count is 3 reads, below the 10-read minimum for a credible species call. The file has 358 lines and the rank codes parsed cleanly, so this reading holds.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 1,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && python3 -I -c \"\nimport gzip,csv,sys\nrows=[]\nwith gzip.open('data/spike_H0.report.gz','rt') as f:\n    for line in f:\n        p=line.rstrip('\\n').split('\\t')\n        if len(p)<6: continue\n        rows.append(p)\nmyco=[r for r in rows if 'Mycobacterium' in r[5]]\nfor r in mycos if False else myco: print(r)\nprint('total lines',len(rows))\nprint('rank codes',sorted(set(r[3] for r in rows)))\nprint('top',[ (r[5].strip(),r[1]) for r in rows[:5]])\n\"",
+   "output": "['  0.00', '6', '0', 'G', '1763', '                Mycobacterium']\r\n['  0.00', '3', '3', 'S', '886343', '                  Mycobacterium spongiae']\r\n['  0.00', '3', '0', 'G1', '77643', '                  Mycobacterium tuberculosis complex']\r\n['  0.00', '3', '3', 'S', '78331', '                    Mycobacterium canetti']\r\ntotal lines 358\r\nrank codes ['C', 'C1', 'C2', 'C3', 'C4', 'D', 'D1', 'F', 'F1', 'G', 'G1', 'G2', 'K', 'K1', 'K2', 'K3', 'O', 'O1', 'O2', 'O3', 'O4', 'P', 'P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'P9', 'R', 'R1', 'R2', 'S', 'S1', 'S2', 'U']\r\ntop [('unclassified', '47340'), ('root', '3952660'), ('cellular organisms', '3952638'), ('Eukaryota', '3947380'), ('Opisthokonta'",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "The report does not support Mycobacterium being present at a credible level.\n\n- **Genus Mycobacterium:** 6 clade reads in total, with 0 direct reads, so all six sit under its species.\n- **M. spongiae** (rank S): 3 clade reads.\n- **M. canetti** (rank S, under M. tuberculosis complex): 3 clade reads.\n- **M. tuberculosis complex** (rank G1): 3 clade reads, but this is a group rank, not a species, and its reads are all accounted for by M. canetti.\n\nThe largest single-species count is 3 reads, below the 10-read minimum for a credible species call. The file has 358 lines and the rank codes parsed cl"
+  }
+ ]
+}

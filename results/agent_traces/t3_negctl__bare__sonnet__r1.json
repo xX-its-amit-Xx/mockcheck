@@ -1,0 +1,40 @@
+{
+ "run": "t3_negctl__bare__sonnet__r1",
+ "task": "t3_negctl",
+ "condition": "bare",
+ "model": "sonnet",
+ "gold": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "result": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "final_text": "Mycobacterium is not supported as present in this sample. The genus has only 6 clade reads in total. The two species hits are *M. spongiae* with 3 reads and *M. canetti* with 3 reads, which is well below the 10-read minimum for a credible species call. These counts are consistent with background noise or misclassification in a human-only sample.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 1,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd data && python -I -c \"\nimport gzip,sys\nfor l in gzip.open('spike_H0.report.gz','rt'):\n    if 'Mycobact' in l: print(l.rstrip())\n\"",
+   "output": "  0.00\t8\t0\tO\t85007\t            Mycobacteriales\r\n  0.00\t6\t0\tF\t1762\t              Mycobacteriaceae\r\n  0.00\t6\t0\tG\t1763\t                Mycobacterium\r\n  0.00\t3\t3\tS\t886343\t                  Mycobacterium spongiae\r\n  0.00\t3\t0\tG1\t77643\t                  Mycobacterium tuberculosis complex\r\n  0.00\t3\t3\tS\t78331\t                    Mycobacterium canetti",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "Mycobacterium is not supported as present in this sample. The genus has only 6 clade reads in total. The two species hits are *M. spongiae* with 3 reads and *M. canetti* with 3 reads, which is well below the 10-read minimum for a credible species call. These counts are consistent with background noise or misclassification in a human-only sample.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}"
+  }
+ ]
+}

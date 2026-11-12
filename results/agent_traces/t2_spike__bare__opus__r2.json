@@ -1,0 +1,71 @@
+{
+ "run": "t2_spike__bare__opus__r2",
+ "task": "t2_spike",
+ "condition": "bare",
+ "model": "opus",
+ "gold": {
+  "detected": [
+   "enterococcus faecalis",
+   "escherichia coli",
+   "lactobacillus fermentum",
+   "pseudomonas aeruginosa",
+   "staphylococcus aureus"
+  ],
+  "missed": [
+   "bacillus subtilis",
+   "cryptococcus neoformans",
+   "listeria monocytogenes",
+   "saccharomyces cerevisiae",
+   "salmonella enterica"
+  ]
+ },
+ "result": {
+  "detected": [
+   "Pseudomonas aeruginosa",
+   "Escherichia coli",
+   "Lactobacillus fermentum",
+   "Enterococcus faecalis",
+   "Staphylococcus aureus"
+  ],
+  "missed": [
+   "Salmonella enterica",
+   "Listeria monocytogenes",
+   "Bacillus subtilis",
+   "Saccharomyces cerevisiae",
+   "Cryptococcus neoformans"
+  ]
+ },
+ "final_text": "I checked the 10 organisms listed for spike_P0 in `truth/spike_manifest.tsv` against the species-level (rank S) rows in `data/spike_P0.report.gz`. An organism counts as detected if its clade read count is at least 10. Five organisms passed and five did not.\n\n| Organism (manifest) | Spiked pairs | Clade reads (S) | Status |\n|---|---|---|---|\n| Pseudomonas aeruginosa | 40,000 | 811 | detected |\n| Escherichia coli | 4,000 | 72 | detected |\n| Salmonella enterica | 400 | 4 | missed |\n| Lactobacillus fermentum (reported as Limosilactobacillus fermentum) | 40 | 26 | detected |\n| Enterococcus faecalis | 40,000 | 6,457 | detected |\n| Staphylococcus aureus | 4,000 | 54 | detected |\n| Listeria monocytogenes | 400 | not in report | missed |\n| Bacillus subtilis | 40 | 2 | missed |\n| Saccharomyces cerevisiae | 40,000 | not in report | missed |\n| Cryptococcus neoformans | 4,000 | not in report | missed |\n\nThree organisms have no species-level row in the report, so I counted them as 0 reads. The report can't tell us whether that's because Kraken2 found nothing or because those species (two of them yeasts) aren't in the database.\n\nRecovered read counts are far below the number of pairs added. For example, Saccharomyces had 40,000 pairs added and none were found, while Lactobacillus fermentum had only 40 added and 26 were found.\n\nRESULT: {\"detected\": [\"Pseudomonas aeruginosa\", \"Escherichia coli\", \"Lactobacillus fermentum\", \"Enterococcus faecalis\", \"Staphylococcus aureus\"], \"missed\": [\"Salmonel",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 2,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_bare; cat truth/spike_manifest.tsv | head -50; python -I -c \"\nimport gzip,csv\nman=[r for r in csv.DictReader(open('truth/spike_manifest.tsv'),delimiter='\\t') if r.get('sample')=='spike_P0']\nprint(man)\n\"",
+   "output": "sample\torganism\tfraction\tspiked_pairs\ttotal_pairs\nspike_P0\tPseudomonas aeruginosa\t0.01\t40000\t4000000\nspike_P0\tEscherichia coli\t0.001\t4000\t4000000\nspike_P0\tSalmonella enterica\t0.0001\t400\t4000000\nspike_P0\tLactobacillus fermentum\t1e-05\t40\t4000000\nspike_P0\tEnterococcus faecalis\t0.01\t40000\t4000000\nspike_P0\tStaphylococcus aureus\t0.001\t4000\t4000000\nspike_P0\tListeria monocytogenes\t0.0001\t400\t4000000\nspike_P0\tBacillus subtilis\t1e-05\t40\t4000000\nspike_P0\tSaccharomyces cerevisiae\t0.01\t40000\t4000000\nspike_P0\tCryptococcus neoformans\t0.001\t4000\t4000000\nspike_P1\tPseudomonas aeruginosa\t0.001\t4000\t4000000\nspike_P1\tEscherichia coli\t0.0001\t400\t4000000\nspike_P1\tSalmonella enterica\t1e-05\t40\t4000000\nspike_P1\tLacto",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_bare; python -I -c \"\nimport gzip\nnames=['pseudomonas aeruginosa','escherichia coli','salmonella enterica','lactobacillus fermentum','enterococcus faecalis','staphylococcus aureus','listeria monocytogenes','bacillus subtilis','saccharomyces cerevisiae','cryptococcus neoformans']\nhits={}\nfor l in gzip.open('data/spike_P0.report.gz','rt'):\n    f=l.rstrip('\\n').split('\\t')\n    if len(f)<6: continue\n    n=f[5].strip().lower()\n    if n=='limosilactobacillus fermentum':",
+   "output": "pseudomonas aeruginosa [('S', '811', '287')]\r\nescherichia coli [('S', '72', '562')]\r\nsalmonella enterica [('S', '4', '28901')]\r\nlactobacillus fermentum [('S', '26', '1613')]\r\nenterococcus faecalis [('S', '6457', '1351')]\r\nstaphylococcus aureus [('S', '54', '1280')]\r\nlisteria monocytogenes None\r\nbacillus subtilis [('S', '2', '1423')]\r\nsaccharomyces cerevisiae None\r\ncryptococcus neoformans None",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "I checked the 10 organisms listed for spike_P0 in `truth/spike_manifest.tsv` against the species-level (rank S) rows in `data/spike_P0.report.gz`. An organism counts as detected if its clade read count is at least 10. Five organisms passed and five did not.\n\n| Organism (manifest) | Spiked pairs | Clade reads (S) | Status |\n|---|---|---|---|\n| Pseudomonas aeruginosa | 40,000 | 811 | detected |\n| Escherichia coli | 4,000 | 72 | detected |\n| Salmonella enterica | 400 | 4 | missed |\n| Lactobacillus fermentum (reported as Limosilactobacillus fermentum) | 40 | 26 | detected |\n| Enterococcus faecalis"
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+{
+ "run": "t3_negctl__bare__haiku__r1",
+ "task": "t3_negctl",
+ "condition": "bare",
+ "model": "haiku",
+ "gold": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "result": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "final_text": "Mycobacterium is not supported in this sample. The largest species-level count is 3 clade reads, below the 10-read minimum.\n\nSpecies-level Mycobacterium rows in `data/spike_H0.report.gz`:\n\n| Taxon | Rank | Clade reads | Direct reads |\n|---|---|---|---|\n| *Mycobacterium spongiae* (886343) | S | 3 | 3 |\n| *Mycobacterium canetti* (78331) | S | 3 | 3 |\n\nThe genus Mycobacterium (1763) has 6 clade reads in total, but that is a genus-level count and not a single species call. *M. canetti* sits under the *M. tuberculosis* complex node (G1, 3 reads), which is also below the threshold.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 1,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && python3 -I -c \"\nimport gzip,sys\nrows=[]\nwith gzip.open('data/spike_H0.report.gz','rt') as f:\n    for line in f:\n        p=line.rstrip('\\n').split('\\t')\n        if len(p)<6: continue\n        name=p[5]\n        if 'Mycobacter' in name or p[3]=='S' and 'Mycobacter' in name:\n            rows.append((p[0],p[1],p[2],p[3],p[4],name))\nfor r in rows: print('\\t'.join(r))\nprint('---total lines', sum(1 for _ in gzip.open('data/spike_H0.report.gz','rt')))\n\" ; ls data",
+   "output": "  0.00\t8\t0\tO\t85007\t            Mycobacteriales\r\n  0.00\t6\t0\tF\t1762\t              Mycobacteriaceae\r\n  0.00\t6\t0\tG\t1763\t                Mycobacterium\r\n  0.00\t3\t3\tS\t886343\t                  Mycobacterium spongiae\r\n  0.00\t3\t0\tG1\t77643\t                  Mycobacterium tuberculosis complex\r\n  0.00\t3\t3\tS\t78331\t                    Mycobacterium canetti\r\n---total lines 358\r\neven.report.gz\nplasma.report.gz\nreagent_contaminant_genera.tsv\nspike_H0.report.gz\nspike_P0.report.gz",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "Mycobacterium is not supported in this sample. The largest species-level count is 3 clade reads, below the 10-read minimum.\n\nSpecies-level Mycobacterium rows in `data/spike_H0.report.gz`:\n\n| Taxon | Rank | Clade reads | Direct reads |\n|---|---|---|---|\n| *Mycobacterium spongiae* (886343) | S | 3 | 3 |\n| *Mycobacterium canetti* (78331) | S | 3 | 3 |\n\nThe genus Mycobacterium (1763) has 6 clade reads in total, but that is a genus-level count and not a single species call. *M. canetti* sits under the *M. tuberculosis* complex node (G1, 3 reads), which is also below the threshold.\n\nRESULT: {\"verdic"
+  }
+ ]
+}

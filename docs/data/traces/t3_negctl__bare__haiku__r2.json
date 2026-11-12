@@ -1,0 +1,40 @@
+{
+ "run": "t3_negctl__bare__haiku__r2",
+ "task": "t3_negctl",
+ "condition": "bare",
+ "model": "haiku",
+ "gold": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "result": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "final_text": "**Answer: Mycobacterium is not supported in this sample.**\n\nThe Kraken2 report `data/spike_H0.report.gz` has 6 lines matching Mycobacterium:\n\n| Rank | Clade reads | Direct reads | Taxon |\n|---|---|---|---|\n| G | 6 | 0 | *Mycobacterium* (genus) |\n| S | 3 | 3 | *Mycobacterium spongiae* |\n| G1 | 3 | 0 | *Mycobacterium tuberculosis complex* |\n| S | 3 | 3 | *Mycobacterium canetti* |\n\nThe largest single-species clade has 3 reads, below the 10-read minimum. The genus total of 6 is not a species call, and the tuberculosis complex line is a grouping rather than a species. The sample is human-only, so these low counts are most likely noise or misassignment, though the report cannot show which.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 1,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && ls -la data/ && python3 -I -c \"\nimport gzip,sys\nwith gzip.open('data/spike_H0.report.gz','rt') as f:\n    lines=f.readlines()\nprint(len(lines))\nfor l in lines:\n    p=l.rstrip('\\n').split('\\t')\n    if len(p)>=6 and 'mycobact' in p[5].lower():\n        print(l.rstrip('\\n'))\n\" ",
+   "output": "total 36\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:49 ./\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:49 ../\n-rw-r--r-- 1 ashenoy00000 1049089 2265 Nov 12 08:49 even.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 3967 Nov 12 08:49 plasma.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 9075 Nov 12 08:49 reagent_contaminant_genera.tsv\n-rw-r--r-- 1 ashenoy00000 1049089 4775 Nov 12 08:49 spike_H0.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 1987 Nov 12 08:49 spike_P0.report.gz\n358\r\n  0.00\t8\t0\tO\t85007\t            Mycobacteriales\r\n  0.00\t6\t0\tF\t1762\t              Mycobacteriaceae\r\n  0.00\t6\t0\tG\t1763\t                Mycobacterium\r\n  0.00\t3\t3\tS\t886343\t                  Mycobacterium spongiae\r\n  0.0",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "**Answer: Mycobacterium is not supported in this sample.**\n\nThe Kraken2 report `data/spike_H0.report.gz` has 6 lines matching Mycobacterium:\n\n| Rank | Clade reads | Direct reads | Taxon |\n|---|---|---|---|\n| G | 6 | 0 | *Mycobacterium* (genus) |\n| S | 3 | 3 | *Mycobacterium spongiae* |\n| G1 | 3 | 0 | *Mycobacterium tuberculosis complex* |\n| S | 3 | 3 | *Mycobacterium canetti* |\n\nThe largest single-species clade has 3 reads, below the 10-read minimum. The genus total of 6 is not a species call, and the tuberculosis complex line is a grouping rather than a species. The sample is human-only, so t"
+  }
+ ]
+}

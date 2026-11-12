@@ -1,0 +1,89 @@
+{
+ "run": "t2_spike__tool__sonnet__r1",
+ "task": "t2_spike",
+ "condition": "tool",
+ "model": "sonnet",
+ "gold": {
+  "detected": [
+   "enterococcus faecalis",
+   "escherichia coli",
+   "lactobacillus fermentum",
+   "pseudomonas aeruginosa",
+   "staphylococcus aureus"
+  ],
+  "missed": [
+   "bacillus subtilis",
+   "cryptococcus neoformans",
+   "listeria monocytogenes",
+   "saccharomyces cerevisiae",
+   "salmonella enterica"
+  ]
+ },
+ "result": {
+  "detected": [
+   "pseudomonas aeruginosa",
+   "escherichia coli",
+   "lactobacillus fermentum",
+   "enterococcus faecalis",
+   "staphylococcus aureus"
+  ],
+  "missed": [
+   "salmonella enterica",
+   "listeria monocytogenes",
+   "bacillus subtilis",
+   "saccharomyces cerevisiae",
+   "cryptococcus neoformans"
+  ]
+ },
+ "final_text": "Using the species-level rows (rank S) with at least 10 clade reads, 6 of the 10 spiked organisms are detected and 4 are missed.\n\n| Organism | Species clade reads | Result |\n|---|---|---|\n| pseudomonas aeruginosa | 811 | detected |\n| escherichia coli | 72 | detected |\n| lactobacillus fermentum (reported as Limosilactobacillus fermentum) | 26 | detected |\n| enterococcus faecalis | 6457 | detected |\n| staphylococcus aureus | 54 | detected |\n| salmonella enterica | 4 | missed (below 10) |\n| bacillus subtilis | 2 | missed (below 10) |\n| listeria monocytogenes | no species row | missed |\n| saccharomyces cerevisiae | not in the report | missed |\n| cryptococcus neoformans | not in the report | missed |\n\nFor Listeria, the report has only a genus-level row (315 reads), so *Listeria monocytogenes* has no species-level count. The Bacillus subtilis group row (11 reads) is a different clade from the species row, so I used the species count of 2.\n\nRESULT: {\"detected\": [\"pseudomonas aeruginosa\", \"escherichia coli\", \"lactobacillus fermentum\", \"enterococcus faecalis\", \"staphylococcus aureus\"], \"missed\": [\"salmonella enterica\", \"listeria monocytogenes\", \"bacillus subtilis\", \"saccharomyces cerevisiae\", \"cryptococcus neoformans\"]}\n\nI listed five organisms as missed in the RESULT line, although the table above shows only four rows marked \"missed\". Salmonella enterica, Bacillus subtilis, Listeria, Saccharomyces and Cryptococcus are the five that fail, and so the correct split is 5 detected and 5 mi",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 1,
+  "L1_tool_calls": 4,
+  "L1_tool_errors": 1,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cat truth/spike_manifest.tsv | head -50; python -m mockcheck --help",
+   "output": "sample\torganism\tfraction\tspiked_pairs\ttotal_pairs\nspike_P0\tPseudomonas aeruginosa\t0.01\t40000\t4000000\nspike_P0\tEscherichia coli\t0.001\t4000\t4000000\nspike_P0\tSalmonella enterica\t0.0001\t400\t4000000\nspike_P0\tLactobacillus fermentum\t1e-05\t40\t4000000\nspike_P0\tEnterococcus faecalis\t0.01\t40000\t4000000\nspike_P0\tStaphylococcus aureus\t0.001\t4000\t4000000\nspike_P0\tListeria monocytogenes\t0.0001\t400\t4000000\nspike_P0\tBacillus subtilis\t1e-05\t40\t4000000\nspike_P0\tSaccharomyces cerevisiae\t0.01\t40000\t4000000\nspike_P0\tCryptococcus neoformans\t0.001\t4000\t4000000\nspike_P1\tPseudomonas aeruginosa\t0.001\t4000\t4000000\nspike_P1\tEscherichia coli\t0.0001\t400\t4000000\nspike_P1\tSalmonella enterica\t1e-05\t40\t4000000\nspike_P1\tLacto",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "I'll read the report directly."
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "zcat data/spike_P0.report.gz | awk -F'\\t' '$4==\"S\"' | grep -iE \"aeruginosa|coli|enterica|fermentum|faecalis|aureus|monocytogenes|subtilis|cerevisiae|neoformans\"",
+   "output": "This Bash command contains multiple operations. The following part requires approval: awk -F'\\t' '$4==\"S\"'",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "zcat data/spike_P0.report.gz | grep -iE \"aeruginosa|coli|enterica|fermentum|faecalis|aureus|monocytogenes|subtilis|cerevisiae|neoformans\"",
+   "output": "  0.16\t6457\t6457\tS\t1351\t                  Enterococcus faecalis\n  0.00\t26\t26\tS\t1613\t                  Limosilactobacillus fermentum\n  0.00\t54\t54\tS\t1280\t                  Staphylococcus aureus\n  0.00\t11\t2\tG1\t653685\t                  Bacillus subtilis group\n  0.00\t2\t2\tS\t1423\t                    Bacillus subtilis\n  0.02\t871\t60\tG1\t136841\t                  Pseudomonas aeruginosa group\n  0.02\t811\t811\tS\t287\t                    Pseudomonas aeruginosa\n  0.00\t4\t4\tS\t28901\t                  Salmonella enterica\n  0.00\t72\t72\tS\t562\t                  Escherichia coli",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "zcat data/spike_P0.report.gz | grep -iE \"listeria|saccharomyces|cryptococcus\"",
+   "output": "  0.01\t315\t0\tF\t186820\t              Listeriaceae\n  0.01\t315\t315\tG\t1637\t                Listeria",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "Using the species-level rows (rank S) with at least 10 clade reads, 6 of the 10 spiked organisms are detected and 4 are missed.\n\n| Organism | Species clade reads | Result |\n|---|---|---|\n| pseudomonas aeruginosa | 811 | detected |\n| escherichia coli | 72 | detected |\n| lactobacillus fermentum (reported as Limosilactobacillus fermentum) | 26 | detected |\n| enterococcus faecalis | 6457 | detected |\n| staphylococcus aureus | 54 | detected |\n| salmonella enterica | 4 | missed (below 10) |\n| bacillus subtilis | 2 | missed (below 10) |\n| listeria monocytogenes | no species row | missed |\n| saccharom"
+  }
+ ]
+}

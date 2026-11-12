@@ -71,6 +71,7 @@ button.tog{font:14px system-ui,sans-serif;border:1px solid var(--line);backgroun
 .t-t1{color:var(--ok)}.t-t2{color:var(--acc)}.t-t3{color:var(--warn)}.t-t4{color:var(--bad)}
 .tiercard h3{margin-top:0}.ok{color:var(--ok)}.bad{color:var(--bad)}
 .card p{overflow-wrap:anywhere}
+.basis{font:600 11px system-ui,sans-serif;padding:2px 7px;border-radius:999px;border:1px solid var(--line);margin-left:6px;vertical-align:middle;white-space:nowrap}.b-sourced{color:var(--ok)}.b-our-reasoning{color:var(--mut)}.b-our-data{color:var(--acc)}.ssum{font-weight:400;display:block;margin:2px 0 0 1.2em}details pre{white-space:pre-wrap;overflow-wrap:anywhere;margin:4px 0}.srcs a{overflow-wrap:anywhere}
 .tw{overflow-x:auto}table.mini{border-collapse:collapse;font-size:.88rem;width:100%}table.mini th,table.mini td{border-bottom:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top}
 .dl{display:grid;grid-template-columns:minmax(120px,max-content) 1fr;gap:2px 12px;font-size:.9rem}.dl dt{font-weight:600;word-break:break-word}.dl dd{margin:0}
 #realdata select,#represent select{font:inherit;padding:6px 8px;margin:0 8px 8px 0;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit;max-width:100%}
@@ -121,6 +122,8 @@ button.tog{font:14px system-ui,sans-serif;border:1px solid var(--line);backgroun
 <section id="needdata"><h2>What is just a matter of collecting more data</h2><p class="sub">Gaps that better analysis cannot fix: they need new or newly released data.</p><div id="need-body"></div></section>
 
 <section id="represent"><h2>How each kind of data is represented</h2><div id="rep-intro"></div><div id="rep-dict"></div></section>
+
+<div id="p3-root"></div>
 
 <section id="toy"><h2>Try it: a toy classifier</h2>
 <p class="sub">This is a teaching toy with three <b>made-up</b> mini genomes, not real data. It shows the core idea behind k-mer classifiers such as Kraken2: chop a read into short words, look each word up, let the words vote.</p>
@@ -341,5 +344,6 @@ async function renderCookbook(){
 })();
 </script>
 <script src="phase2.js"></script>
+<script src="phase3.js"></script>
 </body>
 </html>

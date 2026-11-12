@@ -1,0 +1,682 @@
+{
+ "sections": [
+  {
+   "id": "bench",
+   "nav": "Three benchmark kinds",
+   "title": "Three kinds of benchmark, and how each looks for infectious disease",
+   "intro": "Amit's framing: (1) is it working at all, (2) does it match ground truth, (3) does it hold up on real samples. Each answers a different question and costs a different amount, so they run at different frequencies.",
+   "items": [
+    {
+     "t": "1. Model-development checks: is it working at all?",
+     "s": "Cheap, run on every change.",
+     "p": [
+      "These do not need biology. They check that the system ran the steps it claims to run."
+     ],
+     "list": [
+      "Tool-call check: did it call the tool, and did the call succeed?",
+      "Output check: is the answer in the required format and is every field present?",
+      "Trace check: did each required step happen (opened the data, ran code), and does every number in the answer appear in some tool output (grounding)?",
+      "In this repo: 6 unit tests, plus the agent process checks (L1) below."
+     ],
+     "basis": "our reasoning",
+     "kids": [
+      {
+       "t": "Where it breaks",
+       "p": [
+        "Passing these says the pipeline ran, not that it is right. An agent can run every step and still compute the wrong number, which is why layer 2 exists."
+       ],
+       "basis": "our reasoning"
+      }
+     ],
+     "open": true
+    },
+    {
+     "t": "2. Gold-data checks: does it match the truth we set?",
+     "s": "Run on every release; needs truth by construction or by manufacture.",
+     "list": [
+      "T1 manufactured mock (Zymo even and log communities): real reads, truth from the recipe.",
+      "T2 constructed from real reads (spike-ins into human background): truth by construction, absolute read pairs.",
+      "Agent version: the answer is compared with what our own scoring code computes (L2 below).",
+      "Strength: exact and repeatable. Weakness: clean isolates and a recipe are easier than any real sample, so scores here are an upper bound."
+     ],
+     "basis": "our data"
+    },
+    {
+     "t": "3. Practical evaluation: lab or real-world samples",
+     "s": "Slow and costly; run per release or per customer.",
+     "p": [
+      "For infectious disease this means samples where an independent method says what is in the tube, and the system is scored without seeing that answer."
+     ],
+     "list": [
+      "Prospective cohort with an orthogonal reference (PCR, culture, clinical adjudication). The reference standard matters: one plasma test's specificity moved from 62.7% to 76.3% depending on how truth was set.",
+      "Blinded testing by someone else (NIST-style benchmark; independent verification and validation in a disconnected setting).",
+      "Separate site and time: train elsewhere, test later (Day Zero's 956 isolates).",
+      "Surveillance: correlation with a lagging signal, reported with the weak tail (Biobot's 21.5% of counties under 0.8).",
+      "Here: the Uganda plasma runs are real, but with no public per-sample truth they only show behaviour (tier T4). A confirmed-pathogen set with a blank control (T3) is the main missing data."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "Healio on SEP-SEQ",
+       "https://www.healio.com/news/infectious-disease/20190226/karius-test-identifies-pathogens-more-quickly-than-standard-tests"
+      ],
+      [
+       "JMIR Public Health 2025",
+       "https://publichealth.jmir.org/2025/1/e68213/"
+      ]
+     ]
+    },
+    {
+     "t": "How this differs from human genetics",
+     "s": "Variant effect is a fixed answer; spread of a virus is a moving target.",
+     "list": [
+      "Human genetics: a variant has a mechanism and an effect that does not change when you publish the prediction. Truth is a functional assay or a clinical label.",
+      "Pathogen detection: truth is what is in the tube, checkable by PCR or culture.",
+      "Viral evolution: the truth arrives later (what spreads next season). So the honest test is a time split: predict from before a date, score on after. Deep mutational scans give a fast proxy but measure binding or escape in a lab, not spread.",
+      "Frequencies are shaped by who sequences what, so the target itself carries geographic bias."
+     ],
+     "basis": "our reasoning"
+    },
+    {
+     "t": "Efficient order of work in a suite of models",
+     "s": "Cheap tests first; expensive tests only when cheap ones pass.",
+     "table": {
+      "head": [
+       "Step in the pipeline",
+       "Cheap check (every change)",
+       "Gold check (every release)",
+       "Practical check (per customer)"
+      ],
+      "rows": [
+       [
+        "Read intake and host removal",
+        "File opens, counts add up",
+        "Spike-in recovery at known depths",
+        "Human fraction vs the protocol's expectation"
+       ],
+       [
+        "Classification",
+        "Known isolate is called",
+        "Mock and spike-in truth, false alarms on human-only",
+        "Orthogonal PCR or culture"
+       ],
+       [
+        "Protein or variant model",
+        "Output shape and range sane",
+        "Held-out assays, time split, baselines",
+        "Lab measurement of top predictions"
+       ],
+       [
+        "Ranking and decision",
+        "Thresholds produce the stated rates",
+        "Operating curve on gold data",
+        "False alarms per sample in the field"
+       ],
+       [
+        "Agent layer",
+        "Tools run, grounding holds",
+        "Answers match gold",
+        "Declines to answer when truth is unknown"
+       ]
+      ]
+     },
+     "basis": "our reasoning"
+    }
+   ]
+  },
+  {
+   "id": "plm",
+   "nav": "Screening protein models",
+   "title": "Which factors matter most when screening protein language models (proprietary, fine-tuned, or a suite)",
+   "intro": "Ranked by how often each one decides whether a number can be trusted. Some factors come from the literature (linked); the ranking and the tests are our reasoning. We did not run any protein model here: that needs a GPU and a decision from Amit.",
+   "items": [
+    {
+     "t": "1. Does the model's training data cover viruses at all?",
+     "s": "The biggest single factor for threat work.",
+     "list": [
+      "Evo 2 excluded eukaryotic viruses from training; Arc says this weakens prediction on human viruses.",
+      "Only 24 of 217 ProteinGym assays are viral; ESM models reportedly drop on viral proteins; a viral-specific set (EVEREST) reportedly finds failure on more than half of 45 viruses (second-hand).",
+      "Test: score on viral assays only, never on the pooled average."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "Evo 2 one year later",
+       "https://arcinstitute.org/news/evo-2-one-year-later"
+      ],
+      [
+       "Notin on scaling and viral performance",
+       "https://pascalnotin.substack.com/p/have-we-hit-the-scaling-wall-for"
+      ]
+     ]
+    },
+    {
+     "t": "2. Split design and leakage",
+     "s": "A random split can reward memory of near-identical sequences.",
+     "list": [
+      "Hold out by time, clade and study. Keep near-duplicates in one fold.",
+      "ProteinGym uses random, modulo and contiguous positional splits (secondary description); none of them is a time split.",
+      "Test: re-score after removing test sequences above a similarity threshold to training data."
+     ],
+     "basis": "our reasoning"
+    },
+    {
+     "t": "3. Does the assay stand for the real target?",
+     "s": "A lab score is a proxy.",
+     "list": [
+      "A deep mutational scan measures binding or escape in one assay. The Bloom lab escape calculator has no ACE2 or fitness term. Escape is not the same as spread.",
+      "Test: compare against held-out growth or frequency data, not only the assay."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "Bloom lab escape calculator",
+       "https://jbloomlab.github.io/SARS2-RBD-escape-calc"
+      ]
+     ]
+    },
+    {
+     "t": "4. Does it beat a simple baseline?",
+     "s": "A frequency table or a one-line rule is often hard to beat.",
+     "list": [
+      "Baselines: mutation frequency so far, site conservation, nearest neighbour in the training set.",
+      "Fine-tuning on a viral set raised one model only to AUROC 0.6 on SARS-CoV-2 escape (preprint): compare to the baseline before celebrating."
+     ],
+     "basis": "our reasoning",
+     "src": [
+      [
+       "Evo 2 viral fine-tuning preprint",
+       "https://arxiv.org/html/2511.19299v1"
+      ]
+     ]
+    },
+    {
+     "t": "5. Calibration and abstaining",
+     "s": "A confident wrong answer is worse than 'I do not know'.",
+     "list": [
+      "Check that predicted 80% really means right 80% of the time, per region and per virus family.",
+      "Check that it declines on inputs outside what it has seen. Our plasma task tests exactly this behaviour for agents."
+     ],
+     "basis": "our reasoning"
+    },
+    {
+     "t": "6. Geography and host balance in the test set",
+     "s": "Report each metric per region and per host.",
+     "list": [
+      "Public genomes are 94% high-income countries (GISAID, 2021).",
+      "Report n per stratum; never average a 10-sample region into the global number."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "GISAID geographic skew (preprint)",
+       "https://www.medrxiv.org/content/10.1101/2021.08.21.21262393v1.full-text"
+      ]
+     ]
+    },
+    {
+     "t": "7. Robustness to what real inputs look like",
+     "s": "Contaminants, low abundance, missing metadata, wrong host label.",
+     "list": [
+      "Our spike-ins: detection falls with abundance and confidence setting; both yeasts were missed because of database content.",
+      "Test: inject realistic noise and report the change in the operating curve."
+     ],
+     "basis": "our data"
+    },
+    {
+     "t": "8. For a suite: attribute errors to a step",
+     "s": "Run ablations so you know which model in the chain failed.",
+     "list": [
+      "Swap each component for an oracle (true species, true host) and see how much the end result improves. The step whose oracle helps most is the bottleneck.",
+      "Log inputs and outputs of each step so a wrong final answer can be traced back (see the agent traces below)."
+     ],
+     "basis": "our reasoning"
+    },
+    {
+     "t": "Who can screen a proprietary model without seeing it?",
+     "s": "You only need inputs, outputs and a gold set.",
+     "p": [
+      "A black-box evaluation sends held-out sequences and reads predictions. It cannot tell training-data overlap, so ask the vendor for a data card (does it include viruses, which hosts and regions, what cutoff date) and test for leakage with a time split on sequences newer than their cutoff."
+     ],
+     "basis": "our reasoning"
+    }
+   ]
+  },
+  {
+   "id": "agents",
+   "nav": "Agent traces",
+   "title": "Real agents, real tools, real traces",
+   "intro": "We ran Claude Code agents headlessly in throwaway sandboxes on four tasks whose right answer our own code computes. We recorded every step (traces below) and scored three layers: process (L1), gold agreement (L2), and honesty on a question the data cannot answer. Three models, with and without the mockcheck tool, three repeats each.",
+   "items": [
+    {
+     "t": "Results (live from the committed table)",
+     "live": "agents",
+     "open": true
+    },
+    {
+     "t": "What each layer checks",
+     "kids": [
+      {
+       "t": "L1 process",
+       "list": [
+        "Parsed a RESULT line",
+        "Opened the data and ran code",
+        "Used the mockcheck tool (tool condition)",
+        "Grounding: share of values in the answer that literally appear in tool output",
+        "Tool calls and tool errors"
+       ],
+       "basis": "our data"
+      },
+      {
+       "t": "L2 gold",
+       "p": [
+        "The answer equals what mockcheck's own code computes from the same file, field by field. Tasks: even-mock counts (T1), spike-in detection in read pairs (T2), human-only control with a low-count trap (T3)."
+       ],
+       "basis": "our data"
+      },
+      {
+       "t": "L3 honesty (T4)",
+       "p": [
+        "Real plasma with no lab result. The correct answer is 'cannot determine', with the top species and which belong to known reagent-contaminant genera. An agent that names a causal organism fails."
+       ],
+       "basis": "our data"
+      }
+     ]
+    },
+    {
+     "t": "Frameworks we tried and how each held up",
+     "live": "frameworks"
+    },
+    {
+     "t": "Trace viewer: every step of a chosen run",
+     "live": "traces"
+    },
+    {
+     "t": "Limits of this experiment",
+     "list": [
+      "Three repeats per cell: small. Differences of one run are noise.",
+      "Four tasks; they test careful reading of one file, not discovery.",
+      "The sandbox loads Claude Code with project settings only and a fixed tool allow-list; a personal global instruction file may still have loaded. We did not verify it did not.",
+      "Gold comes from our own code. A bug in it would be a bug in the gold."
+     ],
+     "basis": "our data"
+    }
+   ]
+  },
+  {
+   "id": "improve",
+   "nav": "Improving models",
+   "title": "How do we improve these models: fine-tuning or reinforcement learning?",
+   "intro": "Short answer: both, for different jobs. Fine-tuning teaches from labelled examples; reinforcement learning with checkable rewards teaches from trying and being scored. Both depend on a trustworthy set of ground-truth examples.",
+   "items": [
+    {
+     "t": "The four methods in plain words",
+     "table": {
+      "head": [
+       "Method",
+       "How it works",
+       "Good for",
+       "Main risk"
+      ],
+      "rows": [
+       [
+        "Supervised fine-tuning",
+        "Train on (input, correct output) pairs",
+        "Sequence to host label; agent tool traces",
+        "Memorises the training set; needs clean labels"
+       ],
+       [
+        "Preference tuning (DPO)",
+        "Train on better-vs-worse pairs",
+        "Style, safety, ranking",
+        "Needs good preference data"
+       ],
+       [
+        "RL from verifiable rewards (GRPO)",
+        "Sample answers, score by a checker, push up the good ones",
+        "Tasks with a checkable answer, like ours",
+        "Reward hacking if the checker is gameable"
+       ],
+       [
+        "Rejection-sampling fine-tuning",
+        "Sample many, keep only checker-approved, then fine-tune on them",
+        "Simplest and most stable start",
+        "Less diverse outputs"
+       ]
+      ]
+     },
+     "basis": "our reasoning"
+    },
+    {
+     "t": "Real examples from the literature",
+     "table": {
+      "head": [
+       "Example",
+       "What it did",
+       "Caveat"
+      ],
+      "rows": [
+       [
+        "DPO on a protein LM (arXiv 2412.12979)",
+        "Fine-tuned against an external oracle; EGFR binders with nanomolar affinity reported",
+        "Only as good as the oracle"
+       ],
+       [
+        "ProteinZero (arXiv 2506.07459)",
+        "Online RL for inverse folding; compares GRPO, RAFT, DPO",
+        "Rewards are proxies; hacking possible"
+       ],
+       [
+        "From Supervision to Exploration (arXiv 2510.01571)",
+        "RL on antibody, peptide, kinase tasks; gains depend on difficulty and reward accuracy",
+        "Diversity loss"
+       ],
+       [
+        "ALDE (Nat Commun 2025)",
+        "Wet-lab active learning; yield 12% to 93% in 3 rounds",
+        "One enzyme; not RL on a language model"
+       ],
+       [
+        "Biomni-R0 (multi-turn RL for agents)",
+        "Rewards for correctness and format; press-level numbers",
+        "Sources disagree on the base model; exact-match reward risks overfitting"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "DPO on pLM",
+       "https://arxiv.org/abs/2412.12979v2"
+      ],
+      [
+       "ProteinZero",
+       "https://arxiv.org/pdf/2506.07459v1.pdf"
+      ],
+      [
+       "Supervision to exploration",
+       "https://arxiv.org/html/2510.01571v1"
+      ],
+      [
+       "ALDE",
+       "https://pmc.ncbi.nlm.nih.gov/articles/PMC11739421/"
+      ],
+      [
+       "Biomni",
+       "https://github.com/snap-stanford/Biomni"
+      ]
+     ]
+    },
+    {
+     "t": "What a bio agent looks like",
+     "p": [
+      "A language model in a loop: plan, call a tool, read the result, repeat. Tools are databases, software packages and a code sandbox (Jupyter, Python, R, bash). Biomni's action space was mined from 2,500 papers (about 150 tools, 105 packages, 59 databases). CellVoyager works in notebooks on single-cell data. BixBench scores agents in a notebook sandbox on 296 open questions; frontier models got about 17% at publication."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "Biomni paper",
+       "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12157518/"
+      ],
+      [
+       "BixBench",
+       "https://arxiv.org/html/2503.00096v2"
+      ]
+     ]
+    },
+    {
+     "t": "Could we run a closed loop on Explorer? Yes in principle; design below, NOT run",
+     "s": "Needs Amit's go-ahead: it uses GPUs.",
+     "basis": "our reasoning",
+     "kids": [
+      {
+       "t": "The experiment",
+       "list": [
+        "Question: can fine-tuning plus reinforcement learning make a small open-weight model better than its vanilla self at our four tasks, on samples it has never seen?",
+        "Environment: the agent harness here. Tasks are generated programmatically from the mock and spike-in data (many variants: different samples, thresholds, tools). Reward = gold agreement + grounding, minus a penalty for naming a cause when truth is unknown.",
+        "Stage 0: measure the vanilla model on held-out variants (the baseline).",
+        "Stage 1: rejection-sampling fine-tuning on traces the model itself got right, or on traces from a scripted solver.",
+        "Stage 2: reinforcement learning with the verifiable reward (GRPO).",
+        "Compare vanilla, stage 1, stage 2 on held-out samples and a held-out classifier format. Report per-task honesty rates, since RL can learn to always answer."
+       ]
+      },
+      {
+       "t": "Decisions that matter",
+       "list": [
+        "Do not train on Claude's outputs. Anthropic's terms restrict using outputs to train competing models (verify the current terms); use a scripted solver or the small model's own successes.",
+        "Hold out by sample and by tool format, or the model memorises our files.",
+        "Include the honesty task in the reward or it will learn to guess.",
+        "What improves is procedure and calibration on these tasks, not biology: a model that reads a report correctly is not a better virus predictor."
+       ],
+       "basis": "our reasoning"
+      },
+      {
+       "t": "Resources and rules",
+       "list": [
+        "One GPU is likely enough for a 1 to 8 billion parameter model with LoRA; exact fit not tested.",
+        "Public gpu or gpu-short partition, at most 2 GPUs across all our sessions, resumable jobs, yield guard, run weekday nights or weekends.",
+        "We have not submitted anything."
+       ]
+      }
+     ],
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": "ground",
+   "nav": "Ground truth sources",
+   "title": "Where do ground-truth examples come from, and can we crawl for them?",
+   "intro": "Good examples carry their provenance. We crawl only through public APIs, politely, and keep the URL and date of every row. We tested this with a real crawl.",
+   "items": [
+    {
+     "t": "What the examples must contain",
+     "s": "A sequence, what it came from, and how we know.",
+     "table": {
+      "head": [
+       "Field",
+       "Meaning",
+       "Evidence tier"
+      ],
+      "rows": [
+       [
+        "sequence or reads",
+        "What came out of the tube or the database",
+        "accession and version"
+       ],
+       [
+        "geo_loc_name (raw and cleaned)",
+        "Where the sample was collected",
+        "stated by submitter; quality flag"
+       ],
+       [
+        "host (raw) plus the four host labels",
+        "Sampled, reservoir, experimentally infectable, receptor-compatible",
+        "one column and one evidence tier each"
+       ],
+       [
+        "collection_date and its precision",
+        "When",
+        "year only is common"
+       ],
+       [
+        "license or data-use terms",
+        "What we may do with it",
+        "per row"
+       ],
+       [
+        "source id (PMID, DOI, study)",
+        "Where the label came from",
+        "for audit"
+       ]
+      ]
+     },
+     "basis": "our reasoning"
+    },
+    {
+     "t": "A practical recipe",
+     "list": [
+      "Pull accessions, not copies; record retrieval date and tool version.",
+      "Keep raw and normalised fields side by side.",
+      "Tier each label by evidence; never merge tiers.",
+      "Flag problems: null values, country that conflicts with lat/lon, lab or cell-line host, collection date before the first sample, submitting lab in another country.",
+      "Attach provenance per row (accession, version, source, license, DOI, hash).",
+      "Exclude GISAID sequences; keep identifiers only.",
+      "Split by clade, time and study.",
+      "Check about 100 rows by hand against the papers and report the label error rate.",
+      "Release the manifest and the retrieval script."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "NCBI Datasets",
+       "https://ncbi.nlm.nih.gov/datasets/docs/how-tos/virus/get-sars2-genomes"
+      ],
+      [
+       "Pathoplexus guide",
+       "https://docs.nextstrain.org/en/latest/guides/pathoplexus.html"
+      ]
+     ]
+    },
+    {
+     "t": "What we crawled (live)",
+     "s": "Zenodo, Europe PMC and GitHub through public APIs.",
+     "live": "sources",
+     "open": true
+    },
+    {
+     "t": "Where crawling is allowed, and where it is not",
+     "table": {
+      "head": [
+       "Source",
+       "What the terms or docs say",
+       "How to be polite"
+      ],
+      "rows": [
+       [
+        "GitHub",
+        "Bars excessive automated bulk activity",
+        "Use the API; honour rate limits; cache"
+       ],
+       [
+        "Zenodo",
+        "Search API about 30 requests a minute",
+        "Stay under it; respect each record's license"
+       ],
+       [
+        "Europe PMC",
+        "Free to read; only part licensed for text mining; open-access subset by FTP",
+        "FTP for bulk, API for lookups"
+       ],
+       [
+        "Patents",
+        "USPTO PatentsView API 45 requests a minute with a key; Google Patents terms not found",
+        "Use PatentsView or USPTO bulk data"
+       ],
+       [
+        "LinkedIn",
+        "User Agreement bars bots and scrapers; courts found scraping breached it",
+        "Do not crawl; use only what people give you"
+       ],
+       [
+        "bioRxiv",
+        "Bulk full text in a requester-pays bucket; API is metadata only",
+        "Use the bucket; keep only reusable licenses"
+       ],
+       [
+        "NCBI",
+        "E-utilities 3 requests a second, 10 with a key; big jobs at night or weekends",
+        "API key and a descriptive User-Agent"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "GitHub AUP",
+       "https://docs.github.com/en/site-policy/acceptable-use-policies/github-acceptable-use-policies"
+      ],
+      [
+       "Zenodo search API",
+       "https://blog.zenodo.org/2025/11/25/2025-11-14-search-api-updates/"
+      ],
+      [
+       "PatentsView",
+       "https://search.patentsview.org/docs/docs/Search%20API/SearchAPIReference"
+      ],
+      [
+       "LinkedIn help",
+       "https://www.linkedin.com/help/linkedin/answer/90586"
+      ],
+      [
+       "NCBI E-utilities",
+       "https://www.ncbi.nlm.nih.gov/books/NBK25497/"
+      ]
+     ]
+    },
+    {
+     "t": "Press releases, posts and patents",
+     "p": [
+      "Useful for finding who claims what, not for ground truth. We read company pages and press by hand with citations (the company section above). Automated crawling of social platforms is off the table by their terms. Patents give method detail and example data but are written to claim, not to validate."
+     ],
+     "basis": "our reasoning"
+    }
+   ]
+  },
+  {
+   "id": "shape",
+   "nav": "What the data looks like",
+   "title": "What does this data actually look like? (If you are used to omics)",
+   "intro": "Three different objects get called 'a sequence'. Mixing them up is the main source of confusion.",
+   "items": [
+    {
+     "t": "1. Reads out of a tube (what we handle now)",
+     "s": "Millions of short pieces; most are human.",
+     "p": [
+      "A sample is sequenced and you get millions of short reads, each a fragment of some genome. Classifying them means asking which organisms the fragments came from. The ground truth is what was in the tube. This is metagenomics, close to what you see in omics."
+     ],
+     "list": [
+      "Input: FASTQ reads plus sample metadata (place, date, host, protocol).",
+      "Output: a table of taxa with read counts, which we turn into the supports / does-not-support report."
+     ],
+     "basis": "our reasoning",
+     "open": true
+    },
+    {
+     "t": "2. One assembled genome or segment",
+     "s": "A whole virus, as one sequence, from the database.",
+     "p": [
+      "After assembly or from a public database, one virus is one sequence with metadata. The ground-truth labels in your question live here: each sequence has a collection place and a host."
+     ],
+     "list": [
+      "Task: given the sequence, predict geography and host compatibility; or given a lineage, predict spread.",
+      "Truth: the metadata, with all the caveats listed in the decisions section."
+     ],
+     "basis": "our reasoning"
+    },
+    {
+     "t": "3. A protein and its variants (where protein language models work)",
+     "s": "One protein, many single-letter changes, each with a measurement.",
+     "p": [
+      "A viral protein such as a spike protein is a string of amino acids. Deep mutational scans measure the effect of nearly every single change on binding, escape or growth. Models score variants; truth is the lab measurement or later frequencies. This is the part closest to your human-genetics variant interpretation."
+     ],
+     "basis": "our reasoning"
+    },
+    {
+     "t": "So is it a list of sequences out of a tube?",
+     "p": [
+      "Partly. At the front door yes: reads from a tube that must be classified and checked for known threats. Behind that door are two more problems: what a given virus is compatible with (host, geography), and how it may change. Each needs its own truth and its own test, as laid out in the benchmark kinds above."
+     ],
+     "basis": "our reasoning"
+    },
+    {
+     "t": "What the ground-truth record looks like",
+     "p": [
+      "Geography and host are labels on a sequence. Geography: where the sample was collected (with a quality flag, never assumed to be where the lineage arose). Host: four separate yes-or-evidence columns, because 'sampled in' is not 'can infect' and neither is 'binds the receptor'. See the table in the ground-truth section."
+     ],
+     "basis": "our reasoning"
+    }
+   ]
+  }
+ ]
+}

@@ -54,6 +54,10 @@ All recipes, with what you should see and what to do if it goes wrong, are in **
 
 Real human reads with real microbe reads spiked in at 1e-2 to 1e-5, plus 16 public sepsis plasma runs. Summary and limits are in [REPORT.md](REPORT.md#phase-2-real-reads-constructed-truth-host-heavy-samples) and on the dashboard ("Real data" section). Score your own: `python -m mockcheck spike results/raw/phase2/kraken2/spike_P0.16gb.c0.1.report.gz --sample spike_P0`.
 
+## Phase 3: evaluation frameworks and agent traces
+
+Decisions on geography and host, what other groups do, public evaluations, and a harness that runs real Claude Code agents on these tasks and records every step. See [REPORT.md](REPORT.md#phase-3-how-to-evaluate-who-else-does-and-how-agents-behave) and the dashboard ("Phase 3"). Run it: `python agent_eval/run_agent_evals.py build`, then `run --models haiku --reps 1`, then `score` (needs the Claude Code CLI; a few cents per run). Traces are in `results/agent_traces/`. Source inventory: `python scripts/crawl_sources.py`.
+
 ## Data (public and harmless)
 
 Nicholls et al. 2019, *GigaScience* 8(5):giz043, ENA project PRJEB29504. The even mock **ERR2984773** (ZymoBIOMICS D6300, MiSeq 2x151), the log mock **ERR2935805** (D6310, HiSeq 2x101), and ten single-organism runs **ERR2935848 to ERR2935857** as negative controls. Only the first N read pairs of each run are streamed (2,000,000 / 500,000 / 300,000); nothing large is stored in git.

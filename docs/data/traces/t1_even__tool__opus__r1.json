@@ -1,0 +1,47 @@
+{
+ "run": "t1_even__tool__opus__r1",
+ "task": "t1_even",
+ "condition": "tool",
+ "model": "opus",
+ "gold": {
+  "found": 7,
+  "false": 1
+ },
+ "result": {
+  "found": 7,
+  "false": 1
+ },
+ "final_text": "I parsed the report directly in Python and did not use `mockcheck`. There are 20 rows with rank code exactly `S`, totalling 237,500 clade reads. I renormalised each one to a percent of that total.\n\n**Species called (at least 0.1%):**\n\n| Species | % of species reads | Expected? |\n|---|---|---|\n| limosilactobacillus fermentum | 61.52 | yes (renamed Lactobacillus fermentum) |\n| bacillus spizizenii | 15.95 | **no** |\n| enterococcus faecalis | 14.62 | yes |\n| pseudomonas aeruginosa | 3.80 | yes |\n| staphylococcus aureus | 1.51 | yes |\n| salmonella enterica | 1.29 | yes |\n| escherichia coli | 0.92 | yes |\n| listeria monocytogenes | 0.34 | yes |\n\n**Expected species not called:**\n- **Bacillus subtilis:** only 2 reads (about 0.001%). Most Bacillus reads went to *Bacillus spizizenii* (37,874 reads). Taxonomically spizizenii is close to subtilis, but you allowed only the fermentum rename, so spizizenii counts as a false call.\n- **Saccharomyces cerevisiae and Cryptococcus neoformans:** no species rows at all. The two yeasts appear to be missing from this database, or they went unclassified.\n\nAll other species rows are below 0.1%. The largest of them is *Actinomyces oris* with 41 reads.\n\n**Result:** 7 of the 10 expected species were called, plus 1 called species that is not expected.\n\nRESULT: {\"found\": 7, \"false\": 1}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 2,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_tool; ls; cat truth/mock_even.tsv; python -I -c \"\nimport gzip\nrows=[l.rstrip('\\n').split('\\t') for l in gzip.open('data/even.report.gz','rt') if l.strip()]\ns=[(r[5].strip().lower(),int(r[1])) for r in rows if r[3].strip()=='S']\nt=sum(c for _,c in s); print(len(rows),len(s),t)\nfor n,c in sorted(s,key=lambda x:-x[1]):\n  p=100*c/t\n  if p>=0.05: print(round(p,4),n)\n\"",
+   "output": "config/\ndata/\nmockcheck/\ntruth/\norganism\texpected_percent\nPseudomonas aeruginosa\t12\nEscherichia coli\t12\nSalmonella enterica\t12\nLactobacillus fermentum\t12\nEnterococcus faecalis\t12\nStaphylococcus aureus\t12\nListeria monocytogenes\t12\nBacillus subtilis\t12\nSaccharomyces cerevisiae\t2\nCryptococcus neoformans\t2\n124 20 237500\r\n61.5192 limosilactobacillus fermentum\r\n15.9469 bacillus spizizenii\r\n14.6232 enterococcus faecalis\r\n3.7971 pseudomonas aeruginosa\r\n1.512 staphylococcus aureus\r\n1.2935 salmonella enterica\r\n0.9225 escherichia coli\r\n0.3415 listeria monocytogenes",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_tool; python -I -c \"\nimport gzip\nrows=[l.rstrip('\\n').split('\\t') for l in gzip.open('data/even.report.gz','rt') if l.strip()]\nfor r in rows:\n  if r[3].strip().startswith('S'): print(r[1],repr(r[3]),r[5].strip())\n\"",
+   "output": "37874 'S' Bacillus spizizenii\r\n1 'S1' Bacillus spizizenii ATCC 6633 = JCM 2499\r\n2 'S' Bacillus subtilis\r\n5 'S' Bacillus mycoides\r\n811 'S' Listeria monocytogenes\r\n4 'S1' Listeria monocytogenes 07PF0776\r\n3 'S1' Listeria monocytogenes serotype 7 str. SLCC2482\r\n3591 'S' Staphylococcus aureus\r\n34730 'S' Enterococcus faecalis\r\n146108 'S' Limosilactobacillus fermentum\r\n41 'S' Actinomyces oris\r\n1 'S' Micromonospora sp. NBRC 110009\r\n1 'S' Cutibacterium acnes\r\n3072 'S' Salmonella enterica\r\n19 'S1' Salmonella enterica subsp. enterica\r\n6 'S2' Salmonella enterica subsp. enterica serovar Birkenhead\r\n1 'S2' Salmonella enterica subsp. enterica serovar Abony\r\n1 'S3' Salmonella enterica subsp. enterica serova",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "I parsed the report directly in Python and did not use `mockcheck`. There are 20 rows with rank code exactly `S`, totalling 237,500 clade reads. I renormalised each one to a percent of that total.\n\n**Species called (at least 0.1%):**\n\n| Species | % of species reads | Expected? |\n|---|---|---|\n| limosilactobacillus fermentum | 61.52 | yes (renamed Lactobacillus fermentum) |\n| bacillus spizizenii | 15.95 | **no** |\n| enterococcus faecalis | 14.62 | yes |\n| pseudomonas aeruginosa | 3.80 | yes |\n| staphylococcus aureus | 1.51 | yes |\n| salmonella enterica | 1.29 | yes |\n| escherichia coli | 0.92 |"
+  }
+ ]
+}

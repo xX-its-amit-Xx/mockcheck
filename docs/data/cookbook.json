@@ -106,6 +106,18 @@
       ],
       "expect": "The generic format needs two columns, organism and percent, and already gets the full report. A proper reader adds the tool-specific warnings (such as Kraken2's reads stuck at genus level).",
       "if_wrong": "Check tests/test_mockcheck.py for how a reader is tested against the committed tables."
+    },
+    {
+      "id": "agent-eval",
+      "title": "10. Check how an AI agent handles these reports (with traces)",
+      "for": "Anyone who wants to see what a real agent does with a classifier report, and score its steps and its answer, not just the final number.",
+      "steps": [
+        "python agent_eval/run_agent_evals.py build                      # makes two throwaway sandboxes (with and without the mockcheck tool) under C:/Temp",
+        "python agent_eval/run_agent_evals.py run --models haiku --reps 1   # real Claude Code agents, one per task and condition",
+        "python agent_eval/run_agent_evals.py score                        # writes results/agent_eval_runs.tsv and one trace file per run"
+      ],
+      "expect": "One row per run: did it open the data and run code (L1), is every number in its answer traceable to tool output, does the answer equal what mockcheck's own code computes (L2), and does it decline when the data cannot answer. Each run's steps are in results/agent_traces/.",
+      "if_wrong": "Needs the Claude Code CLI installed and logged in (it calls the models and costs a few cents per run). Set MC_AGENT_WORK to change where sandboxes go. If every agent disagrees with gold in the same way, check the task wording and the gold first: that is what happened in our round 1."
     }
   ]
 }

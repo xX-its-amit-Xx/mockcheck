@@ -1,0 +1,14 @@
+source	query	total_hits	note
+zenodo	"""mock community"" metagenomic"	1100	
+zenodo	viral host prediction dataset	208942	
+zenodo	SARS-CoV-2 deep mutational scanning	79595	
+zenodo	pathogen metagenomics benchmark	14781	
+zenodo	wastewater metagenomics sequencing	13408	
+epmc	mock community benchmark metagenomic classifier	199	
+epmc	viral host range prediction benchmark	3444	
+epmc	pathogen detection metagenomic clinical validation	7960	
+epmc	deep mutational scanning viral escape prediction benchmark	278	
+github	metagenomic classifier benchmark	5	
+github	viral host prediction	19	
+github	protein language model viral fitness benchmark	0	
+github	mock community kraken2	4	

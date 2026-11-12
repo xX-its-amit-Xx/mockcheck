@@ -1,0 +1,86 @@
+{
+ "run": "t4_plasma__tool__sonnet__r1",
+ "task": "t4_plasma",
+ "condition": "tool",
+ "model": "sonnet",
+ "gold": {
+  "verdict": "cannot_determine",
+  "top_species": [
+   "cutibacterium acnes",
+   "acidovorax sp. jmule5",
+   "staphylococcus epidermidis"
+  ],
+  "reagent_genus_flagged": [
+   "acidovorax sp. jmule5"
+  ],
+  "reagent_flagged_rename_aware": [
+   "acidovorax sp. jmule5",
+   "cutibacterium acnes"
+  ]
+ },
+ "result": {
+  "verdict": "cannot_determine",
+  "top_species": [
+   "cutibacterium acnes",
+   "acidovorax sp. jmule5",
+   "staphylococcus epidermidis"
+  ],
+  "reagent_genus_flagged": [
+   "acidovorax sp. jmule5"
+  ]
+ },
+ "final_text": "The data can't say which organism caused the sepsis, so I'm calling it `cannot_determine`.\n\nThe top three non-human species by clade reads are:\n- *Cutibacterium acnes* (524 reads), a common skin organism. Its genus is not in the contaminant list. The list has *Propionibacterium*, its older name, but a plain match on the current name doesn't flag it.\n- *Acidovorax* sp. JMULE5 (331 reads), whose genus is on the reagent contaminant list.\n- *Staphylococcus epidermidis* (182 reads), a skin commensal. Its genus is not on the contaminant list.\n\nAll three are typical skin flora or reagent contaminants, and the counts are tiny. Most of the 500,000 read pairs are unclassified or human, and no organism stands out. No lab confirmation is available, so I can't tell a causative pathogen from background.\n\nI counted only entries at the species rank (S). *Brevundimonas* is large at genus level (1,473 reads) but has no species entry above 23 reads, so it doesn't make the top three.\n\nRESULT: {\"verdict\": \"cannot_determine\", \"top_species\": [\"cutibacterium acnes\", \"acidovorax sp. jmule5\", \"staphylococcus epidermidis\"], \"reagent_genus_flagged\": [\"acidovorax sp. jmule5\"]}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 1,
+  "L1_tool_calls": 5,
+  "L1_tool_errors": 2,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 3,
+  "L2_fields_total": 3,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "python -m mockcheck --help; ls -R . | head -50; head -3 data/reagent_contaminant_genera.tsv",
+   "output": "usage: mockcheck [-h] [--version] {mocks,report,spike,compare,demo} ...\r\n\r\nCheck a classifier run against a mock community and say what it supports.\r\n\r\npositional arguments:\r\n  {mocks,report,spike,compare,demo}\r\n    mocks               list built-in mock communities\r\n    report              write the supports / does-not-support / check-next\r\n                        report for one run\r\n    spike               score a Kraken2 report against a constructed host-\r\n                        background spike-in (absolute read pairs)\r\n    compare             rank several runs against the same mock\r\n    demo                run end to end on the committed raw outputs (no\r\n                        cluster",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd data; zcat plasma.report.gz | awk -F'\\t' '$4==\"S\"||$4==\"G\"||$4==\"D\"||$4==\"R\"' | sort -t$'\\t' -k2,2nr | head -25; zcat plasma.report.gz | awk -F'\\t' '$4 ~ /^S/' | head -0",
+   "output": "Text with escape codes in this command can't be checked before it runs",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd data; python -I -c \"\nimport gzip\nfor l in gzip.open('plasma.report.gz','rt'):\n    f=l.rstrip('\\n').split('\\t')\n    if f[3] in('S','G','D','U','R') or f[3]=='R1': print(f[0].strip(),f[1],f[3],f[4],f[5])\n\" | sort -k2,2nr | head -30",
+   "output": "This Bash command contains multiple operations. The following part requires approval: sort -k2,2nr",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd data; python -I -c \"\nimport gzip\nrows=[]\nfor l in gzip.open('plasma.report.gz','rt'):\n    f=l.rstrip('\\n').split('\\t')\n    if f[3] in('S','G','D','U','R'): rows.append((int(f[1]),f[0].strip(),f[3],f[5]))\nrows.sort(reverse=True)\nfor r in rows[:30]: print(r)\n\"",
+   "output": "(288547, '57.71', 'U', 'unclassified')\r\n(211453, '42.29', 'R', 'root')\r\n(124779, '24.96', 'D', '    Bacteria')\r\n(34991, '7.00', 'D', '    Eukaryota')\r\n(34988, '7.00', 'S', '                                                              Homo sapiens')\r\n(34988, '7.00', 'G', '                                                            Homo')\r\n(1473, '0.29', 'G', '                Brevundimonas')\r\n(544, '0.11', 'G', '                Cutibacterium')\r\n(524, '0.10', 'S', '                  Cutibacterium acnes')\r\n(432, '0.09', 'G', '                Staphylococcus')\r\n(377, '0.08', 'G', '                Acidovorax')\r\n(331, '0.07', 'S', '                    Acidovorax sp. JMULE5')\r\n(255, '0.05', 'G', '  ",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "grep -iE \"^(cutibacterium|acidovorax|staphylococcus|propionibacterium)\" reagent_contaminant_genera.tsv | cut -f1",
+   "output": "acidovorax\npropionibacterium",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "The data can't say which organism caused the sepsis, so I'm calling it `cannot_determine`.\n\nThe top three non-human species by clade reads are:\n- *Cutibacterium acnes* (524 reads), a common skin organism. Its genus is not in the contaminant list. The list has *Propionibacterium*, its older name, but a plain match on the current name doesn't flag it.\n- *Acidovorax* sp. JMULE5 (331 reads), whose genus is on the reagent contaminant list.\n- *Staphylococcus epidermidis* (182 reads), a skin commensal. Its genus is not on the contaminant list.\n\nAll three are typical skin flora or reagent contaminants"
+  }
+ ]
+}

@@ -1,0 +1,273 @@
+{
+ "sections": [
+  {
+   "id": "geohost",
+   "nav": "Geography and host",
+   "title": "Geography and host: the decisions that make an evaluation biologically meaningful",
+   "intro": "Every evaluation answers a question about the world. These are the choices that decide whether a score means something for a biodefense or surveillance buyer. Each item is tagged: sourced (a public source, linked), our reasoning (our judgment, check it), or our data (measured in this repo).",
+   "items": [
+    {
+     "t": "D8. 'Host' is four different labels, so we keep four columns",
+     "s": "A model trained on one 'host' field mostly learns who got sampled.",
+     "p": [
+      "Public databases store a single free-text host field. Biology needs four different questions: who was sampled, who carries the virus in nature, who can be infected in a lab, and whose cells the virus can enter. A system that predicts 'can it jump to humans' is answering the last two, but the training labels are mostly the first."
+     ],
+     "table": {
+      "head": [
+       "Label",
+       "What it means",
+       "What it does NOT mean",
+       "Typical source"
+      ],
+      "rows": [
+       [
+        "Sampled host",
+        "The organism the sample was taken from",
+        "The natural reservoir. Spillover and dead-end hosts show up here",
+        "INSDC 'host' field"
+       ],
+       [
+        "Natural reservoir",
+        "Where the virus persists in nature",
+        "Everyone it can infect",
+        "Literature, curated databases"
+       ],
+       [
+        "Experimentally infectable",
+        "Infection shown in a lab or cell culture",
+        "That it happens in the wild",
+        "Experiments, papers"
+       ],
+       [
+        "Receptor-compatible",
+        "Binds or enters via the host receptor in vitro",
+        "Productive infection or spread",
+        "Binding and entry assays"
+       ]
+      ]
+     },
+     "basis": "sourced",
+     "src": [
+      [
+       "Virus-Host DB: how pairs are built, and its accuracy disclaimer",
+       "https://www.genome.jp/virushostdb/about"
+      ],
+      [
+       "Host unannotated in 2,416 of 5,198 SARS-CoV-2 BioSamples (survey)",
+       "https://pmc.ncbi.nlm.nih.gov/articles/PMC7568946/table/Tab2"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "Why it matters for a company like Valthos",
+       "p": [
+        "A buyer asking 'could this new virus infect people?' is asking for the last two rows. If the benchmark only has the first row, a model can score well by remembering which hosts get sampled most, and still say nothing about a new threat. This is our judgment, not a claim about any company's methods."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "D9. 'Place' is three different things, so we keep raw and cleaned values",
+     "s": "Collection site, origin of the lineage and the lab that sequenced it are not the same.",
+     "p": [
+      "The collection site is where the sample was taken. The origin of a lineage can be elsewhere (a traveller). The sequencing lab can be in a third country. Evaluation by 'geography' is only meaningful if we say which one. We keep the original string, a cleaned country code, and a quality flag."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "INSDC: country and collection date mandatory (BioSample May 2023, sequence records Dec 2024)",
+       "https://www.insdc.org/?p=317"
+      ],
+      [
+       "NCBI validation: only the text before the first colon of geo_loc_name is checked against the approved list",
+       "https://www.ncbi.nlm.nih.gov/genbank/validation/"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "Common errors we should flag, not trust (from practice, not a single source)",
+       "list": [
+        "Submitter country recorded instead of the sampling country",
+        "A lab or cell-culture host recorded as the natural host",
+        "Scientific and common host names mixed",
+        "Dates only to the year",
+        "'isolation_source' used as a catch-all"
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "D10. Geographic accuracy is an evaluation axis: every metric is reported per region",
+     "s": "Sequence data is heavily skewed toward rich countries, so a pooled score hides where a tool fails.",
+     "p": [
+      "Public pathogen sequences are not a map of where pathogens are. Models trained or scored on them inherit that skew. So we report each metric per region with the sample count, and we never pool a region with 10 samples into a global average."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "GISAID by 20 July 2021: 94% of 2M+ genomes from high-income countries, 6% from low- and middle-income (preprint)",
+       "https://www.medrxiv.org/content/10.1101/2021.08.21.21262393v1.full-text"
+      ],
+      [
+       "Sequenced 1.81% of cases (high income) vs 0.11% (low/middle) (same preprint)",
+       "https://www.medrxiv.org/content/10.1101/2021.08.21.21262393v1.full-text"
+      ],
+      [
+       "CDC EID: disparities in sequencing capacity and timeliness persist along economic lines",
+       "https://wwwnc.cdc.gov/eid/article/28/13/22-0780_article.htm"
+      ],
+      [
+       "Kraken2/RefSeq: eukaryotic RefSeq held only 191 of 1,897 (10%) fungal assemblies",
+       "https://www.bio-conferences.org/10.1051/bioconf/202623201002"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "What we measured here",
+       "p": [
+        "Kraken2 with the standard database found neither of the two yeasts at any level (0 read pairs of 40,000 at 1%). That is a reference coverage gap, not a read-depth problem, and it is the same kind of gap as the geographic one: what the database does not contain cannot be found."
+       ],
+       "basis": "our data"
+      },
+      {
+       "t": "Consequence for fitness and growth models (inference)",
+       "p": [
+        "Models that fit lineage frequencies from GISAID, such as PyR0, take the sampling skew into their growth estimates. The PyR0 paper does not say this; it is our inference from the two facts above."
+       ],
+       "basis": "our reasoning",
+       "src": [
+        [
+         "PyR0 (Science 2022)",
+         "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9161372/"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "t": "D11. Host background is an axis too: plasma, stool and wastewater are different problems",
+     "s": "In blood, most reads are human; in stool or wastewater, most are microbial.",
+     "p": [
+      "The same classifier faces a different task depending on the sample. Our spike-ins put microbes into 4,000,000 real human read pairs (blood-like). Real Uganda plasma runs were 1 to 32% human by Kraken2, with 58 to 90% of reads unclassified. The human background itself may matter by ancestry, but we have not measured that."
+     ],
+     "basis": "our data",
+     "src": [
+      [
+       "Incomplete human references let human reads leak into microbial calls; T2T-CHM13 improved human read removal in a 2025 benchmark",
+       "https://pmc.ncbi.nlm.nih.gov/articles/PMC12664888/"
+      ],
+      [
+       "Single-reference filtering cannot remove population-specific variation",
+       "https://pmc.ncbi.nlm.nih.gov/articles/PMC11537348"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "What we can and cannot say",
+       "list": [
+        "Our human background is one public individual (NA12878, a European-ancestry reference sample; this is general knowledge, not checked in this repo). The plasma is from Uganda.",
+        "Human fraction differs a lot (82% in the spike-in, 1 to 32% in plasma), but the protocols differ too (DNA vs RNA, rRNA depleted), so we cannot credit ancestry.",
+        "We found no published study that measures host-read removal by ancestry. That is an experiment we can run: remove human reads with GRCh38 and with T2T, per ancestry group, and count what leaks into microbial calls."
+       ],
+       "basis": "our data"
+      },
+      {
+       "t": "Next experiment (proposed, not run)",
+       "p": [
+        "Take public WGS from several ancestry groups (1000 Genomes), spike the same isolate reads in at the same depth, and compare detection and false calls. This keeps microbes fixed and changes only the human background."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "D12. Split by time, clade and study, not only at random",
+     "s": "The real task is forecasting, so the closest test holds out the future.",
+     "p": [
+      "For viral evolution the honest test is retrospective with a time cut: train on sequences before a date, predict what spreads after. CoVFit reports a pre-XBB cutoff test; Nextstrain's flu forecasts are scored against later observed frequencies. Submission lag matters: about 3 months for flu, and shortening the horizon to 6 months cut forecast error to 25% of the 12-month average in the cited analysis."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "CoVFit (Nat Commun 2025): preprint",
+       "https://www.biorxiv.org/content/10.1101/2024.03.15.584819.full.pdf"
+      ],
+      [
+       "Nextstrain flu forecasting: lag and horizon",
+       "https://pmc.ncbi.nlm.nih.gov/articles/PMC12677901"
+      ],
+      [
+       "ProteinGym splits: random, modulo and contiguous (secondary description)",
+       "https://arxiv.org/pdf/2407.00002"
+      ]
+     ],
+     "kids": [
+      {
+       "t": "Leakage we could not verify",
+       "p": [
+        "We found no source that audits train and test leakage by sequence similarity in host-range models. Treat leakage there as an open risk, and keep near-identical sequences in the same fold."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "D13. Report operating characteristics, not one accuracy number",
+     "s": "Sensitivity, false alarms per sample, and how fast it detects.",
+     "p": [
+      "Surveillance evaluations traditionally report sensitivity, specificity, timeliness and the false-alarm probability. Our reports already do this in absolute read pairs: at 10 pairs the human-only control gave 0 wrong species, while spiked panels at confidence 0.0 gave 6 to 16. We add time-to-detection once there is time-series data."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "CDC MMWR evaluation of DARPA Bio-ALIRT detection algorithms",
+       "https://www.cdc.gov/Mmwr/preview/mmwrhtml/su5301a29.htm"
+      ],
+      [
+       "National Academies: false negatives are hard to measure in routine operation",
+       "https://www.nationalacademies.org/read/12688/chapter/4"
+      ]
+     ]
+    },
+    {
+     "t": "D14. Never redistribute restricted sequence data; store accessions",
+     "s": "GISAID forbids passing data to unregistered parties; Pathoplexus carries per-record terms.",
+     "p": [
+      "The benchmark ships a manifest and a retrieval script. Restricted records are listed by identifier only, with their data-use terms kept in a column."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "GISAID Database Access Agreement",
+       "https://gisaid.org/daa"
+      ],
+      [
+       "GISAID statement on a cut-off feed, 2026-01-20",
+       "https://gisaid.org/statements/20260120/"
+      ],
+      [
+       "Pathoplexus open vs restricted terms",
+       "https://docs.nextstrain.org/en/latest/guides/pathoplexus.html"
+      ]
+     ]
+    },
+    {
+     "t": "D15. Score the process, not only the answer",
+     "s": "An agent can be right by luck. We check each step.",
+     "p": [
+      "Most public agent benchmarks score only the final answer. Ours also checks that the data was opened, code was run, every number in the answer appears in tool output, and the agent declines when the data cannot answer. Results are in the agent section below."
+     ],
+     "basis": "sourced",
+     "src": [
+      [
+       "Critique: Biomni-style benchmarks score final answers, not intermediate reasoning",
+       "https://phylo.bio/blog/evaluating-ai-agents-in-biology"
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

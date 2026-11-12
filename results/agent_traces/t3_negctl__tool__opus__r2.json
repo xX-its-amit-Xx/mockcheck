@@ -1,0 +1,40 @@
+{
+ "run": "t3_negctl__tool__opus__r2",
+ "task": "t3_negctl",
+ "condition": "tool",
+ "model": "opus",
+ "gold": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "result": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "final_text": "Mycobacterium is not supported in this sample. The whole Mycobacterium genus has only 6 clade reads in `data/spike_H0.report.gz`, split between two species:\n\n| Rank | Taxid | Name | Clade reads |\n|---|---|---|---|\n| G | 1763 | Mycobacterium | 6 |\n| S | 886343 | Mycobacterium spongiae | 3 |\n| G1 | 77643 | M. tuberculosis complex | 3 |\n| S | 78331 | Mycobacterium canetti | 3 |\n\nThe two species account for all 6 genus reads, so no other Mycobacterium species is present. The largest species count is 3 clade reads, well below your 10-read threshold for a credible species call. Even the whole genus (6) falls short of it. A few stray reads like this in a human-only sample are typical misclassification noise, not evidence of a real Mycobacterium. I read the report directly; I didn't need `mockcheck` for this.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 1,
+  "L1_tool_calls": 1,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_tool; python -m mockcheck --help; zcat data/spike_H0.report.gz | grep -i -B1 -A0 mycobact | head -50",
+   "output": "usage: mockcheck [-h] [--version] {mocks,report,spike,compare,demo} ...\r\n\r\nCheck a classifier run against a mock community and say what it supports.\r\n\r\npositional arguments:\r\n  {mocks,report,spike,compare,demo}\r\n    mocks               list built-in mock communities\r\n    report              write the supports / does-not-support / check-next\r\n                        report for one run\r\n    spike               score a Kraken2 report against a constructed host-\r\n                        background spike-in (absolute read pairs)\r\n    compare             rank several runs against the same mock\r\n    demo                run end to end on the committed raw outputs (no\r\n                        cluster",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "Mycobacterium is not supported in this sample. The whole Mycobacterium genus has only 6 clade reads in `data/spike_H0.report.gz`, split between two species:\n\n| Rank | Taxid | Name | Clade reads |\n|---|---|---|---|\n| G | 1763 | Mycobacterium | 6 |\n| S | 886343 | Mycobacterium spongiae | 3 |\n| G1 | 77643 | M. tuberculosis complex | 3 |\n| S | 78331 | Mycobacterium canetti | 3 |\n\nThe two species account for all 6 genus reads, so no other Mycobacterium species is present. The largest species count is 3 clade reads, well below your 10-read threshold for a credible species call. Even the whole genus "
+  }
+ ]
+}

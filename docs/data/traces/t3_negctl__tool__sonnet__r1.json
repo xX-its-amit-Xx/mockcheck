@@ -1,0 +1,40 @@
+{
+ "run": "t3_negctl__tool__sonnet__r1",
+ "task": "t3_negctl",
+ "condition": "tool",
+ "model": "sonnet",
+ "gold": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "result": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "final_text": "Mycobacterium is not supported as present in this human-only sample. Two species have reads, but both fall below the 10-read-pair minimum:\n\n- **Mycobacterium spongiae:** 3 clade reads.\n- **Mycobacterium canetti:** 3 clade reads. This sits under the *M. tuberculosis* complex, which also totals 3.\n\nThe whole genus has only 6 clade reads. The largest single-species count is 3.\n\nI read the report directly with `zcat` and `grep`. I did not run the `mockcheck` package.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 1,
+  "L1_tool_calls": 1,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_tool; python -m mockcheck --help; zcat data/spike_H0.report.gz | grep -i mycobacter",
+   "output": "usage: mockcheck [-h] [--version] {mocks,report,spike,compare,demo} ...\r\n\r\nCheck a classifier run against a mock community and say what it supports.\r\n\r\npositional arguments:\r\n  {mocks,report,spike,compare,demo}\r\n    mocks               list built-in mock communities\r\n    report              write the supports / does-not-support / check-next\r\n                        report for one run\r\n    spike               score a Kraken2 report against a constructed host-\r\n                        background spike-in (absolute read pairs)\r\n    compare             rank several runs against the same mock\r\n    demo                run end to end on the committed raw outputs (no\r\n                        cluster",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "Mycobacterium is not supported as present in this human-only sample. Two species have reads, but both fall below the 10-read-pair minimum:\n\n- **Mycobacterium spongiae:** 3 clade reads.\n- **Mycobacterium canetti:** 3 clade reads. This sits under the *M. tuberculosis* complex, which also totals 3.\n\nThe whole genus has only 6 clade reads. The largest single-species count is 3.\n\nI read the report directly with `zcat` and `grep`. I did not run the `mockcheck` package.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}"
+  }
+ ]
+}

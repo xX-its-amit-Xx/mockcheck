@@ -1,0 +1,65 @@
+{
+ "run": "t4_plasma__bare__opus__r1",
+ "task": "t4_plasma",
+ "condition": "bare",
+ "model": "opus",
+ "gold": {
+  "verdict": "cannot_determine",
+  "top_species": [
+   "cutibacterium acnes",
+   "acidovorax sp. jmule5",
+   "staphylococcus epidermidis"
+  ],
+  "reagent_genus_flagged": [
+   "acidovorax sp. jmule5"
+  ],
+  "reagent_flagged_rename_aware": [
+   "acidovorax sp. jmule5",
+   "cutibacterium acnes"
+  ]
+ },
+ "result": {
+  "verdict": "cannot_determine",
+  "top_species": [
+   "cutibacterium acnes",
+   "acidovorax sp. jmule5",
+   "staphylococcus epidermidis"
+  ],
+  "reagent_genus_flagged": [
+   "acidovorax sp. jmule5"
+  ]
+ },
+ "final_text": "This data can't tell the treating team which organism caused the sepsis.\n\n**Top 3 non-human species by clade reads** (out of 500,000 read pairs):\n\n| Species | Clade reads | Genus on the contaminant list? |\n|---|---|---|\n| Cutibacterium acnes | 524 (0.10%) | No as written. It was formerly *Propionibacterium*, which is on the list. |\n| Acidovorax sp. JMULE5 | 331 (0.07%) | **Yes** (*acidovorax*) |\n| Staphylococcus epidermidis | 182 (0.04%) | No |\n\n**Why no organism can be named:**\n- **No dominant pathogen.** Each of the top species is at or below 0.1% of reads. Nothing clearly stands out above background.\n- **The top species look like contamination.** *C. acnes* and *S. epidermidis* are common skin bacteria and the usual blood-draw contaminants. *Acidovorax* is a reagent-contaminant genus on the provided list. By the list's old genus name, *C. acnes* would also count as a reagent contaminant.\n- **The rest also looks like contamination.** The next species down are *E. coli* (154), equine infectious anemia virus (132), *Methylorubrum extorquens* (88) and *Ralstonia pickettii* (57). These viral reads usually come from lab vector material, not infection. Most of the remaining bacterial genera are on the contaminant list (*Methylobacterium*, *Ralstonia*, *Brevundimonas*, *Pseudomonas*, *Acinetobacter*). *E. coli* is the only plausible sepsis pathogen in the list, and its 154 reads are too few to separate it from background, especially since *Escherichia* is also on the list.\n- **No ",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 2,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 3,
+  "L2_fields_total": 3,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_bare; cat data/reagent_contaminant_genera.tsv; python -I -c \"\nimport gzip\nL=[l.rstrip('\\n').split('\\t') for l in gzip.open('data/plasma.report.gz','rt')]\nfor r in L:\n  if r[3] in ('U','R','D','S','G','P') or int(r[1])>=10 and r[3].startswith('S'): print('\\t'.join(r))\n\" | head -80",
+   "output": "genus\tsource\nabiotrophia\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\nacidovorax\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\nacinetobacter\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\naeromicrobium\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\nafipia\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\naquabacterium\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\narthrobacter\tSalter et al. 2014 BMC Biol 12:87, Table 1 (genera found in sequenced blank controls)\n",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_bare; python -I -c \"\nimport gzip\nL=[l.rstrip('\\n').split('\\t') for l in gzip.open('data/plasma.report.gz','rt')]\nS=sorted([r for r in L if r[3]=='S'],key=lambda r:-int(r[1]))\nfor r in S[:10]: print(r[1],r[5].strip())\nfor r in L:\n  if r[3] in('D','K'): print(r)\n\"",
+   "output": "34988 Homo sapiens\r\n524 Cutibacterium acnes\r\n331 Acidovorax sp. JMULE5\r\n182 Staphylococcus epidermidis\r\n154 Escherichia coli\r\n132 Equine infectious anemia virus\r\n88 Methylorubrum extorquens\r\n57 Ralstonia pickettii\r\n36 Corynebacterium durum\r\n23 Brevundimonas bullata\r\n[' 24.96', '124779', '54385', 'D', '2', '    Bacteria']\r\n[' 13.59', '67943', '967', 'K', '3379134', '      Pseudomonadati']\r\n['  0.49', '2433', '569', 'K', '1783272', '      Bacillati']\r\n['  0.00', '17', '0', 'K', '3384194', '      Thermotogati']\r\n['  0.00', '1', '0', 'K', '3384189', '      Fusobacteriati']\r\n['  7.00', '34991', '0', 'D', '2759', '    Eukaryota']\r\n['  7.00', '34988', '0', 'K', '33208', '        Metazoa']\r\n['  0.03",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "This data can't tell the treating team which organism caused the sepsis.\n\n**Top 3 non-human species by clade reads** (out of 500,000 read pairs):\n\n| Species | Clade reads | Genus on the contaminant list? |\n|---|---|---|\n| Cutibacterium acnes | 524 (0.10%) | No as written. It was formerly *Propionibacterium*, which is on the list. |\n| Acidovorax sp. JMULE5 | 331 (0.07%) | **Yes** (*acidovorax*) |\n| Staphylococcus epidermidis | 182 (0.04%) | No |\n\n**Why no organism can be named:**\n- **No dominant pathogen.** Each of the top species is at or below 0.1% of reads. Nothing clearly stands out above b"
+  }
+ ]
+}

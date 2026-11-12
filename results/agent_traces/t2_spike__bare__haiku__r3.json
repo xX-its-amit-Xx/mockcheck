@@ -1,0 +1,78 @@
+{
+ "run": "t2_spike__bare__haiku__r3",
+ "task": "t2_spike",
+ "condition": "bare",
+ "model": "haiku",
+ "gold": {
+  "detected": [
+   "enterococcus faecalis",
+   "escherichia coli",
+   "lactobacillus fermentum",
+   "pseudomonas aeruginosa",
+   "staphylococcus aureus"
+  ],
+  "missed": [
+   "bacillus subtilis",
+   "cryptococcus neoformans",
+   "listeria monocytogenes",
+   "saccharomyces cerevisiae",
+   "salmonella enterica"
+  ]
+ },
+ "result": {
+  "detected": [
+   "Pseudomonas aeruginosa",
+   "Escherichia coli",
+   "Lactobacillus fermentum",
+   "Enterococcus faecalis",
+   "Staphylococcus aureus"
+  ],
+  "missed": [
+   "Salmonella enterica",
+   "Listeria monocytogenes",
+   "Bacillus subtilis",
+   "Saccharomyces cerevisiae",
+   "Cryptococcus neoformans"
+  ]
+ },
+ "final_text": "The report has 10 manifest organisms to check against species-level (rank S) clade read counts. Five pass the threshold of 10 reads.\n\n| Organism | S-rank reads | Result |\n|---|---|---|\n| Pseudomonas aeruginosa | 811 | detected |\n| Escherichia coli | 72 | detected |\n| Lactobacillus fermentum (report: Limosilactobacillus fermentum) | 26 | detected |\n| Enterococcus faecalis | 6457 | detected |\n| Staphylococcus aureus | 54 | detected |\n| Salmonella enterica | 4 | missed (below 10) |\n| Bacillus subtilis | 2 | missed (below 10) |\n| Listeria monocytogenes | no S-rank row | missed |\n| Saccharomyces cerevisiae | no S-rank row | missed |\n| Cryptococcus neoformans | no S-rank row | missed |\n\nListeria, Saccharomyces and Cryptococcus have no species-level row in the report at all, so they count as missed with 0 reads. The report may still place them at a higher rank, but the criterion only uses species-level counts.\n\nRESULT: {\"detected\": [\"Pseudomonas aeruginosa\", \"Escherichia coli\", \"Lactobacillus fermentum\", \"Enterococcus faecalis\", \"Staphylococcus aureus\"], \"missed\": [\"Salmonella enterica\", \"Listeria monocytogenes\", \"Bacillus subtilis\", \"Saccharomyces cerevisiae\", \"Cryptococcus neoformans\"]}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 3,
+  "L1_tool_errors": 1,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && ls -la data truth && cat truth/spike_manifest.tsv && zcat data/spike_P0.report.gz | head -5",
+   "output": "data:\ntotal 36\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ./\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ../\n-rw-r--r-- 1 ashenoy00000 1049089 2265 Nov 12 08:55 even.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 3967 Nov 12 08:55 plasma.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 9075 Nov 12 08:55 reagent_contaminant_genera.tsv\n-rw-r--r-- 1 ashenoy00000 1049089 4775 Nov 12 08:55 spike_H0.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 1987 Nov 12 08:55 spike_P0.report.gz\n\ntruth:\ntotal 5\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ./\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:55 ../\n-rw-r--r-- 1 ashenoy00000 1049089  272 Nov 12 08:55 mock_even.tsv\n-rw-r--r-- 1 ashenoy",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && zcat data/spike_P0.report.gz | awk -F'\\t' '$4==\"S\"{print}' | sed 's/\\t/|/g' | awk -F'|' '{n=$6; sub(/^ +/,\"\",n); print $2\"|\"$5\"|\"n}' | grep -iE \"pseudomonas|escherichia|salmonella|lactobacillus|limosilactobacillus|enterococcus|staphylococcus|listeria|bacillus|saccharomyces|cryptococcus\"",
+   "output": "awk program contains a command pipe (| \"cmd\" or | getline) which executes arbitrary commands",
+   "error": true
+  },
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd \"<sandbox>\" && zcat data/spike_P0.report.gz | python3 -c '\nimport sys\nfor line in sys.stdin:\n    f = line.rstrip(\"\\n\").split(\"\\t\")\n    if len(f) >= 6 and f[3].strip() == \"S\":\n        print(f[1].strip(), f[2].strip(), f[4].strip(), repr(f[5]))\n'",
+   "output": "3117739 3117739 9606 '                                                              Homo sapiens'\r\n6457 6457 1351 '                  Enterococcus faecalis'\r\n26 26 1613 '                  Limosilactobacillus fermentum'\r\n1 1 1623 '                  Ligilactobacillus ruminis'\r\n54 54 1280 '                  Staphylococcus aureus'\r\n7 7 96241 '                    Bacillus spizizenii'\r\n2 2 1423 '                    Bacillus subtilis'\r\n1 1 1405 '                    Bacillus mycoides'\r\n1 1 33038 '                  Mediterraneibacter gnavus'\r\n15 15 544580 '                  Actinomyces oris'\r\n811 811 287 '                    Pseudomonas aeruginosa'\r\n1 1 2892442 '                    Pseudomonas sp. CIP",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "The report has 10 manifest organisms to check against species-level (rank S) clade read counts. Five pass the threshold of 10 reads.\n\n| Organism | S-rank reads | Result |\n|---|---|---|\n| Pseudomonas aeruginosa | 811 | detected |\n| Escherichia coli | 72 | detected |\n| Lactobacillus fermentum (report: Limosilactobacillus fermentum) | 26 | detected |\n| Enterococcus faecalis | 6457 | detected |\n| Staphylococcus aureus | 54 | detected |\n| Salmonella enterica | 4 | missed (below 10) |\n| Bacillus subtilis | 2 | missed (below 10) |\n| Listeria monocytogenes | no S-rank row | missed |\n| Saccharomyces ce"
+  }
+ ]
+}

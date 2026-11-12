@@ -1,0 +1,40 @@
+{
+ "run": "t3_negctl__tool__haiku__r3",
+ "task": "t3_negctl",
+ "condition": "tool",
+ "model": "haiku",
+ "gold": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "result": {
+  "verdict": "not_supported",
+  "max_species_reads": 3
+ },
+ "final_text": "No, Mycobacterium is not supported by this sample. The largest single-species count is 3 reads, well under the 10-read minimum.\n\nThe report (`data/spike_H0.report.gz`) has four Mycobacterium-related rows, all with low counts:\n\n| Rank | Taxon | Clade reads | Direct reads |\n|---|---|---|---|\n| G | Mycobacterium (genus, taxid 1763) | 6 | 0 |\n| S | Mycobacterium spongiae | 3 | 3 |\n| G1 | Mycobacterium tuberculosis complex | 3 | 0 |\n| S | Mycobacterium canetti | 3 | 3 |\n\nEach species call is 3 reads, below the threshold. The genus total of 6 is also below 10, and the tuberculosis complex's 3 reads are not a species-level call. I did not run `mockcheck`; the answer comes from the report rows alone.\n\nRESULT: {\"verdict\": \"not_supported\", \"max_species_reads\": 3}",
+ "score": {
+  "L1_parsed_result": 1,
+  "L1_used_code": 1,
+  "L1_opened_data": 1,
+  "L1_used_mockcheck": 0,
+  "L1_tool_calls": 1,
+  "L1_tool_errors": 0,
+  "L1_grounded": 1.0,
+  "L2_fields_correct": 2,
+  "L2_fields_total": 2,
+  "L2_all_correct": 1
+ },
+ "steps": [
+  {
+   "kind": "tool",
+   "name": "Bash",
+   "input": "cd /c/Temp/mc/agent_eval/sandbox_tool 2>/dev/null || cd \"<sandbox>\"; ls -la data; zcat data/spike_H0.report.gz | head -5; echo ---; zcat data/spike_H0.report.gz | grep -i -n \"mycobacter\"",
+   "output": "total 36\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:49 ./\ndrwxr-xr-x 1 ashenoy00000 1049089    0 Nov 12 08:49 ../\n-rw-r--r-- 1 ashenoy00000 1049089 2265 Nov 12 08:49 even.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 3967 Nov 12 08:49 plasma.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 9075 Nov 12 08:49 reagent_contaminant_genera.tsv\n-rw-r--r-- 1 ashenoy00000 1049089 4775 Nov 12 08:49 spike_H0.report.gz\n-rw-r--r-- 1 ashenoy00000 1049089 1987 Nov 12 08:49 spike_P0.report.gz\n  1.18\t47340\t47340\tU\t0\tunclassified\n 98.82\t3952660\t18\tR\t1\troot\n 98.82\t3952638\t5171\tR1\t131567\t  cellular organisms\n 98.68\t3947380\t0\tD\t2759\t    Eukaryota\n 98.68\t3947380\t0\tD1\t33154\t      Opisthokonta\n---\n57:  0.00\t8\t0\tO\t85",
+   "error": false
+  },
+  {
+   "kind": "say",
+   "text": "No, Mycobacterium is not supported by this sample. The largest single-species count is 3 reads, well under the 10-read minimum.\n\nThe report (`data/spike_H0.report.gz`) has four Mycobacterium-related rows, all with low counts:\n\n| Rank | Taxon | Clade reads | Direct reads |\n|---|---|---|---|\n| G | Mycobacterium (genus, taxid 1763) | 6 | 0 |\n| S | Mycobacterium spongiae | 3 | 3 |\n| G1 | Mycobacterium tuberculosis complex | 3 | 0 |\n| S | Mycobacterium canetti | 3 | 3 |\n\nEach species call is 3 reads, below the threshold. The genus total of 6 is also below 10, and the tuberculosis complex's 3 reads "
+  }
+ ]
+}
