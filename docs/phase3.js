@@ -119,7 +119,7 @@
   live.p4tiers = async box => {
     const T = await tsv("data/results/p4_tiered.tsv");
     if (!T) { box.append(el("p", { class: "mut" }, "Tiered results are not published yet.")); return; }
-    const NAMES = { "majority": "Majority class per virus", "knn+abstain": "Nearest neighbour (5-mers)", "probe+abstain": "Vanilla frozen ESM-2 + linear", "ce+abstain": "Fine-tune, cross-entropy", "util_avg": "From scratch: utility, average", "util_worst": "From scratch: utility, worst", "wu_avg": "Warm start: utility, average", "wu_worst": "Warm start: utility, worst", "ce_long": "Fine-tune, cross-entropy, longer" };
+    const NAMES = { "majority": "Majority class per virus", "knn+abstain": "Nearest neighbour (5-mers)", "probe+abstain": "Vanilla frozen ESM-2 + linear", "ce+abstain": "Fine-tune, cross-entropy", "util_avg": "From scratch: utility, average", "util_worst": "From scratch: utility, worst", "wu_avg": "Warm start: utility, average", "wu_worst": "Warm start: utility, worst", "ce_long+abstain": "Fine-tune, cross-entropy, 3x budget", "wu_avg_long": "Warm start 3x budget: utility, average", "wu_worst_long": "Warm start 3x budget: utility, worst", "hybrid": "Retrieval hybrid" };
     const tiers = ["seen", "near", "mid", "far"], conds = Object.keys(NAMES).filter(c => T.some(r => r.condition === c));
     const cell = (c, t) => { const r = T.find(x => x.condition === c && x.tier === t); return r ? f(r.utility) + " [" + f(r.ci_lo) + ", " + f(r.ci_hi) + "]" : ""; };
     const n = t => { const r = T.find(x => x.tier === t); return r ? " (n=" + r.n_sequences + ")" : ""; };
@@ -129,7 +129,7 @@
   live.p4results = async box => {
     const S = await tsv("data/results/p4_condition_summary.tsv");
     if (!S) { box.append(el("p", { class: "mut" }, "Training results are not published yet.")); return; }
-    const NAMES = { "majority": "Majority class per virus (baseline)", "knn+abstain": "Nearest neighbour, 5-mers (baseline)", "probe+abstain": "Vanilla: frozen ESM-2 + linear heads", "ce+abstain": "Fine-tune, cross-entropy (+ abstain rule)", "util_avg": "From scratch: utility loss, average of strata", "util_worst": "From scratch: utility loss, worst-stratum weighted", "wu_avg": "Warm start (supervised, then utility): average of strata", "wu_worst": "Warm start (supervised, then utility): worst stratum", "ce_long": "Fine-tune, cross-entropy, longer and faster (+ abstain rule)" };
+    const NAMES = { "majority": "Majority class per virus (baseline)", "knn+abstain": "Nearest neighbour, 5-mers (baseline)", "probe+abstain": "Vanilla: frozen ESM-2 + linear heads", "ce+abstain": "Fine-tune, cross-entropy (+ abstain rule)", "util_avg": "From scratch: utility loss, average of strata", "util_worst": "From scratch: utility loss, worst-stratum weighted", "wu_avg": "Warm start (supervised, then utility): average of strata", "wu_worst": "Warm start (supervised, then utility): worst stratum", "ce_long+abstain": "Fine-tune, cross-entropy, 3x steps and 5x encoder rate (+ abstain rule)", "wu_avg_long": "Warm start, 3x budget: average of strata", "wu_worst_long": "Warm start, 3x budget: worst stratum", "hybrid": "Retrieval hybrid (nearest neighbour if close, else 200-step fine-tune)" };
     const grp = g => S.filter(r => r.group === g);
     for (const g of ["dev", "heldout", "blind"]) {
       const rows = grp(g).filter(r => !r.condition.startsWith("util_single"));
@@ -147,13 +147,13 @@
   live.p4transfer = async box => {
     const M = await tsv("data/results/p4_transfer_matrix.tsv"), S = await tsv("data/results/p4_eval_by_stratum.tsv");
     if (!M || !S) { box.append(el("p", { class: "mut" }, "Transfer matrix not published yet.")); return; }
-    const famSel = el("select", { "aria-label": "training family" }, [["warm", "Warm start (supervised first, then utility)"], ["scratch", "From scratch (utility only)"]].map(([v, l]) => el("option", { value: v }, l)));
+    const famSel = el("select", { "aria-label": "training family" }, [["warm_long", "Warm start, 3x budget (proper training)"], ["warm", "Warm start, 200 steps"], ["scratch", "From scratch (utility only)"]].map(([v, l]) => el("option", { value: v }, l)));
     const metSel = el("select", { "aria-label": "metric" }, [["host", "Host head only"], ["region", "Region head only"], ["both", "Both heads averaged"]].map(([v, l]) => el("option", { value: v }, l)));
     const out = el("div");
     const KEY = { host: "utility_host", region: "utility_region", both: "utility" };
     const colour = v => isNaN(v) ? "" : "background:" + (v >= 0 ? "rgba(46,160,120," + Math.min(0.75, v) + ")" : "rgba(210,70,60," + Math.min(0.75, -v) + ")");
     const draw = () => {
-      const fam = famSel.value, key = KEY[metSel.value], avgCond = fam === "warm" ? "wu_avg" : "util_avg";
+      const fam = famSel.value, key = KEY[metSel.value], avgCond = fam === "warm_long" ? "wu_avg_long" : fam === "warm" ? "wu_avg" : "util_avg";
       const rows = M.filter(r => r.family === fam);
       const trained = [...new Set(rows.map(r => r.trained_on))].sort(), cols = [...new Set(rows.map(r => r.evaluated_on))].sort();
       const ref = {}; S.filter(r => r.condition === avgCond && r.group === "heldout").forEach(r => ref[r.stratum] = num(r[key]));

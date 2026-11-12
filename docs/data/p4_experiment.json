@@ -92,17 +92,17 @@
      "basis": "our reasoning"
     },
     {
-     "t": "Results (live from the committed tables; interim while runs finish)",
-     "s": "Tables change as new runs land.",
+     "t": "Results (live from the committed tables)",
+     "s": "Tables update as runs land. The blind split is shown; no decision was based on it.",
      "p": [
-      "Interim status: round 1 (utility loss from scratch, cross-entropy, probes, baselines) is complete. Warm-started utility runs and a longer-training control are still running. The blind split is not shown until all design decisions are frozen."
+      "Utility is +1 right, -1 wrong, 0 abstain (higher is better, 0 is 'always abstain'). Distance tiers pool every non-training sequence, including the blind split. 'Held out' means unseen countries, unseen host genera, or 2022 and later. 'Blind' is a sealed split we looked at after the runs were done: it was not used to choose anything."
      ],
      "basis": "our data",
      "kids": [
       {
        "t": "By distance tier",
        "p": [
-        "Where each model holds up: close to what it has seen, or far from it."
+        "Where each model holds up: on sequences it has seen, or close to or far from what it has seen."
        ],
        "live": "p4tiers",
        "open": true
@@ -112,30 +112,34 @@
        "live": "p4results"
       },
       {
-       "t": "Transfer matrix: train on one stratum, evaluate on every other",
+       "t": "Transfer matrix: train the utility phase on one stratum, evaluate on every other",
        "live": "p4transfer"
       }
      ],
      "open": true
     },
     {
-     "t": "What round 1 showed (verified numbers)",
+     "t": "What we found (verified numbers; details in the tables above)",
      "list": [
-      "Utility loss from scratch fails, in two opposite ways. Trained on the average or worst stratum it learns to abstain: it answers only 15 to 17% of held-out sequences. Trained on one stratum alone it answers almost everything (coverage about 100%) but is right only 15 to 37% of the time. Abstaining is the safe local optimum when the policy starts untrained, and a single small stratum is too little data to learn from.",
-      "A nearest-neighbour rule beats ordinary fine-tuning. Held-out utility: nearest neighbour 0.40, fine-tuned cross-entropy 0.27, frozen probe 0.01, majority class -0.41. Nearest neighbour is ahead at every distance tier.",
-      "The fine-tuned model is underfit. On sequences it trained on, cross-entropy scores 0.56 against nearest neighbour's 0.86 (which excludes the sequence itself). At 200 steps and a small learning rate it had not learned the training set, so comparisons between loss functions at this budget are confounded by too little training.",
-      "Everything gets worse with distance. Nearest neighbour falls from 0.86 (seen) to 0.33 (far).",
-      "Our own split names were misleading. 'dev' (whole clusters held out) is in fact the far tier; 34% of test_geo rows are near-copies of training sequences. This is why we now report by distance tier."
+      "1. Utility loss from scratch fails, in two opposite ways. On the average or worst stratum the model learns to abstain (it answers 15 to 17% of held-out sequences). On one stratum alone it answers nearly everything but is right only 15 to 37% of the time.",
+      "2. A warm start fixes that. After supervised steps first, held-out utility is 0.34 (average of strata) and 0.33 (worst-stratum weighted) against 0.11 from scratch. Weighting the worst stratum raises the worst stratum (-0.03 against -0.24 for the average version) without lowering the mean, but the intervals are wide.",
+      "3. The biggest single gain came from the simplest lever: training longer with a faster encoder learning rate. Utility on sequences the model had trained on went from 0.56 to 0.82, on far-tier sequences from 0.45 to 0.55 (the best of any method there; nearest neighbour scores 0.31), and held-out average from 0.27 to 0.35. The first comparison of loss functions was therefore confounded by underfitting.",
+      "4. A nearest-neighbour rule is a strong baseline. It scores 0.86 on seen, 0.63 near, 0.58 mid and 0.31 far. Fine-tuning degrades more gracefully with distance (0.55 on far), so the best method depends on how far the new sequence is. A hybrid that retrieves when a close neighbour exists and uses the 200-step model otherwise tracks nearest neighbour near and mid and the model far, but does not beat nearest neighbour on the overall held-out average (0.35 against 0.40, intervals overlapping).",
+      "5. Host is learnable; region is not. Held-out host-only utility is 0.52 to 0.71 for the trained methods and nearest neighbour (0.03 for the frozen probe). Region-only utility is about 0 for every method (nearest neighbour 0.10): from one protein, none of these models can say where in the world a sequence came from any better than abstaining.",
+      "6. Optimising one stratum alone does not help that stratum and hurts the rest (warm-start budget, host head only): the model trained on one stratum scores -0.06 relative to the average model on its own stratum and -0.68 on every other stratum. The region head looks perfect on its own stratum only because region is a constant label inside a stratum, an artefact of how we defined strata. The proper-budget version of this experiment is still running.",
+      "7. The tiers hold up under a second similarity measure: 67% of sequences land in the same tier using protein-model embeddings (about 39% by chance), and nearest neighbour is again best near, the fine-tuned model best far.",
+      "8. Our own split names misled us: 'dev' (whole clusters held out) is the far tier, while 34% of test_geo rows are near-copies of training sequences."
      ],
      "basis": "our data",
      "open": true
     },
     {
-     "t": "What we decided to do next",
+     "t": "What is still open",
      "list": [
-      "Warm start (running): supervised steps first, then the utility objective, which is the usual recipe for reinforcement learning from a verifiable reward.",
-      "Training budget: a longer, faster-learning-rate control, since the model is underfit. This is the simplest innovation lever (parameters).",
-      "Only then compare loss functions and read the transfer matrix. Reading it before the models are trained properly would be reading noise."
+      "The single-stratum transfer experiment at the proper training budget (running). Until it lands, finding 6 is for an underfit model.",
+      "Warm-start utility at the proper budget against cross-entropy at the proper budget: does tying the loss to the metric beat simply training enough? At 200 steps they are indistinguishable (0.34 against 0.35, intervals overlapping).",
+      "Repeating with another seed set and a larger encoder, and varying lambda in the utility.",
+      "The untested ideas from the scouting list: retrieval as model input, hierarchical host labels, codon tokens, better abstention rules."
      ],
      "basis": "our reasoning"
     },

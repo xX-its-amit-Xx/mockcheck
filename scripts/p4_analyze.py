@@ -144,10 +144,10 @@ def main():
         w = csv.DictWriter(f, fieldnames=list(summ[0]), delimiter="\t", lineterminator="\n"); w.writeheader(); w.writerows(summ)
     # transfer matrix on held-out data: rows = trained on stratum s only; columns = evaluated on stratum t
     tm = []
-    refs = {fam: {r["stratum"]: r["utility"] for r in by if r["condition"] == c and r["group"] == "heldout"} for fam, c in (("scratch", "util_avg"), ("warm", "wu_avg"))}
+    refs = {fam: {r["stratum"]: r["utility"] for r in by if r["condition"] == c and r["group"] == "heldout"} for fam, c in (("scratch", "util_avg"), ("warm", "wu_avg"), ("warm_long", "wu_avg_long"))}
     for r in by:
         if r["condition"].startswith(("util_single", "wu_single")) and r["group"] == "heldout":
-            fam = "warm" if r["condition"].startswith("wu_") else "scratch"
+            fam = ("warm_long" if "_long" in r["condition"].split("-")[0] else "warm") if r["condition"].startswith("wu_") else "scratch"
             tag = r["condition"].split("-", 1)[1]
             trained = {x.replace("|", "_"): x for x in strata}.get(tag, tag)   # stratum names contain underscores, so map the tag back
             tm.append(dict(family=fam, trained_on=trained, evaluated_on=r["stratum"], utility=r["utility"], utility_host=r["utility_host"], utility_region=r["utility_region"], same_stratum=int(trained == r["stratum"]), average_model_reference=refs[fam].get(r["stratum"], "")))
