@@ -86,6 +86,10 @@ Big files (reads, databases, scratch) live under `MOCKCHECK_SCRATCH` (default `/
 
 Two mocks, one lab, public data; real samples will differ. The even mock's "truth" is the vendor's theoretical recipe. Some background chapters on the dashboard were drafted by AI research agents, spot-checked by a second agent, and anything unverified is listed on the page rather than stated as fact. The full list of limitations is at the end of [REPORT.md](REPORT.md).
 
+## Phase 4: curated ground truth and eval-tied fine-tuning
+
+A labelled set of influenza A, rabies and rotavirus A sequences with host class and region, each label checked against an independent field, with held-out countries, host genera, recent years and a sealed blind split. ESM-2 35M is fine-tuned with cross-entropy and with a loss equal to the expected eval utility (+1 right, -1 wrong, 0 abstain). See the dashboard (Phase 4 section), `docs/BRIEF_phase4.md` and REPORT.md.
+
 ## Deploying the dashboard
 
 `docs/` is a plain static site (no build step). On Cloudflare Pages: `wrangler pages deploy docs --project-name mockcheck`.

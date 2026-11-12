@@ -194,3 +194,19 @@ Questions: which choices make an evaluation biologically meaningful (geography, 
 - The sandbox refused compound shell commands and writes outside it; no command referenced the gold or the other sandbox. Read commands were not confined by path.
 
 **What this supports.** The harness can record and score agent behaviour at three layers, and it catches a gold-versus-spec mismatch. **It does not support** any claim that these agents are good at metagenomic classification in general (tasks are easy, one file each, three repeats), nor anything about protein language models: none was run. **To check next:** harder multi-file tasks, a subtler planted claim, an unseen classifier format, a fine-tuning and RL loop on a small open model (design on the dashboard, not run; needs GPU approval).
+
+## Phase 4: curated ground truth and eval-tied fine-tuning
+
+**Data.** 3,177 sequences (influenza A HA, rabies, rotavirus A VP7) with host and region labels. A label counts as tier A only when an independent field (strain name) agrees with the submitter field; this is internal consistency, not external truth. 1,648 sequences have both labels at tier A. Holdouts: whole countries, whole host genera, year >= 2022, and a sealed blind cluster split. Difficulty is reported by distance to the nearest training sequence (seen, near, mid, far), because split names did not measure difficulty.
+
+**Method.** ESM-2 35M, 200 steps (or 3x steps with 5x encoder rate). Conditions: frozen probe, cross-entropy, utility loss (expected +1/-1/0 utility, exact softmax expectation) on the average, worst or a single stratum, each from scratch or after a supervised warm start; kNN, majority and a retrieval hybrid.
+
+**Results (3 seeds, held-out).**
+- Utility from scratch fails (abstains, or answers badly). A warm start fixes it.
+- Training longer is the largest gain: cross-entropy 0.27 to 0.35. Warm-start utility at the same budget: 0.36 (average), 0.40 (worst-stratum weighted); intervals overlap, so no proven advantage over cross-entropy.
+- Nearest neighbour is strongest near training data (0.86 seen, 0.63 near), the fine-tuned model degrades most gracefully far (0.55 vs 0.31).
+- Host is learnable (0.5 to 0.7); region is about 0 for every method.
+- Optimising one stratum: host-only held-out utility 0.57 on its own stratum vs 0.67 for the average model, and 0.00 on other strata (-0.66). The same at 200 steps. Region head results there are an artefact of constant region per stratum.
+- The blind split was viewed once after the runs; no choice was based on it.
+
+**Limits.** Label audit by an external reviewer not done; one small encoder; three seeds (two for single-stratum); lambda fixed at 1.

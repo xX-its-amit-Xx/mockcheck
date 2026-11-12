@@ -98,3 +98,7 @@ report opens with a one-paragraph recommendation by use case.
 - Agent harness `agent_eval/`: six tasks with gold computed by mockcheck code, two sandboxes (with and without the package), haiku/sonnet/opus, 3 repeats. Scores: L1 process, L2 gold, honesty. Round 1 results kept in `results/agent_eval_round1_*.tsv`.
 - Source inventory: `scripts/crawl_sources.py` (Zenodo, Europe PMC, GitHub public APIs; LinkedIn not crawled).
 - Not done: protein language model runs; fine-tuning plus RL loop on Explorer (design only, needs Amit's approval for GPUs); subtler injection tests.
+
+## Phase 4 (fine-tuning with an eval-tied loss)
+- Done: curated ground truth, distance-tier evaluation, probe/CE/utility conditions, budget control, single-stratum transfer matrix at two budgets, retrieval hybrid, embedding check of tiers.
+- Not done: external label audit, lambda sweep, larger encoder, codon tokens, retrieval as model input, synthetic perturbation augmentation, embedding-based clustering for splits.
