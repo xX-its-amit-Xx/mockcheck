@@ -1,73 +1,145 @@
-trained_on	evaluated_on	utility	same_stratum	util_avg_reference
-influenza|a_africa	influenza_a|africa	0.9188	0	0.0
-influenza|a_africa	influenza_a|asia	-0.026	0	0.0
-influenza|a_africa	influenza_a|europe	-0.9801	0	-0.0448
-influenza|a_africa	influenza_a|north_america	-0.2593	0	0.1931
-influenza|a_africa	influenza_a|oceania	-0.1449	0	0.4565
-influenza|a_africa	influenza_a|south_america	-0.793	0	0.0242
-influenza|a_africa	rotavirus_a|africa	0.2222	0	0.2778
-influenza|a_africa	rotavirus_a|asia	-0.9167	0	0.0
-influenza|a_asia	influenza_a|africa	-0.0917	0	0.0
-influenza|a_asia	influenza_a|asia	0.9688	0	0.0
-influenza|a_asia	influenza_a|europe	-0.4975	0	-0.0448
-influenza|a_asia	influenza_a|north_america	-0.9048	0	0.1931
-influenza|a_asia	influenza_a|oceania	-1.0	0	0.4565
-influenza|a_asia	influenza_a|south_america	-0.4247	0	0.0242
-influenza|a_asia	rotavirus_a|africa	-1.0	0	0.2778
-influenza|a_asia	rotavirus_a|asia	0.0	0	0.0
-influenza|a_europe	influenza_a|africa	-0.1313	0	0.0
-influenza|a_europe	influenza_a|asia	-0.1458	0	0.0
-influenza|a_europe	influenza_a|europe	0.7015	0	-0.0448
-influenza|a_europe	influenza_a|north_america	-0.9048	0	0.1931
-influenza|a_europe	influenza_a|oceania	-1.0	0	0.4565
-influenza|a_europe	influenza_a|south_america	-0.2473	0	0.0242
-influenza|a_europe	rotavirus_a|africa	-1.0	0	0.2778
-influenza|a_europe	rotavirus_a|asia	-1.0	0	0.0
-influenza|a_north_america	influenza_a|africa	-0.4875	0	0.0
-influenza|a_north_america	influenza_a|asia	-0.5	0	0.0
-influenza|a_north_america	influenza_a|europe	-0.5348	0	-0.0448
-influenza|a_north_america	influenza_a|north_america	0.8571	0	0.1931
-influenza|a_north_america	influenza_a|oceania	-0.0507	0	0.4565
-influenza|a_north_america	influenza_a|south_america	-0.4839	0	0.0242
-influenza|a_north_america	rotavirus_a|africa	-0.5	0	0.2778
-influenza|a_north_america	rotavirus_a|asia	-0.5	0	0.0
-influenza|a_oceania	influenza_a|africa	-0.975	0	0.0
-influenza|a_oceania	influenza_a|asia	-1.0	0	0.0
-influenza|a_oceania	influenza_a|europe	-0.9851	0	-0.0448
-influenza|a_oceania	influenza_a|north_america	-0.0952	0	0.1931
-influenza|a_oceania	influenza_a|oceania	1.0	0	0.4565
-influenza|a_oceania	influenza_a|south_america	-0.8226	0	0.0242
-influenza|a_oceania	rotavirus_a|africa	-0.3333	0	0.2778
-influenza|a_oceania	rotavirus_a|asia	-0.5833	0	0.0
-influenza|a_south_america	influenza_a|africa	-0.9875	0	0.0
-influenza|a_south_america	influenza_a|asia	-1.0	0	0.0
-influenza|a_south_america	influenza_a|europe	-0.0299	0	-0.0448
-influenza|a_south_america	influenza_a|north_america	-1.0	0	0.1931
-influenza|a_south_america	influenza_a|oceania	-1.0	0	0.4565
-influenza|a_south_america	influenza_a|south_america	0.6452	0	0.0242
-influenza|a_south_america	rotavirus_a|africa	-1.0	0	0.2778
-influenza|a_south_america	rotavirus_a|asia	-0.5833	0	0.0
-rotavirus|a_africa	influenza_a|africa	0.025	0	0.0
-rotavirus|a_africa	influenza_a|asia	-1.0	0	0.0
-rotavirus|a_africa	influenza_a|europe	-0.9851	0	-0.0448
-rotavirus|a_africa	influenza_a|north_america	-0.0952	0	0.1931
-rotavirus|a_africa	influenza_a|oceania	0.0	0	0.4565
-rotavirus|a_africa	influenza_a|south_america	-0.8226	0	0.0242
-rotavirus|a_africa	rotavirus_a|africa	0.6667	0	0.2778
-rotavirus|a_africa	rotavirus_a|asia	-0.5833	0	0.0
-rotavirus|a_asia	influenza_a|africa	-0.9646	0	0.0
-rotavirus|a_asia	influenza_a|asia	0.0417	0	0.0
-rotavirus|a_asia	influenza_a|europe	-0.9975	0	-0.0448
-rotavirus|a_asia	influenza_a|north_america	-0.9974	0	0.1931
-rotavirus|a_asia	influenza_a|oceania	-1.0	0	0.4565
-rotavirus|a_asia	influenza_a|south_america	-0.9892	0	0.0242
-rotavirus|a_asia	rotavirus_a|africa	-0.6667	0	0.2778
-rotavirus|a_asia	rotavirus_a|asia	0.0556	0	0.0
-rotavirus|a_oceania	influenza_a|africa	-0.975	0	0.0
-rotavirus|a_oceania	influenza_a|asia	-1.0	0	0.0
-rotavirus|a_oceania	influenza_a|europe	-0.9851	0	-0.0448
-rotavirus|a_oceania	influenza_a|north_america	-0.0952	0	0.1931
-rotavirus|a_oceania	influenza_a|oceania	1.0	0	0.4565
-rotavirus|a_oceania	influenza_a|south_america	-0.8226	0	0.0242
-rotavirus|a_oceania	rotavirus_a|africa	-0.3333	0	0.2778
-rotavirus|a_oceania	rotavirus_a|asia	-0.5833	0	0.0
+family	trained_on	evaluated_on	utility	utility_host	utility_region	same_stratum	average_model_reference
+scratch	influenza_a|africa	influenza_a|africa	0.9188	0.8375	1.0	1	0.0
+scratch	influenza_a|africa	influenza_a|asia	-0.026	0.9479	-1.0	0	0.0
+scratch	influenza_a|africa	influenza_a|europe	-0.9801	-0.9602	-1.0	0	-0.0448
+scratch	influenza_a|africa	influenza_a|north_america	-0.2593	0.4815	-1.0	0	0.1931
+scratch	influenza_a|africa	influenza_a|oceania	-0.1449	0.7101	-1.0	0	0.4565
+scratch	influenza_a|africa	influenza_a|south_america	-0.793	-0.586	-1.0	0	0.0242
+scratch	influenza_a|africa	rotavirus_a|africa	0.2222	-0.5556	1.0	0	0.2778
+scratch	influenza_a|africa	rotavirus_a|asia	-0.9167	-0.8333	-1.0	0	0.0
+scratch	influenza_a|asia	influenza_a|africa	-0.0917	0.8167	-1.0	0	0.0
+scratch	influenza_a|asia	influenza_a|asia	0.9688	0.9375	1.0	1	0.0
+scratch	influenza_a|asia	influenza_a|europe	-0.4975	0.005	-1.0	0	-0.0448
+scratch	influenza_a|asia	influenza_a|north_america	-0.9048	-0.8095	-1.0	0	0.1931
+scratch	influenza_a|asia	influenza_a|oceania	-1.0	-1.0	-1.0	0	0.4565
+scratch	influenza_a|asia	influenza_a|south_america	-0.4247	0.1505	-1.0	0	0.0242
+scratch	influenza_a|asia	rotavirus_a|africa	-1.0	-1.0	-1.0	0	0.2778
+scratch	influenza_a|asia	rotavirus_a|asia	0.0	-1.0	1.0	0	0.0
+scratch	influenza_a|europe	influenza_a|africa	-0.1313	0.7375	-1.0	0	0.0
+scratch	influenza_a|europe	influenza_a|asia	-0.1458	0.7083	-1.0	0	0.0
+scratch	influenza_a|europe	influenza_a|europe	0.7015	0.403	1.0	1	-0.0448
+scratch	influenza_a|europe	influenza_a|north_america	-0.9048	-0.8095	-1.0	0	0.1931
+scratch	influenza_a|europe	influenza_a|oceania	-1.0	-1.0	-1.0	0	0.4565
+scratch	influenza_a|europe	influenza_a|south_america	-0.2473	0.5054	-1.0	0	0.0242
+scratch	influenza_a|europe	rotavirus_a|africa	-1.0	-1.0	-1.0	0	0.2778
+scratch	influenza_a|europe	rotavirus_a|asia	-1.0	-1.0	-1.0	0	0.0
+scratch	influenza_a|north_america	influenza_a|africa	-0.4875	0.025	-1.0	0	0.0
+scratch	influenza_a|north_america	influenza_a|asia	-0.5	0.0	-1.0	0	0.0
+scratch	influenza_a|north_america	influenza_a|europe	-0.5348	-0.0697	-1.0	0	-0.0448
+scratch	influenza_a|north_america	influenza_a|north_america	0.8571	0.7143	1.0	1	0.1931
+scratch	influenza_a|north_america	influenza_a|oceania	-0.0507	0.8986	-1.0	0	0.4565
+scratch	influenza_a|north_america	influenza_a|south_america	-0.4839	0.0323	-1.0	0	0.0242
+scratch	influenza_a|north_america	rotavirus_a|africa	-0.5	0.0	-1.0	0	0.2778
+scratch	influenza_a|north_america	rotavirus_a|asia	-0.5	0.0	-1.0	0	0.0
+scratch	influenza_a|oceania	influenza_a|africa	-0.975	-0.95	-1.0	0	0.0
+scratch	influenza_a|oceania	influenza_a|asia	-1.0	-1.0	-1.0	0	0.0
+scratch	influenza_a|oceania	influenza_a|europe	-0.9851	-0.9701	-1.0	0	-0.0448
+scratch	influenza_a|oceania	influenza_a|north_america	-0.0952	0.8095	-1.0	0	0.1931
+scratch	influenza_a|oceania	influenza_a|oceania	1.0	1.0	1.0	1	0.4565
+scratch	influenza_a|oceania	influenza_a|south_america	-0.8226	-0.6452	-1.0	0	0.0242
+scratch	influenza_a|oceania	rotavirus_a|africa	-0.3333	0.3333	-1.0	0	0.2778
+scratch	influenza_a|oceania	rotavirus_a|asia	-0.5833	-0.1667	-1.0	0	0.0
+scratch	influenza_a|south_america	influenza_a|africa	-0.9875	-0.975	-1.0	0	0.0
+scratch	influenza_a|south_america	influenza_a|asia	-1.0	-1.0	-1.0	0	0.0
+scratch	influenza_a|south_america	influenza_a|europe	-0.0299	0.9403	-1.0	0	-0.0448
+scratch	influenza_a|south_america	influenza_a|north_america	-1.0	-1.0	-1.0	0	0.1931
+scratch	influenza_a|south_america	influenza_a|oceania	-1.0	-1.0	-1.0	0	0.4565
+scratch	influenza_a|south_america	influenza_a|south_america	0.6452	0.2903	1.0	1	0.0242
+scratch	influenza_a|south_america	rotavirus_a|africa	-1.0	-1.0	-1.0	0	0.2778
+scratch	influenza_a|south_america	rotavirus_a|asia	-0.5833	-0.1667	-1.0	0	0.0
+scratch	rotavirus_a|africa	influenza_a|africa	0.025	-0.95	1.0	0	0.0
+scratch	rotavirus_a|africa	influenza_a|asia	-1.0	-1.0	-1.0	0	0.0
+scratch	rotavirus_a|africa	influenza_a|europe	-0.9851	-0.9701	-1.0	0	-0.0448
+scratch	rotavirus_a|africa	influenza_a|north_america	-0.0952	0.8095	-1.0	0	0.1931
+scratch	rotavirus_a|africa	influenza_a|oceania	0.0	1.0	-1.0	0	0.4565
+scratch	rotavirus_a|africa	influenza_a|south_america	-0.8226	-0.6452	-1.0	0	0.0242
+scratch	rotavirus_a|africa	rotavirus_a|africa	0.6667	0.3333	1.0	1	0.2778
+scratch	rotavirus_a|africa	rotavirus_a|asia	-0.5833	-0.1667	-1.0	0	0.0
+scratch	rotavirus_a|asia	influenza_a|africa	-0.9646	-0.9292	-1.0	0	0.0
+scratch	rotavirus_a|asia	influenza_a|asia	0.0417	-0.9167	1.0	0	0.0
+scratch	rotavirus_a|asia	influenza_a|europe	-0.9975	-0.995	-1.0	0	-0.0448
+scratch	rotavirus_a|asia	influenza_a|north_america	-0.9974	-0.9947	-1.0	0	0.1931
+scratch	rotavirus_a|asia	influenza_a|oceania	-1.0	-1.0	-1.0	0	0.4565
+scratch	rotavirus_a|asia	influenza_a|south_america	-0.9892	-0.9785	-1.0	0	0.0242
+scratch	rotavirus_a|asia	rotavirus_a|africa	-0.6667	-0.3333	-1.0	0	0.2778
+scratch	rotavirus_a|asia	rotavirus_a|asia	0.0556	-0.8889	1.0	1	0.0
+scratch	rotavirus_a|oceania	influenza_a|africa	-0.975	-0.95	-1.0	0	0.0
+scratch	rotavirus_a|oceania	influenza_a|asia	-1.0	-1.0	-1.0	0	0.0
+scratch	rotavirus_a|oceania	influenza_a|europe	-0.9851	-0.9701	-1.0	0	-0.0448
+scratch	rotavirus_a|oceania	influenza_a|north_america	-0.0952	0.8095	-1.0	0	0.1931
+scratch	rotavirus_a|oceania	influenza_a|oceania	1.0	1.0	1.0	0	0.4565
+scratch	rotavirus_a|oceania	influenza_a|south_america	-0.8226	-0.6452	-1.0	0	0.0242
+scratch	rotavirus_a|oceania	rotavirus_a|africa	-0.3333	0.3333	-1.0	0	0.2778
+scratch	rotavirus_a|oceania	rotavirus_a|asia	-0.5833	-0.1667	-1.0	0	0.0
+warm	influenza_a|africa	influenza_a|africa	0.9625	0.925	1.0	1	0.4604
+warm	influenza_a|africa	influenza_a|asia	0.0	1.0	-1.0	0	0.5417
+warm	influenza_a|africa	influenza_a|europe	-0.9851	-0.9701	-1.0	0	0.2861
+warm	influenza_a|africa	influenza_a|north_america	-0.381	0.2381	-1.0	0	0.4206
+warm	influenza_a|africa	influenza_a|oceania	-0.3768	0.2464	-1.0	0	0.5
+warm	influenza_a|africa	influenza_a|south_america	-0.8011	-0.6022	-1.0	0	0.6022
+warm	influenza_a|africa	rotavirus_a|africa	0.4444	-0.1111	1.0	0	0.1111
+warm	influenza_a|africa	rotavirus_a|asia	-0.6389	-0.2778	-1.0	0	-0.2361
+warm	influenza_a|asia	influenza_a|africa	-0.0875	0.825	-1.0	0	0.4604
+warm	influenza_a|asia	influenza_a|asia	0.9479	0.8958	1.0	1	0.5417
+warm	influenza_a|asia	influenza_a|europe	-0.1343	0.7313	-1.0	0	0.2861
+warm	influenza_a|asia	influenza_a|north_america	-0.8783	-0.7566	-1.0	0	0.4206
+warm	influenza_a|asia	influenza_a|oceania	-0.6957	-0.3913	-1.0	0	0.5
+warm	influenza_a|asia	influenza_a|south_america	-0.172	0.6559	-1.0	0	0.6022
+warm	influenza_a|asia	rotavirus_a|africa	-0.8889	-0.7778	-1.0	0	0.1111
+warm	influenza_a|asia	rotavirus_a|asia	0.25	-0.5	1.0	0	-0.2361
+warm	influenza_a|europe	influenza_a|africa	-0.2208	0.5583	-1.0	0	0.4604
+warm	influenza_a|europe	influenza_a|asia	-0.1979	0.6042	-1.0	0	0.5417
+warm	influenza_a|europe	influenza_a|europe	0.8557	0.7114	1.0	1	0.2861
+warm	influenza_a|europe	influenza_a|north_america	-0.9048	-0.8095	-1.0	0	0.4206
+warm	influenza_a|europe	influenza_a|oceania	-1.0	-1.0	-1.0	0	0.5
+warm	influenza_a|europe	influenza_a|south_america	-0.1935	0.6129	-1.0	0	0.6022
+warm	influenza_a|europe	rotavirus_a|africa	-0.6667	-0.7778	-0.5556	0	0.1111
+warm	influenza_a|europe	rotavirus_a|asia	-0.7222	-0.4444	-1.0	0	-0.2361
+warm	influenza_a|north_america	influenza_a|africa	-0.0625	0.875	-1.0	0	0.4604
+warm	influenza_a|north_america	influenza_a|asia	-0.0312	0.9375	-1.0	0	0.5417
+warm	influenza_a|north_america	influenza_a|europe	-0.4975	0.005	-1.0	0	0.2861
+warm	influenza_a|north_america	influenza_a|north_america	0.9894	0.9788	1.0	1	0.4206
+warm	influenza_a|north_america	influenza_a|oceania	-0.2754	0.4493	-1.0	0	0.5
+warm	influenza_a|north_america	influenza_a|south_america	-0.1559	0.6882	-1.0	0	0.6022
+warm	influenza_a|north_america	rotavirus_a|africa	-0.2222	0.1111	-0.5556	0	0.1111
+warm	influenza_a|north_america	rotavirus_a|asia	-0.5833	-0.1667	-1.0	0	-0.2361
+warm	influenza_a|oceania	influenza_a|africa	-0.9458	-0.8917	-1.0	0	0.4604
+warm	influenza_a|oceania	influenza_a|asia	-0.9792	-0.9792	-0.9792	0	0.5417
+warm	influenza_a|oceania	influenza_a|europe	-0.9801	-0.9602	-1.0	0	0.2861
+warm	influenza_a|oceania	influenza_a|north_america	-0.0794	0.8413	-1.0	0	0.4206
+warm	influenza_a|oceania	influenza_a|oceania	1.0	1.0	1.0	1	0.5
+warm	influenza_a|oceania	influenza_a|south_america	-0.8118	-0.6237	-1.0	0	0.6022
+warm	influenza_a|oceania	rotavirus_a|africa	-0.3333	0.3333	-1.0	0	0.1111
+warm	influenza_a|oceania	rotavirus_a|asia	-0.5833	-0.1667	-1.0	0	-0.2361
+warm	influenza_a|south_america	influenza_a|africa	-0.1438	0.3917	-0.6792	0	0.4604
+warm	influenza_a|south_america	influenza_a|asia	-0.1146	0.4375	-0.6667	0	0.5417
+warm	influenza_a|south_america	influenza_a|europe	-0.1418	0.7114	-0.995	0	0.2861
+warm	influenza_a|south_america	influenza_a|north_america	-0.381	0.2063	-0.9683	0	0.4206
+warm	influenza_a|south_america	influenza_a|oceania	-0.1014	0.7971	-1.0	0	0.5
+warm	influenza_a|south_america	influenza_a|south_america	0.7581	0.5914	0.9247	1	0.6022
+warm	influenza_a|south_america	rotavirus_a|africa	-0.2778	-0.1111	-0.4444	0	0.1111
+warm	influenza_a|south_america	rotavirus_a|asia	-0.4306	0.0556	-0.9167	0	-0.2361
+warm	rotavirus_a|africa	influenza_a|africa	-0.0208	-0.7833	0.7417	0	0.4604
+warm	rotavirus_a|africa	influenza_a|asia	-0.9271	-0.875	-0.9792	0	0.5417
+warm	rotavirus_a|africa	influenza_a|europe	-0.0896	0.2338	-0.4129	0	0.2861
+warm	rotavirus_a|africa	influenza_a|north_america	-0.3333	0.3016	-0.9683	0	0.4206
+warm	rotavirus_a|africa	influenza_a|oceania	-0.2464	0.5072	-1.0	0	0.5
+warm	rotavirus_a|africa	influenza_a|south_america	-0.2688	0.0538	-0.5914	0	0.6022
+warm	rotavirus_a|africa	rotavirus_a|africa	0.7222	0.4444	1.0	1	0.1111
+warm	rotavirus_a|africa	rotavirus_a|asia	-0.5139	-0.0278	-1.0	0	-0.2361
+warm	rotavirus_a|asia	influenza_a|africa	-0.6583	-0.3167	-1.0	0	0.4604
+warm	rotavirus_a|asia	influenza_a|asia	0.2917	-0.4167	1.0	0	0.5417
+warm	rotavirus_a|asia	influenza_a|europe	-0.1841	0.1144	-0.4826	0	0.2861
+warm	rotavirus_a|asia	influenza_a|north_america	-0.7566	-0.5132	-1.0	0	0.4206
+warm	rotavirus_a|asia	influenza_a|oceania	-0.4058	-0.3913	-0.4203	0	0.5
+warm	rotavirus_a|asia	influenza_a|south_america	-0.2258	0.0645	-0.5161	0	0.6022
+warm	rotavirus_a|asia	rotavirus_a|africa	-1.0	-1.0	-1.0	0	0.1111
+warm	rotavirus_a|asia	rotavirus_a|asia	0.0833	-0.8333	1.0	1	-0.2361
+warm	rotavirus_a|oceania	influenza_a|africa	-0.8458	-0.6917	-1.0	0	0.4604
+warm	rotavirus_a|oceania	influenza_a|asia	-0.8854	-0.7708	-1.0	0	0.5417
+warm	rotavirus_a|oceania	influenza_a|europe	-0.7313	-0.5423	-0.9204	0	0.2861
+warm	rotavirus_a|oceania	influenza_a|north_america	-0.037	0.873	-0.9471	0	0.4206
+warm	rotavirus_a|oceania	influenza_a|oceania	1.0	1.0	1.0	0	0.5
+warm	rotavirus_a|oceania	influenza_a|south_america	-0.7366	-0.5054	-0.9677	0	0.6022
+warm	rotavirus_a|oceania	rotavirus_a|africa	-0.3333	0.3333	-1.0	0	0.1111
+warm	rotavirus_a|oceania	rotavirus_a|asia	-0.5833	-0.1667	-1.0	0	-0.2361

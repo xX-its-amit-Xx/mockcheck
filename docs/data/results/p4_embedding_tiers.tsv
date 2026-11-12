@@ -1,0 +1,16 @@
+condition	tier_by_embedding	seeds	mean_utility	tier_agreement_with_5mer
+ce+abstain	far	3	0.3869	0.67
+ce+abstain	mid	3	0.3964	0.67
+ce+abstain	near	3	0.3889	0.67
+hybrid	far	3	0.414	0.67
+hybrid	mid	3	0.4655	0.67
+hybrid	near	3	0.6778	0.67
+knn+abstain	far	1	0.3056	0.67
+knn+abstain	mid	1	0.5214	0.67
+knn+abstain	near	1	0.6778	0.67
+majority	far	1	-0.6151	0.67
+majority	mid	1	-0.3143	0.67
+majority	near	1	-0.6778	0.67
+probe+abstain	far	3	0.1488	0.67
+probe+abstain	mid	3	-0.0214	0.67
+probe+abstain	near	3	-0.0741	0.67

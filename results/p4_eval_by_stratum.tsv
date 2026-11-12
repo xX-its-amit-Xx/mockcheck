@@ -1,225 +1,589 @@
-condition	group	stratum	n_eval	seeds	utility	accuracy_when_answering	coverage
-ce+abstain	dev	influenza_a|asia	80	3	0.6542	0.9938	0.6625
-ce+abstain	dev	influenza_a|europe	22	3	0.1364	0.7175	0.6212
-ce+abstain	dev	influenza_a|north_america	22	3	0.2727	0.7517	0.697
-ce+abstain	dev	influenza_a|south_america	11	3	0.7273	0.9833	0.7576
-ce+abstain	dev	rotavirus_a|africa	4	3	0.5	0.6667	0.5
-ce+abstain	dev	rotavirus_a|asia	1	3	-0.5	0.0	0.5
-ce+abstain	heldout	influenza_a|africa	80	3	0.2583	0.8879	0.4167
-ce+abstain	heldout	influenza_a|asia	32	3	0.5156	0.9855	0.5365
-ce+abstain	heldout	influenza_a|europe	67	3	0.2711	0.7556	0.5697
-ce+abstain	heldout	influenza_a|north_america	63	3	0.3942	0.9365	0.4418
-ce+abstain	heldout	influenza_a|oceania	23	3	0.1377	0.6723	0.5725
-ce+abstain	heldout	influenza_a|south_america	62	3	0.5753	0.9325	0.6774
-ce+abstain	heldout	rotavirus_a|africa	3	3	0.2222	0.8889	0.4444
-ce+abstain	heldout	rotavirus_a|asia	12	3	-0.2083	0.3833	0.375
-hybrid	dev	influenza_a|asia	80	3	0.6583	0.9939	0.6667
-hybrid	dev	influenza_a|europe	22	3	0.1364	0.7175	0.6212
-hybrid	dev	influenza_a|north_america	22	3	0.2727	0.7517	0.697
-hybrid	dev	influenza_a|south_america	11	3	0.803	0.9833	0.8333
-hybrid	dev	rotavirus_a|africa	4	3	0.5	0.6667	0.5
-hybrid	dev	rotavirus_a|asia	1	3	-0.5	0.0	0.5
-hybrid	heldout	influenza_a|africa	80	3	0.8708	0.9409	0.9875
-hybrid	heldout	influenza_a|asia	32	3	0.3333	0.7348	0.7083
-hybrid	heldout	influenza_a|europe	67	3	0.2239	0.6547	0.7264
-hybrid	heldout	influenza_a|north_america	63	3	0.4021	0.8977	0.4815
-hybrid	heldout	influenza_a|oceania	23	3	0.0	0.5	1.0
-hybrid	heldout	influenza_a|south_america	62	3	0.6129	0.8508	0.8763
-hybrid	heldout	rotavirus_a|africa	3	3	0.5	0.7944	0.8333
-hybrid	heldout	rotavirus_a|asia	12	3	-0.1389	0.4338	0.6389
-knn+abstain	dev	influenza_a|asia	80	1	0.1125	0.5563	1.0
-knn+abstain	dev	influenza_a|europe	22	1	0.2273	0.6136	1.0
-knn+abstain	dev	influenza_a|north_america	22	1	0.0	0.5	1.0
-knn+abstain	dev	influenza_a|south_america	11	1	0.4545	0.7273	1.0
-knn+abstain	dev	rotavirus_a|africa	4	1	1.0	1.0	1.0
-knn+abstain	dev	rotavirus_a|asia	1	1	-1.0	0.0	1.0
-knn+abstain	heldout	influenza_a|africa	80	1	0.8875	0.9437	1.0
-knn+abstain	heldout	influenza_a|asia	32	1	0.0938	0.5469	1.0
-knn+abstain	heldout	influenza_a|europe	67	1	0.2388	0.6194	1.0
-knn+abstain	heldout	influenza_a|north_america	63	1	0.9524	0.9762	1.0
-knn+abstain	heldout	influenza_a|oceania	23	1	0.0	0.5	1.0
-knn+abstain	heldout	influenza_a|south_america	62	1	0.6452	0.8226	1.0
-knn+abstain	heldout	rotavirus_a|africa	3	1	0.6667	0.8333	1.0
-knn+abstain	heldout	rotavirus_a|asia	12	1	-0.25	0.375	1.0
-majority	dev	influenza_a|asia	80	1	-1.0	0.0	1.0
-majority	dev	influenza_a|europe	22	1	-0.7727	0.1136	1.0
-majority	dev	influenza_a|north_america	22	1	0.0	0.5	1.0
-majority	dev	influenza_a|south_america	11	1	-0.2727	0.3636	1.0
-majority	dev	rotavirus_a|africa	4	1	1.0	1.0	1.0
-majority	dev	rotavirus_a|asia	1	1	-1.0	0.0	1.0
-majority	heldout	influenza_a|africa	80	1	-0.9875	0.0063	1.0
-majority	heldout	influenza_a|asia	32	1	-1.0	0.0	1.0
-majority	heldout	influenza_a|europe	67	1	-0.0299	0.4851	1.0
-majority	heldout	influenza_a|north_america	63	1	0.0	0.5	1.0
-majority	heldout	influenza_a|oceania	23	1	-1.0	0.0	1.0
-majority	heldout	influenza_a|south_america	62	1	-0.3548	0.3226	1.0
-majority	heldout	rotavirus_a|africa	3	1	0.6667	0.8333	1.0
-majority	heldout	rotavirus_a|asia	12	1	-0.5833	0.2083	1.0
-probe+abstain	dev	influenza_a|asia	80	3	0.3333	0.6667	0.3333
-probe+abstain	dev	influenza_a|europe	22	3	0.303	0.6364	0.3333
-probe+abstain	dev	influenza_a|north_america	22	3	-0.3333	0.0	0.3333
-probe+abstain	dev	influenza_a|south_america	11	3	0.2727	0.5327	0.4545
-probe+abstain	dev	rotavirus_a|africa	4	3	0.25	0.7083	0.8333
-probe+abstain	dev	rotavirus_a|asia	1	3	-0.1667	0.3333	0.8333
-probe+abstain	heldout	influenza_a|africa	80	3	-0.2938	0.0483	0.3438
-probe+abstain	heldout	influenza_a|asia	32	3	-0.3333	0.0	0.3333
-probe+abstain	heldout	influenza_a|europe	67	3	0.0572	0.3813	0.4005
-probe+abstain	heldout	influenza_a|north_america	63	3	0.2302	0.4836	0.5106
-probe+abstain	heldout	influenza_a|oceania	23	3	0.0145	0.6515	0.6812
-probe+abstain	heldout	influenza_a|south_america	62	3	0.2097	0.8416	0.3978
-probe+abstain	heldout	rotavirus_a|africa	3	3	0.2222	0.6111	0.7778
-probe+abstain	heldout	rotavirus_a|asia	12	3	-0.0139	0.4848	0.8194
-util_avg	dev	influenza_a|asia	80	3	0.0	0.0	0.0
-util_avg	dev	influenza_a|europe	22	3	0.0	0.0	0.0
-util_avg	dev	influenza_a|north_america	22	3	0.0	0.0	0.0
-util_avg	dev	influenza_a|south_america	11	3	0.0	0.0	0.0
-util_avg	dev	rotavirus_a|africa	4	3	0.1667	0.3333	0.1667
-util_avg	dev	rotavirus_a|asia	1	3	-0.1667	0.0	0.1667
-util_avg	heldout	influenza_a|africa	80	3	0.0	0.0	0.0
-util_avg	heldout	influenza_a|asia	32	3	0.0	0.0	0.0
-util_avg	heldout	influenza_a|europe	67	3	-0.0448	0.0	0.0448
-util_avg	heldout	influenza_a|north_america	63	3	0.1931	1.0	0.1931
-util_avg	heldout	influenza_a|oceania	23	3	0.4565	1.0	0.4565
-util_avg	heldout	influenza_a|south_america	62	3	0.0242	1.0	0.0242
-util_avg	heldout	rotavirus_a|africa	3	3	0.2778	1.0	0.2778
-util_avg	heldout	rotavirus_a|asia	12	3	0.0	0.6237	0.3611
-util_single-influenza_a_africa	dev	influenza_a|asia	80	3	-0.3292	0.3354	1.0
-util_single-influenza_a_africa	dev	influenza_a|europe	22	3	-0.4545	0.2727	1.0
-util_single-influenza_a_africa	dev	influenza_a|north_america	22	3	-0.8333	0.0	0.8333
-util_single-influenza_a_africa	dev	influenza_a|south_america	11	3	-0.9242	0.0303	0.9848
-util_single-influenza_a_africa	dev	rotavirus_a|africa	4	3	0.0	0.5	1.0
-util_single-influenza_a_africa	dev	rotavirus_a|asia	1	3	-1.0	0.0	1.0
-util_single-influenza_a_africa	heldout	influenza_a|africa	80	3	0.9188	0.9644	0.9896
-util_single-influenza_a_africa	heldout	influenza_a|asia	32	3	-0.026	0.4869	0.9948
-util_single-influenza_a_africa	heldout	influenza_a|europe	67	3	-0.9801	0.01	1.0
-util_single-influenza_a_africa	heldout	influenza_a|north_america	63	3	-0.2593	0.3704	1.0
-util_single-influenza_a_africa	heldout	influenza_a|oceania	23	3	-0.1449	0.4071	0.913
-util_single-influenza_a_africa	heldout	influenza_a|south_america	62	3	-0.793	0.1024	0.9973
-util_single-influenza_a_africa	heldout	rotavirus_a|africa	3	3	0.2222	0.6111	1.0
-util_single-influenza_a_africa	heldout	rotavirus_a|asia	12	3	-0.9167	0.0417	1.0
-util_single-influenza_a_asia	dev	influenza_a|asia	80	3	1.0	1.0	1.0
-util_single-influenza_a_asia	dev	influenza_a|europe	22	3	-0.1061	0.447	1.0
-util_single-influenza_a_asia	dev	influenza_a|north_america	22	3	0.0	0.5	1.0
-util_single-influenza_a_asia	dev	influenza_a|south_america	11	3	-0.4242	0.2879	1.0
-util_single-influenza_a_asia	dev	rotavirus_a|africa	4	3	-1.0	0.0	1.0
-util_single-influenza_a_asia	dev	rotavirus_a|asia	1	3	0.0	0.5	1.0
-util_single-influenza_a_asia	heldout	influenza_a|africa	80	3	-0.0917	0.4542	1.0
-util_single-influenza_a_asia	heldout	influenza_a|asia	32	3	0.9688	0.9844	1.0
-util_single-influenza_a_asia	heldout	influenza_a|europe	67	3	-0.4975	0.2512	1.0
-util_single-influenza_a_asia	heldout	influenza_a|north_america	63	3	-0.9048	0.0476	1.0
-util_single-influenza_a_asia	heldout	influenza_a|oceania	23	3	-1.0	0.0	1.0
-util_single-influenza_a_asia	heldout	influenza_a|south_america	62	3	-0.4247	0.2876	1.0
-util_single-influenza_a_asia	heldout	rotavirus_a|africa	3	3	-1.0	0.0	1.0
-util_single-influenza_a_asia	heldout	rotavirus_a|asia	12	3	0.0	0.5	1.0
-util_single-influenza_a_europe	dev	influenza_a|asia	80	3	-0.0187	0.4901	0.9813
-util_single-influenza_a_europe	dev	influenza_a|europe	22	3	1.0	1.0	1.0
-util_single-influenza_a_europe	dev	influenza_a|north_america	22	3	-0.0303	0.4848	1.0
-util_single-influenza_a_europe	dev	influenza_a|south_america	11	3	-0.1818	0.4091	1.0
-util_single-influenza_a_europe	dev	rotavirus_a|africa	4	3	-1.0	0.0	1.0
-util_single-influenza_a_europe	dev	rotavirus_a|asia	1	3	-1.0	0.0	1.0
-util_single-influenza_a_europe	heldout	influenza_a|africa	80	3	-0.1313	0.4342	0.9979
-util_single-influenza_a_europe	heldout	influenza_a|asia	32	3	-0.1458	0.4244	0.9688
-util_single-influenza_a_europe	heldout	influenza_a|europe	67	3	0.7015	0.8507	1.0
-util_single-influenza_a_europe	heldout	influenza_a|north_america	63	3	-0.9048	0.0476	1.0
-util_single-influenza_a_europe	heldout	influenza_a|oceania	23	3	-1.0	0.0	1.0
-util_single-influenza_a_europe	heldout	influenza_a|south_america	62	3	-0.2473	0.3744	0.9839
-util_single-influenza_a_europe	heldout	rotavirus_a|africa	3	3	-1.0	0.0	1.0
-util_single-influenza_a_europe	heldout	rotavirus_a|asia	12	3	-1.0	0.0	1.0
-util_single-influenza_a_north_america	dev	influenza_a|asia	80	3	-0.5	0.0	0.5
-util_single-influenza_a_north_america	dev	influenza_a|europe	22	3	-0.5	0.0	0.5
-util_single-influenza_a_north_america	dev	influenza_a|north_america	22	3	0.5	1.0	0.5
-util_single-influenza_a_north_america	dev	influenza_a|south_america	11	3	-0.5	0.0	0.5
-util_single-influenza_a_north_america	dev	rotavirus_a|africa	4	3	-0.5	0.0	0.5
-util_single-influenza_a_north_america	dev	rotavirus_a|asia	1	3	-0.5	0.0	0.5
-util_single-influenza_a_north_america	heldout	influenza_a|africa	80	3	-0.4875	0.0244	0.5125
-util_single-influenza_a_north_america	heldout	influenza_a|asia	32	3	-0.5	0.0	0.5
-util_single-influenza_a_north_america	heldout	influenza_a|europe	67	3	-0.5348	0.0136	0.5498
-util_single-influenza_a_north_america	heldout	influenza_a|north_america	63	3	0.8571	1.0	0.8571
-util_single-influenza_a_north_america	heldout	influenza_a|oceania	23	3	-0.0507	0.4701	0.9493
-util_single-influenza_a_north_america	heldout	influenza_a|south_america	62	3	-0.4839	0.0311	0.5161
-util_single-influenza_a_north_america	heldout	rotavirus_a|africa	3	3	-0.5	0.0	0.5
-util_single-influenza_a_north_america	heldout	rotavirus_a|asia	12	3	-0.5	0.0	0.5
-util_single-influenza_a_oceania	dev	influenza_a|asia	80	3	-1.0	0.0	1.0
-util_single-influenza_a_oceania	dev	influenza_a|europe	22	3	-1.0	0.0	1.0
-util_single-influenza_a_oceania	dev	influenza_a|north_america	22	3	-1.0	0.0	1.0
-util_single-influenza_a_oceania	dev	influenza_a|south_america	11	3	-0.8182	0.0909	1.0
-util_single-influenza_a_oceania	dev	rotavirus_a|africa	4	3	0.0	0.5	1.0
-util_single-influenza_a_oceania	dev	rotavirus_a|asia	1	3	-1.0	0.0	1.0
-util_single-influenza_a_oceania	heldout	influenza_a|africa	80	3	-0.975	0.0125	1.0
-util_single-influenza_a_oceania	heldout	influenza_a|asia	32	3	-1.0	0.0	1.0
-util_single-influenza_a_oceania	heldout	influenza_a|europe	67	3	-0.9851	0.0075	1.0
-util_single-influenza_a_oceania	heldout	influenza_a|north_america	63	3	-0.0952	0.4524	1.0
-util_single-influenza_a_oceania	heldout	influenza_a|oceania	23	3	1.0	1.0	1.0
-util_single-influenza_a_oceania	heldout	influenza_a|south_america	62	3	-0.8226	0.0887	1.0
-util_single-influenza_a_oceania	heldout	rotavirus_a|africa	3	3	-0.3333	0.3333	1.0
-util_single-influenza_a_oceania	heldout	rotavirus_a|asia	12	3	-0.5833	0.2083	1.0
-util_single-influenza_a_south_america	dev	influenza_a|asia	80	3	-1.0	0.0	1.0
-util_single-influenza_a_south_america	dev	influenza_a|europe	22	3	-0.7727	0.1136	1.0
-util_single-influenza_a_south_america	dev	influenza_a|north_america	22	3	-1.0	0.0	1.0
-util_single-influenza_a_south_america	dev	influenza_a|south_america	11	3	0.7273	0.8636	1.0
-util_single-influenza_a_south_america	dev	rotavirus_a|africa	4	3	-1.0	0.0	1.0
-util_single-influenza_a_south_america	dev	rotavirus_a|asia	1	3	0.0	0.5	1.0
-util_single-influenza_a_south_america	heldout	influenza_a|africa	80	3	-0.9875	0.0063	1.0
-util_single-influenza_a_south_america	heldout	influenza_a|asia	32	3	-1.0	0.0	1.0
-util_single-influenza_a_south_america	heldout	influenza_a|europe	67	3	-0.0299	0.4851	1.0
-util_single-influenza_a_south_america	heldout	influenza_a|north_america	63	3	-1.0	0.0	1.0
-util_single-influenza_a_south_america	heldout	influenza_a|oceania	23	3	-1.0	0.0	1.0
-util_single-influenza_a_south_america	heldout	influenza_a|south_america	62	3	0.6452	0.8226	1.0
-util_single-influenza_a_south_america	heldout	rotavirus_a|africa	3	3	-1.0	0.0	1.0
-util_single-influenza_a_south_america	heldout	rotavirus_a|asia	12	3	-0.5833	0.2083	1.0
-util_single-rotavirus_a_africa	dev	influenza_a|asia	80	3	-1.0	0.0	1.0
-util_single-rotavirus_a_africa	dev	influenza_a|europe	22	3	-1.0	0.0	1.0
-util_single-rotavirus_a_africa	dev	influenza_a|north_america	22	3	-1.0	0.0	1.0
-util_single-rotavirus_a_africa	dev	influenza_a|south_america	11	3	-0.8182	0.0909	1.0
-util_single-rotavirus_a_africa	dev	rotavirus_a|africa	4	3	1.0	1.0	1.0
-util_single-rotavirus_a_africa	dev	rotavirus_a|asia	1	3	-1.0	0.0	1.0
-util_single-rotavirus_a_africa	heldout	influenza_a|africa	80	3	0.025	0.5125	1.0
-util_single-rotavirus_a_africa	heldout	influenza_a|asia	32	3	-1.0	0.0	1.0
-util_single-rotavirus_a_africa	heldout	influenza_a|europe	67	3	-0.9851	0.0075	1.0
-util_single-rotavirus_a_africa	heldout	influenza_a|north_america	63	3	-0.0952	0.4524	1.0
-util_single-rotavirus_a_africa	heldout	influenza_a|oceania	23	3	0.0	0.5	1.0
-util_single-rotavirus_a_africa	heldout	influenza_a|south_america	62	3	-0.8226	0.0887	1.0
-util_single-rotavirus_a_africa	heldout	rotavirus_a|africa	3	3	0.6667	0.8333	1.0
-util_single-rotavirus_a_africa	heldout	rotavirus_a|asia	12	3	-0.5833	0.2083	1.0
-util_single-rotavirus_a_asia	dev	influenza_a|asia	80	3	0.0021	0.501	0.9979
-util_single-rotavirus_a_asia	dev	influenza_a|europe	22	3	-1.0	0.0	1.0
-util_single-rotavirus_a_asia	dev	influenza_a|north_america	22	3	-1.0	0.0	1.0
-util_single-rotavirus_a_asia	dev	influenza_a|south_america	11	3	-1.0	0.0	1.0
-util_single-rotavirus_a_asia	dev	rotavirus_a|africa	4	3	-0.8333	0.0	0.8333
-util_single-rotavirus_a_asia	dev	rotavirus_a|asia	1	3	0.1667	0.6667	0.8333
-util_single-rotavirus_a_asia	heldout	influenza_a|africa	80	3	-0.9646	0.0109	0.9854
-util_single-rotavirus_a_asia	heldout	influenza_a|asia	32	3	0.0417	0.523	0.9688
-util_single-rotavirus_a_asia	heldout	influenza_a|europe	67	3	-0.9975	0.0	0.9975
-util_single-rotavirus_a_asia	heldout	influenza_a|north_america	63	3	-0.9974	0.0	0.9974
-util_single-rotavirus_a_asia	heldout	influenza_a|oceania	23	3	-1.0	0.0	1.0
-util_single-rotavirus_a_asia	heldout	influenza_a|south_america	62	3	-0.9892	0.0	0.9892
-util_single-rotavirus_a_asia	heldout	rotavirus_a|africa	3	3	-0.6667	0.1667	1.0
-util_single-rotavirus_a_asia	heldout	rotavirus_a|asia	12	3	0.0556	0.5333	0.9444
-util_single-rotavirus_a_oceania	dev	influenza_a|asia	80	3	-1.0	0.0	1.0
-util_single-rotavirus_a_oceania	dev	influenza_a|europe	22	3	-1.0	0.0	1.0
-util_single-rotavirus_a_oceania	dev	influenza_a|north_america	22	3	-1.0	0.0	1.0
-util_single-rotavirus_a_oceania	dev	influenza_a|south_america	11	3	-0.8182	0.0909	1.0
-util_single-rotavirus_a_oceania	dev	rotavirus_a|africa	4	3	0.0	0.5	1.0
-util_single-rotavirus_a_oceania	dev	rotavirus_a|asia	1	3	-1.0	0.0	1.0
-util_single-rotavirus_a_oceania	heldout	influenza_a|africa	80	3	-0.975	0.0125	1.0
-util_single-rotavirus_a_oceania	heldout	influenza_a|asia	32	3	-1.0	0.0	1.0
-util_single-rotavirus_a_oceania	heldout	influenza_a|europe	67	3	-0.9851	0.0075	1.0
-util_single-rotavirus_a_oceania	heldout	influenza_a|north_america	63	3	-0.0952	0.4524	1.0
-util_single-rotavirus_a_oceania	heldout	influenza_a|oceania	23	3	1.0	1.0	1.0
-util_single-rotavirus_a_oceania	heldout	influenza_a|south_america	62	3	-0.8226	0.0887	1.0
-util_single-rotavirus_a_oceania	heldout	rotavirus_a|africa	3	3	-0.3333	0.3333	1.0
-util_single-rotavirus_a_oceania	heldout	rotavirus_a|asia	12	3	-0.5833	0.2083	1.0
-util_worst	dev	influenza_a|asia	80	3	0.0	0.0	0.0
-util_worst	dev	influenza_a|europe	22	3	0.0	0.0	0.0
-util_worst	dev	influenza_a|north_america	22	3	0.0	0.0	0.0
-util_worst	dev	influenza_a|south_america	11	3	0.0	0.0	0.0
-util_worst	dev	rotavirus_a|africa	4	3	0.1667	0.3333	0.1667
-util_worst	dev	rotavirus_a|asia	1	3	-0.1667	0.0	0.1667
-util_worst	heldout	influenza_a|africa	80	3	0.0	0.0	0.0
-util_worst	heldout	influenza_a|asia	32	3	0.0	0.0	0.0
-util_worst	heldout	influenza_a|europe	67	3	-0.0572	0.0	0.0572
-util_worst	heldout	influenza_a|north_america	63	3	0.1799	0.6667	0.1799
-util_worst	heldout	influenza_a|oceania	23	3	0.442	1.0	0.442
-util_worst	heldout	influenza_a|south_america	62	3	0.0242	1.0	0.0242
-util_worst	heldout	rotavirus_a|africa	3	3	0.2222	1.0	0.2222
-util_worst	heldout	rotavirus_a|asia	12	3	0.0556	0.8056	0.25
+condition	group	stratum	n_eval	seeds	utility	utility_host	utility_region	accuracy_when_answering	coverage
+ce+abstain	dev	influenza_a|asia	80	3	0.6542	0.9875	0.3208	0.9938	0.6625
+ce+abstain	dev	influenza_a|europe	22	3	0.1364	0.6667	-0.3939	0.7175	0.6212
+ce+abstain	dev	influenza_a|north_america	22	3	0.2727	0.9697	-0.4242	0.7517	0.697
+ce+abstain	dev	influenza_a|south_america	11	3	0.7273	0.8788	0.5758	0.9833	0.7576
+ce+abstain	dev	rotavirus_a|africa	4	3	0.5	0.6667	0.3333	0.6667	0.5
+ce+abstain	dev	rotavirus_a|asia	1	3	-0.5	-0.6667	-0.3333	0.0	0.5
+ce+abstain	heldout	influenza_a|africa	80	3	0.2583	0.675	-0.1583	0.8879	0.4167
+ce+abstain	heldout	influenza_a|asia	32	3	0.5156	0.8958	0.1354	0.9855	0.5365
+ce+abstain	heldout	influenza_a|europe	67	3	0.2711	0.5124	0.0299	0.7556	0.5697
+ce+abstain	heldout	influenza_a|north_america	63	3	0.3942	0.672	0.1164	0.9365	0.4418
+ce+abstain	heldout	influenza_a|oceania	23	3	0.1377	0.5072	-0.2319	0.6723	0.5725
+ce+abstain	heldout	influenza_a|south_america	62	3	0.5753	0.7258	0.4247	0.9325	0.6774
+ce+abstain	heldout	rotavirus_a|africa	3	3	0.2222	0.3333	0.1111	0.8889	0.4444
+ce+abstain	heldout	rotavirus_a|asia	12	3	-0.2083	-0.1389	-0.2778	0.3833	0.375
+ce+abstain	blind	influenza_a|asia	45	3	0.5074	0.9778	0.037	1.0	0.5074
+ce+abstain	blind	influenza_a|europe	42	3	0.496	0.9524	0.0397	0.9427	0.5833
+ce+abstain	blind	influenza_a|north_america	3	3	0.0556	0.3333	-0.2222	0.4667	0.3889
+ce+abstain	blind	influenza_a|south_america	15	3	0.7778	0.9778	0.5778	1.0	0.7778
+ce+abstain	blind	rotavirus_a|africa	25	3	0.4733	0.76	0.1867	0.9915	0.4867
+ce+abstain	blind	rotavirus_a|asia	4	3	-0.4167	-0.5	-0.3333	0.0	0.4167
+ce+abstain	blind	rotavirus_a|oceania	7	3	0.1905	0.6667	-0.2857	0.7048	0.5238
+ce_long+abstain	dev	influenza_a|asia	80	3	0.9854	1.0	0.9708	0.9979	0.9896
+ce_long+abstain	dev	influenza_a|europe	22	3	0.2045	1.0	-0.5909	0.6032	0.9924
+ce_long+abstain	dev	influenza_a|north_america	22	3	0.1439	1.0	-0.7121	0.5919	0.8561
+ce_long+abstain	dev	influenza_a|south_america	11	3	0.7727	0.8182	0.7273	0.9323	0.8939
+ce_long+abstain	dev	rotavirus_a|africa	4	3	0.4167	0.3333	0.5	0.6667	0.4167
+ce_long+abstain	dev	rotavirus_a|asia	1	3	-0.1667	0.0	-0.3333	0.0	0.1667
+ce_long+abstain	heldout	influenza_a|africa	80	3	0.6229	0.9958	0.25	0.8957	0.8104
+ce_long+abstain	heldout	influenza_a|asia	32	3	0.4427	1.0	-0.1146	0.7995	0.7865
+ce_long+abstain	heldout	influenza_a|europe	67	3	0.3035	0.6517	-0.0448	0.6777	0.8806
+ce_long+abstain	heldout	influenza_a|north_america	63	3	0.4339	0.2963	0.5714	0.7356	0.836
+ce_long+abstain	heldout	influenza_a|oceania	23	3	0.0072	0.4058	-0.3913	0.5354	0.6739
+ce_long+abstain	heldout	influenza_a|south_america	62	3	0.6935	0.7796	0.6075	0.8882	0.8978
+ce_long+abstain	heldout	rotavirus_a|africa	3	3	0.3889	0.7778	0.0	0.8056	0.7222
+ce_long+abstain	heldout	rotavirus_a|asia	12	3	-0.125	0.1944	-0.4444	0.4434	0.5694
+ce_long+abstain	blind	influenza_a|asia	45	3	0.5815	1.0	0.163	0.8703	0.8185
+ce_long+abstain	blind	influenza_a|europe	42	3	0.4325	0.9762	-0.1111	0.74	0.9325
+ce_long+abstain	blind	influenza_a|north_america	3	3	0.6667	0.8889	0.4444	0.8778	0.8889
+ce_long+abstain	blind	influenza_a|south_america	15	3	0.9556	0.9778	0.9333	0.9889	0.9778
+ce_long+abstain	blind	rotavirus_a|africa	25	3	0.5467	0.5867	0.5067	0.9743	0.5867
+ce_long+abstain	blind	rotavirus_a|asia	4	3	-0.2083	0.0833	-0.5	0.3175	0.5417
+ce_long+abstain	blind	rotavirus_a|oceania	7	3	0.0	0.7143	-0.7143	0.5222	0.7143
+hybrid	dev	influenza_a|asia	80	3	0.6583	0.9875	0.3292	0.9939	0.6667
+hybrid	dev	influenza_a|europe	22	3	0.1364	0.6667	-0.3939	0.7175	0.6212
+hybrid	dev	influenza_a|north_america	22	3	0.2727	0.9697	-0.4242	0.7517	0.697
+hybrid	dev	influenza_a|south_america	11	3	0.803	1.0	0.6061	0.9833	0.8333
+hybrid	dev	rotavirus_a|africa	4	3	0.5	0.6667	0.3333	0.6667	0.5
+hybrid	dev	rotavirus_a|asia	1	3	-0.5	-0.6667	-0.3333	0.0	0.5
+hybrid	heldout	influenza_a|africa	80	3	0.8708	0.9958	0.7458	0.9409	0.9875
+hybrid	heldout	influenza_a|asia	32	3	0.3333	0.9688	-0.3021	0.7348	0.7083
+hybrid	heldout	influenza_a|europe	67	3	0.2239	0.5075	-0.0597	0.6547	0.7264
+hybrid	heldout	influenza_a|north_america	63	3	0.4021	0.6878	0.1164	0.8977	0.4815
+hybrid	heldout	influenza_a|oceania	23	3	0.0	1.0	-1.0	0.5	1.0
+hybrid	heldout	influenza_a|south_america	62	3	0.6129	0.8172	0.4086	0.8508	0.8763
+hybrid	heldout	rotavirus_a|africa	3	3	0.5	0.2222	0.7778	0.7944	0.8333
+hybrid	heldout	rotavirus_a|asia	12	3	-0.1389	0.0	-0.2778	0.4338	0.6389
+hybrid	blind	influenza_a|asia	45	3	0.5074	0.9778	0.037	1.0	0.5074
+hybrid	blind	influenza_a|europe	42	3	0.5079	0.9524	0.0635	0.9427	0.5952
+hybrid	blind	influenza_a|north_america	3	3	0.6111	0.5556	0.6667	0.9333	0.7222
+hybrid	blind	influenza_a|south_america	15	3	0.8444	0.9778	0.7111	1.0	0.8444
+hybrid	blind	rotavirus_a|africa	25	3	0.84	0.92	0.76	0.9928	0.8533
+hybrid	blind	rotavirus_a|asia	4	3	-0.2917	-0.0833	-0.5	0.3194	0.5417
+hybrid	blind	rotavirus_a|oceania	7	3	0.119	1.0	-0.7619	0.5684	0.881
+knn+abstain	dev	influenza_a|asia	80	1	0.1125	1.0	-0.775	0.5563	1.0
+knn+abstain	dev	influenza_a|europe	22	1	0.2273	1.0	-0.5455	0.6136	1.0
+knn+abstain	dev	influenza_a|north_america	22	1	0.0	1.0	-1.0	0.5	1.0
+knn+abstain	dev	influenza_a|south_america	11	1	0.4545	0.6364	0.2727	0.7273	1.0
+knn+abstain	dev	rotavirus_a|africa	4	1	1.0	1.0	1.0	1.0	1.0
+knn+abstain	dev	rotavirus_a|asia	1	1	-1.0	-1.0	-1.0	0.0	1.0
+knn+abstain	heldout	influenza_a|africa	80	1	0.8875	1.0	0.775	0.9437	1.0
+knn+abstain	heldout	influenza_a|asia	32	1	0.0938	1.0	-0.8125	0.5469	1.0
+knn+abstain	heldout	influenza_a|europe	67	1	0.2388	0.3731	0.1045	0.6194	1.0
+knn+abstain	heldout	influenza_a|north_america	63	1	0.9524	1.0	0.9048	0.9762	1.0
+knn+abstain	heldout	influenza_a|oceania	23	1	0.0	1.0	-1.0	0.5	1.0
+knn+abstain	heldout	influenza_a|south_america	62	1	0.6452	0.9355	0.3548	0.8226	1.0
+knn+abstain	heldout	rotavirus_a|africa	3	1	0.6667	0.3333	1.0	0.8333	1.0
+knn+abstain	heldout	rotavirus_a|asia	12	1	-0.25	0.0	-0.5	0.375	1.0
+knn+abstain	blind	influenza_a|asia	45	1	0.1111	1.0	-0.7778	0.5556	1.0
+knn+abstain	blind	influenza_a|europe	42	1	0.3571	0.7143	0.0	0.6786	1.0
+knn+abstain	blind	influenza_a|north_america	3	1	0.6667	0.6667	0.6667	1.0	0.6667
+knn+abstain	blind	influenza_a|south_america	15	1	0.8	0.6	1.0	0.9	1.0
+knn+abstain	blind	rotavirus_a|africa	25	1	1.0	1.0	1.0	1.0	1.0
+knn+abstain	blind	rotavirus_a|asia	4	1	0.25	1.0	-0.5	0.625	1.0
+knn+abstain	blind	rotavirus_a|oceania	7	1	0.0	1.0	-1.0	0.5	1.0
+majority	dev	influenza_a|asia	80	1	-1.0	-1.0	-1.0	0.0	1.0
+majority	dev	influenza_a|europe	22	1	-0.7727	-0.5455	-1.0	0.1136	1.0
+majority	dev	influenza_a|north_america	22	1	0.0	-1.0	1.0	0.5	1.0
+majority	dev	influenza_a|south_america	11	1	-0.2727	0.4545	-1.0	0.3636	1.0
+majority	dev	rotavirus_a|africa	4	1	1.0	1.0	1.0	1.0	1.0
+majority	dev	rotavirus_a|asia	1	1	-1.0	-1.0	-1.0	0.0	1.0
+majority	heldout	influenza_a|africa	80	1	-0.9875	-0.975	-1.0	0.0063	1.0
+majority	heldout	influenza_a|asia	32	1	-1.0	-1.0	-1.0	0.0	1.0
+majority	heldout	influenza_a|europe	67	1	-0.0299	0.9403	-1.0	0.4851	1.0
+majority	heldout	influenza_a|north_america	63	1	0.0	-1.0	1.0	0.5	1.0
+majority	heldout	influenza_a|oceania	23	1	-1.0	-1.0	-1.0	0.0	1.0
+majority	heldout	influenza_a|south_america	62	1	-0.3548	0.2903	-1.0	0.3226	1.0
+majority	heldout	rotavirus_a|africa	3	1	0.6667	0.3333	1.0	0.8333	1.0
+majority	heldout	rotavirus_a|asia	12	1	-0.5833	-0.1667	-1.0	0.2083	1.0
+majority	blind	influenza_a|asia	45	1	-1.0	-1.0	-1.0	0.0	1.0
+majority	blind	influenza_a|europe	42	1	-0.3095	0.381	-1.0	0.3452	1.0
+majority	blind	influenza_a|north_america	3	1	0.6667	0.3333	1.0	0.8333	1.0
+majority	blind	influenza_a|south_america	15	1	0.0	1.0	-1.0	0.5	1.0
+majority	blind	rotavirus_a|africa	25	1	0.96	0.92	1.0	0.98	1.0
+majority	blind	rotavirus_a|asia	4	1	-1.0	-1.0	-1.0	0.0	1.0
+majority	blind	rotavirus_a|oceania	7	1	0.0	1.0	-1.0	0.5	1.0
+probe+abstain	dev	influenza_a|asia	80	3	0.3333	0.6667	0.0	0.6667	0.3333
+probe+abstain	dev	influenza_a|europe	22	3	0.303	0.6061	0.0	0.6364	0.3333
+probe+abstain	dev	influenza_a|north_america	22	3	-0.3333	-0.6667	0.0	0.0	0.3333
+probe+abstain	dev	influenza_a|south_america	11	3	0.2727	0.303	0.2424	0.5327	0.4545
+probe+abstain	dev	rotavirus_a|africa	4	3	0.25	1.0	-0.5	0.7083	0.8333
+probe+abstain	dev	rotavirus_a|asia	1	3	-0.1667	-1.0	0.6667	0.3333	0.8333
+probe+abstain	heldout	influenza_a|africa	80	3	-0.2938	-0.5458	-0.0417	0.0483	0.3438
+probe+abstain	heldout	influenza_a|asia	32	3	-0.3333	-0.6562	-0.0104	0.0	0.3333
+probe+abstain	heldout	influenza_a|europe	67	3	0.0572	0.2488	-0.1343	0.3813	0.4005
+probe+abstain	heldout	influenza_a|north_america	63	3	0.2302	0.1058	0.3545	0.4836	0.5106
+probe+abstain	heldout	influenza_a|oceania	23	3	0.0145	0.6377	-0.6087	0.6515	0.6812
+probe+abstain	heldout	influenza_a|south_america	62	3	0.2097	0.3602	0.0591	0.8416	0.3978
+probe+abstain	heldout	rotavirus_a|africa	3	3	0.2222	0.2222	0.2222	0.6111	0.7778
+probe+abstain	heldout	rotavirus_a|asia	12	3	-0.0139	-0.1389	0.1111	0.4848	0.8194
+probe+abstain	blind	influenza_a|asia	45	3	-0.2741	-0.5481	0.0	0.0593	0.3333
+probe+abstain	blind	influenza_a|europe	42	3	0.0357	0.2698	-0.1984	0.3609	0.4325
+probe+abstain	blind	influenza_a|north_america	3	3	-0.2778	-0.6667	0.1111	0.0833	0.3889
+probe+abstain	blind	influenza_a|south_america	15	3	0.2778	0.4889	0.0667	0.5722	0.3889
+probe+abstain	blind	rotavirus_a|africa	25	3	0.4067	0.92	-0.1067	0.7825	0.82
+probe+abstain	blind	rotavirus_a|asia	4	3	-0.25	-1.0	0.5	0.2917	0.8333
+probe+abstain	blind	rotavirus_a|oceania	7	3	0.1429	0.9524	-0.6667	0.6667	0.8095
+util_avg	dev	influenza_a|asia	80	3	0.0	0.0	0.0	0.0	0.0
+util_avg	dev	influenza_a|europe	22	3	0.0	0.0	0.0	0.0	0.0
+util_avg	dev	influenza_a|north_america	22	3	0.0	0.0	0.0	0.0	0.0
+util_avg	dev	influenza_a|south_america	11	3	0.0	0.0	0.0	0.0	0.0
+util_avg	dev	rotavirus_a|africa	4	3	0.1667	0.3333	0.0	0.3333	0.1667
+util_avg	dev	rotavirus_a|asia	1	3	-0.1667	-0.3333	0.0	0.0	0.1667
+util_avg	heldout	influenza_a|africa	80	3	0.0	0.0	0.0	0.0	0.0
+util_avg	heldout	influenza_a|asia	32	3	0.0	0.0	0.0	0.0	0.0
+util_avg	heldout	influenza_a|europe	67	3	-0.0448	-0.0896	0.0	0.0	0.0448
+util_avg	heldout	influenza_a|north_america	63	3	0.1931	0.3862	0.0	1.0	0.1931
+util_avg	heldout	influenza_a|oceania	23	3	0.4565	0.913	0.0	1.0	0.4565
+util_avg	heldout	influenza_a|south_america	62	3	0.0242	0.0484	0.0	1.0	0.0242
+util_avg	heldout	rotavirus_a|africa	3	3	0.2778	0.5556	0.0	1.0	0.2778
+util_avg	heldout	rotavirus_a|asia	12	3	0.0	0.0	0.0	0.6237	0.3611
+util_avg	blind	influenza_a|asia	45	3	0.0	0.0	0.0	0.0	0.0
+util_avg	blind	influenza_a|europe	42	3	0.0	0.0	0.0	0.0	0.0
+util_avg	blind	influenza_a|north_america	3	3	0.0	0.0	0.0	0.0	0.0
+util_avg	blind	influenza_a|south_america	15	3	-0.0111	-0.0222	0.0	0.0	0.0111
+util_avg	blind	rotavirus_a|africa	25	3	0.2867	0.5733	0.0	0.9589	0.3133
+util_avg	blind	rotavirus_a|asia	4	3	-0.3333	-0.6667	0.0	0.0	0.3333
+util_avg	blind	rotavirus_a|oceania	7	3	0.3095	0.619	0.0	1.0	0.3095
+util_single-influenza_a_africa	dev	influenza_a|asia	80	3	-0.3292	0.3417	-1.0	0.3354	1.0
+util_single-influenza_a_africa	dev	influenza_a|europe	22	3	-0.4545	0.0909	-1.0	0.2727	1.0
+util_single-influenza_a_africa	dev	influenza_a|north_america	22	3	-0.8333	-0.6667	-1.0	0.0	0.8333
+util_single-influenza_a_africa	dev	influenza_a|south_america	11	3	-0.9242	-0.8485	-1.0	0.0303	0.9848
+util_single-influenza_a_africa	dev	rotavirus_a|africa	4	3	0.0	-1.0	1.0	0.5	1.0
+util_single-influenza_a_africa	dev	rotavirus_a|asia	1	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_africa	heldout	influenza_a|africa	80	3	0.9188	0.8375	1.0	0.9644	0.9896
+util_single-influenza_a_africa	heldout	influenza_a|asia	32	3	-0.026	0.9479	-1.0	0.4869	0.9948
+util_single-influenza_a_africa	heldout	influenza_a|europe	67	3	-0.9801	-0.9602	-1.0	0.01	1.0
+util_single-influenza_a_africa	heldout	influenza_a|north_america	63	3	-0.2593	0.4815	-1.0	0.3704	1.0
+util_single-influenza_a_africa	heldout	influenza_a|oceania	23	3	-0.1449	0.7101	-1.0	0.4071	0.913
+util_single-influenza_a_africa	heldout	influenza_a|south_america	62	3	-0.793	-0.586	-1.0	0.1024	0.9973
+util_single-influenza_a_africa	heldout	rotavirus_a|africa	3	3	0.2222	-0.5556	1.0	0.6111	1.0
+util_single-influenza_a_africa	heldout	rotavirus_a|asia	12	3	-0.9167	-0.8333	-1.0	0.0417	1.0
+util_single-influenza_a_africa	blind	influenza_a|asia	45	3	-0.0296	0.9407	-1.0	0.4852	1.0
+util_single-influenza_a_africa	blind	influenza_a|europe	42	3	-0.6905	-0.381	-1.0	0.1548	1.0
+util_single-influenza_a_africa	blind	influenza_a|north_america	3	3	-0.6667	-0.3333	-1.0	0.1667	1.0
+util_single-influenza_a_africa	blind	influenza_a|south_america	15	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_africa	blind	rotavirus_a|africa	25	3	0.0133	-0.9733	1.0	0.5067	1.0
+util_single-influenza_a_africa	blind	rotavirus_a|asia	4	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_africa	blind	rotavirus_a|oceania	7	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_asia	dev	influenza_a|asia	80	3	1.0	1.0	1.0	1.0	1.0
+util_single-influenza_a_asia	dev	influenza_a|europe	22	3	-0.1061	0.7879	-1.0	0.447	1.0
+util_single-influenza_a_asia	dev	influenza_a|north_america	22	3	0.0	1.0	-1.0	0.5	1.0
+util_single-influenza_a_asia	dev	influenza_a|south_america	11	3	-0.4242	0.1515	-1.0	0.2879	1.0
+util_single-influenza_a_asia	dev	rotavirus_a|africa	4	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_asia	dev	rotavirus_a|asia	1	3	0.0	-1.0	1.0	0.5	1.0
+util_single-influenza_a_asia	heldout	influenza_a|africa	80	3	-0.0917	0.8167	-1.0	0.4542	1.0
+util_single-influenza_a_asia	heldout	influenza_a|asia	32	3	0.9688	0.9375	1.0	0.9844	1.0
+util_single-influenza_a_asia	heldout	influenza_a|europe	67	3	-0.4975	0.005	-1.0	0.2512	1.0
+util_single-influenza_a_asia	heldout	influenza_a|north_america	63	3	-0.9048	-0.8095	-1.0	0.0476	1.0
+util_single-influenza_a_asia	heldout	influenza_a|oceania	23	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_asia	heldout	influenza_a|south_america	62	3	-0.4247	0.1505	-1.0	0.2876	1.0
+util_single-influenza_a_asia	heldout	rotavirus_a|africa	3	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_asia	heldout	rotavirus_a|asia	12	3	0.0	-1.0	1.0	0.5	1.0
+util_single-influenza_a_asia	blind	influenza_a|asia	45	3	1.0	1.0	1.0	1.0	1.0
+util_single-influenza_a_asia	blind	influenza_a|europe	42	3	-0.2381	0.5238	-1.0	0.381	1.0
+util_single-influenza_a_asia	blind	influenza_a|north_america	3	3	-0.2222	0.5556	-1.0	0.3889	1.0
+util_single-influenza_a_asia	blind	influenza_a|south_america	15	3	-0.3778	0.2444	-1.0	0.3111	1.0
+util_single-influenza_a_asia	blind	rotavirus_a|africa	25	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_asia	blind	rotavirus_a|asia	4	3	0.0	-1.0	1.0	0.5	1.0
+util_single-influenza_a_asia	blind	rotavirus_a|oceania	7	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_europe	dev	influenza_a|asia	80	3	-0.0187	0.9625	-1.0	0.4901	0.9813
+util_single-influenza_a_europe	dev	influenza_a|europe	22	3	1.0	1.0	1.0	1.0	1.0
+util_single-influenza_a_europe	dev	influenza_a|north_america	22	3	-0.0303	0.9394	-1.0	0.4848	1.0
+util_single-influenza_a_europe	dev	influenza_a|south_america	11	3	-0.1818	0.6364	-1.0	0.4091	1.0
+util_single-influenza_a_europe	dev	rotavirus_a|africa	4	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_europe	dev	rotavirus_a|asia	1	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_europe	heldout	influenza_a|africa	80	3	-0.1313	0.7375	-1.0	0.4342	0.9979
+util_single-influenza_a_europe	heldout	influenza_a|asia	32	3	-0.1458	0.7083	-1.0	0.4244	0.9688
+util_single-influenza_a_europe	heldout	influenza_a|europe	67	3	0.7015	0.403	1.0	0.8507	1.0
+util_single-influenza_a_europe	heldout	influenza_a|north_america	63	3	-0.9048	-0.8095	-1.0	0.0476	1.0
+util_single-influenza_a_europe	heldout	influenza_a|oceania	23	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_europe	heldout	influenza_a|south_america	62	3	-0.2473	0.5054	-1.0	0.3744	0.9839
+util_single-influenza_a_europe	heldout	rotavirus_a|africa	3	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_europe	heldout	rotavirus_a|asia	12	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_europe	blind	influenza_a|asia	45	3	-0.2556	0.4889	-1.0	0.3576	0.9148
+util_single-influenza_a_europe	blind	influenza_a|europe	42	3	1.0	1.0	1.0	1.0	1.0
+util_single-influenza_a_europe	blind	influenza_a|north_america	3	3	-0.6667	-0.3333	-1.0	0.1667	1.0
+util_single-influenza_a_europe	blind	influenza_a|south_america	15	3	-0.1	0.8	-1.0	0.4494	0.9889
+util_single-influenza_a_europe	blind	rotavirus_a|africa	25	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_europe	blind	rotavirus_a|asia	4	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_europe	blind	rotavirus_a|oceania	7	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_north_america	dev	influenza_a|asia	80	3	-0.5	0.0	-1.0	0.0	0.5
+util_single-influenza_a_north_america	dev	influenza_a|europe	22	3	-0.5	0.0	-1.0	0.0	0.5
+util_single-influenza_a_north_america	dev	influenza_a|north_america	22	3	0.5	0.0	1.0	1.0	0.5
+util_single-influenza_a_north_america	dev	influenza_a|south_america	11	3	-0.5	0.0	-1.0	0.0	0.5
+util_single-influenza_a_north_america	dev	rotavirus_a|africa	4	3	-0.5	0.0	-1.0	0.0	0.5
+util_single-influenza_a_north_america	dev	rotavirus_a|asia	1	3	-0.5	0.0	-1.0	0.0	0.5
+util_single-influenza_a_north_america	heldout	influenza_a|africa	80	3	-0.4875	0.025	-1.0	0.0244	0.5125
+util_single-influenza_a_north_america	heldout	influenza_a|asia	32	3	-0.5	0.0	-1.0	0.0	0.5
+util_single-influenza_a_north_america	heldout	influenza_a|europe	67	3	-0.5348	-0.0697	-1.0	0.0136	0.5498
+util_single-influenza_a_north_america	heldout	influenza_a|north_america	63	3	0.8571	0.7143	1.0	1.0	0.8571
+util_single-influenza_a_north_america	heldout	influenza_a|oceania	23	3	-0.0507	0.8986	-1.0	0.4701	0.9493
+util_single-influenza_a_north_america	heldout	influenza_a|south_america	62	3	-0.4839	0.0323	-1.0	0.0311	0.5161
+util_single-influenza_a_north_america	heldout	rotavirus_a|africa	3	3	-0.5	0.0	-1.0	0.0	0.5
+util_single-influenza_a_north_america	heldout	rotavirus_a|asia	12	3	-0.5	0.0	-1.0	0.0	0.5
+util_single-influenza_a_north_america	blind	influenza_a|asia	45	3	-0.5	0.0	-1.0	0.0	0.5
+util_single-influenza_a_north_america	blind	influenza_a|europe	42	3	-0.5	0.0	-1.0	0.0	0.5
+util_single-influenza_a_north_america	blind	influenza_a|north_america	3	3	0.5	0.0	1.0	1.0	0.5
+util_single-influenza_a_north_america	blind	influenza_a|south_america	15	3	-0.5	0.0	-1.0	0.0	0.5
+util_single-influenza_a_north_america	blind	rotavirus_a|africa	25	3	-0.5	0.0	-1.0	0.0	0.5
+util_single-influenza_a_north_america	blind	rotavirus_a|asia	4	3	-0.5	0.0	-1.0	0.0	0.5
+util_single-influenza_a_north_america	blind	rotavirus_a|oceania	7	3	-0.5	0.0	-1.0	0.0	0.5
+util_single-influenza_a_oceania	dev	influenza_a|asia	80	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_oceania	dev	influenza_a|europe	22	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_oceania	dev	influenza_a|north_america	22	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_oceania	dev	influenza_a|south_america	11	3	-0.8182	-0.6364	-1.0	0.0909	1.0
+util_single-influenza_a_oceania	dev	rotavirus_a|africa	4	3	0.0	1.0	-1.0	0.5	1.0
+util_single-influenza_a_oceania	dev	rotavirus_a|asia	1	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_oceania	heldout	influenza_a|africa	80	3	-0.975	-0.95	-1.0	0.0125	1.0
+util_single-influenza_a_oceania	heldout	influenza_a|asia	32	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_oceania	heldout	influenza_a|europe	67	3	-0.9851	-0.9701	-1.0	0.0075	1.0
+util_single-influenza_a_oceania	heldout	influenza_a|north_america	63	3	-0.0952	0.8095	-1.0	0.4524	1.0
+util_single-influenza_a_oceania	heldout	influenza_a|oceania	23	3	1.0	1.0	1.0	1.0	1.0
+util_single-influenza_a_oceania	heldout	influenza_a|south_america	62	3	-0.8226	-0.6452	-1.0	0.0887	1.0
+util_single-influenza_a_oceania	heldout	rotavirus_a|africa	3	3	-0.3333	0.3333	-1.0	0.3333	1.0
+util_single-influenza_a_oceania	heldout	rotavirus_a|asia	12	3	-0.5833	-0.1667	-1.0	0.2083	1.0
+util_single-influenza_a_oceania	blind	influenza_a|asia	45	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_oceania	blind	influenza_a|europe	42	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_oceania	blind	influenza_a|north_america	3	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_oceania	blind	influenza_a|south_america	15	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_oceania	blind	rotavirus_a|africa	25	3	-0.04	0.92	-1.0	0.48	1.0
+util_single-influenza_a_oceania	blind	rotavirus_a|asia	4	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_oceania	blind	rotavirus_a|oceania	7	3	1.0	1.0	1.0	1.0	1.0
+util_single-influenza_a_south_america	dev	influenza_a|asia	80	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_south_america	dev	influenza_a|europe	22	3	-0.7727	-0.5455	-1.0	0.1136	1.0
+util_single-influenza_a_south_america	dev	influenza_a|north_america	22	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_south_america	dev	influenza_a|south_america	11	3	0.7273	0.4545	1.0	0.8636	1.0
+util_single-influenza_a_south_america	dev	rotavirus_a|africa	4	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_south_america	dev	rotavirus_a|asia	1	3	0.0	1.0	-1.0	0.5	1.0
+util_single-influenza_a_south_america	heldout	influenza_a|africa	80	3	-0.9875	-0.975	-1.0	0.0063	1.0
+util_single-influenza_a_south_america	heldout	influenza_a|asia	32	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_south_america	heldout	influenza_a|europe	67	3	-0.0299	0.9403	-1.0	0.4851	1.0
+util_single-influenza_a_south_america	heldout	influenza_a|north_america	63	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_south_america	heldout	influenza_a|oceania	23	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_south_america	heldout	influenza_a|south_america	62	3	0.6452	0.2903	1.0	0.8226	1.0
+util_single-influenza_a_south_america	heldout	rotavirus_a|africa	3	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_south_america	heldout	rotavirus_a|asia	12	3	-0.5833	-0.1667	-1.0	0.2083	1.0
+util_single-influenza_a_south_america	blind	influenza_a|asia	45	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_south_america	blind	influenza_a|europe	42	3	-0.3095	0.381	-1.0	0.3452	1.0
+util_single-influenza_a_south_america	blind	influenza_a|north_america	3	3	-0.3333	0.3333	-1.0	0.3333	1.0
+util_single-influenza_a_south_america	blind	influenza_a|south_america	15	3	1.0	1.0	1.0	1.0	1.0
+util_single-influenza_a_south_america	blind	rotavirus_a|africa	25	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-influenza_a_south_america	blind	rotavirus_a|asia	4	3	-0.75	-0.5	-1.0	0.125	1.0
+util_single-influenza_a_south_america	blind	rotavirus_a|oceania	7	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_africa	dev	influenza_a|asia	80	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_africa	dev	influenza_a|europe	22	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_africa	dev	influenza_a|north_america	22	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_africa	dev	influenza_a|south_america	11	3	-0.8182	-0.6364	-1.0	0.0909	1.0
+util_single-rotavirus_a_africa	dev	rotavirus_a|africa	4	3	1.0	1.0	1.0	1.0	1.0
+util_single-rotavirus_a_africa	dev	rotavirus_a|asia	1	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_africa	heldout	influenza_a|africa	80	3	0.025	-0.95	1.0	0.5125	1.0
+util_single-rotavirus_a_africa	heldout	influenza_a|asia	32	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_africa	heldout	influenza_a|europe	67	3	-0.9851	-0.9701	-1.0	0.0075	1.0
+util_single-rotavirus_a_africa	heldout	influenza_a|north_america	63	3	-0.0952	0.8095	-1.0	0.4524	1.0
+util_single-rotavirus_a_africa	heldout	influenza_a|oceania	23	3	0.0	1.0	-1.0	0.5	1.0
+util_single-rotavirus_a_africa	heldout	influenza_a|south_america	62	3	-0.8226	-0.6452	-1.0	0.0887	1.0
+util_single-rotavirus_a_africa	heldout	rotavirus_a|africa	3	3	0.6667	0.3333	1.0	0.8333	1.0
+util_single-rotavirus_a_africa	heldout	rotavirus_a|asia	12	3	-0.5833	-0.1667	-1.0	0.2083	1.0
+util_single-rotavirus_a_africa	blind	influenza_a|asia	45	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_africa	blind	influenza_a|europe	42	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_africa	blind	influenza_a|north_america	3	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_africa	blind	influenza_a|south_america	15	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_africa	blind	rotavirus_a|africa	25	3	0.96	0.92	1.0	0.98	1.0
+util_single-rotavirus_a_africa	blind	rotavirus_a|asia	4	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_africa	blind	rotavirus_a|oceania	7	3	0.0	1.0	-1.0	0.5	1.0
+util_single-rotavirus_a_asia	dev	influenza_a|asia	80	3	0.0021	-0.9958	1.0	0.501	0.9979
+util_single-rotavirus_a_asia	dev	influenza_a|europe	22	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_asia	dev	influenza_a|north_america	22	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_asia	dev	influenza_a|south_america	11	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_asia	dev	rotavirus_a|africa	4	3	-0.8333	-0.6667	-1.0	0.0	0.8333
+util_single-rotavirus_a_asia	dev	rotavirus_a|asia	1	3	0.1667	-0.6667	1.0	0.6667	0.8333
+util_single-rotavirus_a_asia	heldout	influenza_a|africa	80	3	-0.9646	-0.9292	-1.0	0.0109	0.9854
+util_single-rotavirus_a_asia	heldout	influenza_a|asia	32	3	0.0417	-0.9167	1.0	0.523	0.9688
+util_single-rotavirus_a_asia	heldout	influenza_a|europe	67	3	-0.9975	-0.995	-1.0	0.0	0.9975
+util_single-rotavirus_a_asia	heldout	influenza_a|north_america	63	3	-0.9974	-0.9947	-1.0	0.0	0.9974
+util_single-rotavirus_a_asia	heldout	influenza_a|oceania	23	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_asia	heldout	influenza_a|south_america	62	3	-0.9892	-0.9785	-1.0	0.0	0.9892
+util_single-rotavirus_a_asia	heldout	rotavirus_a|africa	3	3	-0.6667	-0.3333	-1.0	0.1667	1.0
+util_single-rotavirus_a_asia	heldout	rotavirus_a|asia	12	3	0.0556	-0.8889	1.0	0.5333	0.9444
+util_single-rotavirus_a_asia	blind	influenza_a|asia	45	3	0.0815	-0.837	1.0	0.5539	0.9185
+util_single-rotavirus_a_asia	blind	influenza_a|europe	42	3	-0.996	-0.9921	-1.0	0.0	0.996
+util_single-rotavirus_a_asia	blind	influenza_a|north_america	3	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_asia	blind	influenza_a|south_america	15	3	-0.9889	-0.9778	-1.0	0.0	0.9889
+util_single-rotavirus_a_asia	blind	rotavirus_a|africa	25	3	-0.8733	-0.7467	-1.0	0.0223	0.9133
+util_single-rotavirus_a_asia	blind	rotavirus_a|asia	4	3	0.75	0.5	1.0	0.875	1.0
+util_single-rotavirus_a_asia	blind	rotavirus_a|oceania	7	3	-0.9286	-0.8571	-1.0	0.0	0.9286
+util_single-rotavirus_a_oceania	dev	influenza_a|asia	80	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_oceania	dev	influenza_a|europe	22	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_oceania	dev	influenza_a|north_america	22	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_oceania	dev	influenza_a|south_america	11	3	-0.8182	-0.6364	-1.0	0.0909	1.0
+util_single-rotavirus_a_oceania	dev	rotavirus_a|africa	4	3	0.0	1.0	-1.0	0.5	1.0
+util_single-rotavirus_a_oceania	dev	rotavirus_a|asia	1	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_oceania	heldout	influenza_a|africa	80	3	-0.975	-0.95	-1.0	0.0125	1.0
+util_single-rotavirus_a_oceania	heldout	influenza_a|asia	32	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_oceania	heldout	influenza_a|europe	67	3	-0.9851	-0.9701	-1.0	0.0075	1.0
+util_single-rotavirus_a_oceania	heldout	influenza_a|north_america	63	3	-0.0952	0.8095	-1.0	0.4524	1.0
+util_single-rotavirus_a_oceania	heldout	influenza_a|oceania	23	3	1.0	1.0	1.0	1.0	1.0
+util_single-rotavirus_a_oceania	heldout	influenza_a|south_america	62	3	-0.8226	-0.6452	-1.0	0.0887	1.0
+util_single-rotavirus_a_oceania	heldout	rotavirus_a|africa	3	3	-0.3333	0.3333	-1.0	0.3333	1.0
+util_single-rotavirus_a_oceania	heldout	rotavirus_a|asia	12	3	-0.5833	-0.1667	-1.0	0.2083	1.0
+util_single-rotavirus_a_oceania	blind	influenza_a|asia	45	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_oceania	blind	influenza_a|europe	42	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_oceania	blind	influenza_a|north_america	3	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_oceania	blind	influenza_a|south_america	15	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_oceania	blind	rotavirus_a|africa	25	3	-0.04	0.92	-1.0	0.48	1.0
+util_single-rotavirus_a_oceania	blind	rotavirus_a|asia	4	3	-1.0	-1.0	-1.0	0.0	1.0
+util_single-rotavirus_a_oceania	blind	rotavirus_a|oceania	7	3	1.0	1.0	1.0	1.0	1.0
+util_worst	dev	influenza_a|asia	80	3	0.0	0.0	0.0	0.0	0.0
+util_worst	dev	influenza_a|europe	22	3	0.0	0.0	0.0	0.0	0.0
+util_worst	dev	influenza_a|north_america	22	3	0.0	0.0	0.0	0.0	0.0
+util_worst	dev	influenza_a|south_america	11	3	0.0	0.0	0.0	0.0	0.0
+util_worst	dev	rotavirus_a|africa	4	3	0.1667	0.3333	0.0	0.3333	0.1667
+util_worst	dev	rotavirus_a|asia	1	3	-0.1667	-0.3333	0.0	0.0	0.1667
+util_worst	heldout	influenza_a|africa	80	3	0.0	0.0	0.0	0.0	0.0
+util_worst	heldout	influenza_a|asia	32	3	0.0	0.0	0.0	0.0	0.0
+util_worst	heldout	influenza_a|europe	67	3	-0.0572	-0.1144	0.0	0.0	0.0572
+util_worst	heldout	influenza_a|north_america	63	3	0.1799	0.3598	0.0	0.6667	0.1799
+util_worst	heldout	influenza_a|oceania	23	3	0.442	0.8841	0.0	1.0	0.442
+util_worst	heldout	influenza_a|south_america	62	3	0.0242	0.0484	0.0	1.0	0.0242
+util_worst	heldout	rotavirus_a|africa	3	3	0.2222	0.4444	0.0	1.0	0.2222
+util_worst	heldout	rotavirus_a|asia	12	3	0.0556	0.1111	0.0	0.8056	0.25
+util_worst	blind	influenza_a|asia	45	3	0.0	0.0	0.0	0.0	0.0
+util_worst	blind	influenza_a|europe	42	3	0.0	0.0	0.0	0.0	0.0
+util_worst	blind	influenza_a|north_america	3	3	0.0	0.0	0.0	0.0	0.0
+util_worst	blind	influenza_a|south_america	15	3	0.0	0.0	0.0	0.0	0.0
+util_worst	blind	rotavirus_a|africa	25	3	0.3	0.6	0.0	0.9867	0.3133
+util_worst	blind	rotavirus_a|asia	4	3	-0.125	-0.25	0.0	0.0	0.125
+util_worst	blind	rotavirus_a|oceania	7	3	0.3095	0.619	0.0	1.0	0.3095
+wu_avg	dev	influenza_a|asia	80	3	0.5583	1.0	0.1167	0.8625	0.8333
+wu_avg	dev	influenza_a|europe	22	3	0.4545	0.9394	-0.0303	0.7919	0.8636
+wu_avg	dev	influenza_a|north_america	22	3	-0.1364	0.7273	-1.0	0.4318	1.0
+wu_avg	dev	influenza_a|south_america	11	3	0.5606	0.3939	0.7273	0.7887	0.9545
+wu_avg	dev	rotavirus_a|africa	4	3	0.6667	1.0	0.3333	1.0	0.6667
+wu_avg	dev	rotavirus_a|asia	1	3	-0.6667	-1.0	-0.3333	0.0	0.6667
+wu_avg	heldout	influenza_a|africa	80	3	0.4604	0.95	-0.0292	0.8523	0.6896
+wu_avg	heldout	influenza_a|asia	32	3	0.5417	0.9792	0.1042	0.9036	0.7188
+wu_avg	heldout	influenza_a|europe	67	3	0.2861	0.602	-0.0299	0.6614	0.8831
+wu_avg	heldout	influenza_a|north_america	63	3	0.4206	0.8624	-0.0212	0.8949	0.5317
+wu_avg	heldout	influenza_a|oceania	23	3	0.5	1.0	0.0	1.0	0.5
+wu_avg	heldout	influenza_a|south_america	62	3	0.6022	0.6129	0.5914	0.8218	0.9355
+wu_avg	heldout	rotavirus_a|africa	3	3	0.1111	0.3333	-0.1111	0.5889	0.6667
+wu_avg	heldout	rotavirus_a|asia	12	3	-0.2361	-0.1667	-0.3056	0.3502	0.6528
+wu_avg	blind	influenza_a|asia	45	3	0.4926	1.0	-0.0148	0.8698	0.7296
+wu_avg	blind	influenza_a|europe	42	3	0.4563	0.9841	-0.0714	0.7482	0.9484
+wu_avg	blind	influenza_a|north_america	3	3	0.2222	1.0	-0.5556	0.65	0.7778
+wu_avg	blind	influenza_a|south_america	15	3	0.9778	1.0	0.9556	0.9889	1.0
+wu_avg	blind	rotavirus_a|africa	25	3	0.6267	0.92	0.3333	0.9667	0.6667
+wu_avg	blind	rotavirus_a|asia	4	3	-0.625	-1.0	-0.25	0.0	0.625
+wu_avg	blind	rotavirus_a|oceania	7	3	0.1667	0.7143	-0.381	0.7024	0.6905
+wu_single-influenza_a_africa	dev	influenza_a|asia	80	3	0.0	1.0	-1.0	0.5	1.0
+wu_single-influenza_a_africa	dev	influenza_a|europe	22	3	-0.2273	0.5455	-1.0	0.3864	1.0
+wu_single-influenza_a_africa	dev	influenza_a|north_america	22	3	-0.0303	0.9394	-1.0	0.4848	1.0
+wu_single-influenza_a_africa	dev	influenza_a|south_america	11	3	-0.9091	-0.8182	-1.0	0.0455	1.0
+wu_single-influenza_a_africa	dev	rotavirus_a|africa	4	3	0.0	-1.0	1.0	0.5	1.0
+wu_single-influenza_a_africa	dev	rotavirus_a|asia	1	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-influenza_a_africa	heldout	influenza_a|africa	80	3	0.9625	0.925	1.0	0.9812	1.0
+wu_single-influenza_a_africa	heldout	influenza_a|asia	32	3	0.0	1.0	-1.0	0.5	1.0
+wu_single-influenza_a_africa	heldout	influenza_a|europe	67	3	-0.9851	-0.9701	-1.0	0.0075	1.0
+wu_single-influenza_a_africa	heldout	influenza_a|north_america	63	3	-0.381	0.2381	-1.0	0.3095	1.0
+wu_single-influenza_a_africa	heldout	influenza_a|oceania	23	3	-0.3768	0.2464	-1.0	0.3116	1.0
+wu_single-influenza_a_africa	heldout	influenza_a|south_america	62	3	-0.8011	-0.6022	-1.0	0.0995	1.0
+wu_single-influenza_a_africa	heldout	rotavirus_a|africa	3	3	0.4444	-0.1111	1.0	0.7222	1.0
+wu_single-influenza_a_africa	heldout	rotavirus_a|asia	12	3	-0.6389	-0.2778	-1.0	0.1806	1.0
+wu_single-influenza_a_africa	blind	influenza_a|asia	45	3	0.0	1.0	-1.0	0.5	1.0
+wu_single-influenza_a_africa	blind	influenza_a|europe	42	3	-0.6905	-0.381	-1.0	0.1548	1.0
+wu_single-influenza_a_africa	blind	influenza_a|north_america	3	3	-0.6667	-0.3333	-1.0	0.1667	1.0
+wu_single-influenza_a_africa	blind	influenza_a|south_america	15	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-influenza_a_africa	blind	rotavirus_a|africa	25	3	0.4533	-0.0933	1.0	0.7267	1.0
+wu_single-influenza_a_africa	blind	rotavirus_a|asia	4	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-influenza_a_africa	blind	rotavirus_a|oceania	7	3	-0.4286	0.1429	-1.0	0.2857	1.0
+wu_single-influenza_a_asia	dev	influenza_a|asia	80	3	1.0	1.0	1.0	1.0	1.0
+wu_single-influenza_a_asia	dev	influenza_a|europe	22	3	0.0	1.0	-1.0	0.5	1.0
+wu_single-influenza_a_asia	dev	influenza_a|north_america	22	3	0.0	1.0	-1.0	0.5	1.0
+wu_single-influenza_a_asia	dev	influenza_a|south_america	11	3	-0.1818	0.6364	-1.0	0.4091	1.0
+wu_single-influenza_a_asia	dev	rotavirus_a|africa	4	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-influenza_a_asia	dev	rotavirus_a|asia	1	3	0.3333	-0.3333	1.0	0.6667	1.0
+wu_single-influenza_a_asia	heldout	influenza_a|africa	80	3	-0.0875	0.825	-1.0	0.4562	1.0
+wu_single-influenza_a_asia	heldout	influenza_a|asia	32	3	0.9479	0.8958	1.0	0.974	1.0
+wu_single-influenza_a_asia	heldout	influenza_a|europe	67	3	-0.1343	0.7313	-1.0	0.4328	1.0
+wu_single-influenza_a_asia	heldout	influenza_a|north_america	63	3	-0.8783	-0.7566	-1.0	0.0608	1.0
+wu_single-influenza_a_asia	heldout	influenza_a|oceania	23	3	-0.6957	-0.3913	-1.0	0.1522	1.0
+wu_single-influenza_a_asia	heldout	influenza_a|south_america	62	3	-0.172	0.6559	-1.0	0.414	1.0
+wu_single-influenza_a_asia	heldout	rotavirus_a|africa	3	3	-0.8889	-0.7778	-1.0	0.0556	1.0
+wu_single-influenza_a_asia	heldout	rotavirus_a|asia	12	3	0.25	-0.5	1.0	0.625	1.0
+wu_single-influenza_a_asia	blind	influenza_a|asia	45	3	1.0	1.0	1.0	1.0	1.0
+wu_single-influenza_a_asia	blind	influenza_a|europe	42	3	-0.0079	0.9841	-1.0	0.496	1.0
+wu_single-influenza_a_asia	blind	influenza_a|north_america	3	3	-0.1111	0.7778	-1.0	0.4444	1.0
+wu_single-influenza_a_asia	blind	influenza_a|south_america	15	3	-0.0667	0.8667	-1.0	0.4667	1.0
+wu_single-influenza_a_asia	blind	rotavirus_a|africa	25	3	-0.6933	-0.3867	-1.0	0.1533	1.0
+wu_single-influenza_a_asia	blind	rotavirus_a|asia	4	3	0.0	-1.0	1.0	0.5	1.0
+wu_single-influenza_a_asia	blind	rotavirus_a|oceania	7	3	-0.619	-0.2381	-1.0	0.1905	1.0
+wu_single-influenza_a_europe	dev	influenza_a|asia	80	3	0.0	1.0	-1.0	0.5	1.0
+wu_single-influenza_a_europe	dev	influenza_a|europe	22	3	0.803	0.6061	1.0	0.9015	1.0
+wu_single-influenza_a_europe	dev	influenza_a|north_america	22	3	0.0	1.0	-1.0	0.5	1.0
+wu_single-influenza_a_europe	dev	influenza_a|south_america	11	3	-0.1818	0.6364	-1.0	0.4091	1.0
+wu_single-influenza_a_europe	dev	rotavirus_a|africa	4	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-influenza_a_europe	dev	rotavirus_a|asia	1	3	-0.6667	-0.3333	-1.0	0.1667	1.0
+wu_single-influenza_a_europe	heldout	influenza_a|africa	80	3	-0.2208	0.5583	-1.0	0.3896	1.0
+wu_single-influenza_a_europe	heldout	influenza_a|asia	32	3	-0.1979	0.6042	-1.0	0.401	1.0
+wu_single-influenza_a_europe	heldout	influenza_a|europe	67	3	0.8557	0.7114	1.0	0.9279	1.0
+wu_single-influenza_a_europe	heldout	influenza_a|north_america	63	3	-0.9048	-0.8095	-1.0	0.0476	1.0
+wu_single-influenza_a_europe	heldout	influenza_a|oceania	23	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-influenza_a_europe	heldout	influenza_a|south_america	62	3	-0.1935	0.6129	-1.0	0.4032	1.0
+wu_single-influenza_a_europe	heldout	rotavirus_a|africa	3	3	-0.6667	-0.7778	-0.5556	0.1667	1.0
+wu_single-influenza_a_europe	heldout	rotavirus_a|asia	12	3	-0.7222	-0.4444	-1.0	0.1389	1.0
+wu_single-influenza_a_europe	blind	influenza_a|asia	45	3	-0.2963	0.4074	-1.0	0.3519	1.0
+wu_single-influenza_a_europe	blind	influenza_a|europe	42	3	1.0	1.0	1.0	1.0	1.0
+wu_single-influenza_a_europe	blind	influenza_a|north_america	3	3	-0.1111	0.7778	-1.0	0.4444	1.0
+wu_single-influenza_a_europe	blind	influenza_a|south_america	15	3	-0.0444	0.9111	-1.0	0.4778	1.0
+wu_single-influenza_a_europe	blind	rotavirus_a|africa	25	3	-0.7067	-0.7067	-0.7067	0.1467	1.0
+wu_single-influenza_a_europe	blind	rotavirus_a|asia	4	3	-0.9167	-0.8333	-1.0	0.0417	1.0
+wu_single-influenza_a_europe	blind	rotavirus_a|oceania	7	3	-0.8095	-0.619	-1.0	0.0952	1.0
+wu_single-influenza_a_north_america	dev	influenza_a|asia	80	3	0.0	1.0	-1.0	0.5	1.0
+wu_single-influenza_a_north_america	dev	influenza_a|europe	22	3	-0.0909	0.8182	-1.0	0.4545	1.0
+wu_single-influenza_a_north_america	dev	influenza_a|north_america	22	3	1.0	1.0	1.0	1.0	1.0
+wu_single-influenza_a_north_america	dev	influenza_a|south_america	11	3	-0.1818	0.6364	-1.0	0.4091	1.0
+wu_single-influenza_a_north_america	dev	rotavirus_a|africa	4	3	-0.6667	-0.3333	-1.0	0.1667	1.0
+wu_single-influenza_a_north_america	dev	rotavirus_a|asia	1	3	-0.6667	-0.3333	-1.0	0.1667	1.0
+wu_single-influenza_a_north_america	heldout	influenza_a|africa	80	3	-0.0625	0.875	-1.0	0.4688	1.0
+wu_single-influenza_a_north_america	heldout	influenza_a|asia	32	3	-0.0312	0.9375	-1.0	0.4844	1.0
+wu_single-influenza_a_north_america	heldout	influenza_a|europe	67	3	-0.4975	0.005	-1.0	0.2512	1.0
+wu_single-influenza_a_north_america	heldout	influenza_a|north_america	63	3	0.9894	0.9788	1.0	0.9947	1.0
+wu_single-influenza_a_north_america	heldout	influenza_a|oceania	23	3	-0.2754	0.4493	-1.0	0.3623	1.0
+wu_single-influenza_a_north_america	heldout	influenza_a|south_america	62	3	-0.1559	0.6882	-1.0	0.422	1.0
+wu_single-influenza_a_north_america	heldout	rotavirus_a|africa	3	3	-0.2222	0.1111	-0.5556	0.3889	1.0
+wu_single-influenza_a_north_america	heldout	rotavirus_a|asia	12	3	-0.5833	-0.1667	-1.0	0.2083	1.0
+wu_single-influenza_a_north_america	blind	influenza_a|asia	45	3	0.0	1.0	-1.0	0.5	1.0
+wu_single-influenza_a_north_america	blind	influenza_a|europe	42	3	-0.2063	0.5873	-1.0	0.3968	1.0
+wu_single-influenza_a_north_america	blind	influenza_a|north_america	3	3	1.0	1.0	1.0	1.0	1.0
+wu_single-influenza_a_north_america	blind	influenza_a|south_america	15	3	-0.0889	0.8222	-1.0	0.4556	1.0
+wu_single-influenza_a_north_america	blind	rotavirus_a|africa	25	3	-0.3467	0.3067	-1.0	0.3267	1.0
+wu_single-influenza_a_north_america	blind	rotavirus_a|asia	4	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-influenza_a_north_america	blind	rotavirus_a|oceania	7	3	-0.2381	0.5238	-1.0	0.381	1.0
+wu_single-influenza_a_oceania	dev	influenza_a|asia	80	3	-0.7042	-0.4083	-1.0	0.1479	1.0
+wu_single-influenza_a_oceania	dev	influenza_a|europe	22	3	-0.9848	-0.9697	-1.0	0.0076	1.0
+wu_single-influenza_a_oceania	dev	influenza_a|north_america	22	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-influenza_a_oceania	dev	influenza_a|south_america	11	3	-0.8182	-0.6364	-1.0	0.0909	1.0
+wu_single-influenza_a_oceania	dev	rotavirus_a|africa	4	3	0.0	1.0	-1.0	0.5	1.0
+wu_single-influenza_a_oceania	dev	rotavirus_a|asia	1	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-influenza_a_oceania	heldout	influenza_a|africa	80	3	-0.9458	-0.8917	-1.0	0.0271	1.0
+wu_single-influenza_a_oceania	heldout	influenza_a|asia	32	3	-0.9792	-0.9792	-0.9792	0.0104	1.0
+wu_single-influenza_a_oceania	heldout	influenza_a|europe	67	3	-0.9801	-0.9602	-1.0	0.01	1.0
+wu_single-influenza_a_oceania	heldout	influenza_a|north_america	63	3	-0.0794	0.8413	-1.0	0.4603	1.0
+wu_single-influenza_a_oceania	heldout	influenza_a|oceania	23	3	1.0	1.0	1.0	1.0	1.0
+wu_single-influenza_a_oceania	heldout	influenza_a|south_america	62	3	-0.8118	-0.6237	-1.0	0.0941	1.0
+wu_single-influenza_a_oceania	heldout	rotavirus_a|africa	3	3	-0.3333	0.3333	-1.0	0.3333	1.0
+wu_single-influenza_a_oceania	heldout	rotavirus_a|asia	12	3	-0.5833	-0.1667	-1.0	0.2083	1.0
+wu_single-influenza_a_oceania	blind	influenza_a|asia	45	3	-0.9778	-0.9556	-1.0	0.0111	1.0
+wu_single-influenza_a_oceania	blind	influenza_a|europe	42	3	-0.9921	-0.9841	-1.0	0.004	1.0
+wu_single-influenza_a_oceania	blind	influenza_a|north_america	3	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-influenza_a_oceania	blind	influenza_a|south_america	15	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-influenza_a_oceania	blind	rotavirus_a|africa	25	3	-0.04	0.92	-1.0	0.48	1.0
+wu_single-influenza_a_oceania	blind	rotavirus_a|asia	4	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-influenza_a_oceania	blind	rotavirus_a|oceania	7	3	1.0	1.0	1.0	1.0	1.0
+wu_single-influenza_a_south_america	dev	influenza_a|asia	80	3	0.1667	1.0	-0.6667	0.6667	0.8333
+wu_single-influenza_a_south_america	dev	influenza_a|europe	22	3	-0.3561	0.0303	-0.7424	0.3625	0.8712
+wu_single-influenza_a_south_america	dev	influenza_a|north_america	22	3	-0.1818	0.303	-0.6667	0.4924	0.8333
+wu_single-influenza_a_south_america	dev	influenza_a|south_america	11	3	0.7727	0.5758	0.9697	0.8925	0.9848
+wu_single-influenza_a_south_america	dev	rotavirus_a|africa	4	3	-0.3333	-0.3333	-0.3333	0.3333	1.0
+wu_single-influenza_a_south_america	dev	rotavirus_a|asia	1	3	-0.3333	0.3333	-1.0	0.3333	1.0
+wu_single-influenza_a_south_america	heldout	influenza_a|africa	80	3	-0.1438	0.3917	-0.6792	0.489	0.8396
+wu_single-influenza_a_south_america	heldout	influenza_a|asia	32	3	-0.1146	0.4375	-0.6667	0.5208	0.8333
+wu_single-influenza_a_south_america	heldout	influenza_a|europe	67	3	-0.1418	0.7114	-0.995	0.4289	0.9975
+wu_single-influenza_a_south_america	heldout	influenza_a|north_america	63	3	-0.381	0.2063	-0.9683	0.3069	0.9841
+wu_single-influenza_a_south_america	heldout	influenza_a|oceania	23	3	-0.1014	0.7971	-1.0	0.4493	1.0
+wu_single-influenza_a_south_america	heldout	influenza_a|south_america	62	3	0.7581	0.5914	0.9247	0.8904	0.9731
+wu_single-influenza_a_south_america	heldout	rotavirus_a|africa	3	3	-0.2778	-0.1111	-0.4444	0.3778	0.9444
+wu_single-influenza_a_south_america	heldout	rotavirus_a|asia	12	3	-0.4306	0.0556	-0.9167	0.2738	0.9583
+wu_single-influenza_a_south_america	blind	influenza_a|asia	45	3	-0.1519	0.363	-0.6667	0.5074	0.8333
+wu_single-influenza_a_south_america	blind	influenza_a|europe	42	3	-0.1468	0.6032	-0.8968	0.4313	0.9484
+wu_single-influenza_a_south_america	blind	influenza_a|north_america	3	3	-0.3333	0.3333	-1.0	0.3333	1.0
+wu_single-influenza_a_south_america	blind	influenza_a|south_america	15	3	1.0	1.0	1.0	1.0	1.0
+wu_single-influenza_a_south_america	blind	rotavirus_a|africa	25	3	-0.08	0.2533	-0.4133	0.4791	0.96
+wu_single-influenza_a_south_america	blind	rotavirus_a|asia	4	3	-0.9167	-0.8333	-1.0	0.0417	1.0
+wu_single-influenza_a_south_america	blind	rotavirus_a|oceania	7	3	-0.2143	0.4286	-0.8571	0.4026	0.9286
+wu_single-rotavirus_a_africa	dev	influenza_a|asia	80	3	-0.3625	0.275	-1.0	0.3188	1.0
+wu_single-rotavirus_a_africa	dev	influenza_a|europe	22	3	-0.7273	-0.6364	-0.8182	0.1364	1.0
+wu_single-rotavirus_a_africa	dev	influenza_a|north_america	22	3	-0.6288	-0.4394	-0.8182	0.1822	0.9621
+wu_single-rotavirus_a_africa	dev	influenza_a|south_america	11	3	-0.0909	0.1515	-0.3333	0.4545	1.0
+wu_single-rotavirus_a_africa	dev	rotavirus_a|africa	4	3	1.0	1.0	1.0	1.0	1.0
+wu_single-rotavirus_a_africa	dev	rotavirus_a|asia	1	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-rotavirus_a_africa	heldout	influenza_a|africa	80	3	-0.0208	-0.7833	0.7417	0.4896	1.0
+wu_single-rotavirus_a_africa	heldout	influenza_a|asia	32	3	-0.9271	-0.875	-0.9792	0.0365	1.0
+wu_single-rotavirus_a_africa	heldout	influenza_a|europe	67	3	-0.0896	0.2338	-0.4129	0.4552	1.0
+wu_single-rotavirus_a_africa	heldout	influenza_a|north_america	63	3	-0.3333	0.3016	-0.9683	0.3333	1.0
+wu_single-rotavirus_a_africa	heldout	influenza_a|oceania	23	3	-0.2464	0.5072	-1.0	0.3768	1.0
+wu_single-rotavirus_a_africa	heldout	influenza_a|south_america	62	3	-0.2688	0.0538	-0.5914	0.3656	1.0
+wu_single-rotavirus_a_africa	heldout	rotavirus_a|africa	3	3	0.7222	0.4444	1.0	0.8889	0.9444
+wu_single-rotavirus_a_africa	heldout	rotavirus_a|asia	12	3	-0.5139	-0.0278	-1.0	0.2391	0.9861
+wu_single-rotavirus_a_africa	blind	influenza_a|asia	45	3	-0.9556	-0.9111	-1.0	0.0186	0.9926
+wu_single-rotavirus_a_africa	blind	influenza_a|europe	42	3	-0.0238	0.2063	-0.254	0.4857	0.9921
+wu_single-rotavirus_a_africa	blind	influenza_a|north_america	3	3	-0.7778	-0.5556	-1.0	0.1111	1.0
+wu_single-rotavirus_a_africa	blind	influenza_a|south_america	15	3	-0.1111	0.2444	-0.4667	0.4444	1.0
+wu_single-rotavirus_a_africa	blind	rotavirus_a|africa	25	3	0.9667	0.9333	1.0	0.9867	0.9933
+wu_single-rotavirus_a_africa	blind	rotavirus_a|asia	4	3	-0.875	-0.75	-1.0	0.0476	0.9583
+wu_single-rotavirus_a_africa	blind	rotavirus_a|oceania	7	3	0.0	1.0	-1.0	0.5	1.0
+wu_single-rotavirus_a_asia	dev	influenza_a|asia	80	3	0.1875	-0.2917	0.6667	0.5938	1.0
+wu_single-rotavirus_a_asia	dev	influenza_a|europe	22	3	-0.3333	0.1818	-0.8485	0.3333	1.0
+wu_single-rotavirus_a_asia	dev	influenza_a|north_america	22	3	-0.3182	-0.1818	-0.4545	0.3409	1.0
+wu_single-rotavirus_a_asia	dev	influenza_a|south_america	11	3	-0.0606	0.0909	-0.2121	0.4697	1.0
+wu_single-rotavirus_a_asia	dev	rotavirus_a|africa	4	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-rotavirus_a_asia	dev	rotavirus_a|asia	1	3	0.3333	-0.3333	1.0	0.6667	1.0
+wu_single-rotavirus_a_asia	heldout	influenza_a|africa	80	3	-0.6583	-0.3167	-1.0	0.1708	1.0
+wu_single-rotavirus_a_asia	heldout	influenza_a|asia	32	3	0.2917	-0.4167	1.0	0.6458	1.0
+wu_single-rotavirus_a_asia	heldout	influenza_a|europe	67	3	-0.1841	0.1144	-0.4826	0.408	1.0
+wu_single-rotavirus_a_asia	heldout	influenza_a|north_america	63	3	-0.7566	-0.5132	-1.0	0.1217	1.0
+wu_single-rotavirus_a_asia	heldout	influenza_a|oceania	23	3	-0.4058	-0.3913	-0.4203	0.2971	1.0
+wu_single-rotavirus_a_asia	heldout	influenza_a|south_america	62	3	-0.2258	0.0645	-0.5161	0.3871	1.0
+wu_single-rotavirus_a_asia	heldout	rotavirus_a|africa	3	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-rotavirus_a_asia	heldout	rotavirus_a|asia	12	3	0.0833	-0.8333	1.0	0.5417	1.0
+wu_single-rotavirus_a_asia	blind	influenza_a|asia	45	3	0.1481	-0.6741	0.9704	0.5741	1.0
+wu_single-rotavirus_a_asia	blind	influenza_a|europe	42	3	-0.2937	-0.0476	-0.5397	0.3532	1.0
+wu_single-rotavirus_a_asia	blind	influenza_a|north_america	3	3	-0.7778	-0.5556	-1.0	0.1111	1.0
+wu_single-rotavirus_a_asia	blind	influenza_a|south_america	15	3	-0.0667	0.2889	-0.4222	0.4667	1.0
+wu_single-rotavirus_a_asia	blind	rotavirus_a|africa	25	3	-0.8533	-0.7067	-1.0	0.0733	1.0
+wu_single-rotavirus_a_asia	blind	rotavirus_a|asia	4	3	0.0	-1.0	1.0	0.5	1.0
+wu_single-rotavirus_a_asia	blind	rotavirus_a|oceania	7	3	-0.9048	-0.8095	-1.0	0.0476	1.0
+wu_single-rotavirus_a_oceania	dev	influenza_a|asia	80	3	-0.6667	-0.3333	-1.0	0.1667	1.0
+wu_single-rotavirus_a_oceania	dev	influenza_a|europe	22	3	-0.6667	-0.3333	-1.0	0.1667	1.0
+wu_single-rotavirus_a_oceania	dev	influenza_a|north_america	22	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-rotavirus_a_oceania	dev	influenza_a|south_america	11	3	-0.8182	-0.6364	-1.0	0.0909	1.0
+wu_single-rotavirus_a_oceania	dev	rotavirus_a|africa	4	3	0.0	1.0	-1.0	0.5	1.0
+wu_single-rotavirus_a_oceania	dev	rotavirus_a|asia	1	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-rotavirus_a_oceania	heldout	influenza_a|africa	80	3	-0.8458	-0.6917	-1.0	0.0771	1.0
+wu_single-rotavirus_a_oceania	heldout	influenza_a|asia	32	3	-0.8854	-0.7708	-1.0	0.0573	1.0
+wu_single-rotavirus_a_oceania	heldout	influenza_a|europe	67	3	-0.7313	-0.5423	-0.9204	0.1343	1.0
+wu_single-rotavirus_a_oceania	heldout	influenza_a|north_america	63	3	-0.037	0.873	-0.9471	0.4815	1.0
+wu_single-rotavirus_a_oceania	heldout	influenza_a|oceania	23	3	1.0	1.0	1.0	1.0	1.0
+wu_single-rotavirus_a_oceania	heldout	influenza_a|south_america	62	3	-0.7366	-0.5054	-0.9677	0.1317	1.0
+wu_single-rotavirus_a_oceania	heldout	rotavirus_a|africa	3	3	-0.3333	0.3333	-1.0	0.3333	1.0
+wu_single-rotavirus_a_oceania	heldout	rotavirus_a|asia	12	3	-0.5833	-0.1667	-1.0	0.2083	1.0
+wu_single-rotavirus_a_oceania	blind	influenza_a|asia	45	3	-0.963	-0.9259	-1.0	0.0185	1.0
+wu_single-rotavirus_a_oceania	blind	influenza_a|europe	42	3	-0.5238	-0.3333	-0.7143	0.2381	1.0
+wu_single-rotavirus_a_oceania	blind	influenza_a|north_america	3	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-rotavirus_a_oceania	blind	influenza_a|south_america	15	3	-0.7333	-0.6889	-0.7778	0.1333	1.0
+wu_single-rotavirus_a_oceania	blind	rotavirus_a|africa	25	3	-0.04	0.92	-1.0	0.48	1.0
+wu_single-rotavirus_a_oceania	blind	rotavirus_a|asia	4	3	-1.0	-1.0	-1.0	0.0	1.0
+wu_single-rotavirus_a_oceania	blind	rotavirus_a|oceania	7	3	1.0	1.0	1.0	1.0	1.0
+wu_worst	dev	influenza_a|asia	80	3	0.6667	1.0	0.3333	0.9979	0.6708
+wu_worst	dev	influenza_a|europe	22	3	0.5455	0.9697	0.1212	0.94	0.6212
+wu_worst	dev	influenza_a|north_america	22	3	0.1667	1.0	-0.6667	0.6667	0.8333
+wu_worst	dev	influenza_a|south_america	11	3	0.5758	0.5152	0.6364	0.8276	0.8788
+wu_worst	dev	rotavirus_a|africa	4	3	0.3333	0.6667	0.0	0.6667	0.3333
+wu_worst	dev	rotavirus_a|asia	1	3	-0.3333	-0.6667	0.0	0.0	0.3333
+wu_worst	heldout	influenza_a|africa	80	3	0.4792	0.9583	0.0	0.8944	0.6625
+wu_worst	heldout	influenza_a|asia	32	3	0.4635	0.9167	0.0104	0.8808	0.6719
+wu_worst	heldout	influenza_a|europe	67	3	0.3259	0.4129	0.2388	0.705	0.8035
+wu_worst	heldout	influenza_a|north_america	63	3	0.4656	0.9577	-0.0265	0.9559	0.5132
+wu_worst	heldout	influenza_a|oceania	23	3	0.2101	0.4203	0.0	0.7101	0.5
+wu_worst	heldout	influenza_a|south_america	62	3	0.578	0.6774	0.4785	0.8562	0.8145
+wu_worst	heldout	rotavirus_a|africa	3	3	0.1667	0.4444	-0.1111	0.7222	0.5
+wu_worst	heldout	rotavirus_a|asia	12	3	-0.0278	-0.0556	0.0	0.5278	0.3889
+wu_worst	blind	influenza_a|asia	45	3	0.4	1.0	-0.2	0.8667	0.6667
+wu_worst	blind	influenza_a|europe	42	3	0.6032	0.873	0.3333	0.8646	0.8333
+wu_worst	blind	influenza_a|north_america	3	3	0.3333	1.0	-0.3333	0.7833	0.6667
+wu_worst	blind	influenza_a|south_america	15	3	0.8444	1.0	0.6889	0.9889	0.8667
+wu_worst	blind	rotavirus_a|africa	25	3	0.38	0.76	0.0	0.9733	0.4067
+wu_worst	blind	rotavirus_a|asia	4	3	-0.3333	-0.6667	0.0	0.0	0.3333
+wu_worst	blind	rotavirus_a|oceania	7	3	0.1905	0.5714	-0.1905	0.6667	0.5714

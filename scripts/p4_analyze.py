@@ -24,12 +24,12 @@ def read_preds(path):
         return list(csv.DictReader(f, delimiter="\t"))
 
 
-def util_vec(rows, thr_h=None, thr_r=None):
+def util_vec(rows, thr_h=None, thr_r=None, heads=("host", "reg")):
     """Per-sample utility (host+region)/2 and per-head answered/correct flags."""
     out = []
     for r in rows:
         us, ans, cor = [], [], []
-        for head, true, K, thr in (("host", HOSTS, len(HOSTS), thr_h), ("reg", REGIONS, len(REGIONS), thr_r)):
+        for head, true, K, thr in [h for h in (("host", HOSTS, len(HOSTS), thr_h), ("reg", REGIONS, len(REGIONS), thr_r)) if h[0] in heads]:
             t = true.index(r["host_true"]) if head == "host" else true.index(r["reg_true"])
             act, top, pmax = int(r[f"{head}_act"]), int(r[f"{head}_top"]), float(r[f"{head}_pmax"])
             if thr is not None:                 # CE-style: no abstain action, rule on max prob
@@ -37,7 +37,7 @@ def util_vec(rows, thr_h=None, thr_r=None):
             answered = act != K
             correct = answered and act == t
             us.append(1.0 if correct else (-LAM if answered else 0.0)); ans.append(answered); cor.append(correct)
-        out.append((sum(us) / 2, ans[0] + ans[1], cor[0] + cor[1]))
+        out.append((sum(us) / len(us), sum(ans) / len(ans) * 2, sum(cor)))
     return np.array([o[0] for o in out]), np.array([o[1] for o in out]), np.array([o[2] for o in out])
 
 
@@ -95,7 +95,7 @@ def main():
     for p in files:
         tag = os.path.basename(p)[:-7]; cond, seed = tag.rsplit("__seed", 1)
         rows = read_preds(p)
-        thr = tune_threshold(rows) if cond in ("ce", "probe") or cond == "knn" else None
+        thr = tune_threshold(rows) if cond in ("ce", "ce_long", "probe", "knn") else None
         cond_name = cond + ("+abstain" if thr is not None else "")
         data[cond_name].append((int(seed), rows, thr))
     groups = ["dev", "heldout"] + (["blind"] if a.include_blind else [])
@@ -106,16 +106,17 @@ def main():
     for cond, runs in sorted(data.items()):
         for g in groups:
             for s in strata:
-                us, answ, corr = [], [], []
+                us, answ, corr, uh, ur = [], [], [], [], []
                 for seed, rows, thr in runs:
                     sub = [r for r in rows if r["stratum"] == s and r["split"] in GROUPS[g]]
                     if not sub:
                         continue
                     u, an, co = util_vec(sub, thr, thr)
                     us.append(u.mean()); answ.append(an.mean() / 2); corr.append(co.sum() / max(an.sum(), 1))
+                    uh.append(util_vec(sub, thr, thr, ("host",))[0].mean()); ur.append(util_vec(sub, thr, thr, ("reg",))[0].mean())
                     cache[(cond, g, s, seed)] = u
                 if us:
-                    by.append(dict(condition=cond, group=g, stratum=s, n_eval=len(sub), seeds=len(us), utility=round(float(np.mean(us)), 4),
+                    by.append(dict(condition=cond, group=g, stratum=s, n_eval=len(sub), seeds=len(us), utility=round(float(np.mean(us)), 4), utility_host=round(float(np.mean(uh)), 4), utility_region=round(float(np.mean(ur)), 4),
                                    accuracy_when_answering=round(float(np.mean(corr)), 4), coverage=round(float(np.mean(answ)), 4)))
     with open(f"{ROOT}/results/p4_eval_by_stratum.tsv", "w", newline="\n") as f:
         w = csv.DictWriter(f, fieldnames=list(by[0]), delimiter="\t", lineterminator="\n"); w.writeheader(); w.writerows(by)
@@ -143,11 +144,13 @@ def main():
         w = csv.DictWriter(f, fieldnames=list(summ[0]), delimiter="\t", lineterminator="\n"); w.writeheader(); w.writerows(summ)
     # transfer matrix on held-out data: rows = trained on stratum s only; columns = evaluated on stratum t
     tm = []
-    ref = {r["stratum"]: r["utility"] for r in by if r["condition"] == "util_avg" and r["group"] == "heldout"}
+    refs = {fam: {r["stratum"]: r["utility"] for r in by if r["condition"] == c and r["group"] == "heldout"} for fam, c in (("scratch", "util_avg"), ("warm", "wu_avg"))}
     for r in by:
-        if r["condition"].startswith("util_single") and r["group"] == "heldout":
-            trained = r["condition"].split("-", 1)[1].replace("_", "|", 1)
-            tm.append(dict(trained_on=trained, evaluated_on=r["stratum"], utility=r["utility"], same_stratum=int(trained == r["stratum"]), util_avg_reference=ref.get(r["stratum"], "")))
+        if r["condition"].startswith(("util_single", "wu_single")) and r["group"] == "heldout":
+            fam = "warm" if r["condition"].startswith("wu_") else "scratch"
+            tag = r["condition"].split("-", 1)[1]
+            trained = {x.replace("|", "_"): x for x in strata}.get(tag, tag)   # stratum names contain underscores, so map the tag back
+            tm.append(dict(family=fam, trained_on=trained, evaluated_on=r["stratum"], utility=r["utility"], utility_host=r["utility_host"], utility_region=r["utility_region"], same_stratum=int(trained == r["stratum"]), average_model_reference=refs[fam].get(r["stratum"], "")))
     if tm:
         with open(f"{ROOT}/results/p4_transfer_matrix.tsv", "w", newline="\n") as f:
             w = csv.DictWriter(f, fieldnames=list(tm[0]), delimiter="\t", lineterminator="\n"); w.writeheader(); w.writerows(tm)

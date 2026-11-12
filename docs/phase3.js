@@ -145,18 +145,31 @@
     }
   };
   live.p4transfer = async box => {
-    const M = await tsv("data/results/p4_transfer_matrix.tsv");
-    if (!M) { box.append(el("p", { class: "mut" }, "Transfer matrix not published yet.")); return; }
-    const rows = [...new Set(M.map(r => r.trained_on))].sort(), cols = [...new Set(M.map(r => r.evaluated_on))].sort();
-    const val = (a, b) => { const r = M.find(x => x.trained_on === a && x.evaluated_on === b); return r ? num(r.utility) : NaN; };
+    const M = await tsv("data/results/p4_transfer_matrix.tsv"), S = await tsv("data/results/p4_eval_by_stratum.tsv");
+    if (!M || !S) { box.append(el("p", { class: "mut" }, "Transfer matrix not published yet.")); return; }
+    const famSel = el("select", { "aria-label": "training family" }, [["warm", "Warm start (supervised first, then utility)"], ["scratch", "From scratch (utility only)"]].map(([v, l]) => el("option", { value: v }, l)));
+    const metSel = el("select", { "aria-label": "metric" }, [["host", "Host head only"], ["region", "Region head only"], ["both", "Both heads averaged"]].map(([v, l]) => el("option", { value: v }, l)));
+    const out = el("div");
+    const KEY = { host: "utility_host", region: "utility_region", both: "utility" };
     const colour = v => isNaN(v) ? "" : "background:" + (v >= 0 ? "rgba(46,160,120," + Math.min(0.75, v) + ")" : "rgba(210,70,60," + Math.min(0.75, -v) + ")");
-    const ref = c => { const r = M.find(x => x.evaluated_on === c); return r ? num(r.util_avg_reference) : NaN; };
-    const tbl = el("div", { class: "tw" }, el("table", { class: "mini" }, el("thead", {}, el("tr", {}, [el("th", {}, "trained on ↓ / evaluated on →"), ...cols.map(c => el("th", {}, c.replace("|", " | ")))])),
-      el("tbody", {}, [...rows.map(a => el("tr", {}, [el("th", {}, a.replace("_", "|").replace("|", " | ")), ...cols.map(c => { const v = val(a, c); return el("td", { style: colour(v) + ((a.replace("_", "|") === c || a === c.replace("|", "_")) ? ";font-weight:700;outline:1px solid var(--fg)" : "") }, isNaN(v) ? "" : v.toFixed(2)); })])),
-        el("tr", {}, [el("th", {}, "optimise the average (reference)"), ...cols.map(c => el("td", { style: colour(ref(c)) }, isNaN(ref(c)) ? "" : ref(c).toFixed(2)))])])));
-    box.append(el("p", { class: "small mut" }, "Cell = held-out selective utility on the column stratum for a model trained only on the row stratum (+1 right, -1 wrong, 0 abstain). Boxed cells are the stratum the model was trained on; the last row is the model trained on the average of all strata."), tbl);
+    const draw = () => {
+      const fam = famSel.value, key = KEY[metSel.value], avgCond = fam === "warm" ? "wu_avg" : "util_avg";
+      const rows = M.filter(r => r.family === fam);
+      const trained = [...new Set(rows.map(r => r.trained_on))].sort(), cols = [...new Set(rows.map(r => r.evaluated_on))].sort();
+      const ref = {}; S.filter(r => r.condition === avgCond && r.group === "heldout").forEach(r => ref[r.stratum] = num(r[key]));
+      const cell = (a, c) => rows.find(r => r.trained_on === a && r.evaluated_on === c);
+      let dOwn = [], dOth = [];
+      trained.forEach(a => { const own = cell(a, a), oth = cols.filter(c => c !== a).map(c => cell(a, c)).filter(Boolean);
+        if (own && oth.length) { dOwn.push(num(own[key]) - ref[a]); dOth.push(oth.reduce((x, r) => x + num(r[key]) - ref[r.evaluated_on], 0) / oth.length); } });
+      const mean = v => v.reduce((x, y) => x + y, 0) / (v.length || 1);
+      const tbl = el("div", { class: "tw" }, el("table", { class: "mini" }, el("thead", {}, el("tr", {}, [el("th", {}, "trained on only ↓ / evaluated on →"), ...cols.map(c => el("th", {}, c.replace("|", " | ")))])),
+        el("tbody", {}, [...trained.map(a => el("tr", {}, [el("th", {}, a.replace("|", " | ")), ...cols.map(c => { const r = cell(a, c); const v = r ? num(r[key]) : NaN; return el("td", { style: colour(v) + (r && r.same_stratum === "1" ? ";font-weight:700;outline:1px solid var(--fg)" : "") }, isNaN(v) ? "" : v.toFixed(2)); })])),
+          el("tr", {}, [el("th", {}, "model trained on the average (reference)"), ...cols.map(c => el("td", { style: colour(ref[c]) }, isNaN(ref[c]) ? "" : ref[c].toFixed(2)))])])));
+      out.replaceChildren(el("p", { class: "small" }, el("b", {}, "Averaged over the " + dOwn.length + " single-stratum models: "), "its own stratum " + (mean(dOwn) >= 0 ? "+" : "") + mean(dOwn).toFixed(2) + ", every other stratum " + (mean(dOth) >= 0 ? "+" : "") + mean(dOth).toFixed(2) + ", both relative to the model trained on the average."), tbl);
+    };
+    famSel.onchange = draw; metSel.onchange = draw; draw();
+    box.append(el("p", { class: "small mut" }, "Cell = held-out selective utility (+1 right, -1 wrong, 0 abstain) on the column stratum for a model whose utility phase saw only the row stratum. Boxed cells are the stratum it was trained on. Region is constant within a stratum, so 'region head only' on the boxed cell is trivially 1.00: read the host head for the fair comparison."), famSel, metSel, out);
   };
-
   // ------------------------------------------------------------------ generic nested renderer
   function body(n) {
     const out = [];
