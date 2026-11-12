@@ -1,5 +1,6 @@
 BRIEF.md
-/data/
+/data/*
+!/data/groundtruth/
 /work/
 *.fastq*
 *.fq*

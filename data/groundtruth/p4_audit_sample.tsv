@@ -1,0 +1,61 @@
+accession	virus	host_class	host_species_raw	host_tier	host_evidence	country	geo_tier	geo_evidence	year	strain	isolate	reviewer_verdict	reviewer_note
+AB762410.1	influenza_a	swine	sus scrofa domesticus	A	swine	japan	B		2002	A/swine/Ehime/1/2002			
+PP576488.1	influenza_a	avian	gallus gallus	A	avian	egypt	A	egypt	2022	A/chicken/Egypt/PS20934OP/2022			
+KR700121.1	influenza_a	swine	sus scrofa	A	swine	denmark	A	denmark	2012	A/swine/Denmark/10169-3/2012			
+MF173214.1	influenza_a	canine	canis lupus familiaris	A	canine	usa	A	usa	2011	A/canine/Connecticut/85863/2011			
+MK292601.1	influenza_a	human	homo sapiens	A	human	usa	A	usa	2018	A/Hawaii/61/2018			
+JQ943561.1	rotavirus_a	bovine	cow	A	bovine	brazil	A	brazil		RVA/Cow-wt/BRA/BRA1513/2009/G6P[5]			
+MK501760.1	influenza_a	equine	equus caballus	A	equine	france	B		2018	A/Equus caballus/Paris/1/2018	1		
+KP766020.1	influenza_a	avian	chicken	A	avian	china	A	china	2014	A/chicken/Jiangsu/J1237/2014			
+MH796281.1	influenza_a	equine	equus caballus	A	equine	mongolia	B		2011	A/Equus caballus/Ulaanbaatar/1/2011	1		
+AB595957.1	rotavirus_a	equine	equus caballus	A	equine	japan	B		2004	No.87/04/Jpn			
+PX208418.1	influenza_a	human	homo sapiens	A	human	germany	B		2025	A/Bayern/USAFSAM-16246/2025	USAFSAM-16246		
+KX979517.1	influenza_a	avian	anas platyrhynchos	A	avian	netherlands	A	netherlands	2012	A/mallard duck/Netherlands/13/2012			
+MK364239.1	influenza_a	human	homo sapiens	A	human	usa	A	usa	2018	A/New York/48/2018			
+KT338365.1	influenza_a	avian	anas platyrhynchos (mallard)	A	avian	usa	A	usa	2014	A/mallard/Alaska/417/2014			
+KR863467.1	influenza_a	swine	swine	A	swine	argentina	A	argentina	2011	A/swine/Argentina/CIP051-C08-473/2011			
+MK159035.1	influenza_a	human	homo sapiens	A	human	south korea	B		2017	A/Jeju/759/2017			
+PX324594.1	influenza_a	human	homo sapiens	A	human	new zealand	A	new zealand	2018	A/New Zealand/18CF0350/2018	18CF0350		
+MK364663.1	influenza_a	human	homo sapiens	A	human	usa	A	usa	2018	A/New York/45/2018			
+KJ753198.1	rotavirus_a	human	homo sapiens	A	human	south africa	A	south africa	2010	RVA/Human-wt/ZAF/MRC-DPRU1506/2010/G1P[8]			
+KR870267.1	influenza_a	swine	swine	A	swine	mexico	A	mexico	2013	A/swine/Mexico/9562931/2013			
+MH796345.1	influenza_a	equine	equus caballus	A	equine	mongolia	B		2011	A/Equus caballus/Ulaanbaatar/6/2011	6		
+KP752687.1	rotavirus_a	human	homo sapiens	A	human	south africa	A	south africa		RVA/Human-wt/ZAF/MRC-DPRU1656/XXXX/G12P[6]			
+OR802285.1	influenza_a	swine	swine	A	swine	brazil	A	brazil	2020	A/swine/Brazil/285-2020/2020	285-2020		
+PX320856.1	influenza_a	human	homo sapiens	A	human	new zealand	A	new zealand	2022	A/New Zealand/22VR3153/2022	22VR3153		
+MK268384.1	influenza_a	human	homo sapiens	A	human	usa	A	usa	2018	A/Wisconsin/103/2018			
+KR700177.1	influenza_a	swine	sus scrofa	A	swine	spain	A	spain	2012	A/swine/Spain/29257/2012			
+MF173126.1	influenza_a	canine	canis lupus familiaris	A	canine	usa	A	usa	2016	A/canine/Indiana/132276-16-1-2/2016			
+PX320635.1	influenza_a	human	homo sapiens	A	human	new zealand	A	new zealand	2022	A/New Zealand/22VR2644/2022	22VR2644		
+KY463937.1	influenza_a	avian	anas platyrhynchos	A	avian	usa	A	usa	2014	A/mallard/Ohio/14OS840/2014			
+KJ753539.1	rotavirus_a	human	homo sapiens	A	human	zimbabwe	A	zimbabwe	2010	RVA/Human-wt/ZWE/MRC-DPRU3367/2010/9P[8]			
+OR802551.1	influenza_a	swine	swine	A	swine	brazil	A	brazil	2021	A/swine/Brazil/217-2021/2021	217-2021		
+PZ965540.1	influenza_a	avian	lesser snow goose	A	avian	usa	B		2024	A/Lesser Snow Goose/PA/25-000169-004-original/2024	25-000169-004-original		
+KR870243.1	influenza_a	swine	swine	A	swine	mexico	A	mexico	2013	A/swine/Mexico/10126158/2013			
+PP410102.1	influenza_a		geese			egypt	A	egypt	2022	A/Geese/Egypt/MN4/2022	MN4		
+KC443238.1	rotavirus_a	human	homo sapiens	A	human	australia	A	australia	2010	RVA/Human-wt/AUS/CK20045/2010/G2P[4]			
+GQ866225.1	influenza_a		turkey			chile	A	chile	2009	A/turkey/Chile/28317-6504-3/2009			
+KU059801.1	rotavirus_a	human	homo sapiens	A	human	australia	A	australia	2012	RVA/Human-wt/AUS/D346/2012/G3P[8]			
+PZ984296.1	influenza_a	human	homo sapiens	A	human	usa	A	usa	2026	A/Missouri/80/2026			
+KJ753834.1	rotavirus_a	human	homo sapiens	A	human	zimbabwe	A	zimbabwe		RVA/Human-wt/ZWE/MRC-DPRU1158/XXXX/G2G9P[6] mixed_genotype			
+PV387711.1	influenza_a	avian	gallus gallus	A	avian	bangladesh	A	bangladesh	2023	A/chicken/Bangladesh/CE-115-08-DB-18-BR-O/2023			
+MW772865.1	influenza_a	swine	swine	A	swine	brazil	A	brazil	2019	A/swine/Brazil/084-19/2019	084-19		
+KU059802.1	rotavirus_a	human	homo sapiens	A	human	australia	A	australia	2013	RVA/Human-wt/AUS/SA475/2013/G3P[8]			
+PV391111.1	influenza_a	avian	gallus gallus	A	avian	bangladesh	A	bangladesh	2024	A/chicken/Bangladesh/CE-116-09-DA-07-BR-O/2024			
+KP766056.1	influenza_a	avian	chicken	A	avian	china	A	china	2014	A/chicken/Shanghai/S3087/2014			
+EU296621.1	influenza_a	swine	sus scrofa	A	swine	thailand	B			A/swine/Chonburi/05CB2/2005			
+KJ752999.1	rotavirus_a	human	homo sapiens	A	human	zimbabwe	A	zimbabwe		RVA/Human-wt/ZWE/MRC-DPRU1132/XXXX/G2P[4]			
+MK268415.1	influenza_a	human	homo sapiens	A	human	usa	A	usa	2018	A/Minnesota/48/2018			
+KP752587.1	rotavirus_a	human	homo sapiens	A	human	south africa	A	south africa		RVA/Human-wt/ZAF/MRC-DPRU901/XXXX/G1P[8]			
+MK265632.1	influenza_a	human	homo sapiens	A	human	usa	A	usa	2018	A/Florida/85/2018			
+PV665601.1	influenza_a	swine	swine	A	swine	italy	A	italy	2025	A/swine/Italy/44792-01/2025	44792-01		
+GU984761.1	rotavirus_a	bovine	cattle	A	bovine	india	B		2007	79			
+JX458959.1	rotavirus_a	human	homo sapiens	A	human	argentina	B		1996	ARG007			
+KR870286.1	influenza_a	swine	swine	A	swine	mexico	A	mexico	2013	A/swine/Mexico/9812228/2013			
+JN375297.1	influenza_a	swine	sus scrofa	A	swine	china	A	china	2010	A/swine/Hong Kong/2237/2010			
+LC553611.1	rotavirus_a	bovine	bos taurus	A	bovine	japan	A	japan	2007	RVA/Cow-tc/JPN/GB14-45/2007/G6P[11]			
+LC468500.1	rotavirus_a	equine	equus caballus	A	equine	japan	A	japan	2013	RVA/Horse-wt/JPN/No.53/2013/G3P[x]			
+KP765997.1	influenza_a	avian	chicken	A	avian	china	A	china	2014	A/chicken/Guangdong/G1312/2014			
+PZ977082.1	influenza_a	human	homo sapiens	A	human	usa	A	usa	2026	A/Arizona/107/2026			
+PX325014.1	influenza_a	human	homo sapiens	A	human	new zealand	A	new zealand	2019	A/New Zealand/19CF1756/2019	19CF1756		
+PV335451.1	influenza_a	avian	gallus gallus	A	avian	bangladesh	A	bangladesh	2024	A/chicken/Bangladesh/63994/2024			
