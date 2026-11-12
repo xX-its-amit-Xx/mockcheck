@@ -16,5 +16,5 @@ export HF_HOME=$S/hf HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false
 cd "$S/repo"
 nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
 python scripts/p4_train.py --data data/groundtruth/p4_groundtruth.tsv.gz --out "$S/out/p4" \
-  --conds probe,ce,util_avg,util_worst,util_single --seeds 0,1,2 --steps 300
+  --base "$S/models/esm2_35m" --conds probe,ce,util_avg,util_worst,util_single --seeds 0,1,2 --steps 300
 echo P4_TRAIN_DONE

@@ -1,0 +1,8 @@
+virus	host_pair_at_J0.9	count
+influenza_a	human vs swine	11
+rotavirus_a	bovine vs swine	6
+rotavirus_a	bovine vs human	3
+influenza_a	avian vs human	2
+influenza_a	avian vs other_mammal	1
+influenza_a	avian vs feline	1
+rotavirus_a	human vs swine	1

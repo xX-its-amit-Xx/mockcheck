@@ -1,0 +1,7 @@
+virus	similarity_threshold	sequences_with_near_neighbour	host_disagrees	disagreement_rate
+influenza_a	0.8	1587	20	0.0126
+influenza_a	0.9	1374	15	0.0109
+rabies	0.8	21	3	0.1429
+rabies	0.9	18	0	0.0
+rotavirus_a	0.8	451	18	0.0399
+rotavirus_a	0.9	393	10	0.0254
