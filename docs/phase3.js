@@ -116,15 +116,25 @@
     box.append(el("p", { class: "small mut" }, "Fully labelled (gold host and gold region) by virus and region."));
     box.append(table(["Virus | region", ...splits, "Total"], strata.map(s => { const c = sp => both.filter(r => r.virus + " | " + r.region === s && r.split === sp).reduce((a, r) => a + num(r.n), 0); return [s, ...splits.map(c), splits.reduce((a, sp) => a + c(sp), 0)]; })));
   };
+  live.p4tiers = async box => {
+    const T = await tsv("data/results/p4_tiered.tsv");
+    if (!T) { box.append(el("p", { class: "mut" }, "Tiered results are not published yet.")); return; }
+    const NAMES = { "majority": "Majority class per virus", "knn+abstain": "Nearest neighbour (5-mers)", "probe+abstain": "Vanilla frozen ESM-2 + linear", "ce+abstain": "Fine-tune, cross-entropy", "util_avg": "From scratch: utility, average", "util_worst": "From scratch: utility, worst", "wu_avg": "Warm start: utility, average", "wu_worst": "Warm start: utility, worst", "ce_long": "Fine-tune, cross-entropy, longer" };
+    const tiers = ["seen", "near", "mid", "far"], conds = Object.keys(NAMES).filter(c => T.some(r => r.condition === c));
+    const cell = (c, t) => { const r = T.find(x => x.condition === c && x.tier === t); return r ? f(r.utility) + " [" + f(r.ci_lo) + ", " + f(r.ci_hi) + "]" : ""; };
+    const n = t => { const r = T.find(x => x.tier === t); return r ? " (n=" + r.n_sequences + ")" : ""; };
+    box.append(el("p", { class: "small mut" }, "Selective utility (+1 right, -1 wrong, 0 abstain) with 95% interval, pooled over strata, by distance from the training set. 'Seen' for nearest neighbour excludes the sequence itself."));
+    box.append(table(["Condition", ...tiers.map(t => t + n(t))], conds.map(c => [NAMES[c], ...tiers.map(t => cell(c, t))])));
+  };
   live.p4results = async box => {
     const S = await tsv("data/results/p4_condition_summary.tsv");
     if (!S) { box.append(el("p", { class: "mut" }, "Training results are not published yet.")); return; }
-    const NAMES = { "majority": "Majority class per virus (baseline)", "knn+abstain": "Nearest neighbour, 5-mers (baseline)", "probe+abstain": "Vanilla: frozen ESM-2 + linear heads", "ce+abstain": "Fine-tune, cross-entropy (+ abstain rule)", "util_avg": "Fine-tune, utility loss, average of all strata", "util_worst": "Fine-tune, utility loss, worst-stratum weighted" };
+    const NAMES = { "majority": "Majority class per virus (baseline)", "knn+abstain": "Nearest neighbour, 5-mers (baseline)", "probe+abstain": "Vanilla: frozen ESM-2 + linear heads", "ce+abstain": "Fine-tune, cross-entropy (+ abstain rule)", "util_avg": "From scratch: utility loss, average of strata", "util_worst": "From scratch: utility loss, worst-stratum weighted", "wu_avg": "Warm start (supervised, then utility): average of strata", "wu_worst": "Warm start (supervised, then utility): worst stratum", "ce_long": "Fine-tune, cross-entropy, longer and faster (+ abstain rule)" };
     const grp = g => S.filter(r => r.group === g);
     for (const g of ["dev", "heldout", "blind"]) {
       const rows = grp(g).filter(r => !r.condition.startsWith("util_single"));
       if (!rows.length) continue;
-      box.append(el("h4", {}, g === "dev" ? "In-distribution (dev)" : g === "heldout" ? "Held out: unseen countries, unseen host genera, 2022 and later" : "Blind holdout (looked at once, after all design was frozen)"));
+      box.append(el("h4", {}, g === "dev" ? "New lineages (dev): whole similarity clusters held out" : g === "heldout" ? "Held out: unseen countries, unseen host genera, 2022 and later" : "Blind holdout (looked at once, after all design was frozen)"));
       box.append(table(["Condition", "Seeds", "Average utility [95% CI]", "Worst stratum [95% CI]"], rows.map(r => [NAMES[r.condition] || r.condition, r.seeds, f(r.macro_utility) + " [" + f(r.macro_ci_lo) + ", " + f(r.macro_ci_hi) + "]", f(r.worst_stratum_utility) + " [" + f(r.worst_ci_lo) + ", " + f(r.worst_ci_hi) + "]"])));
     }
     const singles = grp("heldout").filter(r => r.condition.startsWith("util_single"));
@@ -166,7 +176,7 @@
   }
 
   const nav = document.querySelector("nav .wrap");
-  root.append(el("div", { class: "card", id: "phase3" }, el("h2", { style: "margin-top:0" }, "Phase 3: how to evaluate, who else does, and how agents behave"),
+  root.append(el("div", { class: "card", id: "phase3" }, el("h2", { style: "margin-top:0" }, "Phases 3 and 4: how to evaluate, who else does, agent traces, ground truth, training on the eval"),
     el("p", { class: "sub" }, "Open any dropdown. Tags show where a statement comes from: sourced (linked), our reasoning, or our data."),
     el("p", { class: "p3idx" }, ...secs.flatMap((s, i) => [i ? " · " : "", el("a", { href: "#" + s.id }, s.nav || s.title)]))));
   for (const s of secs) root.append(el("section", { id: s.id }, el("h2", {}, s.title), s.intro ? el("p", { class: "sub" }, s.intro) : null, ...s.items.map(node)));

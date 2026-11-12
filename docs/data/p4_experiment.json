@@ -1,0 +1,338 @@
+{
+ "sections": [
+  {
+   "id": "experiment",
+   "nav": "Training on the eval",
+   "title": "Phase 4: training on the eval itself, and what it did",
+   "intro": "Your idea: make the loss the eval metric, restricted to one stratum, and see what that does to every other stratum compared with optimising the average. First results are in, and the main one is that our models were not trained well enough for the question yet.",
+   "items": [
+    {
+     "t": "The question",
+     "p": [
+      "If we train a model on the eval metric itself, restricted to one slice of the data, what happens on every other slice? And is it better to optimise the average of all slices? We built the loss so that it IS the eval metric (computed on training points), then measured it on held-out points."
+     ],
+     "basis": "our reasoning",
+     "open": true
+    },
+    {
+     "t": "The eval metric and the loss",
+     "s": "Selective utility: +1 right, -1 wrong, 0 abstain.",
+     "p": [
+      "For each sequence the model gives two calls: host class and region. Each call can also be 'abstain'. Utility is +1 if right, -1 if wrong, 0 if it abstains, averaged over the two calls and over sequences. A wrong host call costs as much as a right one gains; that cost is a choice (lambda = 1) and we did not test other values. Where a threat triage tool would rather say 'I do not know' than be wrong, this metric rewards that.",
+      "The training loss is the negative of the same quantity, computed exactly from the model's probabilities (including the abstain option). It is the average that reinforcement learning with a verifiable reward estimates by sampling answers, without the sampling noise. We used the exact version because with 10 possible actions it is cheap and stable. It is reinforcement learning in expectation, not sampled roll-outs; multi-step agent RL is a separate thing we did not do."
+     ],
+     "basis": "our reasoning"
+    },
+    {
+     "t": "The conditions (everything else is identical)",
+     "table": {
+      "head": [
+       "Condition",
+       "What the loss sees",
+       "Why it is there"
+      ],
+      "rows": [
+       [
+        "majority",
+        "Nothing (most common label per virus)",
+        "Floor: what a rule gets"
+       ],
+       [
+        "nearest neighbour",
+        "Nothing (label of the most similar training sequence)",
+        "A simple baseline a model must beat"
+       ],
+       [
+        "vanilla probe",
+        "Frozen ESM-2 35M embeddings, linear heads, cross-entropy",
+        "The untouched model"
+       ],
+       [
+        "fine-tune, cross-entropy",
+        "All training sequences, standard loss",
+        "Ordinary supervised fine-tuning"
+       ],
+       [
+        "utility, average",
+        "Expected utility, every stratum weighted equally",
+        "Loss tied to the average eval"
+       ],
+       [
+        "utility, worst-stratum",
+        "Expected utility, weight shifted toward the worst stratum",
+        "Loss tied to the weakest slice"
+       ],
+       [
+        "utility, one stratum only (9 runs)",
+        "Expected utility of ONE stratum only",
+        "The transfer experiment: optimise one slice, measure all others"
+       ]
+      ]
+     },
+     "basis": "our reasoning",
+     "kids": [
+      {
+       "t": "Strata",
+       "p": [
+        "A stratum is one virus in one region: influenza in Africa, Asia, Europe, North America, Oceania and South America, and rotavirus in Africa, Asia and Oceania (the other rotavirus regions have too few fully labelled sequences). Only sequences whose host AND region labels are both gold are used: 1,626 sequences."
+       ],
+       "basis": "our reasoning"
+      }
+     ]
+    },
+    {
+     "t": "Controls",
+     "list": [
+      "Same encoder (ESM-2, 35M parameters), same 200 steps, same learning rates, same data pool for every fine-tuned condition. Three seeds each.",
+      "No early stopping and no hyperparameter search for any utility condition, so no condition gets to peek at other strata through a dev set.",
+      "The cross-entropy and probe models and the nearest-neighbour baseline cannot abstain, so they get a fair rule: abstain when the top probability is below a threshold picked on dev. The utility models learn their own abstaining.",
+      "Held-out evaluation = unseen countries + unseen host genera + 2022 and later. The blind split is evaluated once at the end.",
+      "Confidence intervals come from resampling the evaluation sequences within each stratum (500 resamples)."
+     ],
+     "basis": "our reasoning"
+    },
+    {
+     "t": "Results (live from the committed tables; interim while runs finish)",
+     "s": "Tables change as new runs land.",
+     "p": [
+      "Interim status: round 1 (utility loss from scratch, cross-entropy, probes, baselines) is complete. Warm-started utility runs and a longer-training control are still running. The blind split is not shown until all design decisions are frozen."
+     ],
+     "basis": "our data",
+     "kids": [
+      {
+       "t": "By distance tier",
+       "p": [
+        "Where each model holds up: close to what it has seen, or far from it."
+       ],
+       "live": "p4tiers",
+       "open": true
+      },
+      {
+       "t": "Overall and worst stratum",
+       "live": "p4results"
+      },
+      {
+       "t": "Transfer matrix: train on one stratum, evaluate on every other",
+       "live": "p4transfer"
+      }
+     ],
+     "open": true
+    },
+    {
+     "t": "What round 1 showed (verified numbers)",
+     "list": [
+      "Utility loss from scratch fails, in two opposite ways. Trained on the average or worst stratum it learns to abstain: it answers only 15 to 17% of held-out sequences. Trained on one stratum alone it answers almost everything (coverage about 100%) but is right only 15 to 37% of the time. Abstaining is the safe local optimum when the policy starts untrained, and a single small stratum is too little data to learn from.",
+      "A nearest-neighbour rule beats ordinary fine-tuning. Held-out utility: nearest neighbour 0.40, fine-tuned cross-entropy 0.27, frozen probe 0.01, majority class -0.41. Nearest neighbour is ahead at every distance tier.",
+      "The fine-tuned model is underfit. On sequences it trained on, cross-entropy scores 0.56 against nearest neighbour's 0.86 (which excludes the sequence itself). At 200 steps and a small learning rate it had not learned the training set, so comparisons between loss functions at this budget are confounded by too little training.",
+      "Everything gets worse with distance. Nearest neighbour falls from 0.86 (seen) to 0.33 (far).",
+      "Our own split names were misleading. 'dev' (whole clusters held out) is in fact the far tier; 34% of test_geo rows are near-copies of training sequences. This is why we now report by distance tier."
+     ],
+     "basis": "our data",
+     "open": true
+    },
+    {
+     "t": "What we decided to do next",
+     "list": [
+      "Warm start (running): supervised steps first, then the utility objective, which is the usual recipe for reinforcement learning from a verifiable reward.",
+      "Training budget: a longer, faster-learning-rate control, since the model is underfit. This is the simplest innovation lever (parameters).",
+      "Only then compare loss functions and read the transfer matrix. Reading it before the models are trained properly would be reading noise."
+     ],
+     "basis": "our reasoning"
+    },
+    {
+     "t": "The innovation loop: how new ideas get into the work",
+     "s": "Scout, triage, test small, log the result.",
+     "p": [
+      "Besides running experiments, each cycle starts with a scan for new ideas: new arXiv (q-bio, cs.LG), bioRxiv (bioinformatics, genomics, evolutionary biology) and ChemRxiv preprints, within our domain and from other fields. An idea is worth a test only if it passes four questions: is the claim checkable, does it change something we can measure here, can we test it on one GPU in a day, and what would count as it failing. Results, including failures, are logged on this page."
+     ],
+     "basis": "our reasoning",
+     "kids": [
+      {
+       "t": "Six levels where an idea can enter",
+       "table": {
+        "head": [
+         "Level",
+         "Examples",
+         "Status"
+        ],
+        "rows": [
+         [
+          "1. Parameters",
+          "Learning rate, steps, batch, lambda in the utility",
+          "Training-budget control queued"
+         ],
+         [
+          "2. Representation",
+          "Amino-acid vs codon vs k-mer tokens; adding predicted structure; encoding host and place as a hierarchy; giving the model its nearest neighbours as input",
+          "Scouting"
+         ],
+         [
+          "3. Model and inductive bias",
+          "Other pretrained models (genomic or protein language models, joint-embedding predictive architectures); fine-tuning a viral-capable model; models that predict variant effects, applied to viruses",
+          "Scouting; claims being verified before use"
+         ],
+         [
+          "4. Data: perturbation and synthetic",
+          "In-silico mutation, codon swaps, mixing in embedding space; deliberately injected noise to test robustness. Synthetic data is labelled as such and never used as truth",
+          "Scouting"
+         ],
+         [
+          "5. Loss tied to the metric",
+          "Utility loss (done); warm start; sampled rollouts instead of exact expectation",
+          "Warm start running"
+         ],
+         [
+          "6. Evaluation layer",
+          "Distance tiers (done, by 5-mer similarity); better embeddings for the clustering; leakage-controlled splits",
+          "Tiers done; embedding upgrade scouting"
+         ]
+        ]
+       },
+       "basis": "our reasoning"
+      },
+      {
+       "t": "Scouting pass, 2026-11-12: your suggested ideas, checked",
+       "s": "Verified or unverified, with sources. Search coverage was thin; nothing here is a full-text read.",
+       "table": {
+        "head": [
+         "Idea",
+         "What we found",
+         "Verdict for us"
+        ],
+        "rows": [
+         [
+          "Marin 1B as a base model",
+          "No model named Marin 1B found. The only roughly 1B Marin checkpoint is a general text language model; Marin-8B is Apache-2.0.",
+          "Not relevant to sequences. Dropped."
+         ],
+         [
+          "AlphaGenome (and an 'AlphaGenome 2')",
+          "A human regulatory-genome model: predicts expression, splicing, chromatin and contacts from up to 1 Mb of DNA. Nature 2026-01-28. Weights non-commercial; needs a large GPU. No virus support documented. No 'AlphaGenome 2' found.",
+          "Not usable for viral host or place. Successor UNVERIFIED."
+         ],
+         [
+          "JEPA-style model",
+          "JEPA-DNA (arXiv 2602.17162, Feb 2026) adds a latent-prediction loss to a DNA language model; a single-cell JEPA exists. No protein-sequence JEPA found. A 100M NVIDIA checkpoint is UNVERIFIED (licence and release status unclear).",
+          "Interesting auxiliary loss, but DNA-only. Deprioritised."
+         ],
+         [
+          "Fine-tune Evo 2 on viruses",
+          "Evo 2 excluded eukaryotic viruses from training. One preprint fine-tuned the 7B on 110 viral genomes: lower perplexity on unseen viruses, AUROC 0.6 for SARS-CoV-2 escape. Hardware needs on a V100 UNVERIFIED.",
+          "Possible but weak signal and heavy. Deprioritised."
+         ],
+         [
+          "Nucleotide Transformer v3 (8M to 650M)",
+          "DNA models trained on 24 animal and plant species; no viral training data mentioned. Non-commercial licence.",
+          "Viral coverage UNVERIFIED."
+         ],
+         [
+          "ESM C (300M, 600M)",
+          "Strong small protein models with a fine-tuning-friendly licence (terms for 600M UNVERIFIED; the HF card shows conflicting licence tags).",
+          "Best candidate for a stronger encoder."
+         ],
+         [
+          "Codon-level tokens",
+          "Mixed evidence: CaLM beat larger protein models on some tasks, while a later comparison found amino-acid models ahead.",
+          "Cheap to try; synonymous changes may carry lineage signal."
+         ],
+         [
+          "Retrieval of training homologs as input",
+          "RAG-ESM (ICLR 2025) and Profluent's E1 (Nov 2025) feed homologs to the model. Not shown for classification.",
+          "Fits our held-out geography and time splits. Our own nearest-neighbour baseline already beats the fine-tuned model."
+         ],
+         [
+          "Hierarchical host labels",
+          "HAVEN (bioRxiv, Jun 2025) predicts host at several taxonomic ranks. Page could not be read in full.",
+          "Cheap multi-rank heads. Benefit UNVERIFIED."
+         ],
+         [
+          "Augmentation by deliberate perturbation",
+          "Codon-degeneracy and other augmentations exist; reported gains are on small or imbalanced data. No evidence found that they help out-of-distribution.",
+          "Test as a hypothesis, do not assume."
+         ],
+         [
+          "Overlap-controlled evaluation",
+          "Two 2026 papers show pretrained-model gains can shrink or vanish on strict no-overlap tiers: both argue for tiered tests.",
+          "Matches what we found: our split names did not measure difficulty."
+         ],
+         [
+          "Better abstention",
+          "Likelihood-ratio selectors for shift (ICLR 2026), a rank-based risk-coverage reward (RLSR, Jul 2026), a selective-prediction loss (SYNC, Feb 2026).",
+          "Near-zero cost on our encoder; worth testing."
+         ]
+        ]
+       },
+       "basis": "sourced",
+       "src": [
+        [
+         "AlphaGenome (DeepMind)",
+         "https://deepmind.google/blog/alphagenome-ai-for-better-understanding-the-genome/"
+        ],
+        [
+         "JEPA-DNA",
+         "https://arxiv.org/abs/2602.17162"
+        ],
+        [
+         "Evo 2 viral fine-tuning",
+         "https://arxiv.org/abs/2511.19299"
+        ],
+        [
+         "Marin community models",
+         "https://huggingface.co/marin-community"
+        ],
+        [
+         "Likelihood-ratio selectors",
+         "https://arxiv.org/html/2505.15008v2"
+        ],
+        [
+         "HonestAffinity (overlap tiers)",
+         "https://arxiv.org/html/2606.03422v1"
+        ],
+        [
+         "RAG-ESM",
+         "https://iclr.cc/virtual/2025/36987"
+        ]
+       ],
+       "kids": [
+        {
+         "t": "What we will try, in order",
+         "list": [
+          "1. Tiered evaluation with a second similarity measure (protein-model embeddings) to check the tiers are not an artefact of 5-mer counting.",
+          "2. A longer, faster-learning-rate fine-tune (the model is underfit).",
+          "3. A retrieval hybrid: use the nearest training sequence when it is close, the model when it is not.",
+          "4. A stronger encoder (ESM-2 150M now; ESM C if the licence is clean).",
+          "5. Better abstention rules on the existing models.",
+          "Anything from the list marked UNVERIFIED stays untested until a primary source is read."
+         ],
+         "basis": "our reasoning"
+        },
+        {
+         "t": "Not found",
+         "list": [
+          "No new architecture or loss paper from the last 90 days on selective prediction turned up (the closest are from February and July 2026). That is UNVERIFIED, not proof of absence: the search was thin.",
+          "Nothing on ProtT5 or Caduceus was checked."
+         ],
+         "basis": "sourced"
+        }
+       ],
+       "open": true
+      }
+     ],
+     "open": true
+    },
+    {
+     "t": "Limits of this experiment",
+     "list": [
+      "One small model (35M parameters) and three viruses. A bigger model or other viruses could behave differently.",
+      "Strata sizes are uneven and some held-out strata are small, so differences between neighbouring conditions are often inside the confidence interval.",
+      "The label set is gold by internal consistency, not by outside verification.",
+      "Utility depends on lambda = 1, which we did not vary.",
+      "Held-out data comes from the same public database as the training data, so shared biases (who sequences what) are shared by both.",
+      "Nothing here says a model is safe or good for biosecurity use; it measures one narrow classification task."
+     ],
+     "basis": "our reasoning"
+    }
+   ]
+  }
+ ]
+}

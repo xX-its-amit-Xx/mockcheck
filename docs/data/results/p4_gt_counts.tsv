@@ -1,0 +1,250 @@
+virus	split	host_class	host_tier	region	geo_tier	n
+influenza_a	blind			south_america	A	2
+influenza_a	blind	avian	A	asia	A	45
+influenza_a	blind	avian	A	asia	B	1
+influenza_a	blind	avian	A	europe	A	13
+influenza_a	blind	avian	A	north_america	A	1
+influenza_a	blind	swine	A	asia	B	3
+influenza_a	blind	swine	A	europe	A	29
+influenza_a	blind	swine	A	north_america	A	2
+influenza_a	blind	swine	A	south_america	A	15
+influenza_a	dev	avian	A	asia	A	80
+influenza_a	dev	avian	A	europe	A	17
+influenza_a	dev	avian	A	north_america	A	22
+influenza_a	dev	avian	A	south_america	A	1
+influenza_a	dev	avian	B	south_america	A	2
+influenza_a	dev	human	A	asia	B	3
+influenza_a	dev	human	A	south_america	A	2
+influenza_a	dev	swine	A	asia	B	5
+influenza_a	dev	swine	A	europe	A	5
+influenza_a	dev	swine	A	europe	B	1
+influenza_a	dev	swine	A	south_america	A	8
+influenza_a	test_geo			africa	A	4
+influenza_a	test_geo			europe	A	1
+influenza_a	test_geo			europe	B	14
+influenza_a	test_geo			south_america	A	3
+influenza_a	test_geo			south_america	B	4
+influenza_a	test_geo	avian	A	africa	A	11
+influenza_a	test_geo	avian	A	asia	A	17
+influenza_a	test_geo	avian	A	europe	B	23
+influenza_a	test_geo	avian	A	north_america	A	3
+influenza_a	test_geo	avian	A	south_america	A	11
+influenza_a	test_geo	equine	A	africa	A	5
+influenza_a	test_geo	equine	A	asia	A	1
+influenza_a	test_geo	equine	A	asia	B	9
+influenza_a	test_geo	human	A	africa	B	34
+influenza_a	test_geo	human	A	europe	A	1
+influenza_a	test_geo	human	A	europe	B	33
+influenza_a	test_geo	human	A	south_america	A	11
+influenza_a	test_geo	human	A	south_america	B	11
+influenza_a	test_geo	swine	A	africa	A	1
+influenza_a	test_geo	swine	A	europe	A	54
+influenza_a	test_geo	swine	A	south_america	A	3
+influenza_a	test_host	avian	A	asia	A	12
+influenza_a	test_host	avian	A	asia	B	3
+influenza_a	test_host	avian	A	north_america	B	14
+influenza_a	test_time			africa	A	16
+influenza_a	test_time			europe	B	10
+influenza_a	test_time			north_america	B	25
+influenza_a	test_time			south_america	B	5
+influenza_a	test_time	avian	A	africa	A	61
+influenza_a	test_time	avian	A	africa	B	4
+influenza_a	test_time	avian	A	asia	A	2
+influenza_a	test_time	avian	A	europe	A	1
+influenza_a	test_time	avian	A	europe	B	1
+influenza_a	test_time	avian	A	north_america	A	3
+influenza_a	test_time	avian	A	north_america	B	98
+influenza_a	test_time	avian	A	south_america	B	15
+influenza_a	test_time	avian	B	africa	A	2
+influenza_a	test_time	avian	B	africa	B	1
+influenza_a	test_time	equine	A	asia	B	2
+influenza_a	test_time	equine	A	europe	B	1
+influenza_a	test_time	feline	A	north_america	B	1
+influenza_a	test_time	human	A	africa	A	2
+influenza_a	test_time	human	A	europe	B	6
+influenza_a	test_time	human	A	north_america	A	57
+influenza_a	test_time	human	A	north_america	B	1
+influenza_a	test_time	human	A	oceania	A	23
+influenza_a	test_time	other_mammal	A	north_america	B	1
+influenza_a	test_time	swine	A	europe	A	11
+influenza_a	test_time	swine	A	south_america	A	37
+influenza_a	train			africa	A	2
+influenza_a	train			asia	B	1
+influenza_a	train			europe	B	1
+influenza_a	train			north_america	A	1
+influenza_a	train			south_america	A	9
+influenza_a	train			south_america	B	2
+influenza_a	train	avian	A	africa	A	8
+influenza_a	train	avian	A	africa	B	1
+influenza_a	train	avian	A	asia	A	70
+influenza_a	train	avian	A	asia	B	1
+influenza_a	train	avian	A	europe	A	71
+influenza_a	train	avian	A	europe	B	1
+influenza_a	train	avian	A	north_america	A	54
+influenza_a	train	avian	A	north_america	B	1
+influenza_a	train	avian	A	south_america	A	4
+influenza_a	train	avian	A	south_america	B	3
+influenza_a	train	avian	B	south_america	A	3
+influenza_a	train	canine	A			1
+influenza_a	train	canine	A	asia	A	4
+influenza_a	train	canine	A	north_america	A	25
+influenza_a	train	canine	A	north_america	B	1
+influenza_a	train	equine	A	africa	A	1
+influenza_a	train	equine	A	africa	B	1
+influenza_a	train	equine	A	asia	B	3
+influenza_a	train	equine	A	europe	A	7
+influenza_a	train	equine	A	europe	B	20
+influenza_a	train	equine	A	north_america	A	8
+influenza_a	train	equine	A	north_america	B	1
+influenza_a	train	equine	A	south_america	B	2
+influenza_a	train	human	A			1
+influenza_a	train	human	A	africa	A	17
+influenza_a	train	human	A	asia	A	1
+influenza_a	train	human	A	asia	B	7
+influenza_a	train	human	A	north_america	A	128
+influenza_a	train	human	A	oceania	A	96
+influenza_a	train	human	A	south_america	A	40
+influenza_a	train	human	A	south_america	B	8
+influenza_a	train	swine	A	asia	A	24
+influenza_a	train	swine	A	asia	B	36
+influenza_a	train	swine	A	europe	A	73
+influenza_a	train	swine	A	europe	B	4
+influenza_a	train	swine	A	north_america	A	40
+influenza_a	train	swine	A	south_america	A	150
+influenza_a	train	swine	A	south_america	B	3
+rabies	blind			south_america	B	1
+rabies	blind	bovine	B	south_america	B	1
+rabies	dev			africa	B	1
+rabies	dev	bovine	B	south_america	B	1
+rabies	test_geo	bat	B	south_america	B	32
+rabies	test_geo	bovine	B	asia	B	9
+rabies	test_geo	canine	B	asia	B	3
+rabies	test_geo	human	B	asia	B	15
+rabies	test_geo	human	B	north_america	B	1
+rabies	test_geo	other_mammal	B	asia	B	4
+rabies	test_host	bat	B	south_america	B	15
+rabies	test_time			europe	B	1
+rabies	test_time	canine	B	asia	B	8
+rabies	test_time	canine	B	europe	B	3
+rabies	test_time	feline	B	europe	B	2
+rabies	test_time	human	B	asia	B	5
+rabies	test_time	other_mammal	B	europe	B	10
+rabies	test_time	other_mammal	B	north_america	B	1
+rabies	train			africa	B	29
+rabies	train			north_america	A	21
+rabies	train			north_america	B	7
+rabies	train			south_america	B	32
+rabies	train	bat	B	africa	B	1
+rabies	train	bat	B	north_america	B	40
+rabies	train	bovine	A	europe	B	1
+rabies	train	bovine	B			3
+rabies	train	bovine	B	africa	B	8
+rabies	train	bovine	B	asia	B	8
+rabies	train	bovine	B	europe	B	1
+rabies	train	bovine	B	south_america	B	45
+rabies	train	canine	B			1
+rabies	train	canine	B	africa	B	40
+rabies	train	canine	B	asia	B	60
+rabies	train	canine	B	north_america	B	2
+rabies	train	canine	B	south_america	B	39
+rabies	train	feline	B	africa	B	7
+rabies	train	feline	B	asia	B	1
+rabies	train	feline	B	south_america	B	5
+rabies	train	human	A	europe	B	1
+rabies	train	human	A	north_america	B	1
+rabies	train	human	B	africa	B	7
+rabies	train	human	B	asia	B	42
+rabies	train	human	B	north_america	B	6
+rabies	train	human	B	south_america	A	2
+rabies	train	human	B	south_america	B	8
+rabies	train	other_mammal	A			5
+rabies	train	other_mammal	A	europe	B	2
+rabies	train	other_mammal	A	north_america	A	10
+rabies	train	other_mammal	A	north_america	B	1
+rabies	train	other_mammal	B			1
+rabies	train	other_mammal	B	africa	B	3
+rabies	train	other_mammal	B	asia	B	11
+rabies	train	other_mammal	B	europe	B	18
+rabies	train	other_mammal	B	north_america	B	54
+rabies	train	swine	B	africa	B	1
+rotavirus_a	blind			asia	B	3
+rotavirus_a	blind			europe	B	1
+rotavirus_a	blind			oceania	B	1
+rotavirus_a	blind	bovine	A			1
+rotavirus_a	blind	bovine	A	africa	A	1
+rotavirus_a	blind	bovine	A	asia	A	3
+rotavirus_a	blind	bovine	A	asia	B	12
+rotavirus_a	blind	bovine	A	europe	A	1
+rotavirus_a	blind	bovine	A	north_america	B	3
+rotavirus_a	blind	bovine	B	asia	B	1
+rotavirus_a	blind	human	A	africa	A	24
+rotavirus_a	blind	human	A	africa	B	6
+rotavirus_a	blind	human	A	asia	B	7
+rotavirus_a	blind	human	A	europe	B	5
+rotavirus_a	blind	human	A	north_america	B	7
+rotavirus_a	blind	human	A	oceania	A	7
+rotavirus_a	blind	human	A	oceania	B	2
+rotavirus_a	blind	human	A	south_america	B	16
+rotavirus_a	blind	human	B	asia	B	2
+rotavirus_a	blind	human	B	south_america	B	18
+rotavirus_a	blind	swine	A	asia	A	1
+rotavirus_a	blind	swine	A	europe	B	1
+rotavirus_a	blind	swine	A	south_america	B	1
+rotavirus_a	blind	swine	B	asia	B	24
+rotavirus_a	dev	human	A	africa	A	4
+rotavirus_a	dev	human	A	north_america	B	2
+rotavirus_a	dev	swine	A	asia	A	1
+rotavirus_a	test_geo			asia	A	3
+rotavirus_a	test_geo			europe	B	1
+rotavirus_a	test_geo	bovine	A	north_america	B	7
+rotavirus_a	test_geo	human	A	africa	A	2
+rotavirus_a	test_geo	human	A	asia	A	5
+rotavirus_a	test_geo	human	A	europe	B	7
+rotavirus_a	test_geo	human	A	north_america	B	7
+rotavirus_a	test_geo	human	B	north_america	B	5
+rotavirus_a	test_time	avian	A	asia	B	4
+rotavirus_a	test_time	bovine	A	africa	A	1
+rotavirus_a	test_time	bovine	A	africa	B	1
+rotavirus_a	test_time	bovine	A	asia	B	2
+rotavirus_a	test_time	bovine	B	asia	B	4
+rotavirus_a	test_time	feline	A	asia	A	2
+rotavirus_a	test_time	human	A	europe	B	3
+rotavirus_a	test_time	swine	A	asia	A	5
+rotavirus_a	test_time	swine	B	asia	B	59
+rotavirus_a	train			africa	B	4
+rotavirus_a	train			asia	B	5
+rotavirus_a	train			europe	B	1
+rotavirus_a	train			north_america	A	1
+rotavirus_a	train			south_america	A	1
+rotavirus_a	train	avian	A	asia	B	2
+rotavirus_a	train	bovine	A	africa	A	8
+rotavirus_a	train	bovine	A	africa	B	1
+rotavirus_a	train	bovine	A	asia	A	10
+rotavirus_a	train	bovine	A	asia	B	28
+rotavirus_a	train	bovine	A	europe	A	2
+rotavirus_a	train	bovine	A	north_america	A	2
+rotavirus_a	train	bovine	A	north_america	B	2
+rotavirus_a	train	bovine	A	south_america	A	5
+rotavirus_a	train	bovine	B			1
+rotavirus_a	train	equine	A	asia	A	51
+rotavirus_a	train	equine	A	asia	B	17
+rotavirus_a	train	equine	A	south_america	A	1
+rotavirus_a	train	feline	A	asia	A	1
+rotavirus_a	train	human	A	africa	A	69
+rotavirus_a	train	human	A	africa	B	4
+rotavirus_a	train	human	A	asia	A	1
+rotavirus_a	train	human	A	asia	B	39
+rotavirus_a	train	human	A	europe	B	1
+rotavirus_a	train	human	A	north_america	B	10
+rotavirus_a	train	human	A	oceania	A	34
+rotavirus_a	train	human	A	oceania	B	14
+rotavirus_a	train	human	A	south_america	B	21
+rotavirus_a	train	human	B	asia	B	9
+rotavirus_a	train	human	B	europe	B	13
+rotavirus_a	train	human	B	south_america	B	28
+rotavirus_a	train	swine	A	africa	A	7
+rotavirus_a	train	swine	A	africa	B	7
+rotavirus_a	train	swine	A	asia	A	1
+rotavirus_a	train	swine	A	asia	B	3
+rotavirus_a	train	swine	A	europe	B	1
+rotavirus_a	train	swine	A	north_america	A	1

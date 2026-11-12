@@ -167,8 +167,8 @@
        ],
        [
         "dev",
-        "Random 10% of similarity clusters",
-        "In-distribution check; used only to tune abstain thresholds for baselines"
+        "Random 10% of whole similarity clusters",
+        "New lineages: no close relative in training (median similarity 0.67). Used only to tune abstain thresholds for baselines. NOT an in-distribution check, despite our first label for it"
        ],
        [
         "test_geo",
@@ -201,12 +201,22 @@
       {
        "t": "Honest limits of the holdouts",
        "list": [
-        "Time and geography holdouts are by sample, so a new sample can still sit in an old lineage. Every held-out row records its similarity to the nearest training sequence so results can be split by novelty.",
+        "Time and geography holdouts are by sample, so a new sample can still sit in an old lineage: 34% of test_geo rows and 20% of test_time rows have a training sequence at similarity 0.9 or higher, while dev and blind (whole clusters held out) have almost none. Split names therefore do not measure difficulty. We evaluate by distance tier instead (next item).",
         "Held-out places are chosen by hash with the biggest countries kept in training; that is a design choice, and a different choice would change difficulty."
        ],
        "basis": "our reasoning"
       }
      ]
+    },
+    {
+     "t": "4b. Distance tiers: how far each test sequence is from training",
+     "s": "Difficulty measured by similarity, not by the split name.",
+     "p": [
+      "Every sequence gets a tier from its own similarity to the nearest training sequence of the same virus (5-mer Jaccard): seen (it is in the training set, the memorisation reference), near (0.9 or more), mid (0.7 to 0.9), far (below 0.7). Results are reported per tier, so we can see where a model improves: close to what it has seen, or far from it. The similarity is a simple stand-in; better embeddings for the clustering are on the innovation list."
+     ],
+     "basis": "our data",
+     "live": "p4tiers",
+     "open": true
     },
     {
      "t": "5. Incomplete and derived labels",

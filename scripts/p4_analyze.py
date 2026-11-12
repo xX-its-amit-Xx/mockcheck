@@ -51,6 +51,40 @@ def tune_threshold(rows):
     return bt
 
 
+TIERS = [("seen", "in the training set (memorisation reference)"), ("near", "similarity to training >= 0.9"), ("mid", "similarity 0.7 to 0.9"), ("far", "similarity < 0.7")]
+
+
+def tier_of(r):
+    if r["split"] == "train":
+        return "seen"
+    sim = float(r["nn_sim_train"])
+    return "near" if sim >= 0.9 else ("mid" if sim >= 0.7 else "far")
+
+
+def tiered(data, include_blind, boot, rng):
+    """Utility by distance tier, pooled over strata. Tier comes from the sequence's own similarity to training, not from the split name."""
+    out = []
+    for cond, runs in sorted(data.items()):
+        for tname, _ in TIERS:
+            per_seed, answered, correct, n = [], [], [], 0
+            for seed, rows, thr in runs:
+                sub = [r for r in rows if (include_blind or r["split"] != "blind") and tier_of(r) == tname]
+                if not sub:
+                    continue
+                u, an, co = util_vec(sub, thr, thr)
+                per_seed.append(u); answered.append(an.mean() / 2); correct.append(co.sum() / max(an.sum(), 1)); n = len(sub)
+            if not per_seed or len({len(x) for x in per_seed}) != 1:
+                continue
+            m = np.mean(per_seed, 0)
+            bs = [m[rng.integers(0, len(m), len(m))].mean() for _ in range(boot)]
+            out.append(dict(condition=cond, tier=tname, n_sequences=n, seeds=len(per_seed), utility=round(float(m.mean()), 4), ci_lo=round(float(np.percentile(bs, 2.5)), 4),
+                            ci_hi=round(float(np.percentile(bs, 97.5)), 4), coverage=round(float(np.mean(answered)), 4), accuracy_when_answering=round(float(np.mean(correct)), 4)))
+    if out:
+        with open(f"{ROOT}/results/p4_tiered.tsv", "w", newline="\n") as f:
+            w = csv.DictWriter(f, fieldnames=list(out[0]), delimiter="\t", lineterminator="\n"); w.writeheader(); w.writerows(out)
+    return len(out)
+
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--preds", default=f"{ROOT}/results/p4_preds"); ap.add_argument("--include-blind", action="store_true")
     ap.add_argument("--boot", type=int, default=500); a = ap.parse_args()
@@ -117,6 +151,8 @@ def main():
     if tm:
         with open(f"{ROOT}/results/p4_transfer_matrix.tsv", "w", newline="\n") as f:
             w = csv.DictWriter(f, fieldnames=list(tm[0]), delimiter="\t", lineterminator="\n"); w.writeheader(); w.writerows(tm)
+    nt = tiered(data, a.include_blind, a.boot, rng)
+    print(f"tier rows {nt}")
     print(f"conditions {sorted(data)}; eval rows {len(by)}; summary rows {len(summ)}; transfer rows {len(tm)}")
 
 
