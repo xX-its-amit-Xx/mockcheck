@@ -101,7 +101,7 @@ def main():
 
     conds = []
     for c in a.conds.split(","):
-        if c in ("util_single", "wu_single"):
+        if c.split("_long")[0] in ("util_single", "wu_single"):
             conds += [f"{c}:{s}" for s in STRATA]
         else:
             conds += [c]
@@ -113,20 +113,22 @@ def main():
                 print("skip", tag); continue
             t0 = time.time()
             torch.manual_seed(seed); rng = np.random.default_rng(seed)
-            abstain = cond.startswith(("util", "wu"))
+            bc = cond[:-5] if cond.endswith("_long") else cond   # base condition without the budget suffix
+            mult = 3 if cond.endswith("_long") else 1
+            abstain = bc.startswith(("util", "wu"))
             net = Net(a.base, abstain, freeze=(cond == "probe")).to(dev)
             params = [{"params": [p for n, p in net.named_parameters() if n.startswith(("hh", "rh"))], "lr": a.lr_head}]
             if cond != "probe":
-                params.append({"params": net.enc.parameters(), "lr": a.lr_enc})
+                params.append({"params": net.enc.parameters(), "lr": a.lr_enc * (5 if mult > 1 else 1)})
             opt = torch.optim.AdamW(params, weight_decay=0.01)
             scaler = torch.amp.GradScaler("cuda", enabled=(dev == "cuda" and cond != "probe"))
-            steps = a.steps if cond != "probe" else 200
+            steps = a.steps * mult if cond != "probe" else 200
             if cond == "probe":
                 with torch.no_grad():
                     emb = torch.cat([net.embed(ids[i:i + 64].to(dev), mask[i:i + 64].to(dev)).float().cpu() for i in range(0, len(rows), 64)])
             for step in range(steps):
                 # wu_* = warm start: first `warm` steps are supervised (cross-entropy on all strata), then the eval-tied utility objective
-                mode = "ce" if (cond.startswith("wu_") and step < a.warm) else cond.replace("wu_", "util_", 1)
+                mode = "ce" if (bc.startswith("wu_") and step < a.warm * mult) else bc.replace("wu_", "util_", 1)
                 if mode == "ce" or mode == "probe":
                     b = rng.choice(train_idx, size=min(32, len(train_idx)), replace=False if len(train_idx) >= 32 else True)
                 elif mode.startswith("util_single"):
