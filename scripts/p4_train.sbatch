@@ -12,7 +12,7 @@
 set -euo pipefail
 S=/scratch/shenoy.am/mockcheck
 . "$S/env_ft/bin/activate"
-export HF_HOME=$S/hf HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True HF_HOME=$S/hf HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false
 cd "$S/repo"
 nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
 python scripts/p4_train.py --data data/groundtruth/p4_groundtruth.tsv.gz --out "$S/out/p4" \

@@ -126,8 +126,8 @@ def main():
                     b = rng.choice(train_idx, size=min(32, len(train_idx)), replace=False if len(train_idx) >= 32 else True)
                 elif cond.startswith("util_single"):
                     pool = by_s[cond.split(":", 1)[1]]; b = rng.choice(pool, size=32, replace=len(pool) < 32)
-                else:  # util_avg / util_worst: equal draw from every stratum
-                    b = np.concatenate([rng.choice(by_s[s], size=6, replace=len(by_s[s]) < 6) for s in STRATA if by_s[s]])
+                else:  # util_avg / util_worst: equal draw (3) from every stratum; 27 per batch fits in 32 GB
+                    b = np.concatenate([rng.choice(by_s[s], size=3, replace=len(by_s[s]) < 3) for s in STRATA if by_s[s]])
                 b = torch.as_tensor(b)
                 if cond == "probe":
                     lh, lr_ = net.hh(emb[b].to(dev)), net.rh(emb[b].to(dev))
