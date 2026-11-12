@@ -83,7 +83,7 @@ def main():
     ap.add_argument("--conds", default="ce,util_avg,util_worst"); ap.add_argument("--seeds", default="0,1,2")
     ap.add_argument("--steps", type=int, default=300); ap.add_argument("--base", default="facebook/esm2_t12_35M_UR50D")
     ap.add_argument("--lr_enc", type=float, default=2e-5); ap.add_argument("--lr_head", type=float, default=1e-3)
-    ap.add_argument("--tau", type=float, default=0.25); ap.add_argument("--limit", type=int, default=0, help="debug: use only this many rows")
+    ap.add_argument("--tau", type=float, default=0.25); ap.add_argument("--warm", type=int, default=100, help="CE steps before the utility phase for wu_* conditions"); ap.add_argument("--limit", type=int, default=0, help="debug: use only this many rows")
     a = ap.parse_args()
     from transformers import AutoTokenizer
     dev = "cuda" if torch.cuda.is_available() else "cpu"
@@ -101,7 +101,10 @@ def main():
 
     conds = []
     for c in a.conds.split(","):
-        conds += [f"util_single:{s}" for s in STRATA] if c == "util_single" else [c]
+        if c in ("util_single", "wu_single"):
+            conds += [f"{c}:{s}" for s in STRATA]
+        else:
+            conds += [c]
     for cond in conds:
         for seed in map(int, a.seeds.split(",")):
             tag = f"{cond.replace('|', '_').replace(':', '-')}__seed{seed}"
@@ -110,7 +113,7 @@ def main():
                 print("skip", tag); continue
             t0 = time.time()
             torch.manual_seed(seed); rng = np.random.default_rng(seed)
-            abstain = cond.startswith("util")
+            abstain = cond.startswith(("util", "wu"))
             net = Net(a.base, abstain, freeze=(cond == "probe")).to(dev)
             params = [{"params": [p for n, p in net.named_parameters() if n.startswith(("hh", "rh"))], "lr": a.lr_head}]
             if cond != "probe":
@@ -122,10 +125,12 @@ def main():
                 with torch.no_grad():
                     emb = torch.cat([net.embed(ids[i:i + 64].to(dev), mask[i:i + 64].to(dev)).float().cpu() for i in range(0, len(rows), 64)])
             for step in range(steps):
-                if cond == "ce" or cond == "probe":
+                # wu_* = warm start: first `warm` steps are supervised (cross-entropy on all strata), then the eval-tied utility objective
+                mode = "ce" if (cond.startswith("wu_") and step < a.warm) else cond.replace("wu_", "util_", 1)
+                if mode == "ce" or mode == "probe":
                     b = rng.choice(train_idx, size=min(32, len(train_idx)), replace=False if len(train_idx) >= 32 else True)
-                elif cond.startswith("util_single"):
-                    pool = by_s[cond.split(":", 1)[1]]; b = rng.choice(pool, size=32, replace=len(pool) < 32)
+                elif mode.startswith("util_single"):
+                    pool = by_s[mode.split(":", 1)[1]]; b = rng.choice(pool, size=32, replace=len(pool) < 32)
                 else:  # util_avg / util_worst: equal draw (3) from every stratum; 27 per batch fits in 32 GB
                     b = np.concatenate([rng.choice(by_s[s], size=3, replace=len(by_s[s]) < 3) for s in STRATA if by_s[s]])
                 b = torch.as_tensor(b)
@@ -134,16 +139,16 @@ def main():
                 else:
                     net.train(); lh, lr_ = net(ids[b].to(dev), mask[b].to(dev))
                 Yh, Yr = yh[b].to(dev), yr[b].to(dev)
-                if cond in ("ce", "probe"):
-                    loss = (F.cross_entropy(lh, Yh) + F.cross_entropy(lr_, Yr)) / 2
+                if mode in ("ce", "probe"):
+                    loss = (F.cross_entropy(lh[:, :len(HOSTS)], Yh) + F.cross_entropy(lr_[:, :len(REGIONS)], Yr)) / 2
                 else:
                     u = (exp_util(lh, Yh) + exp_util(lr_, Yr)) / 2        # per-sample expected utility
-                    if cond.startswith("util_single"):
+                    if mode.startswith("util_single"):
                         loss = -u.mean()
                     else:
                         sv = torch.tensor([STRATA.index(rows[i]["stratum"]) for i in b.tolist()], device=dev)
                         us = torch.stack([u[sv == k].mean() for k in range(len(STRATA)) if (sv == k).any()])
-                        if cond == "util_avg":
+                        if mode == "util_avg":
                             loss = -us.mean()
                         else:   # util_worst: softmin weights put most weight on the lowest-utility strata
                             w = F.softmax(-us.detach() / a.tau, 0)

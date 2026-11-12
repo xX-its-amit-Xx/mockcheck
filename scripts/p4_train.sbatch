@@ -7,7 +7,7 @@
 #SBATCH --mem=24G
 #SBATCH --time=03:00:00
 #SBATCH --output=/scratch/shenoy.am/mockcheck/logs/p4train.%j.out
-# Phase 4 training: 13 loss conditions x 3 seeds on one GPU. Resumable: finished runs are skipped, so a re-submit continues.
+# Phase 4 training: 24 loss conditions x 3 seeds (finished runs are skipped) on one GPU. Resumable: finished runs are skipped, so a re-submit continues.
 # Public gpu partition, 1 GPU, started in the weekday night window. Submit from the repo root: sbatch scripts/p4_train.sbatch
 set -euo pipefail
 S=/scratch/shenoy.am/mockcheck
@@ -16,5 +16,5 @@ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True HF_HOME=$S/hf HF_HUB_OFF
 cd "$S/repo"
 nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
 python scripts/p4_train.py --data data/groundtruth/p4_groundtruth.tsv.gz --out "$S/out/p4" \
-  --base "$S/models/esm2_35m" --conds probe,ce,util_avg,util_worst,util_single --seeds 0,1,2 --steps 200
+  --base "$S/models/esm2_35m" --conds probe,ce,util_avg,util_worst,util_single,wu_avg,wu_worst,wu_single --seeds 0,1,2 --steps 200
 echo P4_TRAIN_DONE
