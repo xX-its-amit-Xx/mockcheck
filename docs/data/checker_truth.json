@@ -1,0 +1,72 @@
+{
+ "aliases": {
+  "cutibacterium": "propionibacterium",
+  "limosilactobacillus": "lactobacillus",
+  "limosilactobacillus fermentum": "lactobacillus fermentum"
+ },
+ "mocks": {
+  "zymo-d6300-even": {
+   "anchors": {},
+   "cell": {
+    "bacillus subtilis": 10.3,
+    "cryptococcus neoformans": 0.18,
+    "enterococcus faecalis": 14.6,
+    "escherichia coli": 8.5,
+    "lactobacillus fermentum": 21.9,
+    "listeria monocytogenes": 13.9,
+    "pseudomonas aeruginosa": 6.1,
+    "saccharomyces cerevisiae": 0.29,
+    "salmonella enterica": 8.8,
+    "staphylococcus aureus": 15.3
+   },
+   "dna": {
+    "bacillus subtilis": 12.0,
+    "cryptococcus neoformans": 2.0,
+    "enterococcus faecalis": 12.0,
+    "escherichia coli": 12.0,
+    "lactobacillus fermentum": 12.0,
+    "listeria monocytogenes": 12.0,
+    "pseudomonas aeruginosa": 12.0,
+    "saccharomyces cerevisiae": 2.0,
+    "salmonella enterica": 12.0,
+    "staphylococcus aureus": 12.0
+   },
+   "kind": "quantitative",
+   "species": [
+    "bacillus subtilis",
+    "cryptococcus neoformans",
+    "enterococcus faecalis",
+    "escherichia coli",
+    "lactobacillus fermentum",
+    "listeria monocytogenes",
+    "pseudomonas aeruginosa",
+    "saccharomyces cerevisiae",
+    "salmonella enterica",
+    "staphylococcus aureus"
+   ],
+   "title": "ZymoBIOMICS D6300 (even)"
+  },
+  "zymo-d6310-log": {
+   "anchors": {
+    "listeria monocytogenes": 89.1,
+    "staphylococcus aureus": 8.9e-05
+   },
+   "cell": {},
+   "dna": {},
+   "kind": "presence",
+   "species": [
+    "bacillus subtilis",
+    "cryptococcus neoformans",
+    "enterococcus faecalis",
+    "escherichia coli",
+    "lactobacillus fermentum",
+    "listeria monocytogenes",
+    "pseudomonas aeruginosa",
+    "saccharomyces cerevisiae",
+    "salmonella enterica",
+    "staphylococcus aureus"
+   ],
+   "title": "ZymoBIOMICS D6310 (log distribution)"
+  }
+ }
+}
