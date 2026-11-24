@@ -12,3 +12,5 @@ logs/
 *.out
 /out/
 /STATE.md
+/BRAIN.md
+/BRAIN-public.md

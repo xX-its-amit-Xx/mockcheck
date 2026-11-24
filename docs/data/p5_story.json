@@ -1,0 +1,46 @@
+{
+ "updated": "2026-11-24",
+ "tldr": [
+  "We tested whether simple, interpretable measures of how far a variant target is from a detection guide (Cas13a, data from the ADAPT work of Metsky and colleagues) predict how much detection activity is lost, on data the models never saw.",
+  "Which positions mismatch matters more than how many: a position-weighted distance beat mismatch count on held-out guides, held-out regions, held-out targets, and the strictest test (guides and targets both unseen).",
+  "A k-mer spectrum distance did not help. The gain is real but modest, and it comes from one lab dataset.",
+  "Two warnings: at a useful catch rate (90% of failures) most alarms are false (precision about 0.30 against a 13% base rate), and a threshold set on 0 to 3 mismatches stops working at 4 or more (it flags everything). Calibration does not survive that shift."
+ ],
+ "sections": [
+  {"title": "Why this, and what we think it is for", "body": [
+   "Our reading of the Phase 4 brief is a biosecurity use: detection tools have to keep working as pathogens vary. A concrete, narrow version is an escape flag for an existing assay: given a guide whose normal activity is known, does a variant target push it down to background?",
+   "This is classification of existing measurements only. No guides, probes or variants were generated or designed, in line with the project guardrails. We did not verify any specific company's requirements; treat the framing as ours.",
+   "Starting point was Hayden Metsky's ADAPT and CATCH (both MIT licensed). We could not find a specific, dated Sabeti-lab paper on sequence distance, so 'in line with Sabeti' here means only the general direction of her lab's diagnostics and benchmarking work. The 2025 Cas13a guide-generation paper we found is design work and is out of scope."]},
+  {"title": "What exactly was done", "body": [
+   "Data: the Cas13a dataset published with ADAPT (adapt-seq-design, MIT): 85 guides each measured against about 225 targets, about 19,000 measurements, plus negative controls.",
+   "Task 1 (distance): predict each pair's activity change relative to that guide's own perfect-match reading. Task 2 (escape flag): call a pair 'failed' when its measured activity is at the measurement floor (log k = -4.0). Every one of the 255 negative controls reads exactly -4.0 and no measurement is lower, so -4.0 is the floor of the assay: 'failed' means indistinguishable from background. 13% of measurements are at the floor.",
+   "Three distances of our own, built on the mismatch idea behind ADAPT: (D1) position-weighted mismatches, which learns how much each position in the guide matters; (D2) which substitution it is, plus adjacent mismatch runs; (D3) k-mer spectrum difference between guide and target window. Plain mismatch count is the baseline, and a model of just the guide's own reference activity is a second baseline.",
+   "Models are deliberately simple (ridge regression) so the distance, not model capacity, is what is tested. Everything is scored out-of-fold. Uncertainty comes from resampling guides, with paired comparisons against the baselines.",
+   "Splits: random pairs (shown only as a leaky reference, because every guide appears about 225 times), held-out guides, held-out position blocks, held-out clusters of overlapping guides (only 3 exist), held-out targets, held-out guides AND targets together (the strict test), and train on 0 to 3 mismatches then test on 4 or more.",
+   "The pass rule was written in the script before the first run. After run 1 we made the baseline stricter (see below); that amendment is disclosed in the code, and the first run's output is kept."]},
+  {"title": "What failed, was refused, or should not be trusted", "body": [
+   "The k-mer spectrum distance (D3) gave no gain over mismatch count and was slightly worse when extrapolating.",
+   "Our first attempt at a 'strict' verdict printed false for everything. That was an artefact: the categorical baseline cannot predict mismatch counts it never saw, so it returns a constant. We kept the printed result and explain it here instead of quietly changing the rule.",
+   "Threshold transfer failed. Chosen to catch 90% of failures on 0 to 3 mismatches, the threshold flagged every pair at 4 or more mismatches (recall 1.00, precision equal to the base rate, about 0.30). So a ranking that looks good (AUROC 0.78 to 0.80 there) does not give a usable go or no-go call under that shift.",
+   "Precision at 90% recall is only about 0.29 to 0.30 even on easy splits, with a 13% failure base rate. In practice that is many false alarms for each real failure.",
+   "The pre-trained ADAPT models cannot be used for this test: they were trained on this same dataset, so scoring them here would flatter them. We did not run ADAPT's own CNN on our splits yet.",
+   "A survey of BV-BRC found no usable structured severity labels (the disease field is empty for influenza, rotavirus and rabies; the surveillance severity field is empty), so clinical-severity endpoints are not available from there.",
+   "Two web searches on antibody-escape or receptor-binding data and on antiviral-resistance data were refused by a safety filter. We deliberately did not rephrase them, and those endpoints are left out.",
+   "Smaller setbacks: the ADAPT environment needed an older protobuf pin; a first count query silently returned totals and was redone with facet queries."]},
+  {"title": "Limits", "body": [
+   "One dataset from one library. Targets are engineered and natural variants of a small set of regions, so 'held-out targets' is weaker than it sounds, and our features do not use target identity at all, which is partly why held-out guides and targets change little.",
+   "The escape flag assumes the guide's perfect-match activity is known (true for a deployed assay, not for a brand-new guide).",
+   "Everything is in silico on existing measurements. Nothing was validated in a lab.",
+   "The failure label sits at an instrument floor, so 'failed' means 'not distinguishable from background in this assay', not 'would miss a patient sample'."]},
+  {"title": "Next steps", "body": [
+   "Retrain ADAPT's own model on the same splits as a fair comparison (CPU, small).",
+   "Test on a second, independent dataset with natural viral diversity, and on whole held-out viruses. This is the test that matters most.",
+   "Fix threshold transfer: calibrate the flag under distance shift, or have it abstain when a variant is further from anything seen.",
+   "Decisions for Amit: allow diagnostic design for evaluation (held-out-detection test)? Which labels for the remaining GPU follow-ups, since clinical endpoints are scarce? An external reviewer for the Phase 4 label audit."]},
+  {"title": "Also done in Phase 5 and Phase 4 follow-up", "body": [
+   "An in-browser checker on this page scores a pasted Kraken2, Bracken or MetaPhlAn output against the Zymo mocks; the JavaScript was verified against the Python scorer on every committed output.",
+   "A Python 3.8 environment for ADAPT was built on the cluster (CPU only, no GPU used). No GPU jobs have been run in Phase 5."]},
+  {"title": "Files", "body": [
+   "scripts/p5_distance_eval.py and scripts/p5_escape_flag.py (both in the repo). Results: data/p5_distance_eval.json, data/p5_escape_flag.json. Run 1, with the linear baseline only, is kept in the repo under results/p5."]}
+ ]
+}
