@@ -86,7 +86,7 @@ button.tog{font:14px system-ui,sans-serif;border:1px solid var(--line);backgroun
   <div class="tldr" id="tldr">Loading the headline&hellip;</div>
 </div></header>
 <nav><div class="wrap">
-  <a href="#story">The story</a><a href="#results">Live results</a><a href="#reports">Run reports</a><a href="#cookbook">Cookbook</a><a href="#realdata">Real data</a><a href="#decisions">Decisions</a><a href="#innovation">Innovation</a><a href="#needdata">More data</a><a href="#represent">Data guide</a><a href="#phase5">Phase 5</a><a href="#checker">Check yours</a><a href="#toy">Try it</a><a href="#fail">What goes wrong</a><a href="#analogy">Other fields</a><a href="#ideas">Untried ideas</a><a href="#gloss">Glossary</a><a href="#timeline">Timeline</a><a href="#devlog">Dev log</a><a href="#sources">Sources</a>
+  <a href="#story">The story</a><a href="#results">Live results</a><a href="#reports">Run reports</a><a href="#cookbook">Cookbook</a><a href="#realdata">Real data</a><a href="#decisions">Decisions</a><a href="#innovation">Innovation</a><a href="#needdata">More data</a><a href="#represent">Data guide</a><a href="#p4eval">Phase 4 audit</a><a href="#phase5">Phase 5</a><a href="#checker">Check yours</a><a href="#toy">Try it</a><a href="#fail">What goes wrong</a><a href="#analogy">Other fields</a><a href="#ideas">Untried ideas</a><a href="#gloss">Glossary</a><a href="#timeline">Timeline</a><a href="#devlog">Dev log</a><a href="#sources">Sources</a>
 </div></nav>
 <main class="wrap">
 
@@ -124,6 +124,10 @@ button.tog{font:14px system-ui,sans-serif;border:1px solid var(--line);backgroun
 <section id="represent"><h2>How each kind of data is represented</h2><div id="rep-intro"></div><div id="rep-dict"></div></section>
 
 <div id="p3-root"></div>
+
+<section id="p4eval"><h2>Phase 4 audit: do the evaluations measure what we think?</h2>
+<p class="sub">Stage-by-stage checks on host and region: labels, splits, shortcut baselines, models, novelty. Includes what we got wrong along the way.</p>
+<div id="p4eval-root"></div></section>
 
 <section id="phase5"><h2>Phase 5: will a detection assay keep working on variants?</h2>
 <p class="sub">Cas13a guide and target distance, tested on data the models never saw. Everything tried, what failed, and what is next.</p>
@@ -354,6 +358,7 @@ async function renderCookbook(){
 <script src="phase2.js"></script>
 <script src="phase3.js"></script>
 <script src="phase5.js"></script>
+<script src="p4eval.js"></script>
 <script src="checker.js"></script>
 <script src="checker_ui.js"></script>
 </body>

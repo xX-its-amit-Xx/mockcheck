@@ -1,0 +1,40 @@
+{
+ "updated": "2026-11-24",
+ "tldr": [
+  "We audited the Phase 4 evaluation stage by stage (labels, splits, shortcuts, models, novelty) for host and region. The main result is uncomfortable: a plain 3-mer logistic regression with no neural network matches or beats every fine-tuned model on host, on every held-out split, with no clear win for any model.",
+  "So the earlier claim 'host is learnable; fine-tuning is best on far data' is not supported once this baseline is included. Host looks mostly solved by lineage composition. Region accuracy rises steadily with similarity to training sequences, which looks like lookup of close relatives, not learned geography.",
+  "Only the sealed blind split is a clean novelty test (no shared clusters or exact sequences, median similarity 0.68). The country, year and host holdouts share clusters with training and about a third to a half of their rows are 90% or more similar to a training sequence.",
+  "Several held-out groups are too small to mean much (host-genus holdout: 12 scored rows; blind has 2 rabies sequences). Three mistakes in our own first version of this audit were caught and fixed; they are listed below."
+ ],
+ "sections": [
+  {"title": "What was checked at each stage", "body": [
+   "Stage 0, label provenance: how many labels in each split were independently evidenced (tier A) versus inferred (tier B). The models are scored only on rows where host and region are both tier A.",
+   "Stage 1, split integrity: for every holdout, overlap with training in sequence clusters, exact sequence copies, countries (geographic holdout), host genera (host holdout) and years (time holdout); how similar each split is to training; how many sequences of each virus it contains.",
+   "Stage 2, shortcut baselines: what you get with no sequence biology at all (majority class, virus identity plus length) and with a bag of 3-mers, trained on exactly the rows the models train on. A control trains the 3-mer model on shuffled labels and should fall to chance.",
+   "Stage 3, models: accuracy, utility (+1 right, -1 wrong, 0 abstain), coverage, and the difference from the 3-mer baseline on the same rows with a 95% interval that resamples whole clusters, not single sequences.",
+   "Stage 4, novelty: accuracy as a function of the similarity of each test sequence to its nearest training sequence."]},
+  {"title": "What each stage found", "body": [
+   "Labels: the held-out splits still contain many tier-B (inferred) labels, but the models are scored only on tier-A rows, which is why the model tables have fewer rows than the split sizes.",
+   "Splits: the sealed blind split is clean. The geographic, time and host splits are not disjoint from training by sequence: 31, 27 and 4 of their clusters also occur in training, 11 and 7 sequences in the geographic and time splits are exact copies of training sequences, and 48%, 29% and 39% of their rows are at least 90% similar to training. They measure transfer across country, year or host between close relatives, which is a real but easier question than sequence novelty.",
+   "Shortcuts: for host, virus identity plus length already reaches 0.77 on blind, and 3-mers reach 0.99. The shuffled-label control falls to 0.28, so the pipeline is not leaking.",
+   "Models versus the 3-mer baseline (host): no model is clearly better on any held-out split; on the geographic holdout the plain fine-tune is worse by 0.17 and the hybrid by 0.10 (intervals exclude zero), and on blind the plain fine-tune is worse by 0.03.",
+   "Region: nothing reliably beats the 3-mer baseline either; the best-looking gains (blind) have intervals that include zero, and on the time holdout the plain fine-tune loses to the baseline by 0.37 (interval excludes zero) while the other models are not clearly different.",
+   "Novelty: for region, the baseline climbs from 0.31 to 0.74 as similarity to training goes up. Region is being recalled from close relatives."]},
+  {"title": "Mistakes in our own audit that were caught and fixed", "body": [
+   "The first comparison scored the baselines on all labelled rows but the models on the smaller tier-A subset. They were not the same rows; the baselines are now scored on exactly the rows the models are scored on.",
+   "Utility-trained models mostly abstain (for example 16% coverage on blind host). Reading their raw top class made them look 22% accurate, when they are right about 86% of the time when they answer. Those rows now show utility and coverage, and are not given a baseline comparison.",
+   "The baseline was first trained on every labelled training row, including inferred ones, so it had more data than the models. It now trains on the same rows as the models. The conclusions did not change."]},
+  {"title": "Limits and things not to over-read", "body": [
+   "Small groups: the host-genus holdout has 12 scored rows; blind has 2 rabies sequences; per-virus results there are anecdotes. A tripwire list in the repo output flags every case.",
+   "The intervals in the comparison cells come from the first random seed while the point estimates average three seeds, so a few cells look inconsistent; we do not rely on those.",
+   "A 3-mer model succeeding is not proof that neural models are useless. It shows this task, on these labels, can be done from lineage composition, so these labels cannot show what a protein model adds.",
+   "Host here means the recorded source host of the sequence, not a prediction of whether a virus can infect it. Labels were assembled from public records; the external label audit has not happened yet."]},
+  {"title": "Next steps", "body": [
+   "A new holdout by sequence similarity (for example nothing above 70% similar to training) across all three viruses, so novelty is tested directly instead of through country, year or host.",
+   "Robustness tests on the trained models (truncated sequences, random substitutions, shuffled-sequence control) and more seeds. These need a few short GPU or CPU jobs on the cluster, run under the fair-use rules and the give-way guard. We have not run them yet.",
+   "A label that does not follow lineage, so the evaluation can tell a model from a lookup table. Candidates are limited; clinical severity labels were not available in the public databases we checked.",
+   "The external label audit, which needs a reviewer."]},
+  {"title": "Files", "body": [
+   "scripts/p4_eval_suite.py (the audit), scripts/build_p4_eval_slim.py (dashboard data), results/p4_eval_suite.json (full output)."]}
+ ]
+}
