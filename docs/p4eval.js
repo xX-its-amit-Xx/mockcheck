@@ -36,5 +36,15 @@
         D.splits.map(s => { const v = D.integrity[s]; return [s, v.n, `${v.clusters_shared_with_train} of ${v.n_clusters}`, v.seqs_exact_in_train, f(v.nn_sim_quantiles && v.nn_sim_quantiles["50"]), v.frac_sim_ge_0_9 == null ? "n/a" : Math.round(v.frac_sim_ge_0_9 * 100) + "%"]; })),
       el("details", {}, el("summary", {}, "All tripwires raised (" + D.tripwires.length + ")"), el("ul", {}, D.tripwires.map(t => el("li", {}, t))))));
   }
+  const R = await j("data/p4_robust.json");
+  if (R) {
+    const kinds = [["clean", "Unchanged"], ["sub_5", "5% random substitutions"], ["sub_20", "20% random substitutions"], ["trunc_50", "Keep first 50%"], ["trunc_25", "Keep first 25%"], ["shuffle", "Residue order shuffled"]];
+    root.append(el("div", { class: "card" }, el("h4", {}, "Robustness runs: whole clusters held out, 5 seeds"),
+      table(["Head", "Fine-tuned model", "3-mer baseline", "Most common class", "Model minus 3-mer (95% interval, first seed)", "Control: shuffled training labels"],
+        ["host", "region"].map(h => { const c = R.cv[h]; return [h, f(c.model_acc_mean), f(c.m3_acc_mean), f(c.majority_acc_mean), `${c.diff_vs_3mer_mean >= 0 ? "+" : ""}${f(c.diff_vs_3mer_mean)} [${f(c.diff_ci95_seed0[0])}, ${f(c.diff_ci95_seed0[1])}]`, f(R.control[h].shuffled_acc_mean)]; })),
+      el("h4", {}, "Accuracy when the input is damaged (held-out rows of the original split, 5 seeds)"),
+      table(["Input", "Host", "Region"], kinds.map(([k, n]) => [n, f(R.pert.host._all[k]), f(R.pert.region._all[k])])),
+      el("p", { class: "mut small" }, "Every fold holds out whole sequence clusters. The model is ESM-2 35M fine-tuned for 200 steps; larger or longer-trained models were not tested here. Perturbations measure how fragile a classifier is; no sequence is generated for use.")));
+  }
   for (const sec of S.sections) root.append(el("details", sec.title.startsWith("Mistakes") || sec.title.startsWith("What each") ? { open: "" } : {}, el("summary", {}, sec.title), sec.body.map(p => el("p", {}, p))));
 })();
